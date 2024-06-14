@@ -50,10 +50,16 @@
                             <td>{!!$e->fecha_inicio!!}</td>
                             <td>{!!$e->fecha_fin!!}</td>
                             <td>
-
                                 <a href="{!!'eventos/'.$e->id.'/edit'!!}">
                                     <button>editar</button>
                                 </a>
+                                <a href="{{url('eventos/'.$e->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $e->id }}').submit(); }">
+                                <button>Eliminar</button>
+                                </a>
+                                <form id="delete-form-{{ $e->id }}" action="{{ url('eventos/'.$e->id) }}" method="POST" style="display: none;">
+                                    @method('DELETE')
+                                    @csrf
+                                </form>
                             </td>
                         </tr>
                         @endforeach
