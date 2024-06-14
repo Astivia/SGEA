@@ -46,6 +46,20 @@
                             <td>{!!$art->articulo->titulo!!}</td>
                             <td>{!!$art->articulo->area->nombre!!}</td>
                             <td>{!!$art->autor->participante->nombre!!} {!!$art->autor->participante->apellidos!!}</td>
+
+                            <td>
+                                <a href="{!!'articulos/'.$art->id.'/edit'!!}">
+                                    <button>editar</button>
+                                </a>
+                                <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">
+                                <button>Eliminar</button>
+                                </a>
+                                <form id="delete-form-{{ $art->id }}" action="{{ url('articulos/'.$art->id) }}" method="POST" style="display: none;">
+                                    @method('DELETE')
+                                    @csrf
+                                </form>
+
+                            </td>
                         </tr>
                         @endforeach
                     </table>

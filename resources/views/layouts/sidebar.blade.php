@@ -25,8 +25,8 @@
                     <li><a href=eventos><span class="las la-calendar-alt"></span>Eventos</a></li>
                     <li><a href=participantes><span class="las la-user"></span>Participantes</a></li>
                     <li><a href=areas><span class="las la-id-card"></span>Áreas</a></li>    
-                    <li><a href=articulos><span class="las la-comment"></span>Artículos</a></li>
                     <li><a href=autores><span class="las la-comment"></span>Autores</a></li>
+                    <li><a href=articulos><span class="las la-comment"></span>Artículos</a></li>
                     <li><a href=revisores_articulos><span class="las la-people-carry"></span>Revisores</a></li>                           
                 </ul>
                 <div class="menu-head">

@@ -59,15 +59,27 @@
                 <div class="info">
                     <table border=0>
                         <tr>
-                            <th>ID</th>
+                            
                             <th>PARTICIPANTE</th>
                             <th>AFILIACION</th>
                         </tr>
                         @foreach ($Autores as $autor)
-                        <tr>
-                            <td>{!!$autor->id!!}</td>
+                        <tr>                  
                             <td>{!!$autor->participante->nombre!!} {!!$autor->participante->apellidos!!}</td>
                             <td>{!!$autor->afiliacion!!}</td>
+                            <td>
+                                <a href="{!!'autores/'.$autor->id.'/edit'!!}">
+                                    <button>editar</button>
+                                </a>
+                                <a href="{{url('autores/'.$autor->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $autor->id }}').submit(); }">
+                                <button>Eliminar</button>
+                                </a>
+                                <form id="delete-form-{{ $autor->id }}" action="{{ url('autores/'.$autor->id) }}" method="POST" style="display: none;">
+                                    @method('DELETE')
+                                    @csrf
+                                </form>
+
+                            </td>
                         </tr>
                         @endforeach
                     </table>

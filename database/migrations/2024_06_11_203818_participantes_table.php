@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('apellidos');
             $table->string('curp')->unique();
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

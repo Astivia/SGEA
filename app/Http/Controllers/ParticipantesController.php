@@ -13,7 +13,7 @@ class ParticipantesController extends Controller
      */
     public function index()
     {
-        $Participantes = participantes::OrderBy('evento_id')->get();
+        $Participantes = participantes::OrderBy('nombre')->get();
         $Eventos=eventos::all();
 
         return view ('Participantes.index',compact('Participantes','Eventos'));
@@ -58,7 +58,10 @@ class ParticipantesController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $events=eventos::all();
+
+        $part=participantes::find($id);
+        return view ('Participantes.edit',compact('part','events'));
     }
 
     /**
@@ -66,7 +69,11 @@ class ParticipantesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
+        $NuevosDatos = $request->all();
+        $participante=participantes::find($id);
+        $participante->update($NuevosDatos);
+        return redirect('/participantes');
     }
 
     /**
@@ -74,6 +81,9 @@ class ParticipantesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $participante=participantes::find($id);
+        $participante->delete();
+
+        return redirect('participantes');
     }
 }

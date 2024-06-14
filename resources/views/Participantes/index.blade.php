@@ -47,6 +47,22 @@
                             <td>{!!$part->apellidos!!}</td>
                             <td>{!!$part->email!!}</td>
                             <td>{!!$part->curp!!}</td>
+                            <td>
+                            <a href="{!!'participantes/'.$part->id.'/edit'!!}">
+                                    <button>editar</button>
+                                </a>
+                                <a href="{{url('participantes/'.$part->id)}}" 
+                                    onclick="
+                                    event.preventDefault(); 
+                                    if (confirm('¿Estás seguro de que deseas eliminar este registro?')) 
+                                    { document.getElementById('delete-form-{{ $part->id }}').submit(); }">
+                                <button>Eliminar</button>
+                                </a>
+                                <form id="delete-form-{{ $part->id }}" action="{{ url('participantes/'.$part->id) }}" method="POST" style="display: none;">
+                                    @method('DELETE')
+                                    @csrf
+                                </form>
+                            </td>
                         </tr>
                         @endforeach
                     </table>

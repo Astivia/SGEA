@@ -41,7 +41,9 @@ class AutoresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos=$request->all();
+        autores::create($datos);
+        return redirect ('/autores');
     }
 
     /**
@@ -57,7 +59,12 @@ class AutoresController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        
+        $events=eventos::all();
+        $participantes=participantes::all();
+        
+        $autor=autores::find($id);
+        return view ('Autores.edit',compact('autor','events','participantes'));
     }
 
     /**
@@ -65,7 +72,10 @@ class AutoresController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $NuevosDatos = $request->all();
+        $autores=autores::find($id);
+        $autores->update($NuevosDatos);
+        return redirect('/autores');
     }
 
     /**
@@ -73,6 +83,9 @@ class AutoresController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $autor=autores::find($id);
+        $autor->delete();
+
+        return redirect('autores');
     }
 }

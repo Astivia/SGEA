@@ -44,16 +44,16 @@
                             <td>{!!$area->nombre!!}</td>
                             <td>{!!$area->descripcion!!}</td>
                             <td>
-                            <a href="{!!'areas/'.$area->id.'/edit'!!}">
-                                <button>editar</button>
-                            </a>
-                            <a href="{{url('areas/'.$area->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $area->id }}').submit(); }">
-                            <button>Eliminar</button>
-                            </a>
-                            <form id="delete-form-{{ $area->id }}" action="{{ url('areas/'.$area->id) }}" method="POST" style="display: none;">
-                                @method('DELETE')
-                                @csrf
-                            </form>
+                                <a href="{!!'areas/'.$area->id.'/edit'!!}">
+                                    <button>editar</button>
+                                </a>
+                                <a href="{{url('areas/'.$area->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $area->id }}').submit(); }">
+                                <button>Eliminar</button>
+                                </a>
+                                <form id="delete-form-{{ $area->id }}" action="{{ url('areas/'.$area->id) }}" method="POST" style="display: none;">
+                                    @method('DELETE')
+                                    @csrf
+                                </form>
 
                             </td>
                         </tr>

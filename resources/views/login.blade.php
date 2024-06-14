@@ -23,7 +23,10 @@
         <br> <br>
         <button type="submit" class="btn btn-primary">Iniciar sesión</button>
     </form>
-        <a href="{{route('registro')}}">Registrarse</a>
+    <br><br>
+    <a href="{{route('registro')}}">Registrarse</a><br>
+    <br>    
+    <a href="">¿Olvidaste tu contraseña?</a>
          
     </div>
 </body>
