@@ -1,0 +1,149 @@
+@extends('layouts.master')
+    <title>Autores</title>
+    <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
+    <link rel="stylesheet" href="./css/style-home.css">
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<script>
+    function llenar_participantes(evento_id){
+        // $("#participante_id").empty();
+        var asset = '{{asset('')}}';
+        var ruta = asset+'combo_autoresPorEvento/'+evento_id;
+        $.ajax({
+            type:'GET',
+            url:ruta,
+
+            success:function(data){
+                var participantes = data;
+
+                for (let i = 0; i < participantes.length; i++) {
+                    $("#participante_id").append('<option value="'+participantes[i].id+'">'+
+                        participantes[i].nombre+'</option>'
+                    );
+                    
+                }
+            }
+        });
+    }
+</script>
+
+
+@section('Content')
+<div class="main-content">
+        <header>
+            <div class="menu-toggle">
+                <label for="">
+                    <span class="las la-bars"></span>
+                </label>
+            </div>
+            <div class="header-icons">
+                <span class="las la-search"></span>
+                <span class="las la-bookmarks"></span>
+                <span class="las la-sms"></span>
+            </div>
+        </header>
+        <main>
+            <div class="container">
+                <h1>Autores</h1>
+                <div class="search-create">
+                    <input type="text" id="search-input" placeholder="Buscar autores...">
+                    <button id="create-event-btn">Registrar Autor</button>
+                </div>
+                <div id="events-list"></div>
+                <div id="pagination"></div>
+            </div>
+
+            <div class="container">
+                <h1>Lista de Autores</h1>
+                <div class="info">
+                    <table border=0>
+                        <tr>
+                            <th>ID</th>
+                            <th>PARTICIPANTE</th>
+                            <th>AFILIACION</th>
+                        </tr>
+                        @foreach ($Autores as $autor)
+                        <tr>
+                            <td>{!!$autor->id!!}</td>
+                            <td>{!!$autor->participante->nombre!!} {!!$autor->participante->apellidos!!}</td>
+                            <td>{!!$autor->afiliacion!!}</td>
+                        </tr>
+                        @endforeach
+                    </table>
+                </div>
+                <div id="events-list"></div>
+                <div id="pagination"></div>
+            </div>
+        
+            <div id="register-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p>Se ha registrado correctamente.</p>
+                </div>
+            </div>
+        
+            <div id="create-event-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Registrar Autor</h2>
+                    {!! Form::open(['url'=>'/autores']) !!}
+
+                        <!-- {!! Form::label ('evento', 'Evento:') !!}
+                        {!! Form::select ('evento',  $Eventos->pluck('acronimo','edicion')->all(), null
+                        ,['placeholder'=> 'Seleccionar...','class'=>'form-control','onchange'=>'llenar_participantes(this.value);'])!!}
+
+
+                        {!! Form::label ('participante_id', 'Participante:') !!}
+                        {!! Form::select ('participante_id', array(''=>'Seleccionar...'), null
+                        ,['placeholder'=> 'Seleccionar...','class'=>'form-control'])!!} -->
+                        <label for="evento">Seleccionar evento :</label>
+                        <select name="evento_id" require>
+                        @foreach ($Eventos as $evento)
+                            <option value="{{ $evento->id }}">{{ $evento->acronimo}} {{ $evento->edicion}}</option>
+                        @endforeach
+                        </select>
+                       
+                        <label for="participante">Seleccionar participante :</label>
+                        <select name="participante_id" require>
+                        @foreach ($Participantes as $participante)
+                            <option value="{{ $participante->id }}">{{ $participante->nombre}} {{ $participante->apellidos}}</option>
+                        @endforeach
+                        </select>
+
+                        <label for="afiliacion">Afiliacion:</label>
+                        <input type="text" id="afiliacion" name="afiliacion" required>
+
+
+                        <button type="submit">Guardar articulo</button>
+                    {!!Form::close()!!} 
+                </div>
+            </div>
+        
+            <div id="edit-event-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Editar Evento</h2>
+                    <form id="edit-event-form">
+                        <label for="edit-event-name">Nombre del Evento:</label>
+                        <input type="text" id="edit-event-name" required>
+                        <label for="edit-event-description">Descripción:</label>
+                        <textarea id="edit-event-description" required></textarea>
+                        <label for="edit-event-photo">Fotografía:</label>
+                        <input type="text" id="edit-event-photo" placeholder="URL de la imagen" required>
+                        <label for="edit-event-speaker">Ponente:</label>
+                        <input type="text" id="edit-event-speaker" required>
+                        <label for="edit-event-date">Fecha del Evento:</label>
+                        <input type="date" id="edit-event-date" required>
+                        <label for="edit-event-time">Hora del Evento:</label>
+                        <input type="time" id="edit-event-time" required>
+                        <button type="submit">Actualizar Evento</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+@endsection
+    
+<script src="./js/scriptEventos.js"></script>
+</html>
