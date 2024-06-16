@@ -5,7 +5,17 @@
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 @section('Content')
+    @if(session('error'))
+        <script>
+        alert('{{ session('error') }}');
+        </script>
+    @endif
 
+    @if(session('success'))
+        <script>
+        alert('{{ session('success') }}');
+        </script>
+    @endif
     <div class="main-content">
         <header>
             <div class="menu-toggle">

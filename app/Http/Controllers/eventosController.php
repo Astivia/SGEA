@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\eventos;
+use App\Models\participantes;
+use App\Models\articulos;
+use App\Models\comite_editorial;
 
 class EventosController extends Controller
 {
@@ -32,7 +35,7 @@ class EventosController extends Controller
     {
        $data=$request->all();
         eventos::create($data);
-        return redirect ('/eventos');
+        return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
     }
 
     /**
@@ -69,8 +72,15 @@ class EventosController extends Controller
     public function destroy(string $id)
     {
         $evento=eventos::find($id);
+
+        if ((articulos::where('evento_id', $evento->id)->count() > 0) ||
+            (participantes::where('evento_id', $evento->id)->count() > 0)||
+            (comite_editorial::where('evento_id', $evento->id)->count() > 0) ) {
+            return redirect()->back()->with('error', 'No se puede eliminar: hay Informacion asociada con este evento');
+        }
+
         $evento->delete();
 
-        return redirect('eventos');
+        return redirect('eventos')->with('success', 'evento eliminado de forma Satisfactoria');
     }
 }

@@ -6,7 +6,7 @@ use App\Http\Controllers\AreasController;
 use App\Http\Controllers\ArticulosAutoresController;
 use App\Http\Controllers\ArticulosController;
 use App\Http\Controllers\AutoresController;
-//use App\Http\Controllers\Comite_EditorialController;
+use App\Http\Controllers\Comite_EditorialController;
 use App\Http\Controllers\EventosController;
 //use App\Http\Controllers\ParticipantesAreasController;
 use App\Http\Controllers\ParticipantesController;

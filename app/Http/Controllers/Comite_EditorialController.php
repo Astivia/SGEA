@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+USE App\Models\comite_editorial;
+USE App\Models\eventos;
+USE App\Models\participantes;
 
 class Comite_EditorialController extends Controller
 {
@@ -11,9 +14,13 @@ class Comite_EditorialController extends Controller
      */
     public function index()
     {
-        // $Title=ServicesType::where('id',$type)->select('name')->where('status', 1)->get();
+        $Comite=comite_editorial::all();
 
-        return view ('Comite_Editorial.index');
+        $Eventos=eventos::all();
+        $Participantes=participantes::OrderBy('nombre')->get();
+
+
+        return view ('Comite_Editorial.index',compact('Comite','Eventos','Participantes'));
     }
 
     /**
@@ -29,7 +36,9 @@ class Comite_EditorialController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data=$request->all();
+        comite_editorial::create($data);
+        return redirect ('/comite_editorial')->with('success', 'Se registro el participante en el comite editorial');
     }
 
     /**
@@ -45,7 +54,12 @@ class Comite_EditorialController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $part=comite_editorial::find($id);
+
+        $Eventos=eventos::all();
+        $Participantes=participantes::OrderBy('nombre')->get();
+
+        return view ('Comite_Editorial.edit',compact('part','Eventos','Participantes'));
     }
 
     /**
@@ -53,7 +67,13 @@ class Comite_EditorialController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $NuevosDatos = $request->all();
+        //buscamos el articulo
+        $Partcomite=comite_editorial::find($id);
+        //insertamos en articulo
+        $Partcomite->update($NuevosDatos);
+
+        return redirect('/comite_editorial');
     }
 
     /**
@@ -61,6 +81,9 @@ class Comite_EditorialController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $Comite=comite_editorial::find($id);
+        $Comite->delete();
+
+        return redirect('comite_editorial')->with('success', 'Participante eliminado del Comite');
     }
 }
