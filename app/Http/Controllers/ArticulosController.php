@@ -105,18 +105,14 @@ class ArticulosController extends Controller
         // Buscar el artículo a eliminar
         $articulo = articulos::find($id);
 
-        // Verificar si el artículo tiene autores asociados
-        $autoresAsociados = articulos_autores::where('articulo_id', $articulo->id)->count();
-
-        // Si hay autores asociados, impedir la eliminación y mostrar un mensaje de error
-        if ($autoresAsociados > 0) {
-            return redirect()->back()->withErrors(['error' => 'No se puede eliminar el artículo, tiene autores asociados']);
+        
+        if (articulos_autores::where('articulo_id', $articulo->id)->count() > 0) {
+              
+              return redirect()->back()->with('error', 'No se puede eliminar el artículo; tiene autores asociados');
         }
-
         // Eliminar el artículo
         $articulo->delete();
-
         // Redireccionar a la vista de artículos con un mensaje de éxito
-        return redirect('/articulos')->with(['success' => 'Artículo eliminado correctamente']);
+        return redirect('/articulos')->with('success', 'Artículo eliminado correctamente');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\autores;
 use App\Models\participantes;
 use App\Models\eventos;
+use App\Models\articulos_autores;
 
 use Illuminate\Http\Request;
 
@@ -84,8 +85,16 @@ class AutoresController extends Controller
     public function destroy(string $id)
     {
         $autor=autores::find($id);
+
+        if (articulos_autores::where('autor_id', $autor->id)->count() > 0) {
+            
+            
+            return redirect()->back()->with('error', 'No se puede eliminar el autor, tiene articulos asociados');
+        }
+
+
         $autor->delete();
 
-        return redirect('autores');
+        return redirect('autores')->with('success', 'Se ha eliminado correctamente');
     }
 }

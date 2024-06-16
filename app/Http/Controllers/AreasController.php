@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\areas;
+use App\Models\articulos; // Assuming the class is in App\Models
+
+use Illuminate\Http\Request;
 
 class areasController extends Controller
 {
@@ -69,8 +71,13 @@ class areasController extends Controller
     public function destroy(string $id)
     {
         $area=areas::find($id);
+
+        if (articulos::where('area_id', $area->id)->count() > 0) {
+            return redirect()->back()->with('error', 'No se puede eliminar: hay articulos asociados con esta Area');
+        }
+
         $area->delete();
 
-        return redirect('areas');
+        return redirect('areas')->with('success', 'Se ha eliminado correctamente');
     }
 }

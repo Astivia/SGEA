@@ -44,20 +44,26 @@ class ParticipantesController extends Controller
         ]);
         $datos=$request->all();
 
-        $existeParticipante = participantes::where('curp', $datos['curp'])->exists();
+        // $existeParticipante = participantes::where('curp', $datos['curp'])->exists();
+        // if ($existeParticipante) {
+            
+        //     $Participantes = participantes::OrderBy('nombre')->get();
+        //     $Eventos=eventos::all();
+        //     $Message="Ya existe un participante con la CURP ingresada.No se guardaron los datos";
+            
+        //     return view ('Participantes.index',compact('Participantes','Eventos','Message'));
+        // }
 
-        if ($existeParticipante) {
+        //     participantes::create($datos);
+        //     $Message="Participante Registrado Exitosamente!";
+        //     return redirect('/participantes')->with('Message', $Message);
+        if (participantes::where('curp', $datos['curp'])->exists()) {
             
-            $Participantes = participantes::OrderBy('nombre')->get();
-            $Eventos=eventos::all();
-            $Message="Ya existe un participante con la CURP ingresada.No se guardaron los datos";
-            
-            return view ('Participantes.index',compact('Participantes','Eventos','Message'));
-        }else{
-            participantes::create($datos);
-            $Message="Participante Registrado Exitosamente!";
-            return redirect('/participantes')->with('Message', $Message);
+            return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada.No se guardaron los datos');
         }
+
+        participantes::create($datos);
+        return redirect('/participantes')->with('success', 'Se ha Registrado correctamente');
     }
 
     /**

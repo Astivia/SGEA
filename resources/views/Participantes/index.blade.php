@@ -3,13 +3,20 @@
     <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
     <link rel="stylesheet" href="./css/style-home.css">
     <link rel="stylesheet" href="./css/styles.css">
-    <script>
-        @if(!empty($Message))
-            alert(@json($Message));
-        @endif
-    </script>
 </head>
 @section('Content')
+
+@if(session('error'))
+    <script>
+      alert('{{ session('error') }}');
+    </script>
+  @endif
+
+  @if(session('success'))
+    <script>
+      alert('{{ session('success') }}');
+    </script>
+  @endif
 
     <div class="main-content">
         <header>
@@ -27,12 +34,6 @@
         <main>
             <div class="container">
                 <h1>Participantes</h1>
-                <!-- @empty($Error)
-                    <p>no hay errores</p>
-                @else
-                    <p>{{$Error}}</p>
-                                        
-                @endif -->
                 <div class="search-create">
                     <input type="text" id="search-input" placeholder="Buscar Participante...">
                     <button id="create-event-btn">Registrar Participante</button>
