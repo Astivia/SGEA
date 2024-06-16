@@ -39,6 +39,7 @@
         <br><br>                   
         
         <button type="submit">Guardar</button>
+        <a href="{{!!asset('/participantes')!!}"><button>Cancelar</button></a>
     {!!Form::close()!!}   
 
     

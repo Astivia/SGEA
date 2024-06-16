@@ -15,8 +15,9 @@ class ParticipantesController extends Controller
     {
         $Participantes = participantes::OrderBy('nombre')->get();
         $Eventos=eventos::all();
+        $Message=null;
 
-        return view ('Participantes.index',compact('Participantes','Eventos'));
+        return view ('Participantes.index',compact('Participantes','Eventos','Message'));
     }
 
     /**
@@ -32,7 +33,8 @@ class ParticipantesController extends Controller
      */
     public function store(Request $request)
     {
-
+        
+        //validacion de datos
         $this->validate($request, [
             'evento_id' => 'required|integer',
             'nombre' => 'required|string',
@@ -41,8 +43,21 @@ class ParticipantesController extends Controller
             'email' => 'required|email',
         ]);
         $datos=$request->all();
-        participantes::create($datos);
-        return redirect ('/participantes');
+
+        $existeParticipante = participantes::where('curp', $datos['curp'])->exists();
+
+        if ($existeParticipante) {
+            
+            $Participantes = participantes::OrderBy('nombre')->get();
+            $Eventos=eventos::all();
+            $Message="Ya existe un participante con la CURP ingresada.No se guardaron los datos";
+            
+            return view ('Participantes.index',compact('Participantes','Eventos','Message'));
+        }else{
+            participantes::create($datos);
+            $Message="Participante Registrado Exitosamente!";
+            return redirect('/participantes')->with('Message', $Message);
+        }
     }
 
     /**
@@ -59,8 +74,9 @@ class ParticipantesController extends Controller
     public function edit(string $id)
     {
         $events=eventos::all();
-
         $part=participantes::find($id);
+
+
         return view ('Participantes.edit',compact('part','events'));
     }
 

@@ -28,7 +28,7 @@ Route::resource('revisores_articulos', RevisoresArticulosController::class)->mid
 
  Route::view('/login',"login")->name('login');
  Route::view('/registro',"register")->name('registro');
- Route::view('/privada',"secret")->middleware('auth')->name('privada');
+ Route::view('/home',"dashboard")->middleware('auth')->name('home');
 
 Route::post('/validar-registro',[LoginController::class,'register'])->name('validar-registro');
 Route::post ('/inicia-sesion',[LoginController::class,'login'])->name('inicia-sesion');

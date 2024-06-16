@@ -24,6 +24,7 @@
         {!! Form::number ('edicion',$evento->edicion)!!}
         <br><br>
         <button type="submit">Guardar evento</button>
+        <a href="{{!!asset('/eventos')!!}"><button>Cancelar</button></a>
         {!!Form::close()!!}   
 
     

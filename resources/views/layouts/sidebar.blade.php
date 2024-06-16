@@ -18,6 +18,12 @@
                 </div>                
             </div>
             <div class="sidebar-menu">
+                <ul>
+                    <li>
+                    <a href="{{route('home')}}"><span class="las la-calendar-alt"></span>home</a>
+                    </li>
+                </ul>
+                <br>
                 <div class="menu-head">
                     <span>Catálogos</span>
                 </div>
@@ -36,7 +42,9 @@
                     <li><a href=""><span class="las la-calendar"></span>Calendario</a></li>
                     <li><a href=""><span class="las la-user"></span>Contactos</a></li>
                     <br><br><br>
+                    
                     <li><a href="{{route('logout')}}">Salir</a></li>
+                    
                 </ul>
             </div>
         </div>

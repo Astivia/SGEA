@@ -3,8 +3,14 @@
     <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
     <link rel="stylesheet" href="./css/style-home.css">
     <link rel="stylesheet" href="./css/styles.css">
+    <script>
+        @if(!empty($Message))
+            alert(@json($Message));
+        @endif
+    </script>
 </head>
 @section('Content')
+
     <div class="main-content">
         <header>
             <div class="menu-toggle">
@@ -21,6 +27,12 @@
         <main>
             <div class="container">
                 <h1>Participantes</h1>
+                <!-- @empty($Error)
+                    <p>no hay errores</p>
+                @else
+                    <p>{{$Error}}</p>
+                                        
+                @endif -->
                 <div class="search-create">
                     <input type="text" id="search-input" placeholder="Buscar Participante...">
                     <button id="create-event-btn">Registrar Participante</button>
@@ -37,8 +49,8 @@
                             <th>EVENTO</th>
                             <th>NOMBRE</th>
                             <th>APELLIDOS</th>
-                            <th>CURP</th>
                             <th>EMAIL</th>
+                            <th>CURP</th>
                         </tr>
                         @foreach ($Participantes as $part)
                         <tr>
@@ -83,7 +95,6 @@
                     <span class="close">&times;</span>
                     <h2>Registrar Participante</h2>
                     {!! Form::open(['url'=>'/participantes']) !!}
-                    
                         <label for="event-name">Seleccionar evento :</label>
                         <select name="evento_id" require>
                         @foreach ($Eventos as $e)
@@ -134,6 +145,7 @@
             </div>
         </main>
     </div>
+    
 <script src="./js/scriptEventos.js"></script>
 @endsection
 </html>

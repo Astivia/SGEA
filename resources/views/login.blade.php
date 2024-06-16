@@ -10,7 +10,6 @@
         <h1>INICIAR SESION</h1>
         <form method="POST" action="{{ route('inicia-sesion') }}">
         @csrf
-
         <div class="mb-3">
             <label for="email" class="form-label">Correo electrónico:</label>
             <input type="email" class="form-control" id="email" name="email" required>
