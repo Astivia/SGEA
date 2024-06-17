@@ -153,5 +153,5 @@
     </div>
 
 @endsection
-    <script src="./js/scriptArticulos.js"></script>
+    
 </html>

@@ -5,82 +5,6 @@
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 @section('Content')
-    <!-- <div class="sidebar">
-        <div class="sidebar-brand">
-            <div class="brand-flex">
-                <img src="" width="40px" alt="">
-                <div class="brand-icons">
-                    <span class="las la-bell"></span>
-                    <span class="las la-user-circle"></span>
-                </div>
-            </div>
-        </div>
-        <div class="sidebar-main">
-            <div class="sidebar-user">
-                <img src="assets/img/perfil.png" alt="">
-                <div>
-                     <h3>Luis Eduardo</h3>
-                     <span>Administrador</span>
-                </div>                
-            </div>
-            <div class="sidebar-menu">
-                <div class="menu-head">
-                    <span>Catalogos</span>
-                </div>
-                <ul>
-                    <li>
-                        <a href="participantes.html">
-                            <span class="las la-user"></span>
-                            Participantes
-                        </a>
-                    </li>
-                    <li>
-                        <a href="eventos.html">
-                            <span class="las la-calendar-alt"></span>
-                            Eventos
-                        </a>
-                    </li>
-                    <li>
-                        <a href="areas.html">
-                            <span class="las la-id-card"></span>
-                            areas
-                        </a>
-                    </li>    
-                    <li>
-                        <a href="articulos.html">
-                            <span class="las la-comment"></span>
-                            Articulos
-                        </a>
-                    </li>
-                    <li>
-                        <a href="revisores.html">
-                            <span class="las la-people-carry"></span>
-                            Revisores
-                        </a>
-                    </li>                           
-                </ul>
-                <div class="menu-head">
-                    <span>Aplicaciones</span>
-                </div>
-                <ul>
-                    <li>
-                        <a href="">
-                            <span class="las la-calendar"></span>
-                            Calendario
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <span class="las la-user"></span>
-                            Contactos
-                        </a>
-                    </li>
-                 
-                                           
-                </ul>
-            </div>
-        </div>
-    </div> -->
     <div class="main-content">
         <header>
             <div class="menu-toggle">
@@ -110,15 +34,15 @@
                 <div class="info">
                     <table border=0>
                         <tr>
+                            <th>REVISOR</th>
                             <th>ARTICULO</th>
                             <th>AREA</th>
-                            <th>REVISOR</th>
                         </tr>
                         @foreach ($RevArt as $ra)
                         <tr>
+                            <td>{!!$ra->participante->nombre!!} {!!$ra->participante->apellidos!!}</td>
                             <td>{!!$ra->articulo->titulo!!}</td>
                             <td>{!!$ra->articulo->area->nombre!!}</td>
-                            <td>{!!$ra->participante->nombre!!} {!!$ra->participante->apellidos!!}</td>
                         </tr>
                         @endforeach
                     </table>

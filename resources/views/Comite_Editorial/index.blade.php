@@ -57,7 +57,7 @@
                                 <a href="{!!'comite_editorial/'.$ce->id.'/edit'!!}">
                                     <button>editar</button>
                                 </a>
-                                <a href="{{url('comite_editorial/'.$ce->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $ce->id }}').submit(); }">
+                                <a href="{{url('comite_editorial/'.$ce->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de quitar a esta persona del Comite Editorial?')) { document.getElementById('delete-form-{{ $ce->id }}').submit(); }">
                                 <button>Eliminar</button>
                                 </a>
                                 <form id="delete-form-{{ $ce->id }}" action="{{ url('comite_editorial/'.$ce->id) }}" method="POST" style="display: none;">

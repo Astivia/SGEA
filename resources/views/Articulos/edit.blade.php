@@ -9,7 +9,7 @@
     <h1>MODIFICAR ARTICULO</h1>
     {!! Form::open(['method'=>'PATCH','url'=>'/articulos/'.$art->id]) !!}
         <label for="titulo">Titulo:</label>
-        {!! Form::text ('nombre',$art->articulo->titulo)!!}
+        {!! Form::text ('titulo',$art->articulo->titulo)!!}
         <br><br>
         <label for="event-name">Evento :</label>
         <select name="evento_id" require>
@@ -42,9 +42,6 @@
         <br><br>
         <button type="submit">Guardar Cambios</button>
         <a href="{{!!asset('/articulos')!!}"><button>Cancelar</button></a> 
-    {!!Form::close()!!}   
-
-    
-
+        {!!Form::close()!!}   
 </body>
 </html>

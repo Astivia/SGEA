@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\participantes;
 use App\Models\eventos;
+use App\Models\autores;
+use App\Models\comite_editorial;
+use App\Models\revisores_articulos;
+use App\Models\participantes_areas;
+use App\Models\revisores_areas;
 
 class ParticipantesController extends Controller
 {
@@ -104,8 +109,16 @@ class ParticipantesController extends Controller
     public function destroy(string $id)
     {
         $participante=participantes::find($id);
+        if ((autores::where('participante_id', $participante->id)->count() > 0)||
+            (comite_editorial::where('participante_id', $participante->id)->count() > 0)||
+            (revisores_articulos::where('participante_id', $participante->id)->count() > 0)||
+            (participantes_areas::where('participante_id', $participante->id)->count() > 0)||
+            (revisores_areas::where('participante_id', $participante->id)->count() > 0)) {
+              
+            return redirect()->back()->with('error', 'No se puede eliminar el participante porque aun tiene algun cargo asociado');
+        }
         $participante->delete();
 
-        return redirect('participantes');
+        return redirect('participantes')->with('success', 'Participante eliminado correctamente');
     }
 }

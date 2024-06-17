@@ -74,7 +74,7 @@ class ArticulosController extends Controller
 
         $Eventos = Eventos::all();
         $Areas = Areas::all();
-        $Autores = Autores::OrderBy('participante_id')->get();
+        $Autores = Autores::all();
 
         return view('Articulos.edit', compact('art', 'Eventos', 'Areas', 'Autores'));
     }
@@ -86,15 +86,28 @@ class ArticulosController extends Controller
     {
         $NuevosDatos = $request->all();
         //buscamos el articulo
-        $articulo=articulos::find($id);
+        $articulo = articulos::find($id);
+
         //insertamos en articulo
-        $articulo->update($NuevosDatos);
-
-        $autor= articulos_autores::where('articulo_id',$articulo->id)->update([
-            'autor_id'=>$NuevosDatos['autor_id'],
+        $articulo->update([
+            'titulo'=>$NuevosDatos['titulo'],
+            'area_id'=>$NuevosDatos['area_id'],
+            'evento_id'=>$NuevosDatos['evento_id'],
         ]);
+        
+        //buscamos el autor
+        $autor= articulos_autores::where('articulo_id',$articulo->id)->get();
+        //insertamos en articulos_autores
+        if ($autor->count() > 0) {
+            $autor[0]->update([
+                'autor_id' => $NuevosDatos['autor_id'],
+            ]);
+            return redirect('/articulos')->with('success', 'Artículo Modificado');
+        }else{
 
-        return redirect('/articulos');
+            return redirect('/articulos')->with('error', 'No se encontro el Autor ');
+        }
+
     }
 
     /**
@@ -108,7 +121,7 @@ class ArticulosController extends Controller
         
         if (articulos_autores::where('articulo_id', $articulo->id)->count() > 0) {
               
-              return redirect()->back()->with('error', 'No se puede eliminar el artículo; tiene autores asociados');
+              return redirect()->back()->with('error', 'No se puede eliminar el artículo: tiene autores asociados');
         }
         // Eliminar el artículo
         $articulo->delete();

@@ -112,17 +112,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     createArticleForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const authorPhoto = document.getElementById('article-author-photo').value;
-        const title = document.getElementById('article-title').value;
-        const description = document.getElementById('article-description').value;
-        const reviewersCount = parseInt(document.getElementById('article-reviewers-count').value, 10);
-        const reviewers = Array.from({ length: reviewersCount }, (_, i) => document.querySelector(`#create-article-form input[placeholder="Revisor ${i + 1}"]`).value);
-        const publicationDate = document.getElementById('article-publication-date').value;
+        // e.preventDefault();
+        // const authorPhoto = document.getElementById('article-author-photo').value;
+        // const title = document.getElementById('article-title').value;
+        // const description = document.getElementById('article-description').value;
+        // const reviewersCount = parseInt(document.getElementById('article-reviewers-count').value, 10);
+        // const reviewers = Array.from({ length: reviewersCount }, (_, i) => document.querySelector(`#create-article-form input[placeholder="Revisor ${i + 1}"]`).value);
+        // const publicationDate = document.getElementById('article-publication-date').value;
 
-        articles.push({ authorPhoto, title, description, reviewers, publicationDate });
-        createArticleForm.reset();
-        createArticleModal.style.display = 'none';
+        // articles.push({ authorPhoto, title, description, reviewers, publicationDate });
+        // createArticleForm.reset();
+        // createArticleModal.style.display = 'none';
         renderArticles(currentPage);
     });
 
