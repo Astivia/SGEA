@@ -104,7 +104,6 @@ class ArticulosController extends Controller
             ]);
             return redirect('/articulos')->with('success', 'Artículo Modificado');
         }else{
-
             return redirect('/articulos')->with('error', 'No se encontro el Autor ');
         }
 

@@ -1,24 +1,9 @@
 @extends('layouts.master')
-    <title>CiDiCi</title>
-    <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
+    <title>Revisores de articulos</title>
     <link rel="stylesheet" href="./css/style-home.css">
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 @section('Content')
-    <div class="main-content">
-        <header>
-            <div class="menu-toggle">
-                <label for="">
-                    <span class="las la-bars"></span>
-                </label>
-            </div>
-            <div class="header-icons">
-                <span class="las la-search"></span>
-                <span class="las la-bookmarks"></span>
-                <span class="las la-sms"></span>
-            </div>
-        </header>
-        <main>
             <div class="container">
                 <h1>Revisores</h1>
                 <div class="search-create">
@@ -101,8 +86,6 @@
                     </form>
                 </div>
             </div>
-        </main>
-    </div>
-<script src="./js/scriptEventos.js"></script>
-@endsection
-</html>
+
+    @endsection
+    <script src="./js/script-eventos.js"></script>

@@ -2,8 +2,27 @@
 
 @include ('layouts.sidebar')
     <body>
-        @yield('Content')
+        @if(session('error'))
+            <script>
+            alert('{{ session('error') }}');
+            </script>
+        @endif
+
+        @if(session('success'))
+            <script>
+            alert('{{ session('success') }}');
+            </script>
+        @endif
+        <div class="main-content">
+        @include ('layouts.head')
+            <main>
+                @yield('Content')
+            </main>
+        </div>
+        <script src="./js/script.js"></script>
     </body>
-        
+    
+    
+@include ('layouts.Footer')
     
              

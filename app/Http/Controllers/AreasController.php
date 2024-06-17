@@ -34,7 +34,8 @@ class areasController extends Controller
     {
         $datos=$request->all();
         areas::create($datos);
-        return redirect ('/areas');
+        return redirect ('/areas')->with('success', 'Se ha registrado de manera Satisfactoria');
+    
     }
 
     /**

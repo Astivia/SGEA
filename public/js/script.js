@@ -1,45 +1,35 @@
-const logregBox = document.querySelector('.logreg-box');
-const loginLink = document.querySelector('.login-link');
-const registerLink = document.querySelector('.register-link');
+document.addEventListener('DOMContentLoaded', () => {
+    const createEventBtn = document.getElementById('create-event-btn');
+    const createEventModal = document.getElementById('create-event-modal');
+    const closeButtons = document.querySelectorAll('.modal .close');
 
-registerLink.addEventListener('click', () => {
-    logregBox.classList.add('activate');
+    createEventBtn.addEventListener('click', () => {
+        createEventModal.style.display = 'block';
+    });
+
+    closeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            btn.closest('.modal').style.display = 'none';
+        });
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            e.target.style.display = 'none';
+        }
+    });
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    const menuHeads = document.querySelectorAll('.menu-head');
+
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
+
+    menuHeads.forEach(menuHead => {
+        menuHead.addEventListener('click', () => {
+            menuHead.nextElementSibling.classList.toggle('active');
+        });
+    });
 });
-
-loginLink.addEventListener('click', () => {
-    logregBox.classList.remove('activate');
-});
-
-document.getElementById('login-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const email = document.getElementById('login-email').value;
-    if (!email.endsWith('@toluca.tecnm.mx')) {
-        showModal('Usuario o contraseña incorrecto');
-    } else {
-        window.location.href = 'participantes.html';
-    }
-});
-
-document.getElementById('register-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    showModal('Confirma tu cuenta en tu correo electronico.');
-});
-
-const modal = document.getElementById('modal');
-const modalMessage = document.getElementById('modal-message');
-const span = document.getElementsByClassName('close')[0];
-
-function showModal(message) {
-    modalMessage.textContent = message;
-    modal.style.display = 'block';
-}
-
-span.onclick = function() {
-    modal.style.display = 'none';
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = 'none';
-    }
-}

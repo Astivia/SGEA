@@ -1,23 +1,11 @@
 @extends('layouts.master')
-    <title>Inicio</title>
-    <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
+    <title>CiDiCi</title>
     <link rel="stylesheet" href="./css/style-home.css">
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/style-areas.css">
+</head>
 @section('Content')
-<div class="main-content">
-        <header>
-            <div class="menu-toggle">
-                <label for="">
-                    <span class="las la-bars"></span>
-                </label>
-            </div>
-            <div class="header-icons">
-                <span class="las la-search"></span>
-                <span class="las la-bookmarks"></span>
-                <span class="las la-sms"></span>
-            </div>
-        </header>
-        <main>
+
+
             <div class="page-header">
                 <div>
                     <h1>Analytics Dashboard</h1>
@@ -118,9 +106,4 @@
                     </form>
                 </div>
             </div>
-        </main>
-    </div>
-      
 @endsection
-<script src="./script/crud.js"></script>
-</html>
