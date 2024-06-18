@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\areas;
-use App\Models\articulos; // Assuming the class is in App\Models
+use App\Models\articulos;
 
 use Illuminate\Http\Request;
 

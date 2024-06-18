@@ -8,7 +8,8 @@
         <h1>Artículos</h1>
         <div class="search-create">
             <input type="text" id="search-input" placeholder="Buscar artículos...">
-            <button id="create-article-btn">Registrar Artículo</button>
+            <button id="create-event-btn">Registrar Articulo</button>
+            
         </div>
         <div id="articles-list"></div>
         <div id="pagination"></div>
@@ -52,12 +53,6 @@
         <div id="pagination"></div>
     </div>
         
-            <div id="register-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <p>Se ha registrado correctamente.</p>
-                </div>
-            </div>
         
             <div id="create-article-modal" class="modal">
                 <div class="modal-content">
@@ -92,36 +87,5 @@
                     {!!Form::close()!!} 
                 </div>
             </div>
-        
-            <div id="view-article-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2>Detalle del Artículo</h2>
-                    <div id="article-details"></div>
-                    <button id="edit-article-btn">Editar</button>
-                </div>
-            </div>
-        
-            <div id="edit-article-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2>Editar Artículo</h2>
-                    <form id="edit-article-form">
-                        <label for="edit-article-author-photo">Foto del Autor:</label>
-                        <input type="text" id="edit-article-author-photo" placeholder="URL de la imagen" required>
-                        <label for="edit-article-title">Título del Artículo:</label>
-                        <input type="text" id="edit-article-title" required>
-                        <label for="edit-article-description">Descripción:</label>
-                        <textarea id="edit-article-description" required></textarea>
-                        <label for="edit-article-reviewers-count">Cantidad de Revisores:</label>
-                        <input type="number" id="edit-article-reviewers-count" min="1" required>
-                        <div id="edit-reviewers-container"></div>
-                        <label for="edit-article-publication-date">Fecha de Publicación:</label>
-                        <input type="date" id="edit-article-publication-date" required>
-                        <button type="submit">Actualizar Artículo</button>
-                    </form>
-                </div>
-            </div>
-
 @endsection
 <script src="./js/script-articulos.js"></script>

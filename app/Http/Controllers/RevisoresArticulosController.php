@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\revisores_articulos;
+use App\Models\participantes;
+use App\Models\articulos;
 
 class RevisoresArticulosController extends Controller
 {
@@ -13,9 +15,13 @@ class RevisoresArticulosController extends Controller
     public function index()
     {
         $RevArt= revisores_articulos::OrderBy('articulo_id')->get();
+
+        $Participantes=participantes::all();
+        $Articulos = articulos::select('titulo')->distinct()->get();
+
         
 
-        return view ('Revisores_Articulos.index',compact('RevArt'));
+        return view ('Revisores_Articulos.index',compact('RevArt','Participantes','Articulos'));
     }
 
     /**
@@ -31,7 +37,17 @@ class RevisoresArticulosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos=$request->all();
+        // dd($datos);
+
+        $articulo=articulos::where('titulo',$datos['articulo_titulo'])->first();
+
+        revisores_articulos::create([
+            'participante_id'=> $datos['participante_id'],
+            'articulo_id'=>$articulo->id
+        ]);
+
+        return redirect ('revisores_articulos');
     }
 
     /**

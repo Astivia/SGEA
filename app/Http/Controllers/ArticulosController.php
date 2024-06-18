@@ -8,6 +8,7 @@ use App\Models\autores;
 use App\Models\articulos_autores;
 use App\Models\eventos;
 use App\Models\areas;
+use App\Models\revisores_articulos;
 
 class ArticulosController extends Controller
 {
@@ -23,7 +24,6 @@ class ArticulosController extends Controller
         $Autores=autores::OrderBy('participante_id')->get();
 
         return view ('Articulos.index',compact('Articulos','Eventos','Areas','Autores'));
-        //return view ('Articulos.index',compact('Articulos'));
     }
 
     /**
@@ -116,11 +116,14 @@ class ArticulosController extends Controller
     {
         // Buscar el artículo a eliminar
         $articulo = articulos::find($id);
-
-        
-        if (articulos_autores::where('articulo_id', $articulo->id)->count() > 0) {
+        if (!$articulo){
+                
+            return redirect()->back()->with('error', 'No se encontro el articulo');
+        }elseif (articulos_autores::where('articulo_id', $articulo->id)->count() > 0) {
               
-              return redirect()->back()->with('error', 'No se puede eliminar el artículo: tiene autores asociados');
+              return redirect()->back()->with('error', 'No se puede eliminar el artículo porque tiene autores asociados');
+        }elseif(revisores_articulos::where('articulo_id', $articulo->id)->count() > 0){
+                return redirect()->back()->with('error', 'No se puede eliminar el artículo porque tiene revisores asociados');
         }
         // Eliminar el artículo
         $articulo->delete();

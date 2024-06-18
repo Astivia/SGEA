@@ -19,5 +19,6 @@
         <button type="submit">Guardar Cambios</button>
         <a href="{{!!asset('/areas')!!}"><button>Cancelar</button></a> 
     {!!Form::close()!!}   
+    
 </body>
 </html>

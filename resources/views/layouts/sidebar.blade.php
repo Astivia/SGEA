@@ -11,7 +11,7 @@
         <div class="sidebar-user">
             <h2>SGEA</h2>
             <img src="./imgs/perfil.png" alt="">
-                <!-- <img src="{{ asset('/imgs/perfil.png') }}" alt=""> -->
+                <!-- <img src="{{ asset('assets/perfil.png') }}" alt=""> -->
             <div>
                 <h3>@auth {{Auth::user()->name}} @endauth</h3>
                 <span>Administrador</span>

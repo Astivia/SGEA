@@ -12,10 +12,7 @@
                     <small>Estadisticas del evento actual</small>              
                 </div>
                 <div class="header-actions">
-                    <button>
-                        <span class="las la-file-export"></span>
-                        Export
-                    </button>
+                <button id="create-event-btn" class="las la-file-export">Export</button>
                     <button>
                         <span class="las la-tools"></span>
                         Settings

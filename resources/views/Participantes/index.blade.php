@@ -56,12 +56,6 @@
                 <div id="pagination"></div>
             </div>
         
-            <div id="register-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <p>Se ha registrado correctamente.</p>
-                </div>
-            </div>
         
             <div id="create-event-modal" class="modal">
                 <div class="modal-content">
@@ -95,27 +89,6 @@
                 </div>
             </div>
         
-            <div id="edit-event-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2>Editar Evento</h2>
-                    <form id="edit-event-form">
-                        <label for="edit-event-name">Nombre del Evento:</label>
-                        <input type="text" id="edit-event-name" required>
-                        <label for="edit-event-description">Descripción:</label>
-                        <textarea id="edit-event-description" required></textarea>
-                        <label for="edit-event-photo">Fotografía:</label>
-                        <input type="text" id="edit-event-photo" placeholder="URL de la imagen" required>
-                        <label for="edit-event-speaker">Ponente:</label>
-                        <input type="text" id="edit-event-speaker" required>
-                        <label for="edit-event-date">Fecha del Evento:</label>
-                        <input type="date" id="edit-event-date" required>
-                        <label for="edit-event-time">Hora del Evento:</label>
-                        <input type="time" id="edit-event-time" required>
-                        <button type="submit">Actualizar Evento</button>
-                    </form>
-                </div>
-            </div>
 
             @endsection
             <script src="./js/script-participantes.js"></script>

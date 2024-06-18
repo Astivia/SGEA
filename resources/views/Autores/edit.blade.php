@@ -34,6 +34,7 @@
 
         <br><br>
         <button type="submit">Guardar cambios</button>
+        <a href="{{!!asset('/autores')!!}"><button>Cancelar</button></a> 
     {!!Form::close()!!}
 
     

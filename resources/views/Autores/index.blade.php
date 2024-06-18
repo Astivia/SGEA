@@ -48,27 +48,11 @@
                 <div id="pagination"></div>
             </div>
         
-            <div id="register-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <p>Se ha registrado correctamente.</p>
-                </div>
-            </div>
-        
             <div id="create-event-modal" class="modal">
                 <div class="modal-content">
                     <span class="close">&times;</span>
                     <h2>Registrar Autor</h2>
                     {!! Form::open(['url'=>'/autores']) !!}
-
-                        <!-- {!! Form::label ('evento', 'Evento:') !!}
-                        {!! Form::select ('evento',  $Eventos->pluck('acronimo','edicion')->all(), null
-                        ,['placeholder'=> 'Seleccionar...','class'=>'form-control','onchange'=>'llenar_participantes(this.value);'])!!}
-
-
-                        {!! Form::label ('participante_id', 'Participante:') !!}
-                        {!! Form::select ('participante_id', array(''=>'Seleccionar...'), null
-                        ,['placeholder'=> 'Seleccionar...','class'=>'form-control'])!!} -->
                         <label for="evento">Seleccionar evento :</label>
                         <select name="evento_id" require>
                         @foreach ($Eventos as $evento)
@@ -87,34 +71,10 @@
                         <input type="text" id="afiliacion" name="afiliacion" required>
 
 
-                        <button type="submit">Guardar articulo</button>
+                        <button type="submit">Agregar Autor</button>
                     {!!Form::close()!!} 
-                </div>
-            </div>
-        
-            <div id="edit-event-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2>Editar Evento</h2>
-                    <form id="edit-event-form">
-                        <label for="edit-event-name">Nombre del Evento:</label>
-                        <input type="text" id="edit-event-name" required>
-                        <label for="edit-event-description">Descripción:</label>
-                        <textarea id="edit-event-description" required></textarea>
-                        <label for="edit-event-photo">Fotografía:</label>
-                        <input type="text" id="edit-event-photo" placeholder="URL de la imagen" required>
-                        <label for="edit-event-speaker">Ponente:</label>
-                        <input type="text" id="edit-event-speaker" required>
-                        <label for="edit-event-date">Fecha del Evento:</label>
-                        <input type="date" id="edit-event-date" required>
-                        <label for="edit-event-time">Hora del Evento:</label>
-                        <input type="time" id="edit-event-time" required>
-                        <button type="submit">Actualizar Evento</button>
-                    </form>
                 </div>
             </div>
 
 @endsection
-    
-<!-- <script src="./js/scriptEventos.js"></script> -->
 

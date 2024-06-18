@@ -21,7 +21,7 @@ class AutoresController extends Controller
      */
     public function index()
     {
-        $Autores=autores::OrderBy('id')->get();
+        $Autores=autores::OrderBy('participante_id')->get();
 
         $Eventos= eventos::all();
         $Participantes = participantes::OrderBy('nombre')->get();
