@@ -24,6 +24,7 @@
                     <th>TITULO</th>
                     <th>AREA</th>
                     <th>AUTOR</th>
+                    <th>Controles</th>
                 </tr>
                 @foreach ($Articulos as $art)
                 <tr>

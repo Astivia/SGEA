@@ -25,7 +25,7 @@
                             <th>EDICION</th>
                             <th>FECHA INICIO</th>
                             <th>FECHA FIN</th>
-                            <th>CONTROLES</th>
+                            <th>Controles</th>
                         </tr>
                         @foreach ($Eventos as $e)
                         <tr>

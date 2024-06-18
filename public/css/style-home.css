@@ -14,7 +14,7 @@
     left: 0;
     top: 0;
     height: 100%;
-    padding: 1rem 1.5rem;
+    padding: 1rem 1.5rem;  
     background-color: rgb(34, 76, 156);
     color: aliceblue;
     overflow-y: auto;
@@ -35,10 +35,14 @@
     font-size: 1.5rem;
     margin-left: .5rem;
 }
+/*Se aplican cambios start*/
 .sidebar-user {
     margin: 0rem 0rem 1rem 0rem;
     text-align: center;
+    border: 1px solid white;
+    padding: 5px;
 }
+/*Se aplican cambios end*/
 .sidebar-user img {
     width: 100px;
     height: 100px;
@@ -58,19 +62,41 @@
 }
 .sidebar-menu {
     margin-top: 3rem;
+    background-color:wh;
+    padding: 10px;
+    border-radius: 5px;
 }
+/*Se aplican cambios start*/
 .menu-head {
     text-transform: uppercase;
-    color: rgb(227, 119, 59);
-    font-size: .75rem;
-    font-weight: 600;
+    color: rgb(17, 6, 0);
+    font-size: .85rem;
+    font-weight:600;
     margin-bottom: .5rem;
     cursor: pointer;
+    padding: 10px;
+   background-color: rgb(52, 138, 167);
+    
+    
 }
+.menu-head i{
+    color: white;
+}
+.menu-head:hover{
+    background-color: rgb(81, 59, 86);
+    border-radius: 10px;
+}
+
+
 .sidebar-menu ul {
     margin-bottom: 1.5rem;
     display: none;
+    padding: 10px;
+    background-color: rgb(81, 59, 86);
+    border-radius: 2px;
+    
 }
+/*Se aplican cambios end*/
 .sidebar-menu ul.active {
     display: block;
 }
@@ -97,24 +123,26 @@
 .sidebar.active ~ .main-content {
     margin-left: 0;
 }
+/*Se aplican cambios start*/
 header {
-    height: 70px;
-    background-color: rgb(227, 119, 59);
+    height: 150px;
+    background-image: url(../assets/img/headercompleto.jpeg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 1.5rem;
+    border-bottom: 4px solid rgb(227, 119, 59);
 }
+/*Se aplican cambios end*/
 
-header .logo {
-    height: 100%;
-    max-height: 70px; /* Ensure the image doesn't exceed the header height */
-    width: auto;
-}
 
 header .header-icons {
     display: flex;
     align-items: center;
+    margin-top: 120px;
 }
 
 header .header-icons span {
@@ -125,17 +153,28 @@ header .header-icons span {
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
+    border-bottom: 4px solid rgb(227, 119, 59);
+    border-radius: 50%;
 }
 
 header .menu-toggle {
     display: flex;
     align-items: center;
+    margin-top: 120px;
+   
+   
 }
 
 header .menu-toggle span {
     font-size: 1.5rem;
     color: aliceblue;
     margin-right: 1.5rem; /* Adjust the spacing as needed */
+    background-color: rgb(170, 170, 170);
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 4px solid rgb(227, 119, 59);
+    border-radius: 50%;
 }
 
 /* Responsive design */
@@ -144,18 +183,19 @@ header .menu-toggle span {
         flex-direction: column;
         align-items: flex-start;
         padding: 0.5rem;
+        height: 70px;
     }
 
     header .menu-toggle {
         margin-bottom: 0.5rem;
+        margin-top: 50px;
     }
 
-    header .logo {
-        margin-bottom: 0.5rem;
-    }
+   
 
     header .header-icons {
         width: 100%;
+        margin-top: -50px;
         justify-content: flex-end;
     }
 
@@ -282,4 +322,74 @@ form button[type="submit"] {
     
 
     
+}
+
+/* tablas */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: rgb(52, 138, 167);
+    color: white;
+    text-transform: uppercase;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button:focus {
+    outline: none;
+}
+
+a button {
+    background-color: blue;
+    color: white;
+}
+
+a button:hover {
+    background-color: darkblue;
+}
+
+form button {
+    background-color: red;
+    color: white;
+}
+
+form button:hover {
+    background-color: darkred;
+}
+
+form {
+    display: inline;
+}
+
+td:last-child {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }

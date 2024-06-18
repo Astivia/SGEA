@@ -41,7 +41,7 @@
                     </div>
                     <button type="submit" class="btn">Iniciar Sesion</button>
                     <div class="login-register">
-                        <p>No tienes una cuenta? <a href="#" class="register-link">Registrarme</a></p>
+                        <p>No tienes una cuenta? <a href="registro" class="register-link">Registrarme</a></p>
                     </div>
                 </form>
             </div>
@@ -91,8 +91,9 @@
                         </span>
                     </div>
                     <button type="submit" class="btn">Registrar</button>
+
                     <div class="login-register">
-                        <p>¿Ya tienes una cuenta? <a href="#" class="login-link">Inicia sesión</a></p>
+                        <p>¿Ya tienes una cuenta? <a href="login" class="login-link">Inicia sesión</a></p>
                     </div>
                 </form>
             </div>

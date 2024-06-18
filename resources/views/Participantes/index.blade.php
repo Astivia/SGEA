@@ -1,6 +1,6 @@
 @extends('layouts.master')
     <title>Participantes</title>
-    <link rel="stylesheet" href="./css/style-home.css">
+    
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 @section('Content')
@@ -13,7 +13,8 @@
                 <div id="events-list"></div>
                 <div id="pagination"></div>
             </div>
-
+            <br><br>
+            
             <div class="container">
                 <h1>Lista de Participantes</h1>
                 <div class="info">
@@ -24,6 +25,7 @@
                             <th>APELLIDOS</th>
                             <th>EMAIL</th>
                             <th>CURP</th>
+                            <th>Controles</th>
                         </tr>
                         @foreach ($Participantes as $part)
                         <tr>
@@ -90,5 +92,5 @@
             </div>
         
 
-            @endsection
-            <script src="./js/script-participantes.js"></script>
+ @endsection
+     <script src="./js/script-participantes.js"></script>

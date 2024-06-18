@@ -22,7 +22,7 @@
             <div class="menu-head">
                 <span>Catálogos</span>
             </div>
-            <ul class="menu-list">
+            <ul class="menu-list active">
                 <li><a href=eventos><span class="las la-calendar-alt"></span>Eventos</a></li>
                 <li><a href=participantes><span class="las la-user"></span>Participantes</a></li>
                 <li><a href=comite_editorial><span class="las la-user"></span>Comide Editorial</a></li>

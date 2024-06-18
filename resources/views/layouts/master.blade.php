@@ -23,6 +23,7 @@
     </body>
     
     
+    
 @include ('layouts.Footer')
     
              

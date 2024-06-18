@@ -22,12 +22,14 @@
                         <th>REVISOR</th>
                         <th>ARTICULO</th>
                         <th>AREA</th>
+                        <th>Controles</th>
                     </tr>
                      @foreach ($RevArt as $ra)
                     <tr>
                         <td>{!!$ra->participante->nombre!!} {!!$ra->participante->apellidos!!}</td>
                         <td>{!!$ra->articulo->titulo!!}</td>
                         <td>{!!$ra->articulo->area->nombre!!}</td>
+                        
                         <td>
                             <a href="{!!'revisores_articulos/'.$ra->id.'/edit'!!}">
                                     <button>editar</button>

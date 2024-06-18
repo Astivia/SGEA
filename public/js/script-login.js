@@ -19,9 +19,7 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
     const email = document.getElementById('login-email').value;
     if (!email.endsWith('@toluca.tecnm.mx')) {
         showModal('Usuario o contraseña incorrecto');
-    } else {
-        window.location.href = "";
-    }
+    } 
 });
 
 document.getElementById('register-form').addEventListener('submit', function(e) {

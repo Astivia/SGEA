@@ -22,6 +22,7 @@
                             
                             <th>PARTICIPANTE</th>
                             <th>AFILIACION</th>
+                            <th>Controles</th>
                         </tr>
                         @foreach ($Autores as $autor)
                         <tr>                  

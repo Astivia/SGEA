@@ -52,6 +52,9 @@ Route::get('/logout',[LoginController::class,'logout'])->name('logout');
 Route::get('/', function () {
     return view('login');
 });
+Route::get('pruebas', function () {
+    return view('pruebas');
+});
 
 Route::get('EnviarCorreo', function () {
     

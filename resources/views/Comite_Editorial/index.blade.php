@@ -22,6 +22,7 @@
                         <tr>
                             <th>EVENTO</th>
                             <th>PARTICIPANTE</th>
+                            <th>Controles</th>
                         </tr>
                         @foreach ($Comite as $ce)
                         <tr>                  
