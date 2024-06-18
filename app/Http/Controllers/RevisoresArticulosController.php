@@ -63,7 +63,14 @@ class RevisoresArticulosController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $ra=revisores_articulos::find($id);
+
+        $Participantes=participantes::all();
+        $Articulos = articulos::select('titulo')->distinct()->get();
+
+        return view('Revisores_Articulos.edit', compact('Articulos','Participantes','ra'));
+
+
     }
 
     /**
@@ -71,7 +78,11 @@ class RevisoresArticulosController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $NuevosDatos = $request->all();
+        dd($NuevosDatos);
+        $ra=revisores_articulos::find($id);
+        $ra->update($NuevosDatos);
+        return redirect('/participantes');
     }
 
     /**

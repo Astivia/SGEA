@@ -28,6 +28,22 @@
                         <td>{!!$ra->participante->nombre!!} {!!$ra->participante->apellidos!!}</td>
                         <td>{!!$ra->articulo->titulo!!}</td>
                         <td>{!!$ra->articulo->area->nombre!!}</td>
+                        <td>
+                            <a href="{!!'revisores_articulos/'.$ra->id.'/edit'!!}">
+                                    <button>editar</button>
+                                </a>
+                                <a href="{{url('revisores_articulos/'.$ra->id)}}" 
+                                    onclick="
+                                    event.preventDefault(); 
+                                    if (confirm('¿Estás seguro de que deseas eliminar este Revisor?')) 
+                                    { document.getElementById('delete-form-{{ $ra->id }}').submit(); }">
+                                <button>Eliminar</button>
+                                </a>
+                                <form id="delete-form-{{ $ra->id }}" action="{{ url('revisores_articulos/'.$ra->id) }}" method="POST" style="display: none;">
+                                    @method('DELETE')
+                                    @csrf
+                                </form>
+                        </td>
                     </tr>
                      @endforeach
                 </table>
