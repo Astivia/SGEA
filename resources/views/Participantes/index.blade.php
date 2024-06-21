@@ -42,13 +42,13 @@
                 <td>{!!$part->curp!!}</td>
                 <td>
                     <a href="{!!'participantes/'.$part->id.'/edit'!!}">
-                        <i class="las la-user-edit"></i>
+                        <i class="las la-user-edit la-2x"></i>
                     </a>
                     <a href="{{url('participantes/'.$part->id)}}" onclick="
                                             event.preventDefault(); 
                                             if (confirm('¿Estás seguro de que deseas eliminar este registro?')) 
                                             { document.getElementById('delete-form-{{ $part->id }}').submit(); }">
-                        <i class="las la-user-minus"></i>
+                        <i class="las la-user-minus la-2x"></i>
                     </a>
                     <form id="delete-form-{{ $part->id }}" action="{{ url('participantes/'.$part->id) }}" method="POST"
                         style="display: none;">

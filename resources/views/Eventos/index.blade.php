@@ -12,24 +12,26 @@
         <input type="text" id="search-input" placeholder="Buscar eventos...">
         <button id="create-event-btn">Crear nuevo evento</button>
     </div>
-    <div id="events-list"></div>
-    <div id="pagination"></div>
 </div>
-
+<br><br>
 <div class="container">
     <h1>Lista de Eventos</h1>
     <div class="info">
         <table border=0>
             <tr>
+                <th>LOGO</th>
                 <th>NOMBRE</th>
                 <th>ACRONIMO</th>
-                <th>EDICION</th>
+                <th>ED.</th>
                 <th>FECHA INICIO</th>
                 <th>FECHA FIN</th>
-                <th>Controles</th>
+                <th> </th>
             </tr>
             @foreach ($Eventos as $e)
             <tr>
+                <td>
+                    <img src="{{ asset('SGEA/public/assets/uploads/' . $e->img) }}" alt="logo" style="width: 150px;">
+                </td>
                 <td>{!!$e->nombre!!}</td>
                 <td>{!!$e->acronimo!!}</td>
                 <td>{!!$e->edicion!!}</td>
@@ -37,11 +39,11 @@
                 <td>{!!$e->fecha_fin!!}</td>
                 <td>
                     <a href="{!!'eventos/'.$e->id.'/edit'!!}">
-                        <button>editar</button>
+                        <i class="las la-pen la-2x"></i>
                     </a>
                     <a href="{{url('eventos/'.$e->id)}}"
                         onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $e->id }}').submit(); }">
-                        <button>Eliminar</button>
+                        <i class="las la-trash-alt la-2x"></i>
                     </a>
                     <form id="delete-form-{{ $e->id }}" action="{{ url('eventos/'.$e->id) }}" method="POST"
                         style="display: none;">

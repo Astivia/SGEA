@@ -36,19 +36,24 @@ class EventosController extends Controller
         $datos=$request->all();
         // Obtener el archivo imagen
         $file = $datos['img'];
-        // Definir la ruta donde se guardará el archivo
-        $destinationPath = public_path('assets/uploads');
-        // Crear la carpeta si no existe
-        if (!file_exists($destinationPath)) {
-            mkdir($destinationPath, 0755, true);
-        }
-        // Generar un nombre único para el archivo
-        $fileName = time() . '.' . $file->getClientOriginalExtension();
-        // Mover el archivo a la ruta especificada
-        $file->move($destinationPath, $fileName);
-        //guardamos solo el nombre en la BD
-        $datos['img'] = $fileName;
 
+        if($file){
+
+            // Definir la ruta donde se guardará el archivo
+            $destinationPath = public_path('assets/uploads');
+            // Crear la carpeta si no existe
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            // Generar un nombre único para el archivo
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            // Mover el archivo a la ruta especificada
+            $file->move($destinationPath, $fileName);
+            //guardamos solo el nombre en la BD
+            $datos['img'] = $fileName;
+        }else{
+            $datos['img'] = 'NO ASIGNADO';
+        }
         eventos::create($datos);
         return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
     }
@@ -77,6 +82,22 @@ class EventosController extends Controller
     {
         $NuevosDatos = $request->all();
         $evento=eventos::find($id);
+        // Obtener el archivo imagen
+        $file = $NuevosDatos['img'];
+        
+        // Definir la ruta donde se guardará el archivo
+        $destinationPath = public_path('assets/uploads');
+        // Crear la carpeta si no existe
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+        // Generar un nombre único para el archivo
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
+        // Mover el archivo a la ruta especificada
+        $file->move($destinationPath, $fileName);
+        //guardamos solo el nombre en la BD
+        $NuevosDatos['img'] = $fileName;
+
         $evento->update($NuevosDatos);
         return redirect('/eventos');
     }
