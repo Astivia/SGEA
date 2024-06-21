@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class eventos extends Model
 {
     protected $table = 'eventos';
-    protected $fillable = ['nombre','acronimo','fecha_inicio','fecha_fin',
-                            'edicion'];
+    protected $fillable = [
+        'nombre',
+        'acronimo',
+        'fecha_inicio',
+        'fecha_fin',
+        'edicion',
+        'img'
+    ];
 
 }

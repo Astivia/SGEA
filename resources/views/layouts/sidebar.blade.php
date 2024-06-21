@@ -13,7 +13,7 @@
             <img src="./imgs/perfil.png" alt="">
                 <!-- <img src="{{ asset('assets/perfil.png') }}" alt=""> -->
             <div>
-                <h3>@auth {{Auth::user()->name}} @endauth</h3>
+                <h3>@auth {{Auth::user()->nombre}} {{Auth::user()->ap_pat}} {{Auth::user()->ap_mat}}@endauth</h3>
                 <span>Administrador</span>
             </div>                
         </div>

@@ -26,7 +26,7 @@
                         </tr>
                         @foreach ($Autores as $autor)
                         <tr>                  
-                            <td>{!!$autor->participante->nombre!!} {!!$autor->participante->apellidos!!}</td>
+                            <td>{!!$autor->participante->ap_pat!!} {!!$autor->participante->ap_mat!!} {!!$autor->participante->nombre!!}</td>
                             <td>{!!$autor->afiliacion!!}</td>
                             <td>
                                 <a href="{!!'autores/'.$autor->id.'/edit'!!}">
@@ -64,7 +64,7 @@
                         <label for="participante">Seleccionar participante :</label>
                         <select name="participante_id" require>
                         @foreach ($Participantes as $participante)
-                            <option value="{{ $participante->id }}">{{ $participante->nombre}} {{ $participante->apellidos}}</option>
+                            <option value="{{ $participante->id }}">{{ $participante->ap_pat}} {{ $participante->ap_mat}} {{ $participante->nombre}}</option>
                         @endforeach
                         </select>
 

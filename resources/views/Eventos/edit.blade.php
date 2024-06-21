@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Editar</title>
 </head>
 <body>
-    <h1>MODIFICAR Evento</h1>
+    <h1>Modificar Evento</h1>
     {!! Form::open(['method'=>'PATCH','url'=>'/eventos/'.$evento->id]) !!}
+        <label for="img">Imagen:</label>
+        <img src="<?php echo asset('SGEA/public/assets/uploads/' . $evento->img); ?>" alt="Logo-de-Evento"> 
+        <img src="<?php echo public_path('assets/uploads/'. $evento->img); ?>" alt="Logo-de-Evento">
+        <br><br>
+        <img src="{{ asset('assets/uploads/'.$evento->img) }}" alt="aaa">
+        
+        <br><br>
         <label for="nombre">Nombre:</label>
         {!! Form::text ('nombre',$evento->nombre)!!}
         <br><br>

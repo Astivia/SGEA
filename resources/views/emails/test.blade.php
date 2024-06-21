@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>CORREO ELECTRONICO DE PRUEBA</h1>
+    <h1>CORREO ELECTRONICO</h1>
     <img src="https://www.tolucatecnm.mx/images/services/escudo-110733.1639760859.png" alt="" width=400px>
     <P>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
         Excepturi soluta fugiat perferendis eaque possimus inventore in! 

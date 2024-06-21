@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('articulo_id');
             $table->unsignedBigInteger('autor_id');
             $table->foreign('articulo_id')->references('id')->on('articulos');
-            $table->foreign('autor_id')->references('id')->on('autores');
+            $table->foreign('autor_id')->references('id')->on('autores')->onDelete('SET NULL');
             $table->timestamps();
         });
     }

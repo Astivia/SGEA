@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('evento_id')->nullable();
             $table->string('nombre');
-            $table->string('apellidos');
+            $table->string('ap_pat');
+            $table->string('ap_mat');
             $table->string('curp')->unique();
             $table->string('email');
             $table->string('password');

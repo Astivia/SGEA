@@ -7,43 +7,42 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+// use App\Models\User;
+use App\Models\participantes;
 
 
 class LoginController extends Controller
 {
     public function register(Request $request){
-        //validar datos
+        //validacion de datos
 
+        //recolectamos los datos en una variable
 
-        // $participante = Participante::create([
-        //     'nombre' => $validatedData['nombre'],
-        //     'apellidos' => $validatedData['apellidos'],
-        //     'email' => $validatedData['email'],
-        //     'password' => Hash::make($validatedData['password']),
-        //     'curp' => $validatedData['curp'],
-        // ]);
+        $Datos=$request->all();
 
-        // Auth::login($participante);
+        //validamos que NO exista un participante ya registrado con la misma CURP
 
-        $user = new User();
+        if (participantes::where('curp', $Datos['curp'])->exists()) {
+            
+            return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada');
 
-        $user->name= $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        }else{
 
-        $user->save();
+            //Encriptamos la contraseña y Creamos el usuario en la BD
+            $Datos['password'] = Hash::make($Datos['password']);
+            $user = participantes::create($Datos);
 
-        Auth::login($user);
+            //Iniciamos sesion con el usuario recien creado y lo redirigimos al dashboard
+            Auth::login($user);
+            return redirect(route('home'));
+        }
         
-        return redirect(route('home'));
     }
 
     public function login(Request $request){
         //validacion de datos
 
         $credentials =[
-
             "email"=> $request['email'],
             "password"=> $request['password']
         ];

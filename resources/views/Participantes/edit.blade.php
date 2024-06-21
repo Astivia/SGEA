@@ -19,11 +19,14 @@
         </select>
         <br><br>                   
         <label for="participante-name">Nombre:</label>
-        {!! Form::text ('nombre',$part->nombre)!!}
-        <br><br>                   
+        {!! Form::text ('nombre',$part->nombre)!!}              
                             
-        <label for="participante-lastName">Apellidos:</label>
-        {!! Form::text ('apellidos',$part->apellidos)!!}
+        <label for="participante-lastName">Apellido Paterno:</label>
+        {!! Form::text ('ap_pat',$part->ap_pat)!!}
+                           
+                            
+        <label for="participante-lastName">Apellido Materno:</label>
+        {!! Form::text ('ap_mat',$part->ap_mat)!!}
         <br><br>                   
                             
         <label for="participante-curp">CURP:</label>

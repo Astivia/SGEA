@@ -33,8 +33,23 @@ class EventosController extends Controller
      */
     public function store(Request $request)
     {
-       $data=$request->all();
-        eventos::create($data);
+        $datos=$request->all();
+        // Obtener el archivo imagen
+        $file = $datos['img'];
+        // Definir la ruta donde se guardará el archivo
+        $destinationPath = public_path('assets/uploads');
+        // Crear la carpeta si no existe
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+        // Generar un nombre único para el archivo
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
+        // Mover el archivo a la ruta especificada
+        $file->move($destinationPath, $fileName);
+        //guardamos solo el nombre en la BD
+        $datos['img'] = $fileName;
+
+        eventos::create($datos);
         return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
     }
 

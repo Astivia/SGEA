@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\participantes;
 use App\Models\eventos;
 use App\Models\autores;
@@ -20,9 +21,9 @@ class ParticipantesController extends Controller
     {
         $Participantes = participantes::OrderBy('nombre')->get();
         $Eventos=eventos::all();
-        $Message=null;
+        
 
-        return view ('Participantes.index',compact('Participantes','Eventos','Message'));
+        return view ('Participantes.index',compact('Participantes','Eventos'));
     }
 
     /**
@@ -99,6 +100,7 @@ class ParticipantesController extends Controller
         
         $NuevosDatos = $request->all();
         $participante=participantes::find($id);
+        $NuevosDatos['password'] = Hash::make($NuevosDatos['password']);
         $participante->update($NuevosDatos);
         return redirect('/participantes');
     }
