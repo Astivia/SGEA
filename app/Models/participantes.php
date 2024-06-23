@@ -68,6 +68,21 @@ class participantes extends AuthenticatableUser implements Authenticatable
         return $this->belongsTo(eventos::class, 'evento_id','id');
     }
 
+    public function roles()
+    {
+        return $this->belongsToMany(roles::class, 'participantes_roles');
+    }
+    // Métodos para verificar roles de un participante
+    public function hasRole($roleId)
+    {
+        return $this->roles()->where('id', $roleId)->exists();
+    }
+
+    public function hasAnyRoles($roleIds)
+    {
+        return $this->roles()->whereIn('id', $roleIds)->exists();
+    }
+
 }
 // class participantes extends Model
 // {

@@ -32,11 +32,11 @@
                 <li><a href="{{ url('revisores_articulos') }}"><span class="las la-people-carry"></span>Revisores</a></li>                           
             </ul>
             <div class="menu-head">
-                <span>Aplicaciones</span>
+                <span>Administracion</span>
             </div>
             <ul>
-                <li><a href=""><span class="las la-calendar"></span>Calendario</a></li>
-                <li><a href=""><span class="las la-user"></span>Contactos</a></li>
+                <li><a href="{{ url('roles') }}"><span class="las la-calendar"></span>Roles</a></li>
+                <li><a href="{{ url('permisos') }}"><span class="las la-user"></span>Permisos</a></li>
             </ul>
         </div>
     </div>

@@ -9,10 +9,8 @@
                 <input type="text" id="search-input" placeholder="Buscar eventos...">
                 <button id="create-event-btn">Crear nuevo revisor</button>
             </div>
-            <div id="events-list"></div>
-            <div id="pagination"></div>
         </div>
-
+<br><br>
         <div class="container">
             <h1>Revisores</h1>
             <div class="info">

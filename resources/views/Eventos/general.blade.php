@@ -14,6 +14,7 @@
                 <a href="{{ route('general', $e->acronimo) }}"><button>Ver Eventos</button></a>
 
             </div>
+            <br>
         @endforeach
         
     </div>

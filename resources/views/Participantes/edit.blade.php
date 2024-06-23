@@ -15,7 +15,9 @@
                 </option>
             @endforeach
             </select>
-            <br><br>                   
+
+         
+
             <label for="participante-name">Nombre:</label>
             {!! Form::text ('nombre',$part->nombre)!!}              
                                 
@@ -25,19 +27,18 @@
                                 
             <label for="participante-lastName">Apellido Materno:</label>
             {!! Form::text ('ap_mat',$part->ap_mat)!!}
-            <br><br>                   
+               
                                 
             <label for="participante-curp">CURP:</label>
             {!! Form::text ('curp',$part->curp)!!}
-            <br><br>                   
-            
+
             <label for="participante-email">Email:</label>
             {!! Form::text ('email',$part->email)!!}
-            <br><br>                   
+                 
                                 
             <label for="participante-pass">Nueva Contraseña:</label>
             {!! Form::text ('password',null)!!}
-            <br><br>                   
+               
             
             <button type="submit">Guardar</button>
             <a href="{{asset('SGEA/public/participantes')}}"><button>Cancelar</button></a>

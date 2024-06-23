@@ -10,10 +10,8 @@
         <input type="text" id="search-input" placeholder="Buscar participante...">
         <button id="create-event-btn">Agregar Participante</button>
     </div>
-    <div id="events-list"></div>
-    <div id="pagination"></div>
 </div>
-
+<br><br>
 <div class="container">
     <h1>Participantes del Comite Editorial</h1>
     <div class="info">
