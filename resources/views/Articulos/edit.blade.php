@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MODIFICAR DATOS</title>
+@extends('layouts.master')
+    <title>Modificar Datos</title>
 </head>
-<body>
+@section('Content')
+<div class="container">
     <h1>MODIFICAR ARTICULO</h1>
     {!! Form::open(['method'=>'PATCH','url'=>'/articulos/'.$art->id]) !!}
         <label for="titulo">Titulo:</label>
@@ -43,5 +40,6 @@
         <button type="submit">Guardar Cambios</button>
         <a href="{{!!asset('/articulos')!!}"><button>Cancelar</button></a> 
         {!!Form::close()!!}   
-</body>
-</html>
+</div>
+    
+@endsection

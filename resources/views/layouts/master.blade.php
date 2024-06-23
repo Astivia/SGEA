@@ -19,11 +19,9 @@
                 @yield('Content')
             </main>
         </div>
-        <script src="./js/script.js"></script>
+        <script src="{{asset('SGEA/public/js/script.js')}}"></script>
+
     </body>
-    
-    
-    
 @include ('layouts.Footer')
     
              

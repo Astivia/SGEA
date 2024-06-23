@@ -15,9 +15,16 @@ class EventosController extends Controller
      */
     public function index()
     {
-        $Eventos = eventos::all();
+       
 
-        return view ('Eventos.index',compact('Eventos'));
+        $Eventos = eventos::select('nombre','acronimo','img')->distinct()->get();
+        return view ('Eventos.general',compact('Eventos'));
+    }
+
+    public function general($acronimo){
+        
+        $Eventos = eventos::where('acronimo', $acronimo)->get();
+        return view('Eventos.index', compact('Eventos'));
     }
 
     /**

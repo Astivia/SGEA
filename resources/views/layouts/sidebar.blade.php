@@ -10,8 +10,8 @@
     <div class="sidebar-main">
         <div class="sidebar-user">
             <h2>SGEA</h2>
-            <img src="./imgs/perfil.png" alt="">
-                <!-- <img src="{{ asset('assets/perfil.png') }}" alt=""> -->
+                <!-- <img src="./imgs/perfil.png" alt=""> -->
+                <img src="{{ asset('SGEA/public/assets/img/perfil.png') }}" alt="">
             <div>
                 <h3>@auth {{Auth::user()->nombre}} {{Auth::user()->ap_pat}} {{Auth::user()->ap_mat}}@endauth</h3>
                 <span>Administrador</span>
@@ -23,13 +23,13 @@
                 <span>Catálogos</span>
             </div>
             <ul class="menu-list active">
-                <li><a href=eventos><span class="las la-calendar-alt"></span>Eventos</a></li>
-                <li><a href=participantes><span class="las la-user"></span>Participantes</a></li>
-                <li><a href=comite_editorial><span class="las la-user"></span>Comide Editorial</a></li>
-                <li><a href=areas><span class="las la-id-card"></span>Áreas</a></li>    
-                <li><a href=autores><span class="las la-comment"></span>Autores</a></li>
-                <li><a href=articulos><span class="las la-comment"></span>Artículos</a></li>
-                <li><a href=revisores_articulos><span class="las la-people-carry"></span>Revisores</a></li>                           
+                <li><a href="{{ url('eventos') }}"><span class="las la-calendar-alt"></span>Eventos</a></li>
+                <li><a href="{{ url('participantes') }}"><span class="las la-user"></span>Participantes</a></li>
+                <li><a href="{{ url('comite_editorial') }}"><span class="las la-user"></span>Comide Editorial</a></li>
+                <li><a href="{{ url('areas') }}"><span class="las la-id-card"></span>Áreas</a></li>    
+                <li><a href="{{ url('autores') }}"><span class="las la-comment"></span>Autores</a></li>
+                <li><a href="{{ url('articulos') }}"><span class="las la-comment"></span>Artículos</a></li>
+                <li><a href="{{ url('revisores_articulos') }}"><span class="las la-people-carry"></span>Revisores</a></li>                           
             </ul>
             <div class="menu-head">
                 <span>Aplicaciones</span>

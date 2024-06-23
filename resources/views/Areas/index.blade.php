@@ -1,6 +1,6 @@
 @extends('layouts.master')
 <title>Areas</title>
-<link rel="stylesheet" href="./css/style-areas.css">
+<!-- <link rel="stylesheet" href="./css/style-areas.css"> -->
 
 </head>
 

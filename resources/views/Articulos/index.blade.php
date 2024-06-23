@@ -1,7 +1,6 @@
 @extends('layouts.master')
     <title>Articulos</title>
-    <link rel="stylesheet" href="./css/style-home.css">
-    <link rel="stylesheet" href="./css/style-articulos.css">
+    <!-- <link rel="stylesheet" href="./css/style-articulos.css"> -->
 </head>
 @section('Content')
     <div class="container">
@@ -14,6 +13,7 @@
         <div id="articles-list"></div>
         <div id="pagination"></div>
     </div>
+    <br><br>
 
     <div class="container">
         <h1>Lista de Articulos</h1>

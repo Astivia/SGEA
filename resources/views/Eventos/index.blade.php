@@ -1,11 +1,8 @@
+
 @extends('layouts.master')
-<title>Eventos</title>
-<link rel="stylesheet" href="./css/style-home.css">
-<link rel="stylesheet" href="./css/styles.css">
-</head>
+<title>GENERAL VIEW</title>
 
 @section('Content')
-
 <div class="container">
     <h1>Eventos</h1>
     <div class="search-create">
@@ -15,9 +12,9 @@
 </div>
 <br><br>
 <div class="container">
-    <h1>Lista de Eventos</h1>
-    <div class="info">
-        <table border=0>
+
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead>
             <tr>
                 <th>LOGO</th>
                 <th>NOMBRE</th>
@@ -27,6 +24,8 @@
                 <th>FECHA FIN</th>
                 <th> </th>
             </tr>
+        </thead>
+        <tbody>
             @foreach ($Eventos as $e)
             <tr>
                 <td>
@@ -53,10 +52,17 @@
                 </td>
             </tr>
             @endforeach
-        </table>
-    </div>
-    <div id="events-list"></div>
-    <div id="pagination"></div>
+        </tbody>
+        <tfoot>
+            <th>LOGO</th>
+            <th>NOMBRE</th>
+            <th>ACRONIMO</th>
+            <th>ED.</th>
+            <th>FECHA INICIO</th>
+            <th>FECHA FIN</th>
+            <th> </th>
+        </tfoot>
+    </table>
 </div>
 
 <div id="create-event-modal" class="modal">
@@ -89,4 +95,7 @@
 </div>
 
 @endsection
-<!-- <script src="./js/script-eventos.js"></script> -->
+
+<script src="./js/script-eventos.js"></script>
+
+

@@ -1,6 +1,5 @@
 @extends('layouts.master')
     <title>Autores</title>
-    <link rel="stylesheet" href="./css/style-home.css">
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 @section('Content')

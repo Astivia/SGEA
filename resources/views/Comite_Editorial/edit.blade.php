@@ -1,38 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MODIFICAR DATOS</title>
+@extends('layouts.master')
+<title>Modificar datos</title>
 </head>
-<body>
-    <h1>MODIFICAR PARTICIPANTE</h1>
+@section('Content')
+<div class="container">
+    <h1>Modificar datos del miembro</h1>
+
     {!! Form::open(['method'=>'PATCH','url'=>'/comite_editorial/'.$part->id]) !!}
-        <label for="event-name">Evento :</label>
-        <select name="evento_id" require>
+    <label for="event-name">Evento :</label>
+    <select name="evento_id" require>
         @foreach ($Eventos as $e)
-            <option value="{{$e->id }}" {{ $e->id == $part->evento_id ?'selected':''}}>
-                {{ $e->acronimo }} {{ $e->edicion }}
-            </option>
+        <option value="{{$e->id }}" {{ $e->id == $part->evento_id ?'selected':''}}>
+            {{ $e->acronimo }} {{ $e->edicion }}
+        </option>
         @endforeach
-        </select>
+    </select>
 
-        <br><br>
+    <br><br>
 
-        <label for="area">Participante :</label>
-        <select name="participante_id" require>
-            @foreach ($Participantes as $p)
-                <option value="{{ $p->id }}"{{ $p->id == $part->participante_id ?'selected':''}}>
-                    {{ $p->nombre}} {{ $p->apellidos}}
-                </option>
-            @endforeach
-        </select>
-        <br><br>
-        <button type="submit">Guardar Cambios</button>
-        <a href="{{!!asset('/comite_editorial')!!}"><button>Cancelar</button></a> 
-    {!!Form::close()!!}   
-
-    
-
-</body>
-</html>
+    <label for="area">Participante :</label>
+    <select name="participante_id" require>
+        @foreach ($Participantes as $p)
+        <option value="{{ $p->id }}" {{ $p->id == $part->participante_id ?'selected':''}}>
+            {{ $p->nombre}} {{ $p->ap_pat}} {{ $p->ap_mat}}
+        </option>
+        @endforeach
+    </select>
+    <br><br>
+    <button type="submit">Guardar Cambios</button>
+    <a href="{{asset('SGEA/public/comite_editorial')}}"><button>Cancelar</button></a>
+    {!!Form::close()!!}
+</div>
+@endsection

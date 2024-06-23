@@ -83,8 +83,11 @@
         <label for="participante-name">Nombre:</label>
         <input type="text" id="participante-name" name="nombre" required>
 
-        <label for="participante-lastName">Apellidos:</label>
-        <input type="text" id="participante-lastName" name="apellidos" required>
+        <label for="participante-lastName">Apellido Paterno:</label>
+        <input type="text" id="participante-lastName" name="ap_pat" required>
+
+        <label for="participante-lastName">Apellido Materno:</label>
+        <input type="text" id="participante-lastName" name="ap_mat" required>
 
         <label for="participante-curp">CURP:</label>
         <input type="text" id="participante-curp" name="curp" required>

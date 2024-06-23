@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modificar Informacion</title>
+@extends('layouts.master')
+    <title>Modificar Datos</title>
 </head>
-<body>
+@section('Content')
+<div class="container">
+
     <h1>MODIFICAR DATOS</h1>
     {!! Form::open(['method'=>'PATCH','url'=>'/revisores_articulos/'.$ra->id]) !!}
         
@@ -30,6 +28,7 @@
         <button type="submit">Guardar</button>
         <a href="{{!!asset('/revisores_articulos')!!}"><button>Cancelar</button></a>
     {!!Form::close()!!}   
+</div>
     
-</body>
-</html>
+    
+@endsection

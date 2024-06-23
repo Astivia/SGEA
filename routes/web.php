@@ -20,7 +20,11 @@ Route::resource('articulos_autores', ArticulosAutoresController::class)->middlew
 Route::resource('articulos', ArticulosController::class)->middleware('auth');
 Route::resource('autores', AutoresController::class)->middleware('auth');
 Route::resource('comite_editorial', Comite_EditorialController::class)->middleware('auth');
+
+Route::get('eventos/general/{acronimo}', [EventosController::class, 'general'])->name('general');
 Route::resource('eventos', EventosController::class)->middleware('auth');
+
+
 Route::resource('participantes_areas', ParticipantesAreasController::class)->middleware('auth');
 Route::resource('participantes', ParticipantesController::class)->middleware('auth');
 Route::resource('revisores_areas', RevisoresAreasController::class)->middleware('auth');
@@ -54,6 +58,9 @@ Route::get('/', function () {
 });
 Route::get('pruebas', function () {
     return view('pruebas');
+});
+Route::get('pruebas2', function () {
+    return view('pruebas2');
 });
 
 Route::get('EnviarCorreo', function () {

@@ -44,30 +44,18 @@ class ParticipantesController extends Controller
         $this->validate($request, [
             'evento_id' => 'required|integer',
             'nombre' => 'required|string',
-            'apellidos' => 'required|string',
+            'ap_pat' => 'required|string',
+            'ap_mat' => 'required|string',
             'curp' => 'required|string',
             'email' => 'required|email',
         ]);
         $datos=$request->all();
-
-        // $existeParticipante = participantes::where('curp', $datos['curp'])->exists();
-        // if ($existeParticipante) {
-            
-        //     $Participantes = participantes::OrderBy('nombre')->get();
-        //     $Eventos=eventos::all();
-        //     $Message="Ya existe un participante con la CURP ingresada.No se guardaron los datos";
-            
-        //     return view ('Participantes.index',compact('Participantes','Eventos','Message'));
-        // }
-
-        //     participantes::create($datos);
-        //     $Message="Participante Registrado Exitosamente!";
-        //     return redirect('/participantes')->with('Message', $Message);
+        //verificamos que no exista la curp
         if (participantes::where('curp', $datos['curp'])->exists()) {
             
             return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada.No se guardaron los datos');
         }
-
+        $datos['password'] = Hash::make($datos['password']);
         participantes::create($datos);
         return redirect('/participantes')->with('success', 'Se ha Registrado correctamente');
     }
