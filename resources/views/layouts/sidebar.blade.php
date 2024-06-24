@@ -14,7 +14,12 @@
                 <img src="{{ asset('SGEA/public/assets/img/perfil.png') }}" alt="">
             <div>
                 <h3>@auth {{Auth::user()->nombre}} {{Auth::user()->ap_pat}} {{Auth::user()->ap_mat}}@endauth</h3>
+                @role('Administrador')
                 <span>Administrador</span>
+                @endrole
+                @role('Organizador')
+                <span>Organizador</span>
+                @endrole
             </div>                
         </div>
 
