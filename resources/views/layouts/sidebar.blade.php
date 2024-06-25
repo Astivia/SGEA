@@ -36,6 +36,7 @@
                 <li><a href="{{ url('articulos') }}"><span class="las la-comment"></span>Artículos</a></li>
                 <li><a href="{{ url('revisores_articulos') }}"><span class="las la-people-carry"></span>Revisores</a></li>                           
             </ul>
+            @role('Administrador')
             <div class="menu-head">
                 <span>Administracion</span>
             </div>
@@ -43,6 +44,7 @@
                 <li><a href="{{ url('roles') }}"><span class="las la-calendar"></span>Roles</a></li>
                 <li><a href="{{ url('permisos') }}"><span class="las la-user"></span>Permisos</a></li>
             </ul>
+            @endrole
         </div>
     </div>
 </div>
