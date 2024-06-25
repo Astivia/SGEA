@@ -9,7 +9,6 @@ use Illuminate\Foundation\Auth\User as AuthenticatableUser;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-
 use Spatie\Permission\Traits\HasRoles;
 
 
@@ -75,22 +74,3 @@ class participantes extends AuthenticatableUser implements Authenticatable
 
 
 }
-// class participantes extends Model
-// {
-//     protected $table = 'participantes';
-//     protected $fillable = [
-//         'evento_id',
-//         'nombre',
-//         'ap_pat',
-//         'ap_mat',
-//         'apellidos',
-//         'email',
-//         'password',
-//         'curp',
-//     ];
-
-//     public function evento()
-//     {
-//         return $this->belongsTo(eventos::class, 'evento_id','id');
-//     }
-// }

@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <link rel="shortcut icon" href="./imgs/ITTOL.ico" type="image/x-icon">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('layouts.master')
     <title>Editar</title>
 </head>
 
-<body>
+@section('Content')
+<div class="container">
+
     <h1>Modificar Evento</h1>
     {!! Form::open(['method' => 'PATCH', 'url' => '/eventos/'.$evento->id, 'files' => true]) !!}
         <div>
@@ -52,8 +48,7 @@
         <button type="submit">Guardar evento</button>
         <a href="{{!!asset('/eventos')!!}"><button>Cancelar</button></a>
         {!!Form::close()!!}   
+</div>
 
     
-
-</body>
-</html>
+     @endsection

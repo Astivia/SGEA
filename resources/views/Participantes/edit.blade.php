@@ -2,12 +2,19 @@
     <title>Modificar Datos</title>
 </head>
 @section('Content')
-    <div class="container">
+<div class="container">
+        @if(session('info'))
+            <div class="alert alert-succes">
+                <strong>{{session('info')}}</strong>
+            </div>
+    
+        @endif
 
         <h1>MODIFICAR DATOS</h1>
         {!! Form::open(['method'=>'PATCH','url'=>'/participantes/'.$part->id]) !!}
             
             <label for="event-name">Seleccionar evento :</label>
+
             <select name="evento_id" require>
             @foreach ($events as $e)
                 <option value="{{$e->id }}" {{ $e->id == $part->evento_id ?'selected':''}}>
@@ -15,7 +22,6 @@
                 </option>
             @endforeach
             </select>
-
          
 
             <label for="participante-name">Nombre:</label>
@@ -38,6 +44,17 @@
                                 
             <label for="participante-pass">Nueva Contraseña:</label>
             {!! Form::text ('password',null)!!}
+
+            <h3>Seleccionar Rol:</h3>
+            @foreach($roles as $role)
+            <div class="">
+                <label>
+                    {!! Form::checkbox('roles[]',$role->id,null,['class' =>'mr-1'])!!}
+                    {{$role->name}}
+                </label>
+            </div>
+
+            @endforeach
                
             
             <button type="submit">Guardar</button>

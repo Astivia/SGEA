@@ -17,15 +17,21 @@ class EventosController extends Controller
     {
        
 
-        $Eventos = eventos::select('nombre','acronimo','img')->distinct()->get();
-        return view ('Eventos.general',compact('Eventos'));
+        $Eventos = eventos::all();
+        //consultamos las imagenes en sistema
+
+        $sysImgs = [];
+        foreach ($Eventos as $evento) {
+            $imageName = $evento->img; 
+            if (!in_array($imageName, $sysImgs)) {
+                $sysImgs[] = $imageName; // Agregar la imagen al array auxiliar
+            }
+        }
+        // return view ('Eventos.general',compact('Eventos'));
+         return view ('Eventos.index',compact('Eventos','sysImgs'));
     }
 
-    public function general($acronimo){
-        
-        $Eventos = eventos::where('acronimo', $acronimo)->get();
-        return view('Eventos.index', compact('Eventos'));
-    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -41,26 +47,31 @@ class EventosController extends Controller
     public function store(Request $request)
     {
         $datos=$request->all();
+
+
         // Obtener el archivo imagen
         $file = $datos['img'];
 
-        if($file){
+        if(!is_string($file)){
 
-            // Definir la ruta donde se guardará el archivo
-            $destinationPath = public_path('assets/uploads');
-            // Crear la carpeta si no existe
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
+            if($file){
+                // Definir la ruta donde se guardará el archivo
+                $destinationPath = public_path('assets/uploads');
+                // Crear la carpeta si no existe
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true);
+                }
+                // Generar un nombre único para el archivo
+                $fileName = time() . '.' . $file->getClientOriginalExtension();
+                // Mover el archivo a la ruta especificada
+                $file->move($destinationPath, $fileName);
+                //guardamos solo el nombre en la BD
+                $datos['img'] = $fileName;
+            }else{
+                $datos['img'] = 'NO ASIGNADO';
             }
-            // Generar un nombre único para el archivo
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
-            // Mover el archivo a la ruta especificada
-            $file->move($destinationPath, $fileName);
-            //guardamos solo el nombre en la BD
-            $datos['img'] = $fileName;
-        }else{
-            $datos['img'] = 'NO ASIGNADO';
         }
+
         eventos::create($datos);
         return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
     }
@@ -125,5 +136,11 @@ class EventosController extends Controller
         $evento->delete();
 
         return redirect('eventos')->with('success', 'evento eliminado de forma Satisfactoria');
+    }
+
+    public function general($acronimo){
+        
+        $Eventos = eventos::where('acronimo', $acronimo)->get();
+        return view('Eventos.index', compact('Eventos'));
     }
 }

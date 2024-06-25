@@ -22,7 +22,7 @@ Route::resource('articulos_autores', ArticulosAutoresController::class)->middlew
 Route::resource('articulos', ArticulosController::class)->middleware('auth');
 Route::resource('autores', AutoresController::class)->middleware('auth');
 Route::resource('comite_editorial', Comite_EditorialController::class)->middleware('auth');
-Route::get('eventos/general/{acronimo}', [EventosController::class, 'general'])->name('general');
+// Route::get('eventos/general/{acronimo}', [EventosController::class, 'general'])->name('general');
 Route::resource('eventos', EventosController::class)->middleware('auth');
 Route::resource('participantes_areas', ParticipantesAreasController::class)->middleware('auth');
 Route::resource('participantes', ParticipantesController::class)->middleware('auth');

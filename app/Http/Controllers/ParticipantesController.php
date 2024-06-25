@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
+
 use App\Models\participantes;
 use App\Models\eventos;
 use App\Models\autores;
@@ -75,9 +77,8 @@ class ParticipantesController extends Controller
     {
         $events=eventos::all();
         $part=participantes::find($id);
-
-
-        return view ('Participantes.edit',compact('part','events'));
+        $roles =Role::All();
+        return view ('Participantes.edit',compact('part','events','roles'));
     }
 
     /**
@@ -88,9 +89,15 @@ class ParticipantesController extends Controller
         
         $NuevosDatos = $request->all();
         $participante=participantes::find($id);
+        //asignamos Rol elejido
+        $participante->roles()->sync($request->roles);
+
+        //encriptamos la nueva contraseña
         $NuevosDatos['password'] = Hash::make($NuevosDatos['password']);
+        //actualizamos
         $participante->update($NuevosDatos);
-        return redirect('/participantes');
+         return redirect('/participantes')->with('info','Se guardaron los cambios de manera satisfactoria');
+        // return redirect()->route('participantes.edit',$participante)->with('info','Se guardaron los cambios de manera satisfactoria');
     }
 
     /**

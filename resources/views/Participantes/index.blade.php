@@ -1,7 +1,6 @@
 @extends('layouts.master')
 <title>Participantes</title>
 
-<link rel="stylesheet" href="./css/styles.css">
 </head>
 @section('Content')
 <div class="container">
@@ -18,8 +17,6 @@
 <div class="container">
     <h1>Lista de Participantes</h1>
     <div class="info">
-        
-        
         <table>
             <tr>
                 <th>EVENTO</th>
@@ -86,8 +83,8 @@
         <label for="participante-lastName">Apellido Paterno:</label>
         <input type="text" id="participante-lastName" name="ap_pat" required>
 
-        <label for="participante-lastName">Apellido Materno:</label>
-        <input type="text" id="participante-lastName" name="ap_mat" required>
+        <label for="participante-2lastName">Apellido Materno:</label>
+        <input type="text" id="participante-2lastName" name="ap_mat" required>
 
         <label for="participante-curp">CURP:</label>
         <input type="text" id="participante-curp" name="curp" required>
@@ -105,4 +102,4 @@
 
 
 @endsection
-<script src="./js/script-participantes.js"></script>
+<!-- <script src="./js/script-participantes.js"></script> -->
