@@ -69,13 +69,14 @@
 /*Se aplican cambios start*/
 .menu-head {
     text-transform: uppercase;
-    color: rgb(17, 6, 0);
+    color: white;
     font-size: .85rem;
     font-weight:600;
     margin-bottom: .5rem;
     cursor: pointer;
     padding: 10px;
-   background-color: rgb(52, 138, 167);
+   background-color: #1A2D51;
+   align-items: center;
     
     
 }
@@ -83,7 +84,7 @@
     color: white;
 }
 .menu-head:hover{
-    background-color: rgb(81, 59, 86);
+    background-color: #2a3c5e;
     border-radius: 10px;
 }
 
@@ -92,7 +93,7 @@
     margin-bottom: 1.5rem;
     display: none;
     padding: 10px;
-    background-color: rgb(81, 59, 86);
+    background-color: #1A2D51;
     border-radius: 2px;
     
 }
@@ -109,7 +110,7 @@
     display: block;
 }
 .sidebar-menu li a:hover{
-    color: aqua;
+    color: rgb(145, 255, 0);
     transform: translateX(5px);
 }
 .sidebar-menu li a span {
@@ -125,7 +126,7 @@
 }
 /*Se aplican cambios start*/
 header {
-    height: 150px;
+    height: 170px;
     background-image: url(../assets/img/headercompleto.jpeg);
     background-size: cover;
     background-position: center center;
@@ -134,7 +135,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 0 1.5rem;
-    border-bottom: 4px solid rgb(227, 119, 59);
+    
 }
 /*Se aplican cambios end*/
 
@@ -149,12 +150,13 @@ header .header-icons span {
     font-size: 1.5rem;
     margin-left: 1.5rem;
     color: aliceblue;
-    background-color: rgb(170, 170, 170);
+    color: #f99806;
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
-    border-bottom: 4px solid rgb(227, 119, 59);
-    border-radius: 50%;
+    margin-top: 60px;
+    
+    
 }
 
 header .menu-toggle {
@@ -167,14 +169,12 @@ header .menu-toggle {
 
 header .menu-toggle span {
     font-size: 1.5rem;
-    color: aliceblue;
-    margin-right: 1.5rem; /* Adjust the spacing as needed */
-    background-color: rgb(170, 170, 170);
+    color: #f99806;
+    margin-right: 1.5rem; /* Adjust the spacing as needed */   
     border-radius: 50%;
     padding: 10px;
-    cursor: pointer;
-    border-bottom: 4px solid rgb(227, 119, 59);
-    border-radius: 50%;
+    cursor: pointer;   
+    margin-top: 60px;
 }
 
 /* Responsive design */
@@ -393,3 +393,4 @@ td:last-child {
     justify-content: flex-start;
     align-items: center;
 }
+
