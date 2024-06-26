@@ -24,7 +24,9 @@
                 <th>APELLIDOS</th>
                 <th>EMAIL</th>
                 <th>CURP</th>
+                @role(['Administrador','Organizador'])
                 <th>Controles</th>
+                @endrole
             </tr>
             @foreach ($Participantes as $part)
             <tr>
@@ -37,6 +39,7 @@
                 <td>{!!$part->ap_pat!!} {!!$part->ap_mat!!}</td>
                 <td>{!!$part->email!!}</td>
                 <td>{!!$part->curp!!}</td>
+                @role(['Administrador','Organizador'])
                 <td>
                     <a href="{!!'participantes/'.$part->id.'/edit'!!}">
                         <i class="las la-user-edit la-2x"></i>
@@ -53,6 +56,7 @@
                         @csrf
                     </form>
                 </td>
+                @endrole
             </tr>
             @endforeach
         </table>
@@ -70,12 +74,13 @@
         <span class="close">&times;</span>
         <h2>Registrar Participante</h2>
         {!! Form::open(['url'=>'/participantes']) !!}
-        <label for="event-name">Seleccionar evento :</label>
-        <select name="evento_id" require>
-            @foreach ($Eventos as $e)
-            <option value="{{ $e->id }}">{{ $e->acronimo }} {{ $e->edicion }}</option>
-            @endforeach
-        </select>
+        <!-- <label for="event-name">Seleccionar evento :</label> -->
+        <!-- <select name="evento_id" require> -->
+            <!-- <option value="">no asignado</option> -->
+            <!-- @foreach ($Eventos as $e) -->
+            <!-- <option value="{{ $e->id }}">{{ $e->acronimo }} {{ $e->edicion }}</option> -->
+            <!-- @endforeach -->
+        <!-- </select> -->
 
         <label for="participante-name">Nombre:</label>
         <input type="text" id="participante-name" name="nombre" required>

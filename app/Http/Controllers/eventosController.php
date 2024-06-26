@@ -10,9 +10,17 @@ use App\Models\comite_editorial;
 
 class EventosController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('can:eventos.edit')->only('edit','update');
+        $this->middleware('can:eventos.create')->only('create','store'); 
+        $this->middleware('can:eventos.destroy')->only('destroy'); 
+
+    }
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
        
@@ -81,7 +89,8 @@ class EventosController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $evento=eventos::find($id);
+        return view ('Eventos.read',compact('evento'));
     }
 
     /**

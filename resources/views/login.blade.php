@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="./css/style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="shortcut icon" href="./imgs/ITTOL.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{{asset('SGEA/public/assets/img/ITTOL.ico')}}" type="image/x-icon">
     <title>Iniciar Sesion</title>
 </head>
 <body>

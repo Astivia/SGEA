@@ -6,7 +6,7 @@
     <h1>Eventos</h1>
     <div class="search-create">
         <input type="text" id="search-input" placeholder="Buscar eventos...">
-        <button id="create-event-btn">Crear nuevo evento</button>
+        <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
 </div>
 <br><br>
@@ -19,8 +19,6 @@
                 <th>NOMBRE</th>
                 <th>ACRONIMO</th>
                 <th>ED.</th>
-                <th>FECHA INICIO</th>
-                <th>FECHA FIN</th>
                 @role('Administrador')
                 <th> </th>
                 @endrole
@@ -35,10 +33,9 @@
                 <td>{!!$e->nombre!!}</td>
                 <td>{!!$e->acronimo!!}</td>
                 <td>{!!$e->edicion!!}</td>
-                <td>{!!$e->fecha_inicio!!}</td>
-                <td>{!!$e->fecha_fin!!}</td>
-                @role('Administrador')
                 <td>
+                    <a href="{!! 'eventos/'.$e->id !!}"><i class="las la-info-circle la-2x"></i></a>
+                    @role(['Administrador', 'Organizador'])
                     <a href="{!!'eventos/'.$e->id.'/edit'!!}">
                         <i class="las la-pen la-2x"></i>
                     </a>
@@ -51,8 +48,8 @@
                         @method('DELETE')
                         @csrf
                     </form>
+                    @endrole
                 </td>
-                @endrole
             </tr>
             @endforeach
         </tbody>

@@ -16,6 +16,14 @@ use App\Models\revisores_areas;
 
 class ParticipantesController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('can:participantes.index')->only('index');
+        $this->middleware('can:participantes.edit')->only('edit','update');
+        $this->middleware('can:participantes.create')->only('create','store'); 
+        $this->middleware('can:participantes.destroy')->only('destroy'); 
+
+    }
     /**
      * Display a listing of the resource.
      */
@@ -44,7 +52,6 @@ class ParticipantesController extends Controller
         
         //validacion de datos
         $this->validate($request, [
-            'evento_id' => 'required|integer',
             'nombre' => 'required|string',
             'ap_pat' => 'required|string',
             'ap_mat' => 'required|string',
@@ -52,6 +59,7 @@ class ParticipantesController extends Controller
             'email' => 'required|email',
         ]);
         $datos=$request->all();
+        
         //verificamos que no exista la curp
         if (participantes::where('curp', $datos['curp'])->exists()) {
             

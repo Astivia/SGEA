@@ -64,7 +64,7 @@
         <label for="participante">Seleccionar participante :</label>
         <select name="participante_id" require>
             @foreach ($Participantes as $participante)
-            <option value="{{ $participante->id }}">{{ $participante->nombre}} {{ $participante->apellidos}}</option>
+            <option value="{{ $participante->id }}">{{ $participante->nombre}} {{ $participante->ap_pat}} {{ $participante->ap_mat}}</option>
             @endforeach
         </select>
 

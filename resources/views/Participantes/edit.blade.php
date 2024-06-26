@@ -16,6 +16,7 @@
             <label for="event-name">Seleccionar evento :</label>
 
             <select name="evento_id" require>
+            <option value="0">No asignado</option>
             @foreach ($events as $e)
                 <option value="{{$e->id }}" {{ $e->id == $part->evento_id ?'selected':''}}>
                     {{ $e->acronimo }} {{ $e->edicion }}
@@ -45,6 +46,7 @@
             <label for="participante-pass">Nueva Contraseña:</label>
             {!! Form::text ('password',null)!!}
 
+            @role('Administrador')
             <h3>Seleccionar Rol:</h3>
             @foreach($roles as $role)
             <div class="">
@@ -56,7 +58,7 @@
 
             @endforeach
                
-            
+            @endrole
             <button type="submit">Guardar</button>
             <a href="{{asset('SGEA/public/participantes')}}"><button>Cancelar</button></a>
         {!!Form::close()!!}   

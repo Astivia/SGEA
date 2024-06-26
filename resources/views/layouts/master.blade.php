@@ -4,7 +4,7 @@
     <body>
         @if(session('error'))
             <script>
-            alert('{{ session('error') }}');
+                alert('{{ session('error') }}');
             </script>
         @endif
 

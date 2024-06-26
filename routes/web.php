@@ -13,23 +13,22 @@ use App\Http\Controllers\ParticipantesController;
 //use App\Http\Controllers\RevisoresAreasController;
 use App\Http\Controllers\RevisoresArticulosController;
 
-use App\Http\Controllers\rolesController;
 use App\Http\Controllers\LoginController;
 
 
-Route::resource('areas', AreasController::class)->middleware('auth');
+Route::resource('areas', AreasController::class)->middleware('auth')->middleware('can:areas.index');
 Route::resource('articulos_autores', ArticulosAutoresController::class)->middleware('auth');
 Route::resource('articulos', ArticulosController::class)->middleware('auth');
 Route::resource('autores', AutoresController::class)->middleware('auth');
 Route::resource('comite_editorial', Comite_EditorialController::class)->middleware('auth');
 // Route::get('eventos/general/{acronimo}', [EventosController::class, 'general'])->name('general');
-Route::resource('eventos', EventosController::class)->middleware('auth');
-Route::resource('participantes_areas', ParticipantesAreasController::class)->middleware('auth');
+Route::resource('eventos', EventosController::class)->names('eventos')->middleware('auth');
+// Route::resource('participantes_areas', ParticipantesAreasController::class)->middleware('auth');
 Route::resource('participantes', ParticipantesController::class)->middleware('auth');
-Route::resource('revisores_areas', RevisoresAreasController::class)->middleware('auth');
+// Route::resource('revisores_areas', RevisoresAreasController::class)->middleware('auth');
 Route::resource('revisores_articulos', RevisoresArticulosController::class)->middleware('auth');
 
-Route::resource('roles',rolesController::class)->middleware('auth');
+
 
  Route::view('/login',"login")->name('login');
  Route::view('/registro',"register")->name('registro');
@@ -64,13 +63,13 @@ Route::get('pruebas2', function () {
     return view('pruebas2');
 });
 
-Route::get('EnviarCorreo', function () {
+// Route::get('EnviarCorreo', function () {
     
-    Mail::to('mastiviac@toluca.tecnm.mx')
-        ->send(new App\Mail\TestEmail);
+//     Mail::to('mastiviac@toluca.tecnm.mx')
+//         ->send(new App\Mail\TestEmail);
 
-    return "Mensaje enviado";
+//     return "Mensaje enviado";
 
-})->name('EnviarCorreo');
+// })->name('EnviarCorreo');
 
 // Route::get('ejecutarajax/{evento_id}','AutoresController@combo_autoresPorEvento');

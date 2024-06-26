@@ -29,7 +29,9 @@
             </div>
             <ul class="menu-list active">
                 <li><a href="{{ url('eventos') }}"><span class="las la-calendar-alt"></span>Eventos</a></li>
+                @role(['Administrador','Organizador'])
                 <li><a href="{{ url('participantes') }}"><span class="las la-user"></span>Participantes</a></li>
+                @endrole
                 <li><a href="{{ url('autores') }}"><span class="las la-pen-nib"></span>Autores</a></li>
                 <li><a href="{{ url('articulos') }}"><span class="lar la-newspaper"></span>Artículos</a></li>
                                         
