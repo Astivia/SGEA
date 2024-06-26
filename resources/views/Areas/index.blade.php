@@ -1,20 +1,20 @@
 @extends('layouts.master')
 <title>Areas</title>
 <!-- <link rel="stylesheet" href="./css/style-areas.css"> -->
+<link rel="stylesheet" href="{{asset('SGEA/public/css/mainModificar.css')}}">
+
 
 </head>
 
 @section('Content')
+
 <div class="container">
-    <h1>Areas</h1>
+<h1>Areas</h1>
     <div class="search-create">
         <input type="text" id="search-input" placeholder="Buscar areas...">
         <button id="create-event-btn">Registrar nueva area</button>
     </div>
-</div>
-<br><br>
-<div class="container">
-    <h1>Lista de Areas</h1>
+    
     @livewire ('areas-index')
     @livewireScripts
     

@@ -1,12 +1,12 @@
 <div class="sidebar">
-    <div class="sidebar-brand">
+    <!-- <div class="sidebar-brand">
         <div class="brand-flex">
             <div class="brand-icons">
                 <span class="las la-bell"></span>
                 <span class="las la-user-circle"></span>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="sidebar-main">
         <div class="sidebar-user">
             <h2>SGEA</h2>

@@ -1,0 +1,61 @@
+.container h1{
+    color:white;
+    background-color: #1a2d51;
+    text-align: center;
+    margin-bottom:25px;
+    
+}
+.container form input, .container form select,
+.container form textarea{
+    background-color: #C2E1FB;
+    color: rgb(49, 46, 46);
+    font-weight: bold;
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.container form button{
+    background-color: #1a2d51;
+}
+
+.modal .modal-content{
+    background-color: white;
+}
+
+.modal .modal-content input,
+.modal .modal-content select,
+.modal .modal-content input,
+.modal .modal-content textarea{
+    background-color: #C2E1FB;
+    color: rgb(49, 46, 46);
+    font-weight: bold;
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+/* Aqui se aplican los cambios de la seccion main  */
+.container .search-create{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 50px;
+}
+.container .search-create input{
+    background-color: #C2E1FB;
+    color: rgb(49, 46, 46);
+    font-weight: bold;
+    width: 100%;
+    padding: 0.5rem;    
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+#create-event-btn{
+    background-color: #f99806;
+}

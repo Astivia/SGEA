@@ -1,22 +1,18 @@
 @extends('layouts.master')
 <title>Participantes</title>
-
+<link rel="stylesheet" href="{{asset('SGEA/public/css/mainModificar.css')}}">
 <link rel="stylesheet" href="./css/styles.css">
 </head>
 @section('Content')
+
+
 <div class="container">
     <h1>Participantes</h1>
     <div class="search-create">
         <input type="text" id="search-input" placeholder="Buscar Participante...">
         <button id="create-event-btn">Registrar Participante</button>
     </div>
-    <div id="events-list"></div>
-    <div id="pagination"></div>
-</div>
-<br><br>
-
-<div class="container">
-    <h1>Lista de Participantes</h1>
+   
     <div class="info">
         
         
@@ -90,7 +86,8 @@
         <input type="text" id="participante-lastName" name="ap_mat" required>
 
         <label for="participante-curp">CURP:</label>
-        <input type="text" id="participante-curp" name="curp" required>
+        <input type="text" id="participante-curp" name="curp" minlength="18" maxlength="18" required>
+        <span id="mensaje-error" style="color:red; display:none;">Deben ser 18 caracteres</span>
 
         <label for="participante-email">Email:</label>
         <input type="text" id="participante-email" name="email" required>
@@ -103,6 +100,8 @@
     </div>
 </div>
 
+<div id="pagination"></div>
 
 @endsection
-<script src="./js/script-participantes.js"></script>
+<!-- <script src="./js/script-participantes.js"></script> -->
+ <script src="{{asset('SGEA/public/js/validaciones.js')}}"></script>

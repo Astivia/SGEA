@@ -3,15 +3,13 @@
 <title>GENERAL VIEW</title>
 
 @section('Content')
+
 <div class="container">
-    <h1>Eventos</h1>
+<h1>Eventos</h1>
     <div class="search-create">
         <input type="text" id="search-input" placeholder="Buscar eventos...">
         <button id="create-event-btn">Crear nuevo evento</button>
     </div>
-</div>
-<br><br>
-<div class="container">
 
     <table id="example" class="table table-striped" style="width:100%">
         <thead>

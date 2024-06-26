@@ -1,5 +1,7 @@
 @extends('layouts.master')
     <title>Modificar Datos</title>
+    <link rel="stylesheet" href="{{asset('SGEA/public/css/mainModificar.css')}}">
+    link 
 </head>
 @section('Content')
     <div class="container">

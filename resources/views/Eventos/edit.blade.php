@@ -6,9 +6,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar</title>
+    <link rel="stylesheet" href="{{asset('SGEA/public/css/mainModificar.css')}}">
+
 </head>
 
 <body>
+    <div class="container">
     <h1>Modificar Evento</h1>
     {!! Form::open(['method' => 'PATCH', 'url' => '/eventos/'.$evento->id, 'files' => true]) !!}
         <div>
@@ -53,7 +56,7 @@
         <a href="{{!!asset('/eventos')!!}"><button>Cancelar</button></a>
         {!!Form::close()!!}   
 
-    
+    </div>
 
 </body>
 </html>

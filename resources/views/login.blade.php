@@ -95,7 +95,7 @@
                     <button type="submit" class="btn">Registrar</button>
 
                     <div class="login-register">
-                        <p>¿Ya tienes una cuenta? <a href="login" class="login-link">Inicia sesión</a></p>
+                        <p>¿Ya tienes una cue? <a href="login" class="login-link">Inicia sesión</a></p>
                     </div>
                 </form>
             </div>
@@ -147,5 +147,6 @@
     <br>    
     <a href="">¿Olvidaste tu contraseña?</a>         
     </div> -->
+ 
 </body>
 </html>

@@ -1,18 +1,18 @@
 @extends('layouts.master')
 <title>Autores</title>
 <link rel="stylesheet" href="./css/styles.css">
+<link rel="stylesheet" href="{{asset('SGEA/public/css/mainModificar.css')}}">
+
 </head>
 @section('Content')
+
 <div class="container">
-    <h1>Autores</h1>
+<h1>Autores</h1>
     <div class="search-create">
         <input type="text" id="search-input" placeholder="Buscar autores...">
         <button id="create-event-btn">Registrar Autor</button>
     </div>
-</div>
-<br><br>
-<div class="container">
-    <h1>Lista de Autores</h1>
+   
     <div class="info">
         <table border=0>
             <tr>

@@ -1,19 +1,19 @@
 @extends('layouts.master')
 <title>Comite Editorial</title>
 <link rel="stylesheet" href="./css/styles.css">
+<link rel="stylesheet" href="{{asset('SGEA/public/css/mainModificar.css')}}">
+
 </head>
 </head>
 @section('Content')
+
 <div class="container">
-    <h1>Comite Editorial</h1>
+<h1>Comite Editorial</h1>
     <div class="search-create">
         <input type="text" id="search-input" placeholder="Buscar participante...">
         <button id="create-event-btn">Agregar Participante</button>
     </div>
-</div>
-<br><br>
-<div class="container">
-    <h1>Participantes del Comite Editorial</h1>
+    
     <div class="info">
         <table border=0>
             <tr>

@@ -1,22 +1,24 @@
 @extends('layouts.master')
     <title>Articulos</title>
     <!-- <link rel="stylesheet" href="./css/style-articulos.css"> -->
+    <link rel="stylesheet" href="{{asset('SGEA/public/css/mainModificar.css')}}">
+
 </head>
 @section('Content')
     <div class="container">
-        <h1>Artículos</h1>
-        <div class="search-create">
-            <input type="text" id="search-input" placeholder="Buscar artículos...">
-            <button id="create-event-btn">Registrar Articulo</button>
-            
-        </div>
+       
         <div id="articles-list"></div>
         <div id="pagination"></div>
     </div>
     <br><br>
 
     <div class="container">
-        <h1>Lista de Articulos</h1>
+    <h1>Artículos</h1>
+        <div class="search-create">
+            <input type="text" id="search-input" placeholder="Buscar artículos...">
+            <button id="create-event-btn">Registrar Articulo</button>
+            
+        </div>
         <div class="info">
             <table border=0>
                 <tr>
