@@ -11,18 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('participantes', function (Blueprint $table) {
+        Schema::create('usuarios', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('evento_id')->nullable();
-            $table->string('nombre');
-            $table->string('ap_pat');
-            $table->string('ap_mat');
-            $table->string('curp')->unique();
-            $table->string('email');
+            $table->string('curp', 18)->unique(); 
+            $table->string('foto')->nullable();
+            $table->string('nombre', 50);
+            $table->string('ap_pat', 30);
+            $table->string('ap_mat', 30);
+            $table->string('email', 150)->unique();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->foreign('evento_id')->references('id')->on('eventos')->onDelete('SET NULL');
         });
     }
 
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('participantes');
+        Schema::dropIfExists('usuarios');
     }
 };

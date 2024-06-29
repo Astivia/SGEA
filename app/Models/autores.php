@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class autores extends Model
 {
     protected $table = 'autores';
-    protected $fillable = ['participante_id','afiliacion'];
+    protected $fillable = ['usuario_id','afiliacion'];
     
     //llave foranea
-    public function participante()
+    public function usuario()
     {
-        return $this->belongsTo(participantes::class, 'participante_id','id');
+        return $this->belongsTo(usuarios::class, 'usuario_id','id');
     }
 }

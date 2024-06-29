@@ -9,12 +9,17 @@ class eventos extends Model
 {
     protected $table = 'eventos';
     protected $fillable = [
+        'logo',
         'nombre',
         'acronimo',
         'fecha_inicio',
         'fecha_fin',
         'edicion',
-        'img'
     ];
+
+    public function participantes()
+    {
+        return $this->belongsToMany(usuarios::class, 'participantes', 'evento_id','usuario_id' );
+    }
 
 }

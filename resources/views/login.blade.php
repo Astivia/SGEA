@@ -7,6 +7,17 @@
     <title>Iniciar Sesion</title>
 </head>
 <body>
+@if(session('error'))
+            <script>
+                alert('{{ session('error') }}');
+            </script>
+        @endif
+
+        @if(session('success'))
+            <script>
+            alert('{{ session('success') }}');
+            </script>
+        @endif
     <div class="background"></div>
     <div class="container">
         <div class="content">

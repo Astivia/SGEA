@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('revisores_areas', function (Blueprint $table) {
+        Schema::create('participantes_areas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('participante_id');
-            $table->unsignedBigInteger('area_id');
-            $table->foreign('participante_id')->references('id')->on('participantes');
+            $table->integer('evento_id')->unsigned()->nullable();
+            $table->unsignedInteger('usuario_id')->nullable();
+
+            $table->foreign(['evento_id', 'usuario_id'])->references(['evento_id', 'usuario_id'])->on('participantes');
+
+            $table->integer('area_id')->unsigned()->nullable();
             $table->foreign('area_id')->references('id')->on('areas');
+
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('revisores_areas');
+        Schema::dropIfExists('participantes_areas');
     }
 };

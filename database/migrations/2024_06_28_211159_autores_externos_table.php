@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('revisores_articulos', function (Blueprint $table) {
+        Schema::create('autores_externos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('participante_id');
-            $table->unsignedBigInteger('articulo_id');
-            $table->foreign('participante_id')->references('id')->on('participantes');
-            $table->foreign('articulo_id')->references('id')->on('articulos');
+            $table->string('nombre',60);
+            $table->string('ap_pat',30);
+            $table->string('ap_mat',30);
+            $table->string('afiliacion',300);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('revisores_articulos');
+        Schema::dropIfExists('autores_externos');
     }
 };

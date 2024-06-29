@@ -72,7 +72,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\participantes::class, 
+            'model' => App\Models\usuarios::class, 
             // 'connection' => 'default', // Database connection (if applicable)
         ],
     ],

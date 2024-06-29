@@ -6,13 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
-use App\Models\participantes;
 use App\Models\eventos;
-use App\Models\autores;
-use App\Models\comite_editorial;
-use App\Models\revisores_articulos;
-use App\Models\participantes_areas;
-use App\Models\revisores_areas;
+use App\Models\usuarios;
+
 
 class ParticipantesController extends Controller
 {
@@ -27,13 +23,16 @@ class ParticipantesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($eventoId)
     {
-        $Participantes = participantes::OrderBy('nombre')->get();
-        $Eventos=eventos::all();
-        
+        $evento = eventos::find($eventoId); 
+        // Obtener usuarios que asisten
+        $part = $evento->participantes; 
 
-        return view ('Participantes.index',compact('Participantes','Eventos'));
+        //catalogo de eventos
+        $usuarios=usuarios::OrderBy('ap_pat')->get();
+
+        return view ('Participantes.index',compact('part','evento','usuarios'));
     }
 
     /**
@@ -49,25 +48,11 @@ class ParticipantesController extends Controller
      */
     public function store(Request $request)
     {
-        
-        //validacion de datos
-        $this->validate($request, [
-            'nombre' => 'required|string',
-            'ap_pat' => 'required|string',
-            'ap_mat' => 'required|string',
-            'curp' => 'required|string',
-            'email' => 'required|email',
-        ]);
         $datos=$request->all();
-        
-        //verificamos que no exista la curp
-        if (participantes::where('curp', $datos['curp'])->exists()) {
-            
-            return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada.No se guardaron los datos');
-        }
-        $datos['password'] = Hash::make($datos['password']);
-        participantes::create($datos);
-        return redirect('/participantes')->with('success', 'Se ha Registrado correctamente');
+        $evento=eventos::find($datos['evento_id']);
+        $usuario= usuarios::find($datos['usuario_id']);
+        $evento->participantes()->attach($usuario);
+        return redirect()->back()->with('success', 'Se ha Registrado correctamente');
     }
 
     /**
@@ -83,10 +68,7 @@ class ParticipantesController extends Controller
      */
     public function edit(string $id)
     {
-        $events=eventos::all();
-        $part=participantes::find($id);
-        $roles =Role::All();
-        return view ('Participantes.edit',compact('part','events','roles'));
+        //
     }
 
     /**
@@ -94,36 +76,23 @@ class ParticipantesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
-        $NuevosDatos = $request->all();
-        $participante=participantes::find($id);
-        //asignamos Rol elejido
-        $participante->roles()->sync($request->roles);
-
-        //encriptamos la nueva contraseña
-        $NuevosDatos['password'] = Hash::make($NuevosDatos['password']);
-        //actualizamos
-        $participante->update($NuevosDatos);
-         return redirect('/participantes')->with('info','Se guardaron los cambios de manera satisfactoria');
-        // return redirect()->route('participantes.edit',$participante)->with('info','Se guardaron los cambios de manera satisfactoria');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($eventoId,$usuarioId)
     {
-        $participante=participantes::find($id);
-        if ((autores::where('participante_id', $participante->id)->count() > 0)||
-            (comite_editorial::where('participante_id', $participante->id)->count() > 0)||
-            (revisores_articulos::where('participante_id', $participante->id)->count() > 0)||
-            (participantes_areas::where('participante_id', $participante->id)->count() > 0)||
-            (revisores_areas::where('participante_id', $participante->id)->count() > 0)) {
-              
-            return redirect()->back()->with('error', 'No se puede eliminar el participante porque aun tiene algun cargo asociado');
-        }
-        $participante->delete();
+        $evento = eventos::find($eventoId);
+        $usuario = usuarios::find($usuarioId);
 
-        return redirect('participantes')->with('success', 'Participante eliminado correctamente');
+        if (!$evento || !$usuario) {
+            return redirect()->back()->with('error', 'Evento o Usuario no encontrado.');
+        }
+
+        $evento->participantes()->detach($usuario);
+
+        return redirect()->back()->with('success', 'Usuario expulsado del evento.');
     }
 }

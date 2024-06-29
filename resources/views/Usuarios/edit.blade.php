@@ -11,42 +11,30 @@
         @endif
 
         <h1>MODIFICAR DATOS</h1>
-        {!! Form::open(['method'=>'PATCH','url'=>'/participantes/'.$part->id]) !!}
-            
-            <label for="event-name">Seleccionar evento :</label>
-
-            <select name="evento_id" require>
-            <option value="0">No asignado</option>
-            @foreach ($events as $e)
-                <option value="{{$e->id }}" {{ $e->id == $part->evento_id ?'selected':''}}>
-                    {{ $e->acronimo }} {{ $e->edicion }}
-                </option>
-            @endforeach
-            </select>
-         
+        {!! Form::open(['method'=>'PATCH','url'=>'/usuarios/'.$usu->id]) !!}  
 
             <label for="participante-name">Nombre:</label>
-            {!! Form::text ('nombre',$part->nombre)!!}              
+            {!! Form::text ('nombre',$usu->nombre)!!}              
                                 
             <label for="participante-lastName">Apellido Paterno:</label>
-            {!! Form::text ('ap_pat',$part->ap_pat)!!}
+            {!! Form::text ('ap_pat',$usu->ap_pat)!!}
                             
                                 
             <label for="participante-lastName">Apellido Materno:</label>
-            {!! Form::text ('ap_mat',$part->ap_mat)!!}
+            {!! Form::text ('ap_mat',$usu->ap_mat)!!}
                
                                 
             <label for="participante-curp">CURP:</label>
-            {!! Form::text ('curp',$part->curp)!!}
+            {!! Form::text ('curp',$usu->curp)!!}
 
             <label for="participante-email">Email:</label>
-            {!! Form::text ('email',$part->email)!!}
+            {!! Form::text ('email',$usu->email)!!}
                  
                                 
             <label for="participante-pass">Nueva Contraseña:</label>
             {!! Form::text ('password',null)!!}
 
-            @role('Administrador')
+        @role('Administrador')
             <h3>Seleccionar Rol:</h3>
             @foreach($roles as $role)
             <div class="">
@@ -58,9 +46,9 @@
 
             @endforeach
                
-            @endrole
+        @endrole
             <button type="submit">Guardar</button>
-            <a href="{{asset('SGEA/public/participantes')}}"><button>Cancelar</button></a>
+            <a href="{{asset('SGEA/public/usuarios')}}"><button>Cancelar</button></a>
         {!!Form::close()!!}   
     </div>
 

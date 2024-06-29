@@ -9,6 +9,14 @@ USE App\Models\participantes;
 
 class Comite_EditorialController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('can:comite_editorial.index')->only('index');
+        $this->middleware('can:comite_editorial.edit')->only('edit','update');
+        $this->middleware('can:comite_editorial.create')->only('create','store'); 
+        $this->middleware('can:comite_editorial.destroy')->only('destroy'); 
+
+    }
     /**
      * Display a listing of the resource.
      */

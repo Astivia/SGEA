@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 // use App\Models\User;
-use App\Models\participantes;
+use App\Models\usuarios;
 
 
 class LoginController extends Controller
@@ -22,7 +22,7 @@ class LoginController extends Controller
 
         //validamos que NO exista un participante ya registrado con la misma CURP
 
-        if (participantes::where('curp', $Datos['curp'])->exists()) {
+        if (usuarios::where('curp', $Datos['curp'])->exists()) {
             
             return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada');
 
@@ -30,7 +30,7 @@ class LoginController extends Controller
 
             //Encriptamos la contraseña y Creamos el usuario en la BD
             $Datos['password'] = Hash::make($Datos['password']);
-            $user = participantes::create($Datos);
+            $user = usuarios::create($Datos);
 
             //Iniciamos sesion con el usuario recien creado y lo redirigimos al dashboard
             Auth::login($user);
@@ -57,7 +57,7 @@ class LoginController extends Controller
             return redirect()->intended(route('home'));
 
         }else{
-            return redirect('login');
+            return redirect('login')->with('error', 'No se encuentra el usuario');
         }
     }
 

@@ -4,107 +4,66 @@
 </head>
 @section('Content')
 <div class="container">
-    <h1>Participantes</h1>
+    <h1>Participantes del {!!$evento->acronimo!!} {!!$evento->edicion!!}</h1>
     <div class="search-create">
         <input type="text" id="search-input" placeholder="Buscar Participante...">
-        <button id="create-event-btn">Registrar Participante</button>
+        <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
-    <div id="events-list"></div>
-    <div id="pagination"></div>
 </div>
 <br><br>
 
 <div class="container">
-    <h1>Lista de Participantes</h1>
-    <div class="info">
-        <table>
-            <tr>
-                <th>EVENTO</th>
-                <th>NOMBRE</th>
-                <th>APELLIDOS</th>
-                <th>EMAIL</th>
-                <th>CURP</th>
-                @role(['Administrador','Organizador'])
-                <th>Controles</th>
-                @endrole
-            </tr>
-            @foreach ($Participantes as $part)
-            <tr>
-                @if($part->evento == null)
-                <td>No Asignado</td>
-                @else
-                <td>{!!$part->evento->acronimo!!} {!!$part->evento->edicion!!}</td>
-                @endif
-                <td>{!!$part->nombre!!}</td>
-                <td>{!!$part->ap_pat!!} {!!$part->ap_mat!!}</td>
-                <td>{!!$part->email!!}</td>
-                <td>{!!$part->curp!!}</td>
-                @role(['Administrador','Organizador'])
-                <td>
-                    <a href="{!!'participantes/'.$part->id.'/edit'!!}">
-                        <i class="las la-user-edit la-2x"></i>
-                    </a>
-                    <a href="{{url('participantes/'.$part->id)}}" onclick="
-                                            event.preventDefault(); 
-                                            if (confirm('¿Estás seguro de que deseas eliminar este registro?')) 
-                                            { document.getElementById('delete-form-{{ $part->id }}').submit(); }">
-                        <i class="las la-user-minus la-2x"></i>
-                    </a>
-                    <form id="delete-form-{{ $part->id }}" action="{{ url('participantes/'.$part->id) }}" method="POST"
-                        style="display: none;">
-                        @method('DELETE')
-                        @csrf
-                    </form>
-                </td>
-                @endrole
-            </tr>
-            @endforeach
-        </table>
-        
+    @if($part->isEmpty())
+    <strong>No hay datos</strong>
+    @else
+    <table>
+        <tr>
+            <th>NOMBRE</th>
+            <th>CORREO</th>
+            @role(['Administrador','Organizador'])
+            <th>Controles</th>
+            @endrole
+        </tr>
+        @foreach ($part as $usu)
+        <tr>
+            <td>{!!$usu->nombre_completo!!}</td>
+            <td>{!!$usu->email!!}</td>
+            @role(['Administrador','Organizador'])
+            <td>
+                <a href="route{!! 'usuarios/'.$usu->id !!}"><i class="las la-info-circle la-2x"></i></a>
 
+                {!! Form::open(['route' => ['participantes.destroy', $evento->id, $usu->id], 'method' => 'delete', 'style' => 'display:inline-block;']) !!}
+                    <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este participante?');" style="border:none; background:none;">
+                        <i class="las la-trash la-2x" style="color:red;"></i>
+                    </button>
+                {!! Form::close() !!}
 
-    </div>
-    <div id="events-list"></div>
-    <div id="pagination"></div>
+            </td>
+            @endrole
+        </tr>
+        @endforeach
+    </table>
+
+    @endif
 </div>
-
 
 <div id="create-event-modal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Registrar Participante</h2>
-        {!! Form::open(['url'=>'/participantes']) !!}
-        <!-- <label for="event-name">Seleccionar evento :</label> -->
-        <!-- <select name="evento_id" require> -->
-            <!-- <option value="">no asignado</option> -->
-            <!-- @foreach ($Eventos as $e) -->
-            <!-- <option value="{{ $e->id }}">{{ $e->acronimo }} {{ $e->edicion }}</option> -->
-            <!-- @endforeach -->
-        <!-- </select> -->
+        <h2>Añadir participante</h2>
+        <strong>Evento: {!!$evento->acronimo!!} {!!$evento->edicion!!}</strong>
 
-        <label for="participante-name">Nombre:</label>
-        <input type="text" id="participante-name" name="nombre" required>
+        {!! Form::open(['route' => 'participantes.store']) !!}
 
-        <label for="participante-lastName">Apellido Paterno:</label>
-        <input type="text" id="participante-lastName" name="ap_pat" required>
+        {!! Form::hidden('evento_id', $evento->id) !!}
 
-        <label for="participante-2lastName">Apellido Materno:</label>
-        <input type="text" id="participante-2lastName" name="ap_mat" required>
+        <label for="participante-name">Seleccionar Usuario:</label>
 
-        <label for="participante-curp">CURP:</label>
-        <input type="text" id="participante-curp" name="curp" required>
-
-        <label for="participante-email">Email:</label>
-        <input type="text" id="participante-email" name="email" required>
-
-        <label for="participante-pass">Contraseña:</label>
-        <input type="password" id="participante-password" name="password" required>
-
+        {!! Form::select('usuario_id', $usuarios->pluck('nombre_completo', 'id'), null, ['required' => 'required']) !!}
+        <br><br>
         <button type="submit">Guardar</button>
         {!!Form::close()!!}
     </div>
 </div>
 
-
 @endsection
-<!-- <script src="./js/script-participantes.js"></script> -->

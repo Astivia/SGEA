@@ -14,7 +14,7 @@
             </script>
         @endif
         <div class="main-content">
-        @include ('layouts.head')
+            @include ('layouts.head')
             <main>
                 @yield('Content')
             </main>

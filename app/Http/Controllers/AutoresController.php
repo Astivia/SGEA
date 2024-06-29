@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\autores;
-use App\Models\participantes;
-use App\Models\eventos;
+use App\Models\usuarios;
 use App\Models\articulos_autores;
 
 use Illuminate\Http\Request;
@@ -11,22 +10,15 @@ use Illuminate\Http\Request;
 class AutoresController extends Controller
 {
 
-    public function combo_autoresPorEvento($evento_id){
-        $participantes= participantes::select('id','nombre','apellidos')
-                        ->where('evento_id',$evento_id)->get();
-        return $participantes;
-    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $Autores=autores::OrderBy('participante_id')->get();
+        $Autores=autores::OrderBy('usuario_id')->get();
+        $usuarios=usuarios::All();
 
-        $Eventos= eventos::all();
-        $Participantes = participantes::OrderBy('nombre')->get();
-
-        return view ('Autores.index', compact('Autores','Participantes','Eventos'));
+        return view ('Autores.index', compact('Autores','usuarios'));
     }
 
     /**
@@ -61,11 +53,10 @@ class AutoresController extends Controller
     public function edit(string $id)
     {
         
-        $events=eventos::all();
-        $participantes=participantes::all();
-        
         $autor=autores::find($id);
-        return view ('Autores.edit',compact('autor','events','participantes'));
+        $usuarios=usuarios::all();
+        
+        return view ('Autores.edit',compact('usuarios','autor'));
     }
 
     /**
@@ -75,6 +66,11 @@ class AutoresController extends Controller
     {
         $NuevosDatos = $request->all();
         $autores=autores::find($id);
+
+        if(is_null($autores->afiliacion)){
+            return redirect()->back()->with('error', 'el campo afiliacion no puede estar vacio');
+        }
+
         $autores->update($NuevosDatos);
         return redirect('/autores');
     }

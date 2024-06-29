@@ -9,52 +9,58 @@
         <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
 </div>
+
 <br><br>
+
 <div class="container">
-
-    <table id="example" class="table table-striped" style="width:100%">
-        <thead>
-            <tr>
-                <th>LOGO</th>
-                <th>NOMBRE</th>
-                <th>ACRONIMO</th>
-                <th>ED.</th>
-                @role('Administrador')
-                <th> </th>
-                @endrole
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($Eventos as $e)
-            <tr>
-                <td>
-                    <img src="{{ asset('SGEA/public/assets/uploads/' . $e->img) }}" alt="logo" style="width: 150px;">
-                </td>
-                <td>{!!$e->nombre!!}</td>
-                <td>{!!$e->acronimo!!}</td>
-                <td>{!!$e->edicion!!}</td>
-                <td>
-                    <a href="{!! 'eventos/'.$e->id !!}"><i class="las la-info-circle la-2x"></i></a>
-                    @role(['Administrador', 'Organizador'])
-                    <a href="{!!'eventos/'.$e->id.'/edit'!!}">
-                        <i class="las la-pen la-2x"></i>
-                    </a>
-                    <a href="{{url('eventos/'.$e->id)}}"
-                        onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $e->id }}').submit(); }">
-                        <i class="las la-trash-alt la-2x"></i>
-                    </a>
-                    <form id="delete-form-{{ $e->id }}" action="{{ url('eventos/'.$e->id) }}" method="POST"
-                        style="display: none;">
-                        @method('DELETE')
-                        @csrf
-                    </form>
+    @if($Eventos->isEmpty())
+        <strong>No hay datos</strong>
+    @else
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>LOGO</th>
+                    <th>NOMBRE</th>
+                    <th>ACRONIMO</th>
+                    <th>ED.</th>
+                    @role('Administrador')
+                    <th> </th>
                     @endrole
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($Eventos as $e)
+                <tr>
+                    <td>
+                        
+                        <img src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo" style="width: 150px;">
+                    </td>
+                    <td>{!!$e->nombre!!}</td>
+                    <td>{!!$e->acronimo!!}</td>
+                    <td>{!!$e->edicion!!}</td>
+                    <td>
+                        <a href="{!! 'eventos/'.$e->id !!}"><i class="las la-info-circle la-2x"></i></a>
+                        @role(['Administrador', 'Organizador'])
+                        <a href="{!!'eventos/'.$e->id.'/edit'!!}">
+                            <i class="las la-pen la-2x"></i>
+                        </a>
+                        <a href="{{url('eventos/'.$e->id)}}"
+                            onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $e->id }}').submit(); }">
+                            <i class="las la-trash-alt la-2x"></i>
+                        </a>
+                        <form id="delete-form-{{ $e->id }}" action="{{ url('eventos/'.$e->id) }}" method="POST"
+                            style="display: none;">
+                            @method('DELETE')
+                            @csrf
+                        </form>
+                        @endrole
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
 
-    </table>
+        </table>
+    @endif
 </div>
 
 <div id="create-event-modal" class="modal">
@@ -63,7 +69,7 @@
     <h2>Registro de Evento</h2>
     {!! Form::open(['url'=>'/eventos', 'enctype' => 'multipart/form-data']) !!}
     <div class="container">
-        <label for="img">Imagenes en sistema:</label>
+        <label for="logo">Imagenes en sistema:</label>
 
         @if (isset($sysImgs) && !empty($sysImgs))
             <div class="carousell">
@@ -73,13 +79,13 @@
                 @endforeach
             </div>
         @else
-        <p class="">Aun no hay imagenes en el sistema</p>
+            <strong>Aun no hay imagenes en el sistema</strong>
         @endif
         <br>
         <hr><br>
-        <input type="file" id="img" name="img" accept="image/png">
+        <input type="file" id="logo" name="logo" accept="image/png">
         <!-- Campo oculto para almacenar el nombre de la imagen seleccionada -->
-        <input type="hidden" id="selected_img" name="img">
+        <input type="hidden" id="selected_img" name="logo">
     </div>
 
     <label for="nombre">Nombre:</label>
@@ -107,7 +113,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const imgSelectables = document.querySelectorAll('.img-selectable');
-        const imgInput = document.getElementById('img');
+        const imgInput = document.getElementById('logo');
         const selectedImgInput = document.getElementById('selected_img');
 
         imgSelectables.forEach(function(img) {

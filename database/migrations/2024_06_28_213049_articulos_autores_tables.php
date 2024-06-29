@@ -13,10 +13,17 @@ return new class extends Migration
     {
         Schema::create('articulos_autores', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('articulo_id');
-            $table->unsignedBigInteger('autor_id');
-            $table->foreign('articulo_id')->references('id')->on('articulos');
-            $table->foreign('autor_id')->references('id')->on('autores')->onDelete('SET NULL');
+            $table->integer('id_articulo')->unsigned()->index();
+            $table->foreign('id_articulo')->references('id')->on('articulos');
+
+            $table->integer('autor_id_autor')->nullable()->index(); 
+            $table->foreign('autor_id_autor')->references('id')->on('autores');
+
+            $table->integer('autor_id_ext')->nullable()->index();
+            $table->foreign('autor_id_ext')->references('id')->on('autores_externos');
+
+            $table->unique(['autor_id_autor', 'autor_id_ext'], 'autor_exclusivo');
+
             $table->timestamps();
         });
     }

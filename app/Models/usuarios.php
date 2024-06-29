@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User as AuthenticatableUser;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -12,20 +13,18 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 
-
-class participantes extends AuthenticatableUser implements Authenticatable
+class usuarios extends AuthenticatableUser implements Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory,Notifiable;
     use HasRoles;
 
-    protected $table = 'participantes';
+    protected $table = 'usuarios';
 
     protected $fillable = [
-        'evento_id',
+        'foto',
         'nombre',
         'ap_pat',
         'ap_mat',
-        'apellidos',
         'email',
         'password',
         'curp',
@@ -35,7 +34,6 @@ class participantes extends AuthenticatableUser implements Authenticatable
         'password',
         'remember_token',
     ];
-
 
     public function getAuthId()
     {
@@ -67,9 +65,14 @@ class participantes extends AuthenticatableUser implements Authenticatable
         return $this->email;
     }
 
-    public function evento()
+    public function getNombreCompletoAttribute()
     {
-        return $this->belongsTo(eventos::class, 'evento_id','id');
+        return "{$this->ap_pat} {$this->ap_mat} {$this->nombre}";
+    }
+
+    public function eventos()
+    {
+        return $this->belongsToMany(eventos::class, 'participantes', 'usuario_id', 'evento_id');
     }
 
 

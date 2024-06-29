@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('articulos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('evento_id');
-            $table->string('titulo');
-            $table->unsignedBigInteger('area_id');
+            $table->string('titulo',200);
+            $table->unsignedInteger('evento_id');
+            $table->unsignedInteger('area_id');
+            $table->string('estado');
             $table->foreign('evento_id')->references('id')->on('eventos');
             $table->foreign('area_id')->references('id')->on('areas');
             $table->timestamps();

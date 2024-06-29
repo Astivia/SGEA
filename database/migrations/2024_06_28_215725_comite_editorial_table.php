@@ -12,11 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('comite_editorial', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('evento_id');
-            $table->unsignedBigInteger('participante_id');
-            $table->foreign('evento_id')->references('id')->on('eventos');
-            $table->foreign('participante_id')->references('id')->on('participantes');
+            $table->id(); 
+
+            $table->unsignedInteger('evento_id')->nullable();
+            $table->unsignedInteger('usuario_id')->nullable();
+
+            $table->string('rol', 30);
+
+            $table->foreign(['evento_id', 'usuario_id'])->references(['evento_id', 'usuario_id'])->on('participantes');
+
             $table->timestamps();
         });
     }
