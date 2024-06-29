@@ -394,3 +394,8 @@ td:last-child {
     align-items: center;
 }
 
+@media(min-width:300px){
+    .container{
+       
+    }
+}

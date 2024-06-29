@@ -17,6 +17,7 @@
         
         
         <table>
+        
             <tr>
                 <th>EVENTO</th>
                 <th>NOMBRE</th>
@@ -54,9 +55,10 @@
                 </td>
             </tr>
             @endforeach
+           
         </table>
         
-
+       
 
     </div>
     <div id="events-list"></div>

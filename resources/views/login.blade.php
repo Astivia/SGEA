@@ -48,57 +48,7 @@
                 </div>
             </div>
             <!-- Formulario de registro -->
-            <div class="form-box register">
-                <h2>Registro</h2>
-                <form id="register-form" method="POST" action="{{ route('validar-registro') }}">
-                    @csrf
-                    <div class="input-box">
-                        <span class="icon"><i class='bx bxs-user'></i></span>
-                        <input type="text" id="register-name" name="name"  required>
-                        <label>Nombre</label>
-                    </div>
-                
-                    <div class="input-box">
-                        <span class="icon"><i class='bx bxs-user'></i></span>
-                        <input type="text" id="register-email" name = "email" required>
-                        <label>Correo electrónico</label>
-                    </div>
-                    <div class="input-box">
-                        <span class="icon"><i class=''></i></span>
-                        <input type="password" id="register-password" name="password" required>
-                        <label>Contraseña</label>
-                        <span class="toggle-password" onclick="togglePassword('register-password')">
-                            <i class='bx bxs-show'></i>
-                        </span>
-                        <div id="password-requirements" class="tooltip">
-                            <p>La contraseña debe cumplir con los siguientes requisitos:</p>
-                            <ul>
-                                <li id="req-length">No más de 8 caracteres</li>
-                                <li id="req-uppercase">Al menos una letra mayúscula</li>
-                                <li id="req-number">Al menos un número</li>
-                                <li id="req-special">Al menos un carácter especial</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div id="password-strength">
-                        <div id="password-strength-text"></div>
-                        <div id="password-strength-bar"></div>
-                    </div>
-                    <div class="input-box">
-                        <span class="icon"><i class=''></i></span>
-                        <input type="password" id="register-confirm-password" required>
-                        <label>Confirmar contraseña</label>
-                        <span class="toggle-password" onclick="togglePassword('register-confirm-password')">
-                            <i class='bx bxs-show'></i>
-                        </span>
-                    </div>
-                    <button type="submit" class="btn">Registrar</button>
-
-                    <div class="login-register">
-                        <p>¿Ya tienes una cue? <a href="login" class="login-link">Inicia sesión</a></p>
-                    </div>
-                </form>
-            </div>
+           
 
         </div>
     </div>
