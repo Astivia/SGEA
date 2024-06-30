@@ -1,24 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\autores;
-use App\Models\usuarios;
-use App\Models\articulos;
 
 use Illuminate\Http\Request;
+use App\Models\autores_externos;
+use App\Models\articulos;
 
-class AutoresController extends Controller
+class AutoresExternosController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $Autores=autores::OrderBy('usuario_id')->get();
-        $usuarios=usuarios::All();
+        $autoresExt=autores_externos::All();
 
-        return view ('Autores.index', compact('Autores','usuarios'));
+        return view ('AutoresExt.index',compact('autoresExt'));
     }
 
     /**
@@ -35,8 +32,8 @@ class AutoresController extends Controller
     public function store(Request $request)
     {
         $datos=$request->all();
-        autores::create($datos);
-        return redirect ('/autores');
+        autores_externos::create($datos);
+        return redirect()->back()->with('success', 'Se ha Registrado correctamente');
     }
 
     /**
@@ -44,7 +41,9 @@ class AutoresController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $ae = autores_externos::find($id);
+
+        return view ('AutoresExt.read',compact('ae'));
     }
 
     /**
@@ -53,10 +52,8 @@ class AutoresController extends Controller
     public function edit(string $id)
     {
         
-        $autor=autores::find($id);
-        $usuarios=usuarios::all();
-        
-        return view ('Autores.edit',compact('usuarios','autor'));
+        $ae=autores_externos::find($id);
+        return view ('AutoresExt.edit',compact('ae'));
     }
 
     /**
@@ -65,15 +62,14 @@ class AutoresController extends Controller
     public function update(Request $request, string $id)
     {
         $NuevosDatos = $request->all();
-        $autor=autores::find($id);
-        
+        $autor=autores_externos::find($id);
 
         if(is_null($NuevosDatos['afiliacion'])){
             return redirect()->back()->with('error', 'el campo Afiliacion no puede estar vacio');
         }
 
         $autor->update($NuevosDatos);
-        return redirect('/autores');
+        return redirect('/autores_externos');
     }
 
     /**
@@ -81,11 +77,11 @@ class AutoresController extends Controller
      */
     public function destroy(string $id)
     {
-        $autor=autores::find($id);
+        $autor=autores_externos::find($id);
 
-        $articulosConAutor = articulos::whereHas('autores', 
+        $articulosConAutor = articulos::whereHas('autoresExternos', 
             function ($query)use ($autor) {
-                $query->where('autor_id_autor', $autor->id);
+                $query->where('autor_id_ext', $autor->id);
             })->count();
 
         if ($articulosConAutor  > 0) {
@@ -95,6 +91,6 @@ class AutoresController extends Controller
 
         $autor->delete();
 
-        return redirect('autores')->with('success', 'Se ha eliminado correctamente');
+        return redirect('autores_externos')->with('success', 'Se ha eliminado correctamente');
     }
 }

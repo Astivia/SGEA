@@ -29,12 +29,13 @@
                 <td>{!!$autor->usuario->nombre_completo!!} </td>
                 <td>{!!$autor->afiliacion!!}</td>
                 <td>
+                    <a href="{!! 'usuarios/'.$autor->usuario->id !!}"><i class="las la-info-circle la-2x"></i></a>
                     <a href="{!!'autores/'.$autor->id.'/edit'!!}">
-                        <button>editar</button>
+                        <i class="las la-user-edit la-2x"></i>
                     </a>
                     <a href="{{url('autores/'.$autor->id)}}"
                         onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $autor->id }}').submit(); }">
-                        <button>Eliminar</button>
+                        <i class="las la-user-minus la-2x"></i>
                     </a>
                     <form id="delete-form-{{ $autor->id }}" action="{{ url('autores/'.$autor->id) }}" method="POST"
                         style="display: none;">
@@ -56,9 +57,9 @@
         <h2>Registrar Autor</h2>
         {!! Form::open(['url'=>'/autores']) !!}
 
-        <label for="participante-name">Seleccionar Usuario:</label>
+        <label for="participante-name">Seleccione un Usuario del sistema:</label>
         {!! Form::select('usuario_id', $usuarios->pluck('nombre_completo', 'id'), null, ['required' => 'required']) !!}
-       
+       <br>
 
         <label for="afiliacion">Afiliacion:</label>
         <input type="text" id="afiliacion" name="afiliacion" required>

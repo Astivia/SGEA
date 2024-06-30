@@ -6,6 +6,7 @@ use App\Http\Controllers\AreasController;
 use App\Http\Controllers\ArticulosAutoresController;
 use App\Http\Controllers\ArticulosController;
 use App\Http\Controllers\AutoresController;
+use App\Http\Controllers\AutoresExternosController;
 use App\Http\Controllers\Comite_EditorialController;
 use App\Http\Controllers\EventosController;
 //use App\Http\Controllers\ParticipantesAreasController;
@@ -21,6 +22,7 @@ Route::resource('areas', AreasController::class)->middleware('auth')->middleware
 Route::resource('articulos_autores', ArticulosAutoresController::class)->middleware('auth');
 Route::resource('articulos', ArticulosController::class)->middleware('auth');
 Route::resource('autores', AutoresController::class)->middleware('auth');
+Route::resource('autores_externos', AutoresExternosController::class)->middleware('auth');
 Route::resource('comite_editorial', Comite_EditorialController::class)->middleware('auth');
 // Route::get('eventos/general/{acronimo}', [EventosController::class, 'general'])->name('general');
 Route::resource('eventos', EventosController::class)->names('eventos')->middleware('auth');

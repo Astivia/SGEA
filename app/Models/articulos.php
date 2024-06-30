@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class articulos extends Model
 {
     protected $table = 'articulos';
-    protected $fillable = ['evento_id','titulo','area_id'];
+    protected $fillable = ['evento_id','titulo','area_id','estado'];
     
     //llave foranea
     public function evento()
@@ -20,4 +20,17 @@ class articulos extends Model
     {
         return $this->belongsTo(areas::class, 'area_id','id');
     }
+
+    public function autores()
+    {
+        return $this->belongsToMany(autores::class, 'articulos_autores', 'id_articulo', 'autor_id_autor')
+                    ->withPivot('autor_id_ext');
+    }
+
+    public function autoresExternos()
+    {
+        return $this->belongsToMany(autores_externos::class, 'articulos_autores', 'id_articulo', 'autor_id_ext')
+                    ->withPivot('autor_id_autor');
+    }
+    
 }

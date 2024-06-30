@@ -15,4 +15,10 @@ class autores extends Model
     {
         return $this->belongsTo(usuarios::class, 'usuario_id','id');
     }
+
+    public function articulos()
+    {
+        return $this->belongsToMany(Articulo::class, 'articulos_autores', 'autor_id_autor', 'id_articulo')
+                    ->withPivot('autor_id_ext');
+    }
 }
