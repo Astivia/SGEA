@@ -10,7 +10,7 @@
 
         @if(session('success'))
             <script>
-            alert('{{ session('success') }}');
+                alert('{{ session('success') }}');
             </script>
         @endif
         <div class="main-content">

@@ -53,7 +53,7 @@ class ArticulosController extends Controller
     public function store(Request $request)
     {
         $datos=$request->all();
-        //insertamos en articulo
+        //insertamoslos datos del articulo
         $articulo=articulos::create([
             'titulo'=> $datos['titulo'],
             'evento_id'=> $datos['evento_id'],
@@ -117,6 +117,7 @@ class ArticulosController extends Controller
     public function update(Request $request, string $id)
     {
         $NuevosDatos = $request->all();
+
         //buscamos el articulo
         $articulo = articulos::find($id);
 
@@ -134,9 +135,6 @@ class ArticulosController extends Controller
         }elseif(!is_null($NuevosDatos['autor_id_ext'])){
             $articulo->autoresExternos()->detach();
             $articulo->autoresExternos()->attach($NuevosDatos['autor_id_ext']);
-        }else{
-            $articulo->autores()->detach();
-            $articulo->autoresExternos()->detach();
         }
         return redirect('/articulos')->with('success', 'Artículo Modificado');
     }

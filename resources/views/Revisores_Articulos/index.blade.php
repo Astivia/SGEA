@@ -4,26 +4,27 @@
 </head>
 @section('Content')
         <div class="container">
-            <h1>Revisores de Articulos</h1>
+            <h1>Revisores de Articulos en {!!$evento->acronimo!!} {!!$evento->edicion!!}</h1>
             <div class="search-create">
                 <input type="text" id="search-input" placeholder="Buscar eventos...">
-                <button id="create-event-btn">Crear nuevo revisor</button>
+                <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
             </div>
         </div>
-<br><br>
+        <br><br>
         <div class="container">
-            <h1>Revisores</h1>
-            <div class="info">
-                <table border=0>
+            @if($RevArt->isEmpty())
+                <strong>No hay datos</strong>
+            @else
+                <table>
                     <tr>
-                        <th>REVISOR</th>
+                        <th>PARTICIPANTE</th>
                         <th>ARTICULO</th>
                         <th>AREA</th>
                         <th>Controles</th>
                     </tr>
                      @foreach ($RevArt as $ra)
                     <tr>
-                        <td>{!!$ra->participante->nombre!!} {!!$ra->participante->apellidos!!}</td>
+                        <td>{!!$ra->usuario->nombre_completo!!}</td>
                         <td>{!!$ra->articulo->titulo!!}</td>
                         <td>{!!$ra->articulo->area->nombre!!}</td>
                         
@@ -46,9 +47,7 @@
                     </tr>
                      @endforeach
                 </table>
-            </div>
-            <div id="events-list"></div>
-            <div id="pagination"></div>
+            @endif
         </div>
         
         
@@ -57,19 +56,12 @@
                 <span class="close">&times;</span>
                 <h2>Registro de Revisor</h2>
                 {!! Form::open(['url'=>'/revisores_articulos']) !!}
+                    {!! Form::hidden('evento_id', $evento->id) !!}
                     <label for="participante">Seleccionar participante :</label>
-                        <select name="participante_id" require>
-                        @foreach ($Participantes as $participante)
-                            <option value="{{ $participante->id }}">{{ $participante->nombre}} {{ $participante->apellidos}}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('usuario_id', $parts, null, ['required' => 'required']) !!}
 
                     <label for="articulo">Seleccionar Articulo:</label>
-                        <select name="articulo_titulo" require>
-                        @foreach ($Articulos as $art)
-                            <option value="{{ $art->titulo }}">{{ $art->titulo}} </option>
-                        @endforeach
-                    </select>
+                        
                     <br><br>
                     <button type="submit">Registrar Revisor</button>
                 {!!Form::close()!!} 

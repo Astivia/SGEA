@@ -19,6 +19,7 @@
             @endif
         </p>
         <p><strong>Area: </strong>{!!$articulo->area->nombre!!}</p>
+        <p><strong>Revisores: </strong></p>
         <p><strong>Estado: </strong>{!!$articulo->estado!!}</p>
 
         <div class="lector-pdf">

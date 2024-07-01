@@ -8,12 +8,28 @@ use Illuminate\Database\Eloquent\Model;
 class revisores_articulos extends Model
 {
     protected $table = 'revisores_articulos';
-    protected $fillable = ['participante_id','articulo_id'];
+
+    protected $primaryKey = ['evento_id', 'usuario_id', 'articulo_id'];
+
+    public $incrementing = false;
+
+    protected $fillable = [
+        'evento_id',
+        'usuario_id',
+        'articulo_id',
+        'puntuacion',
+        'comentarios',
+    ];
     
-    //llave foranea
-    public function participante()
+    // Define relationships
+    public function evento()
     {
-        return $this->belongsTo(participantes::class, 'participante_id','id');
+        return $this->belongsTo(eventos::class, 'evento_id');
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(usuarios::class, 'usuario_id');
     }
 
     public function articulo()

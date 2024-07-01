@@ -15,6 +15,7 @@ return new class extends Migration
 
             $table->integer('evento_id')->unsigned()->index();
             $table->unsignedInteger('usuario_id')->index();
+            
             $table->integer('articulo_id')->unsigned()->index();
 
             $table->integer('puntuacion')->nullable();

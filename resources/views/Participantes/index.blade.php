@@ -30,7 +30,8 @@
             <td>{!!$usu->email!!}</td>
             @role(['Administrador','Organizador'])
             <td>
-                <a href="route{!! 'usuarios/'.$usu->id !!}"><i class="las la-info-circle la-2x"></i></a>
+                <!-- <a href="route{!! 'usuarios/'.$usu->id !!}"><i class="las la-info-circle la-2x"></i></a> -->
+                <a href="{{ url('usuarios/'.$usu->id) }}"><i class="las la-info-circle la-2x"></i></a>
 
                 {!! Form::open(['route' => ['participantes.destroy', $evento->id, $usu->id], 'method' => 'delete', 'style' => 'display:inline-block;']) !!}
                     <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este participante?');" style="border:none; background:none;">

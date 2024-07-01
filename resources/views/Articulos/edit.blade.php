@@ -33,7 +33,7 @@
                 @endforeach
             @elseif($articulo->autoresExternos->count() > 0)
                 @foreach ($articulo->autoresExternos as $autor)
-                    <i class="las la-external-link-alt"></i>{!!$autor->nombre_completo!!} <a href="{!! 'autores_externos/'.$autor->id !!}"><i class="las la-info-circle la-1x"></i></a>
+                    <i class="las la-external-link-alt"></i>{!!$autor->nombre_completo!!} <a href="{!! url( 'autores_externos/'.$autor->id) !!}"><i class="las la-info-circle la-1x"></i></a>
                 @endforeach
             @endif
         </label>

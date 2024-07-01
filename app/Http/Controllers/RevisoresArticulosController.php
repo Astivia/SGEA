@@ -4,24 +4,36 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\revisores_articulos;
-use App\Models\participantes;
+use App\Models\eventos;
 use App\Models\articulos;
 
 class RevisoresArticulosController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('can:revisores_articulos.index')->only('index');
+        $this->middleware('can:revisores_articulos.edit')->only('edit','update');
+        $this->middleware('can:revisores_articulos.create')->only('create','store'); 
+        $this->middleware('can:revisores_articulos.destroy')->only('destroy'); 
+
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($eventoId)
     {
+        $evento = eventos::find($eventoId); 
         $RevArt= revisores_articulos::OrderBy('articulo_id')->get();
 
-        $Participantes=participantes::all();
-        $Articulos = articulos::select('titulo')->distinct()->get();
-
+        $parts = $evento->participantes->mapWithKeys(function($participante) {
+            $nombreCompleto = $participante->nombre . ' ' . $participante->ap_pat . ' ' .$participante->ap_mat;
+            return [$participante->id => $nombreCompleto];
+        });
+        $articulos= articulos::where('evento_id',$eventoId);
         
 
-        return view ('Revisores_Articulos.index',compact('RevArt','Participantes','Articulos'));
+
+        return view ('Revisores_Articulos.index',compact('RevArt','evento','parts'));
     }
 
     /**

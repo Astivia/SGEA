@@ -32,5 +32,14 @@ class articulos extends Model
         return $this->belongsToMany(autores_externos::class, 'articulos_autores', 'id_articulo', 'autor_id_ext')
                     ->withPivot('autor_id_autor');
     }
+
+    public function revisores()
+    {
+        return $this->belongsToMany(usuarios::class, 'revisores_articulos', 'articulo_id', 'usuario_id')
+                   ->withPivot('puntuacion', 'comentarios')
+                   ->as('revisor'); // Define alias for clarity
+    }
+
+
     
 }

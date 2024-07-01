@@ -29,7 +29,7 @@ class ParticipantesController extends Controller
         // Obtener usuarios que asisten
         $part = $evento->participantes; 
 
-        //catalogo de eventos
+    
         $usuarios=usuarios::OrderBy('ap_pat')->get();
 
         return view ('Participantes.index',compact('part','evento','usuarios'));

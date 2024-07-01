@@ -94,7 +94,7 @@ class usuariosController extends Controller
         //asignamos Rol elejido
         $usuario->roles()->sync($request->roles);
 
-        if($NuevosDatos->password==null){
+        if(is_null($NuevosDatos['password'])){
             $NuevosDatos['password']=$usuario->password;
         }else{
             //encriptamos la nueva contraseña
@@ -111,9 +111,10 @@ class usuariosController extends Controller
     public function destroy(string $id)
     {
         $usuario=usuarios::find($id);
-        // if ((comite_editorial::where('usuario_id', $usuario->id)->count() > 0)||
-         if   (autores::where('usuario_id', $usuario->id)->count() > 0) {
-              
+
+        if ($usuario->eventos()->count() > 0) {
+            return redirect()->back()->with('error', 'No se puede eliminar porque está registrado en uno o más eventos');
+        }else if (autores::where('usuario_id', $usuario->id)->count() > 0) {
             return redirect()->back()->with('error', 'No se puede eliminar el participante porque esta registrado como Autor');
         }
         $usuario->delete();
