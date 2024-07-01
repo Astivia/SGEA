@@ -56,6 +56,8 @@ Route::get('/logout',[LoginController::class,'logout'])->name('logout');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+
 Route::get('/', function () {
     return view('login');
 });

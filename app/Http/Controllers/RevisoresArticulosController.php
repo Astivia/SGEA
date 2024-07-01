@@ -30,10 +30,8 @@ class RevisoresArticulosController extends Controller
             return [$participante->id => $nombreCompleto];
         });
         $articulos= articulos::where('evento_id',$eventoId);
-        
 
-
-        return view ('Revisores_Articulos.index',compact('RevArt','evento','parts'));
+        return view ('Revisores_Articulos.index',compact('RevArt','evento','parts','articulos'));
     }
 
     /**
