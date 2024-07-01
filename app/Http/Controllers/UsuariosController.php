@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\usuarios;
-use App\Models\participantes;
 use App\Models\autores;
+use App\Models\comite_editorial;
 
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -103,7 +103,6 @@ class usuariosController extends Controller
         //actualizamos
         $usuario->update($NuevosDatos);
          return redirect('/usuarios')->with('info','Se guardaron los cambios de manera satisfactoria');
-        // return redirect()->route('participantes.edit',$participante)->with('info','Se guardaron los cambios de manera satisfactoria');
     }
 
     /**
@@ -112,10 +111,10 @@ class usuariosController extends Controller
     public function destroy(string $id)
     {
         $usuario=usuarios::find($id);
-        if ((participantes::where('usuario_id', $usuario->id)->count() > 0)||
-            (autores::where('usuario_id', $usuario->id)->count() > 0)) {
+        // if ((comite_editorial::where('usuario_id', $usuario->id)->count() > 0)||
+         if   (autores::where('usuario_id', $usuario->id)->count() > 0) {
               
-            return redirect()->back()->with('error', 'No se puede eliminar el participante porque es participante de algun evento o esta registrado como Autor');
+            return redirect()->back()->with('error', 'No se puede eliminar el participante porque esta registrado como Autor');
         }
         $usuario->delete();
         return redirect('usuarios')->with('success', 'Participante eliminado correctamente');
