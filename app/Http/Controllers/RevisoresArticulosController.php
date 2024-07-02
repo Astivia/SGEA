@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\revisores_articulos;
 use App\Models\eventos;
 use App\Models\articulos;
+use Illuminate\Support\Str;
 
 class RevisoresArticulosController extends Controller
 {
@@ -29,11 +30,14 @@ class RevisoresArticulosController extends Controller
             $nombreCompleto = $participante->nombre . ' ' . $participante->ap_pat . ' ' .$participante->ap_mat;
             return [$participante->id => $nombreCompleto];
         });
-        $articulos= articulos::where('evento_id',$eventoId);
+        $articulos = articulos::where('evento_id', $eventoId)->get();
 
-        $PRUEBAAAAAA=null;
+        $articulosOptions = $articulos->map(function ($articulo) {
+            return [$articulo->id => Str::limit($articulo->titulo, 50)];
+        })->toArray();
 
-        return view ('Revisores_Articulos.index',compact('RevArt','evento','parts','articulos'));
+        // dd($articulosOptions);
+        return view ('Revisores_Articulos.index',compact('RevArt','evento','parts','articulosOptions'));
     }
 
     /**

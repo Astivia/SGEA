@@ -61,7 +61,8 @@
                     {!! Form::select('usuario_id', $parts, null, ['required' => 'required']) !!}
 
                     <label for="articulo">Seleccionar Articulo:</label>
-                    {!! Form::select('articulo_id', $articulos, null, ['required' => 'required']) !!}
+                    {!! Form::select('articulo_id', $articulosOptions, null, ['required' => 'required']) !!}
+
 
                     <br><br>
                     <button type="submit">Registrar Revisor</button>
