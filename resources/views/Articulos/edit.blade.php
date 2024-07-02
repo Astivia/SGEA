@@ -4,7 +4,7 @@
 @section('Content')
 <div class="container">
     <h1>MODIFICAR ARTICULO</h1>
-    {!! Form::open(['method'=>'PATCH','url'=>'/articulos/'.$articulo->id]) !!}
+    {!! Form::open(['method'=>'PATCH','url'=>'/articulos/'.$articulo->id, 'files' => true]) !!}
         <label for="titulo"><strong>Titulo:</strong></label>
         {!! Form::text ('titulo',$articulo->titulo)!!}
 
@@ -45,9 +45,15 @@
 
         <strong>Estado:</strong>
         {!! Form::text ('estado',$articulo->estado)!!}
-
         <br><br>
-        <button type="submit">Guardar Cambios</button>
+        <p><Strong>Archivo actual: </Strong>{!!$articulo->pdf!!}</p>
+        <br>
+        <div class="form-group">
+            <label for="nuevo_archivo_pdf">Seleccionar nuevo archivo PDF:</label>
+            <input type="file" class="form-control" id="pdf" name="pdf">
+        </div>
+        <br><br>
+        <button type="submit" id="create-event-btn">Guardar Cambios</button>
     {!!Form::close()!!}   
     <a href="{{ url('articulos') }}"><button>Cancelar</button></a> 
 </div>

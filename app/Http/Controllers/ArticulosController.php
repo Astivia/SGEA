@@ -107,15 +107,14 @@ class ArticulosController extends Controller
      */
     public function edit(string $id)
     {
-
+        
         $articulo= articulos::find($id);
-
+        //consultamos los catalogos
         $Eventos = Eventos::all();
         $Areas = Areas::all();
-
         $autores = autores::all();
         $autoresExternos = autores_externos::all();
-
+        //filtramos unicamente el id y nombre de los autores
         $autoresSistema = $autores->mapWithKeys(
             function ($autor) {
                 return [$autor->id => $autor->usuario->nombre_completo];
@@ -138,17 +137,37 @@ class ArticulosController extends Controller
     public function update(Request $request, string $id)
     {
         $NuevosDatos = $request->all();
-
         //buscamos el articulo
         $articulo = articulos::find($id);
 
+         // manejo del archivo
+
+         $archivo = $request->file('pdf');
+         
+         
+         if($archivo){
+            $pdfPath = 'public/Articles/web/' . $articulo->evento_id . '/' . $articulo->pdf;
+            //verificamos ai existe el archivo en nuestra carpeta destino 
+            if (Storage::exists($pdfPath)) {
+                Storage::delete($pdfPath);
+            }
+             $nombreArchivo = $archivo->getClientOriginalName();
+             $rutaArchivo = storage_path('app/public/Articles/web/' . $articulo['evento_id'] . '/' . $nombreArchivo);
+             // Guardamos el archivo con su nombre original y obtenemos la ruta completa
+             $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' . $articulo['evento_id'], $nombreArchivo);
+         }else{
+            $nombreArchivo=$articulo->pdf;
+         }
+ 
         //insertamos en articulo
         $articulo->update([
             'titulo'=>$NuevosDatos['titulo'],
             'area_id'=>$NuevosDatos['area_id'],
             'evento_id'=>$NuevosDatos['evento_id'],
-            'estado'=>$NuevosDatos['estado']
+            'estado'=>$NuevosDatos['estado'],
+            'pdf'=>$nombreArchivo
         ]);
+
         //verificamos que campo viene definido para el autor
         if(!is_null($NuevosDatos['autor_id_autor'])){
             $articulo->autores()->detach();
@@ -169,6 +188,8 @@ class ArticulosController extends Controller
         $articulo = articulos::find($id);
         if (!$articulo){
             return redirect()->back()->with('error', 'No se encontro el articulo');
+        }elseif($articulo->revisores()->count()>0){
+            return redirect()->back()->with('error', 'El articulo aun tiene revisores');
         }elseif ($articulo->autores->count() > 0) {
             $articulo->autores()->detach();
         }else if ($articulo->autoresExternos->count() > 0) {
