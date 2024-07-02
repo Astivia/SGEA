@@ -1,5 +1,6 @@
 @extends('layouts.master')
     <title>Modificar Datos</title>
+    
 </head>
 @section('Content')
     <div class="container">
@@ -21,11 +22,16 @@
         <p><strong>Area: </strong>{!!$articulo->area->nombre!!}</p>
         <p><strong>Revisores: </strong></p>
         <p><strong>Estado: </strong>{!!$articulo->estado!!}</p>
-        <p><strong> Archivo: </strong>{!!$articulo->pdf!!}</p>
-
-        <div class="lector-pdf">
-
-        </div>
+        <p><strong> Archivo: </strong>{!!$articulo->pdf!!}</p><br>
+        @if($pdfUrl)
+            <a href="{!!$pdfUrl !!}" target="_blank"><button><i class="las la-file-pdf la-2x"></i> Abrir en nueva Pestaña</button></a>
+            <br><br>
+            <div id="pdf-viewer" >
+                <iframe src="{!!$pdfUrl !!}" frameborder="0" style="width:90%; height: 70%;"></iframe>
+            </div>
+        @else
+            <strong>No hay archivo para mostrar</strong>
+        @endif
     </div>
 
 @endsection

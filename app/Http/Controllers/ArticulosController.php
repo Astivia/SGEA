@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\articulos;
 use App\Models\autores;
@@ -18,13 +19,12 @@ class ArticulosController extends Controller
     public function index()
     {
         $Articulos=articulos::OrderBy('id')->get();
-
+        //obtenemos los catalogos correspondientes
         $Eventos=eventos::all();
         $Areas =areas::all();
-
         $autores = autores::all();
         $autoresExternos = autores_externos::all();
-
+        //filtramos unicamente el id y nombre de los autores
         $autoresSistema = $autores->mapWithKeys(
             function ($autor) {
                 return [$autor->id => $autor->usuario->nombre_completo];
@@ -61,8 +61,10 @@ class ArticulosController extends Controller
         // manejo del archivo
         $archivo = $request->file('pdf');
         $nombreArchivo = $archivo->getClientOriginalName();
-        $rutaArchivo = storage_path('app/public/Articles/' . $datos['evento_id'] . '/' . $nombreArchivo);
-        $archivo->move($rutaArchivo);
+        $rutaArchivo = storage_path('app/public/Articles/web/' . $datos['evento_id'] . '/' . $nombreArchivo);
+
+        // Guardamos el archivo con su nombre original y obtenemos la ruta completa
+        $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' . $datos['evento_id'], $nombreArchivo);
 
         //insertamoslos datos del articulo
         $articulo = articulos::create([
@@ -90,8 +92,14 @@ class ArticulosController extends Controller
     {
         
         $articulo=articulos::find($id);
+        if(!is_null($articulo->pdf)){
+            $pdfPath = 'SGEA/storage/app/public/Articles/web/viewer.html?file=' . $articulo->evento_id . '/' . $articulo->pdf;
+            $pdfUrl =  asset($pdfPath);
+        }else{
+            $pdfUrl=null;
+        }
         
-        return view ('Articulos.read',compact('articulo'));
+        return view ('Articulos.read',compact('articulo','pdfUrl'));
     }
 
     /**
@@ -159,14 +167,18 @@ class ArticulosController extends Controller
     {
         // Buscar el artículo a eliminar
         $articulo = articulos::find($id);
-
-
         if (!$articulo){
             return redirect()->back()->with('error', 'No se encontro el articulo');
         }elseif ($articulo->autores->count() > 0) {
             $articulo->autores()->detach();
         }else if ($articulo->autoresExternos->count() > 0) {
             $articulo->autoresExternos()->detach();
+        }
+
+        // Eliminar el archivo PDF asociado
+        $pdfPath = 'public/Articles/web/' . $articulo->evento_id . '/' . $articulo->pdf;
+        if (Storage::exists($pdfPath)) {
+            Storage::delete($pdfPath);
         }
 
         $articulo->delete();

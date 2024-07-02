@@ -27,7 +27,6 @@ Route::delete('participantes/{eventoId}/{usuarioId}', [ParticipantesController::
 Route::resource('articulos', ArticulosController::class)->middleware('auth');
 Route::resource('autores', AutoresController::class)->middleware('auth');
 Route::resource('autores_externos', AutoresExternosController::class)->middleware('auth');
-Route::get('articulos/evento/{eventoId}', [ArticulosController::class, 'index'])->name('participantes.evento.index')->middleware('auth');
 // REVISORES DE ARTICULOS:
 Route::resource('revisores_articulos', RevisoresArticulosController::class)->middleware('auth');
 Route::get('revisores_articulos/evento/{eventoId}', [RevisoresArticulosController::class, 'index'])->name('revisores_articulos.evento.index')->middleware('auth');
@@ -77,5 +76,7 @@ Route::get('EnviarCorreo', function () {
     return "Mensaje enviado";
 
 })->name('EnviarCorreo');
+
+
 
 // Route::get('ejecutarajax/{evento_id}','AutoresController@combo_autoresPorEvento');
