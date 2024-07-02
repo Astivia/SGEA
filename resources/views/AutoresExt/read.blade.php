@@ -7,7 +7,10 @@
         <br><br>
         <img src="" alt="foto" style="width:250px">
         <br><br>
+        <div class="container-info">
         <p><strong>Afiliacion: </strong>{!!$ae->afiliacion!!}</p>
+        </div>
+        
 
     </div>
 

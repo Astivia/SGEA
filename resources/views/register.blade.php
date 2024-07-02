@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="./css/style.css">
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="{{asset('SGEA/public/assets/img/ITTOL.ico')}}" type="image/x-icon">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Registrarse</title>
 </head>
 <body>
@@ -87,5 +87,53 @@
         
          
     </div>
+    <style>
+    /* Centrar verticalmente el modal */
+    #loginErrorModal .modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content:center;
+        min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+        
+    }
+
+    /* Estilos adicionales para el modal */
+    #loginErrorModal .modal-content {
+        /* Puedes añadir estilos adicionales según tus necesidades */
+    }
+</style>
+
+    @if(session('register_error'))
+<div class="modal" id="loginErrorModal" tabindex="-1" role="dialog" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginErrorModalLabel">Error de registro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{{ session('register_error') }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Mostrar automáticamente el modal al cargar la página si hay un error de login
+    $(document).ready(function() {
+        $('#loginErrorModal').modal('show');
+        $('#loginErrorModal').on('hidden.bs.modal', function () {
+            // Limpiar cualquier mensaje de error después de cerrar el modal
+            // Esto es opcional y depende de cómo quieras manejar los mensajes de error
+        });
+    });
+</script>
+@endif
 </body>
 </html>

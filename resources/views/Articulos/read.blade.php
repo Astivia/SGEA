@@ -4,6 +4,9 @@
 @section('Content')
     <div class="container">
         <h1>{!!$articulo->titulo!!}</h1>
+        <div class="container-">
+
+        </div>
         <p><strong>Evento: </strong>{!!$articulo->evento->nombre!!} (<strong>{!!$articulo->evento->acronimo!!} {!!$articulo->evento->edicion!!}</strong>)</p>
         <p><strong>Autores: </strong>
             @if($articulo->autores->count() > 0)

@@ -24,7 +24,7 @@ class LoginController extends Controller
 
         if (usuarios::where('curp', $Datos['curp'])->exists()) {
             
-            return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada');
+            return redirect()->back()->with('register_error', 'Ya existe un participante con la CURP ingresada');
 
         }else{
 
@@ -57,7 +57,7 @@ class LoginController extends Controller
             return redirect()->intended(route('home'));
 
         }else{
-            return redirect('login')->with('error', 'No se encuentra el usuario');
+            return redirect('login')->with('login_error', 'Usuario o contraseña incorrectos');
         }
     }
 

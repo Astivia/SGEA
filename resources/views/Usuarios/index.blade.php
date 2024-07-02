@@ -37,7 +37,7 @@
                     <a href="{!!'usuarios/'.$usu->id.'/edit'!!}">
                         <i class="las la-user-edit la-2x"></i>
                     </a>
-                    <a href="{{url('usuarios/'.$usu->id)}}" onclick="
+                    <!-- <a href="{{url('usuarios/'.$usu->id)}}" onclick="
                                             event.preventDefault(); 
                                             if (confirm('¿Estás seguro de que deseas eliminar este registro?')) 
                                             { document.getElementById('delete-form-{{ $usu->id }}').submit(); }">
@@ -47,7 +47,24 @@
                         style="display: none;">
                         @method('DELETE')
                         @csrf
-                    </form>
+                    </form> -->
+                    <a id="mensaje" href="#" onclick="openModal('{{ $usu->id }}')">
+                     <i class="las la-user-minus la-2x"></i> 
+                </a>
+
+                <!-- Modal -->
+                <div id="confirmModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <p>¿Estás seguro de que deseas eliminar este registro?</p>
+                        <button onclick="deleteRecord('{{ $usu->id }}')">Eliminar</button>
+                    </div>
+                </div>
+
+                <form id="delete-form-{{ $usu->id }}" action="{{  url('usuarios/'.$usu->id)  }}" method="POST" style="display: none;">
+                    @csrf
+                    @method('DELETE')
+                </form>
                 </td>
                 @endrole
             </tr>
@@ -95,3 +112,25 @@
 
 @endsection
 <!-- <script src="./js/script-participantes.js"></script> -->
+<script>
+   function openModal(id) {
+    var modal = document.getElementById('confirmModal');
+    modal.style.display = 'block';
+    // Guardamos el ID del registro que se desea eliminar en un atributo data del modal
+    modal.setAttribute('data-record-id', id);
+}
+
+// Función para cerrar el modal
+function closeModal() {
+    var modal = document.getElementById('confirmModal');
+    modal.style.display = 'none';
+}
+
+// Función para eliminar el registro
+function deleteRecord(id) {
+    var modal = document.getElementById('confirmModal');
+    modal.style.display = 'none';
+    // Enviamos el formulario de eliminación correspondiente
+    document.getElementById('delete-form-' + id).submit();
+}
+</script>

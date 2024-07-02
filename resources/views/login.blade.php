@@ -59,57 +59,7 @@
                 </div>
             </div>
             <!-- Formulario de registro -->
-            <div class="form-box register">
-                <h2>Registro</h2>
-                <form id="register-form" method="POST" action="{{ route('validar-registro') }}">
-                    @csrf
-                    <div class="input-box">
-                        <span class="icon"><i class='bx bxs-user'></i></span>
-                        <input type="text" id="register-name" name="name"  required>
-                        <label>Nombre</label>
-                    </div>
-                
-                    <div class="input-box">
-                        <span class="icon"><i class='bx bxs-user'></i></span>
-                        <input type="text" id="register-email" name = "email" required>
-                        <label>Correo electrónico</label>
-                    </div>
-                    <div class="input-box">
-                        <span class="icon"><i class=''></i></span>
-                        <input type="password" id="register-password" name="password" required>
-                        <label>Contraseña</label>
-                        <span class="toggle-password" onclick="togglePassword('register-password')">
-                            <i class='bx bxs-show'></i>
-                        </span>
-                        <div id="password-requirements" class="tooltip">
-                            <p>La contraseña debe cumplir con los siguientes requisitos:</p>
-                            <ul>
-                                <li id="req-length">No más de 8 caracteres</li>
-                                <li id="req-uppercase">Al menos una letra mayúscula</li>
-                                <li id="req-number">Al menos un número</li>
-                                <li id="req-special">Al menos un carácter especial</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div id="password-strength">
-                        <div id="password-strength-text"></div>
-                        <div id="password-strength-bar"></div>
-                    </div>
-                    <div class="input-box">
-                        <span class="icon"><i class=''></i></span>
-                        <input type="password" id="register-confirm-password" required>
-                        <label>Confirmar contraseña</label>
-                        <span class="toggle-password" onclick="togglePassword('register-confirm-password')">
-                            <i class='bx bxs-show'></i>
-                        </span>
-                    </div>
-                    <button type="submit" class="btn">Registrar</button>
-
-                    <div class="login-register">
-                        <p>¿Ya tienes una cuenta? <a href="login" class="login-link">Inicia sesión</a></p>
-                    </div>
-                </form>
-            </div>
+            
 
         </div>
     </div>
@@ -158,5 +108,53 @@
     <br>    
     <a href="">¿Olvidaste tu contraseña?</a>         
     </div> -->
+    <style>
+    /* Centrar verticalmente el modal */
+    #loginErrorModal .modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content:center;
+        min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+    }
+
+    /* Estilos adicionales para el modal */
+    #loginErrorModal .modal-content {
+        /* Puedes añadir estilos adicionales según tus necesidades */
+    }
+</style>
+
+    @if(session('login_error'))
+<div class="modal" id="loginErrorModal" tabindex="-1" role="dialog" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginErrorModalLabel">Error de inicio de sesión</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{{ session('login_error') }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Mostrar automáticamente el modal al cargar la página si hay un error de login
+    $(document).ready(function() {
+        $('#loginErrorModal').modal('show');
+        $('#loginErrorModal').on('hidden.bs.modal', function () {
+            // Limpiar cualquier mensaje de error después de cerrar el modal
+            // Esto es opcional y depende de cómo quieras manejar los mensajes de error
+        });
+    });
+</script>
+@endif
+
 </body>
 </html>

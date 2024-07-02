@@ -8,6 +8,7 @@
             <div class="image">
                 <img src="{{asset('SGEA/public/assets/uploads/'.$evento->logo)}}" alt="" style="width:400px;">
             </div>
+            <div class="container-info">
             <strong>Nombre:</strong>
                 <p>{!!$evento->nombre!!}</p>
             <strong>Acronimo</strong>
@@ -24,6 +25,8 @@
             <a href="{{ url('eventos') }}"><button id="create-event-btn"><i class="las la-arrow-left la-2x"></i></button></a>
             <a href="{{ route('participantes.evento.index', ['eventoId' => $evento->id]) }}"><button id="create-event-btn">Ver participantes</button></a>
             <a href="{{ route('revisores_articulos.evento.index', ['eventoId' => $evento->id]) }}"><button id="create-event-btn">Ver Revisores de Articulos</button></a>
+            </div>
+           
 
         </div>
     </div>

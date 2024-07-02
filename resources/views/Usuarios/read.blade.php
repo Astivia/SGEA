@@ -8,8 +8,11 @@
     <br><br>
     <img src="" alt="foto" style="width:250px">
     <br><br>
+    <div class="container-info">
     <p><strong>CURP: </strong>{!!$Usu->curp!!}</p>
     <p><strong>CORREO: </strong>{!!$Usu->email!!}</p>
+    </div>
+    
 </div>
 
 

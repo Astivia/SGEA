@@ -33,7 +33,7 @@
                 <tr>
                     <td>
                         
-                        <img src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo" style="width: 150px;">
+                        <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo" style="width: 150px;">
                     </td>
                     <td>{!!$e->nombre!!}</td>
                     <td>{!!$e->acronimo!!}</td>

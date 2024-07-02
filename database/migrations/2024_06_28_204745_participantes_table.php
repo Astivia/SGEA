@@ -19,7 +19,7 @@ return new class extends Migration
             // $table->string('rol');
             $table->primary(['evento_id', 'usuario_id']);
             $table->foreign('usuario_id')->references('id')->on('usuarios');
-            $table->foreign('evento_id')->references('id') ->on('eventos')->onDelete('SET NULL');
+            $table->foreign('evento_id')->references('id') ->on('eventos');
         });
     }
 

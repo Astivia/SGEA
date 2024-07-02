@@ -1,4 +1,5 @@
 @extends('layouts.master')
+
 <title>Participantes</title>
 
 </head>
