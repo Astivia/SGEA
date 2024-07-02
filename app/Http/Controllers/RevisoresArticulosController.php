@@ -31,6 +31,8 @@ class RevisoresArticulosController extends Controller
         });
         $articulos= articulos::where('evento_id',$eventoId);
 
+        $PRUEBAAAAAA=null;
+
         return view ('Revisores_Articulos.index',compact('RevArt','evento','parts','articulos'));
     }
 
