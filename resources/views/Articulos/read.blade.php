@@ -21,6 +21,7 @@
         <p><strong>Area: </strong>{!!$articulo->area->nombre!!}</p>
         <p><strong>Revisores: </strong></p>
         <p><strong>Estado: </strong>{!!$articulo->estado!!}</p>
+        <p><strong> Archivo: </strong>{!!$articulo->pdf!!}</p>
 
         <div class="lector-pdf">
 

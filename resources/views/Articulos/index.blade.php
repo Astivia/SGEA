@@ -72,7 +72,7 @@
                 <div class="modal-content">
                     <span class="close">&times;</span>
                     <h2>Registro de Artículo</h2>
-                    {!! Form::open(['url'=>'/articulos']) !!}
+                    {!! Form::open(['url'=>'/articulos','enctype' => 'multipart/form-data']) !!}
                         <label for="evento">Seleccionar evento :</label>
                         <select name="evento_id" required>
                             @foreach ($Eventos as $evento)
@@ -96,7 +96,9 @@
                                 <option value="{{ $area->id }}">{{ $area->nombre }}</option>
                             @endforeach
                         </select>
-
+                        <br><br>
+                        <label for="pfd">Subir archivo pdf:</label>
+                        {!! Form::file('pdf',null,null)!!}
                         <br><br>
 
                         <button type="submit">Guardar articulo</button>

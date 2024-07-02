@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class articulos extends Model
 {
     protected $table = 'articulos';
-    protected $fillable = ['evento_id','titulo','area_id','estado'];
+    protected $fillable = ['evento_id','titulo','area_id','estado','pdf'];
     
     //llave foranea
     public function evento()

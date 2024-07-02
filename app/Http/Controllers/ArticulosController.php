@@ -53,12 +53,24 @@ class ArticulosController extends Controller
     public function store(Request $request)
     {
         $datos=$request->all();
+        
+        //validamos la carga del archivo
+        $request->validate([
+            'pdf' => 'required|file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ]);
+        // manejo del archivo
+        $archivo = $request->file('pdf');
+        $nombreArchivo = $archivo->getClientOriginalName();
+        $rutaArchivo = storage_path('app/public/Articles/' . $datos['evento_id'] . '/' . $nombreArchivo);
+        $archivo->move($rutaArchivo);
+
         //insertamoslos datos del articulo
-        $articulo=articulos::create([
-            'titulo'=> $datos['titulo'],
-            'evento_id'=> $datos['evento_id'],
-            'area_id'=> $datos['area_id'],
-            'estado'=> 'Articulo Registrado en Sistema', 
+        $articulo = articulos::create([
+            'titulo' => $datos['titulo'],
+            'evento_id' => $datos['evento_id'],
+            'area_id' => $datos['area_id'],
+            'estado' => 'Articulo Registrado en Sistema',
+            'pdf' => $nombreArchivo
         ]);
         //verificamos que campo viene definido para el autor
         if(isset($datos['autor_id_autor'])){
@@ -66,6 +78,7 @@ class ArticulosController extends Controller
         }elseif(isset($datos['autor_id_ext'])){
             $articulo->autoresExternos()->attach($datos['autor_id_ext']);
         }
+
 
         return redirect ('/articulos');
     }

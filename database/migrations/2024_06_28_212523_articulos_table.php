@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedInteger('evento_id');
             $table->unsignedInteger('area_id');
             $table->string('estado');
-            // $table->string('pdf')->nullable();
+            $table->string('pdf')->nullable();
             $table->foreign('evento_id')->references('id')->on('eventos');
             $table->foreign('area_id')->references('id')->on('areas');
             $table->timestamps();
