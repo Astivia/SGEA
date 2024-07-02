@@ -25,6 +25,8 @@ return new class extends Migration
 
             $table->foreign('articulo_id')->references('id')->on('articulos');
             $table->foreign(['evento_id', 'usuario_id'])->references(['evento_id', 'usuario_id'])->on('participantes');
+
+            $table->timestamps();
         });
     }
 

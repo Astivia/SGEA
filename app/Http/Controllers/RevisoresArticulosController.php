@@ -24,7 +24,7 @@ class RevisoresArticulosController extends Controller
     public function index($eventoId)
     {
         $evento = eventos::find($eventoId); 
-        $RevArt= revisores_articulos::OrderBy('articulo_id')->get();
+        $RevArt= revisores_articulos::where('evento_id',$eventoId)->OrderBy('articulo_id')->get();
 
         $parts = $evento->participantes->mapWithKeys(function($participante) {
             $nombreCompleto = $participante->nombre . ' ' . $participante->ap_pat . ' ' .$participante->ap_mat;
@@ -54,16 +54,29 @@ class RevisoresArticulosController extends Controller
     public function store(Request $request)
     {
         $datos=$request->all();
-        // dd($datos);
+        
+        //actualizamos los datos del articulo
+        $articulo = articulos::find($datos['articulo_id']);
+        $articulo->estado = "Pendiente de revision";
+        $articulo->save(); 
 
-        $articulo=articulos::where('titulo',$datos['articulo_titulo'])->first();
+        //verificamos que el dato no este registrado
+        $verificacion = revisores_articulos::whereRaw('evento_id = ? AND usuario_id = ? AND articulo_id = ?', [$datos['evento_id'], $datos['usuario_id'], $datos['articulo_id']]);
 
-        revisores_articulos::create([
-            'participante_id'=> $datos['participante_id'],
-            'articulo_id'=>$articulo->id
-        ]);
 
-        return redirect ('revisores_articulos');
+        if($verificacion->count() > 0){
+            return redirect()->back()->with('error', 'Este usuario ya esta asignado al articulo');
+
+        }else{
+            revisores_articulos::create([
+                'evento_id'=> $datos['evento_id'],
+                'usuario_id'=> $datos['usuario_id'],
+                'articulo_id'=>$datos['articulo_id'],
+                'puntuacion'=>null,
+                'comentarios'=>null
+            ]);
+        }
+        return redirect()->back()->with('success', 'Se ha Registrado correctamente');
     }
 
     /**
@@ -77,22 +90,35 @@ class RevisoresArticulosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(revisores_articulos $ra)
     {
-        $ra=revisores_articulos::find($id);
+        
+        $eventoId = $ra['evento_id'];
+        
 
-        $Participantes=participantes::all();
-        $Articulos = articulos::select('titulo')->distinct()->get();
+        $evento = eventos::find($eventoId);
 
-        return view('Revisores_Articulos.edit', compact('Articulos','Participantes','ra'));
+        $parts = $evento->participantes->mapWithKeys(function($participante) {
+            $nombreCompleto = $participante->nombre . ' ' . $participante->ap_pat . ' ' .$participante->ap_mat;
+            return [$participante->id => $nombreCompleto];
+        });
 
+        $articulos = articulos::where('evento_id', $eventoId)->get();
+        $articulosOptions = $articulos->map(function ($articulo) {
+            return [$articulo->id => Str::limit($articulo->titulo, 50)];
+        })->toArray();
 
+        // Set the currently assigned participant and article IDs
+        $selectedParticipante = $ra->usuario_id;
+        $selectedArticulo = $ra->articulo_id;
+
+        return view('Revisores_Articulos.edit', compact('ra', 'evento', 'parts', 'articulosOptions', 'selectedParticipante', 'selectedArticulo'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, revisores_articulos $RevArt)
     {
         $NuevosDatos = $request->all();
         dd($NuevosDatos);
@@ -104,8 +130,14 @@ class RevisoresArticulosController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($eventoId,$usuarioId,$articuloId)
     {
-        //
+        $RevArt=revisores_articulos::where('evento_id',$eventoId)->where('usuario_id',$usuarioId)->where('articulo_id',$articuloId);
+        if ($RevArt) {
+            $RevArt->delete();
+            return redirect()->back()->with('success', 'El revisor se eliminó del artículo');
+        } else {
+            return redirect()->back()->with('error', 'No se encontró el revisor para eliminar');
+        }
     }
 }

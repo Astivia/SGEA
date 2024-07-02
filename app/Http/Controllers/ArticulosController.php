@@ -58,7 +58,7 @@ class ArticulosController extends Controller
             'titulo'=> $datos['titulo'],
             'evento_id'=> $datos['evento_id'],
             'area_id'=> $datos['area_id'],
-            'estado'=> 'pendiente de revision', 
+            'estado'=> 'Articulo Registrado en Sistema', 
         ]);
         //verificamos que campo viene definido para el autor
         if(isset($datos['autor_id_autor'])){
