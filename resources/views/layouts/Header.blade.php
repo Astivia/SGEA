@@ -10,3 +10,5 @@
     <link rel="stylesheet" href="{{ asset('SGEA/public/css/style-home.css') }}">
 
     <!-- <link rel="shortcut icon" href="{{ asset('imgs/ITTOL.ico')}}" type="image/x-icon"> --> 
+    <link rel="stylesheet" href="{{ asset('vendor/datatables/datatables.min.css') }}">
+<link rel="stylesheet" href="{{ asset('vendor/datatables/fixedHeader.dataTables.min.css') }}">

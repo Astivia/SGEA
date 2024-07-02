@@ -328,11 +328,16 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 1.5rem;
+    
     font-family: 'Poppins', sans-serif;
+}
+thead input{
+    
+    max-width: 125px;
 }
 
 th, td {
-    padding: 0.75rem;
+    padding: 0.50rem;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
@@ -396,6 +401,12 @@ td:last-child {
     align-items: center;
 }
 /*mainModificar */
+.container{
+    
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+}
 .container h1{
     color:white;
     background-color: #1a2d51;
