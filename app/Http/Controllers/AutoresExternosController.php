@@ -75,7 +75,7 @@ class AutoresExternosController extends Controller
         if(is_null($NuevosDatos['afiliacion'])){
             return redirect()->back()->with('error', 'el campo Afiliacion no puede estar vacio');
         }
-
+        $NuevosDatos['foto']=$autor->foto;
         $autor->update($NuevosDatos);
         return redirect('/autores_externos');
     }
