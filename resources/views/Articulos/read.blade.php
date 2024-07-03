@@ -22,13 +22,15 @@
         <p><strong>Area: </strong>{!!$articulo->area->nombre!!}</p>
         <p><strong>Revisores: </strong></p>
         <p><strong>Estado: </strong>{!!$articulo->estado!!}</p>
-        <p><strong> Archivo: </strong>{!!$articulo->pdf!!}</p><br>
+        <p><strong> Archivo: </strong>{!!$articulo->pdf!!}</p><br><br>
         @if($pdfUrl)
-            <a href="{!!$pdfUrl !!}" target="_blank"><button><i class="las la-file-pdf la-2x"></i> Abrir en nueva Pestaña</button></a>
-            <br><br>
+            
+            
             <div id="pdf-viewer" >
                 <iframe src="{!!$pdfUrl !!}" frameborder="0" style="width:90%; height: 70%;"></iframe>
             </div>
+            <br><br>
+            <a href="{!!$pdfUrl !!}" target="_blank"><button><i class="las la-file-pdf la-2x"></i> Abrir en nueva Pestaña</button></a>
         @else
             <strong>No hay archivo para mostrar</strong>
         @endif
