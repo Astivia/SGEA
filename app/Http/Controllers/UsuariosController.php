@@ -26,7 +26,7 @@ class usuariosController extends Controller
      */
     public function index()
     {
-        $Usuarios=usuarios::All();
+        $Usuarios=usuarios::orderBy('id')->get();
         return view ('Usuarios.index',compact('Usuarios'));
     }
 
@@ -52,6 +52,12 @@ class usuariosController extends Controller
             'email' => 'required|email',
         ]);
         $datos=$request->all();
+
+        if($datos['curp'][10]=='H'){
+            $datos['foto'] = 'DefaultH.jpg';
+        }else {
+            $datos['foto'] = 'DefaultM.jpg';
+        }
         
         //verificamos que no exista la curp
         if (usuarios::where('curp', $datos['curp'])->exists()) {
@@ -60,6 +66,8 @@ class usuariosController extends Controller
 
         $datos['password'] = Hash::make($datos['password']);
         usuarios::create($datos);
+
+        
         // return redirect('/usuarios')->with('success', 'Se ha Registrado correctamente');
         return redirect()->back()->with('success', 'Se ha Registrado correctamente');
     }
@@ -121,9 +129,9 @@ class usuariosController extends Controller
         if ($usuario->eventos()->count() > 0) {
             return redirect()->back()->with('error', 'No se puede eliminar porque está registrado en uno o más eventos');
         }else if (autores::where('usuario_id', $usuario->id)->count() > 0) {
-            return redirect()->back()->with('error', 'No se puede eliminar el participante porque esta registrado como Autor');
+            return redirect()->back()->with('error', 'No se puede eliminar el usuario porque esta registrado como Autor');
         }
         $usuario->delete();
-        return redirect('usuarios')->with('success', 'Participante eliminado correctamente');
+        return redirect('usuarios')->with('success', 'Usuario eliminado correctamente');
     }
 }

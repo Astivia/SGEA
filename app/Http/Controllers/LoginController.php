@@ -27,7 +27,12 @@ class LoginController extends Controller
             return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada');
 
         }else{
-
+            if($Datos['curp'][10]=='H'){
+                $Datos['foto'] = 'DefaultH.jpg';
+            }else {
+                $Datos['foto'] = 'DefaultM.jpg';
+            }
+            
             //Encriptamos la contraseña y Creamos el usuario en la BD
             $Datos['password'] = Hash::make($Datos['password']);
             $user = usuarios::create($Datos);
@@ -57,7 +62,7 @@ class LoginController extends Controller
             return redirect()->intended(route('home'));
 
         }else{
-            return redirect('login')->with('error', 'No se encuentra el usuario');
+            return redirect('login')->with('error', 'Ocurrio un Error, verifica los datos');
         }
     }
 

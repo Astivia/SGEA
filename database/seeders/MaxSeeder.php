@@ -18,6 +18,7 @@ class MaxSeeder extends Seeder
     public function run(): void
     {
         $user = usuarios::create([
+            'foto' => 'DefaultH.jpg',
             'nombre'=>'Maximiliano',
             'ap_pat'=>'Astivia',
             'ap_mat'=>'Castellanos',
@@ -26,6 +27,7 @@ class MaxSeeder extends Seeder
             'password'=> Hash::make('123')
         ]);
         $user2 = usuarios::create([
+            'foto' => 'DefaultH.jpg',
             'nombre'=>'Luis Eduardo',
             'ap_pat'=>'Gallegos',
             'ap_mat'=>'Garcia',

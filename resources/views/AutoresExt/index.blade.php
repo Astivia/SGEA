@@ -63,6 +63,13 @@
         <label for="participante-2lastName">Apellido Materno:</label>
         <input type="text" id="participante-2lastName" name="ap_mat" required>
 
+        <label for="genero">Género:</label>
+        <select id="genero" name="sexo" required>
+            <option value="">Seleccionar</option>
+            <option value="1">Hombre</option>
+            <option value="2">Mujer</option>
+        </select>
+
         <label for="afiliacion">Afiliacion:</label>
         <input type="text" id="afiliacion" name="afiliacion" required>
 
@@ -72,3 +79,5 @@
 </div>
     
 @endsection
+
+

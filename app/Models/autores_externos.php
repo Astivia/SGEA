@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class autores_externos extends Model
 {
     protected $table = 'autores_externos';
-    protected $fillable = ['nombre','ap_pat','ap_mat','afiliacion'];
+    protected $fillable = ['foto','nombre','ap_pat','ap_mat','afiliacion','sexo'];
     
     //llave foranea
     public function usuario()

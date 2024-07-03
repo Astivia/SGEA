@@ -32,6 +32,14 @@ class AutoresExternosController extends Controller
     public function store(Request $request)
     {
         $datos=$request->all();
+
+        if($datos['sexo']==1){
+            $datos['foto'] = 'DefaultH.jpg';
+        }else {
+            $datos['foto'] = 'DefaultM.jpg';
+        }
+
+
         autores_externos::create($datos);
         return redirect()->back()->with('success', 'Se ha Registrado correctamente');
     }
