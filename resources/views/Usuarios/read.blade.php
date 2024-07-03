@@ -10,6 +10,7 @@
     <br><br>
     <p><strong>CURP: </strong>{!!$Usu->curp!!}</p>
     <p><strong>CORREO: </strong>{!!$Usu->email!!}</p>
+    <p><strong>SEXO: </strong>{!!$sexo!!}</p>
 </div>
 
 

@@ -55,9 +55,9 @@ class usuariosController extends Controller
         
         //verificamos que no exista la curp
         if (usuarios::where('curp', $datos['curp'])->exists()) {
-            
             return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada.No se guardaron los datos');
         }
+
         $datos['password'] = Hash::make($datos['password']);
         usuarios::create($datos);
         // return redirect('/usuarios')->with('success', 'Se ha Registrado correctamente');
@@ -70,8 +70,14 @@ class usuariosController extends Controller
     public function show(string $id)
     {
         $Usu = usuarios::find($id);
-
-        return view ('Usuarios.read',compact('Usu'));
+        $curp=$Usu->curp;
+        if($curp[10]=='H'){
+            $sexo='Masculino';
+        }else{
+            $sexo = 'Femenino';
+        }
+        
+        return view ('Usuarios.read',compact('Usu','sexo'));
     }
 
     /**

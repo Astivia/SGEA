@@ -11,14 +11,18 @@
         <div class="sidebar-user">
             <h2>SGEA</h2>
                 <!-- <img src="./imgs/perfil.png" alt=""> -->
-                <img src="{{ asset('SGEA/public/assets/img/perfil.png') }}" alt="">
+                @if (Auth::user()->curp[10] === 'H')
+                    <img src="{{ asset('SGEA/public/assets/img/defProfileH.jpg') }}" alt="">
+                @else
+                    <img src="{{ asset('SGEA/public/assets/img/defProfileM.jpg') }}" alt="">
+                @endif
             <div>
                 <h3>@auth {{Auth::user()->nombre}} {{Auth::user()->ap_pat}} {{Auth::user()->ap_mat}}@endauth</h3>
                 @role('Administrador')
-                <span>Administrador</span>
+                    <span>Administrador</span>
                 @endrole
                 @role('Organizador')
-                <span>Organizador</span>
+                    <span>Organizador</span>
                 @endrole
             </div>                
         </div>
