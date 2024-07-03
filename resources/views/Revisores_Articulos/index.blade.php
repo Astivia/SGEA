@@ -4,24 +4,25 @@
 </head>
 @section('Content')
         <div class="container">
-            <h1>Revisores de Articulos en {!!$evento->acronimo!!} {!!$evento->edicion!!}</h1>
+            
             <div class="search-create">
-                <input type="text" id="search-input" placeholder="Buscar eventos...">
+            <h1>Revisores de Articulos en {!!$evento->acronimo!!} {!!$evento->edicion!!}</h1>
                 <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
             </div>
-        </div>
-        <br><br>
-        <div class="container">
+        
             @if($RevArt->isEmpty())
                 <strong>No hay datos</strong>
             @else
-                <table>
+            <table id="example" class="table table-striped" style="width:100%">
+            <thead>
                     <tr>
                         <th>PARTICIPANTE</th>
                         <th>ARTICULO</th>
                         <th>AREA</th>
                         <th>Controles</th>
                     </tr>
+                    </thead>
+                    <tbody>
                      @foreach ($RevArt as $ra)
                     <tr>
                         <td>{!!$ra->usuario->nombre_completo!!}</td>
@@ -46,6 +47,7 @@
                         </td>
                     </tr>
                      @endforeach
+                     </tbody>
                 </table>
             @endif
         </div>

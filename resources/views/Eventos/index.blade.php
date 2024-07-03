@@ -3,16 +3,16 @@
 
 @section('Content')
 <div class="container">
-    <h1>Eventos</h1>
+    
     <div class="search-create">
-        <input type="text" id="search-input" placeholder="Buscar eventos...">
+    <h1>Eventos</h1>
         <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
-</div>
 
-<br><br>
 
-<div class="container">
+
+
+
     @if($Eventos->isEmpty())
         <strong>No hay datos</strong>
     @else

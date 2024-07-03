@@ -222,7 +222,7 @@ main {
     align-items: center;
     margin-bottom: 1rem;
 }
-#search-input {
+.search-create h1 {
     flex: 1;
     padding: 0.5rem;
     border: 1px solid #ccc;
@@ -331,10 +331,7 @@ table {
     
     font-family: 'Poppins', sans-serif;
 }
-thead input{
-    
-    max-width: 125px;
-}
+
 
 th, td {
     padding: 0.50rem;
@@ -350,10 +347,16 @@ th {
     background-color: rgb(52, 138, 167);
     color: white;
     text-transform: uppercase;
+    text-align: center;
 }
-
+td{
+   
+    color: black;
+    font-weight: bold;
+}
 tr:nth-child(even) {
     background-color: #f2f2f2;
+    
 }
 
 button {
@@ -400,6 +403,70 @@ td:last-child {
     justify-content: flex-start;
     align-items: center;
 }
+
+/* Modificaciones elementos tabla */
+.dataTables_length{
+    margin-bottom: 25px;
+}
+.dataTables_length label{
+  
+   padding: 10px;
+    font-weight: bold;
+    color:black;
+    margin-bottom: 15px;
+   
+}
+.dataTables_length select{
+    background-color: #C2E1FB;
+    
+}
+.dataTables_length select option{
+    color: #2d0808;
+}
+.dataTables_filter{
+  
+    padding: 10px;
+    font-weight: bold;    
+    margin-top: -10px;
+    color: white;
+    width: 50%;
+    
+}
+.dataTables_filter label{
+    color: black;
+    font-weight: bold;
+}
+.dataTables_filter label input{
+    width: 90%;
+    border: none;
+    outline: none;
+    background-color:  #C2E1FB;
+    color: black;
+    font-weight: bold;
+    height: 35px;
+    border-radius: 5px;
+
+}
+.dataTables_paginate{
+    
+    color: black;
+    font-weight: bold;
+}
+.dataTables_paginate a .paginate_button{
+    background-color: #2d0808;
+}
+thead input{
+    color: black;
+    font-weight: bold;
+    font-size: 10px;
+    max-width: 125px;
+    outline: none;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+}
 /*mainModificar */
 .container{
     
@@ -411,7 +478,7 @@ td:last-child {
     color:white;
     background-color: #1a2d51;
     text-align: center;
-    margin-bottom:25px;
+    
     
 }
 .container img{

@@ -5,19 +5,17 @@
 </head>
 @section('Content')
 <div class="container">
-    <h1>Participantes del {!!$evento->acronimo!!} {!!$evento->edicion!!}</h1>
+    
     <div class="search-create">
-        <input type="text" id="search-input" placeholder="Buscar Participante...">
+    <h1>Participantes del {!!$evento->acronimo!!} {!!$evento->edicion!!}</h1>
         <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
-</div>
-<br><br>
 
-<div class="container">
     @if($part->isEmpty())
     <strong>No hay datos</strong>
     @else
-    <table>
+    <table id="example" class="table table-striped" style="width:100%">
+            <thead>
         <tr>
             <th>NOMBRE</th>
             <th>CORREO</th>
@@ -25,6 +23,8 @@
             <th>Controles</th>
             @endrole
         </tr>
+        </thead>
+        <tbody>
         @foreach ($part as $usu)
         <tr>
             <td>{!!$usu->nombre_completo!!}</td>
@@ -44,6 +44,7 @@
             @endrole
         </tr>
         @endforeach
+        </tbody>
     </table>
 
     @endif

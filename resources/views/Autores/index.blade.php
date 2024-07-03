@@ -4,26 +4,27 @@
 </head>
 @section('Content')
 <div class="container">
-    <h1>Autores</h1>
+    
     <div class="search-create">
-        <input type="text" id="search-input" placeholder="Buscar autores...">
+        <h1>Autores</h1>
         <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
         
     </div>
-</div>
 
-<br><br>
 
-<div class="container">
+
     @if($Autores->isEmpty())
         <strong>No hay autores registrados en este momento</strong>
     @else
-        <table border=0>
+        <table id="example" class="table table-striped" style="width:100%">
+        <thead>
             <tr>
                 <th>PARTICIPANTE</th>
                 <th>AFILIACION</th>
                 <th>Controles</th>
             </tr>
+            </thead>
+            <tbody>
             @foreach ($Autores as $autor)
             <tr>
                 <td>{!!$autor->usuario->nombre_completo!!} </td>
@@ -46,6 +47,7 @@
                 </td>
             </tr>
             @endforeach
+            </tbody>
         </table>
     @endif
     </div>
