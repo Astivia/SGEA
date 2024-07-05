@@ -9,4 +9,9 @@ class areas extends Model
 {
     protected $table = 'areas';
     protected $fillable = ['nombre','descripcion'];
+
+    public function articulos()
+    {
+        return $this->hasMany(articulos::class);
+    }
 }

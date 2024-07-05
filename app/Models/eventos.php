@@ -15,11 +15,22 @@ class eventos extends Model
         'fecha_inicio',
         'fecha_fin',
         'edicion',
+        'url'
     ];
 
-    public function participantes()
+    public function articulos()
     {
-        return $this->belongsToMany(usuarios::class, 'participantes', 'evento_id','usuario_id' );
+        return $this->hasMany(articulos::class);
+    }
+
+    public function revisores()
+    {
+        return $this->hasManyThrough(usuarios::class, articulos::class);
+    }
+
+    public function autores()
+    {
+        return $this->hasManyThrough(usuarios::class, articulos::class);
     }
 
 }

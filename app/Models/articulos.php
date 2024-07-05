@@ -8,7 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class articulos extends Model
 {
     protected $table = 'articulos';
-    protected $fillable = ['evento_id','titulo','area_id','estado','pdf'];
+
+    protected $primaryKey = [
+        'evento_id', 
+        'id'
+    ];
+
+    public $incrementing = false;
+
+    protected $fillable = [
+        'id',
+        'evento_id',
+        'titulo',
+        'resumen',
+        'archivo',
+        'area_id',
+        'estado'
+    ];
     
     //llave foranea
     public function evento()
@@ -23,22 +39,32 @@ class articulos extends Model
 
     public function autores()
     {
-        return $this->belongsToMany(autores::class, 'articulos_autores', 'id_articulo', 'autor_id_autor')
-                    ->withPivot('autor_id_ext');
-    }
-
-    public function autoresExternos()
-    {
-        return $this->belongsToMany(autores_externos::class, 'articulos_autores', 'id_articulo', 'autor_id_ext')
-                    ->withPivot('autor_id_autor');
+        return $this->hasManyThrough(usuarios::class, articulosAutores::class, 'evento_id', 'id', 'articulo_id', 'usuario_id');
     }
 
     public function revisores()
     {
-        return $this->belongsToMany(usuarios::class, 'revisores_articulos', 'articulo_id', 'usuario_id')
-                   ->withPivot('puntuacion', 'comentarios')
-                   ->as('revisor'); // Define alias for clarity
+        return $this->hasManyThrough(usuarios::class, revisoresArticulos::class, 'evento_id', 'id', 'articulo_id', 'usuario_id');
     }
+
+    // public function autores()
+    // {
+    //     return $this->belongsToMany(autores::class, 'articulos_autores', 'id_articulo', 'autor_id_autor')
+    //                 ->withPivot('autor_id_ext');
+    // }
+
+    // public function autoresExternos()
+    // {
+    //     return $this->belongsToMany(autores_externos::class, 'articulos_autores', 'id_articulo', 'autor_id_ext')
+    //                 ->withPivot('autor_id_autor');
+    // }
+
+    // public function revisores()
+    // {
+    //     return $this->belongsToMany(usuarios::class, 'revisores_articulos', 'articulo_id', 'usuario_id')
+    //                ->withPivot('puntuacion', 'comentarios')
+    //                ->as('revisor'); // Define alias for clarity
+    // }
 
 
     

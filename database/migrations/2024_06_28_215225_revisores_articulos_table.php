@@ -12,21 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('revisores_articulos', function (Blueprint $table) {
-
-            $table->integer('evento_id')->unsigned()->index();
-            $table->unsignedInteger('usuario_id')->index();
-            
-            $table->integer('articulo_id')->unsigned()->index();
-
+            $table->unsignedBigInteger('evento_id');
+            $table->unsignedBigInteger('articulo_id');
+            $table->unsignedBigInteger('usuario_id');
             $table->integer('puntuacion')->nullable();
+            $table->string('similitud', 20)->nullable();
             $table->string('comentarios', 150)->nullable();
-
-            $table->primary(['evento_id', 'usuario_id', 'articulo_id']);
-
-            $table->foreign('articulo_id')->references('id')->on('articulos');
-            $table->foreign(['evento_id', 'usuario_id'])->references(['evento_id', 'usuario_id'])->on('participantes');
-
             $table->timestamps();
+
+            $table->primary(['evento_id', 'articulo_id', 'usuario_id']);
+            $table->foreign(['evento_id', 'articulo_id'])->references(['evento_id', 'id'])->on('articulos');
+            $table->foreign('usuario_id')->references('id')->on('usuarios');
         });
     }
 

@@ -12,19 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('articulos_autores', function (Blueprint $table) {
-            $table->id();
-            $table->integer('id_articulo')->unsigned()->index();
-            $table->foreign('id_articulo')->references('id')->on('articulos');
-
-            $table->integer('autor_id_autor')->nullable()->index(); 
-            $table->foreign('autor_id_autor')->references('id')->on('autores');
-
-            $table->integer('autor_id_ext')->nullable()->index();
-            $table->foreign('autor_id_ext')->references('id')->on('autores_externos');
-
-            $table->unique(['autor_id_autor', 'autor_id_ext'], 'autor_exclusivo');
-
+            $table->unsignedBigInteger('evento_id');
+            $table->unsignedBigInteger('articulo_id');
+            $table->unsignedBigInteger('usuario_id');
+            $table->integer('orden');
+            $table->boolean('correspondencia');
+            $table->text('institucion')->nullable();
+            $table->string('email', 150)->nullable();
             $table->timestamps();
+
+            $table->primary(['evento_id', 'articulo_id', 'usuario_id']);
+            $table->foreign(['evento_id', 'articulo_id'])->references(['evento_id', 'id'])->on('articulos');
+            $table->foreign('usuario_id')->references('id')->on('usuarios');
         });
     }
 

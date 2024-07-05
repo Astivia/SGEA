@@ -14,7 +14,6 @@ use App\Models\usuarios;
 class LoginController extends Controller
 {
     public function register(Request $request){
-        //validacion de datos
 
         //recolectamos los datos en una variable
 
@@ -27,6 +26,8 @@ class LoginController extends Controller
             return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada');
 
         }else{
+
+            
             if($Datos['curp'][10]=='H'){
                 $Datos['foto'] = 'DefaultH.jpg';
             }else {

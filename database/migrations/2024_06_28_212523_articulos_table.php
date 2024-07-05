@@ -12,15 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('articulos', function (Blueprint $table) {
-            $table->id();
-            $table->string('titulo',200);
-            $table->unsignedInteger('evento_id');
-            $table->unsignedInteger('area_id');
-            $table->string('estado');
-            $table->string('pdf')->nullable();
+            $table->bigIncrements('id')->index();
+            $table->unsignedBigInteger('evento_id')->index();
+
+            $table->string('titulo', 200)->nullable(false);
+            $table->text('resumen')->nullable();
+            $table->string('archivo', 20)->nullable();
+            $table->unsignedBigInteger('area_id')->index();
+            $table->string('estado', 15)->nullable(false);
+            $table->timestamps();
+
+            $table->unique(['evento_id','id']->nullable(false));
+
             $table->foreign('evento_id')->references('id')->on('eventos');
             $table->foreign('area_id')->references('id')->on('areas');
-            $table->timestamps();
         });
     }
 

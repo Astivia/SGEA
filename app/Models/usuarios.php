@@ -23,11 +23,13 @@ class usuarios extends AuthenticatableUser implements Authenticatable
     protected $fillable = [
         'foto',
         'nombre',
-        'ap_pat',
-        'ap_mat',
+        'ap_paterno',
+        'ap_materno',
         'email',
         'password',
         'curp',
+        'telefono',
+        'estado'
     ];
 
     protected $hidden = [
@@ -59,6 +61,14 @@ class usuarios extends AuthenticatableUser implements Authenticatable
         $this->remember_token = $value;
         $this->save();
     }
+    public function setEstado(string $estado){
+        $this->estado = $estado;
+        $this->save();
+    }
+    public function getEstado()
+    {
+        return $this->estado;
+    }
 
     public function getEmail()
     {
@@ -70,9 +80,14 @@ class usuarios extends AuthenticatableUser implements Authenticatable
         return "{$this->ap_pat} {$this->ap_mat} {$this->nombre}";
     }
 
-    public function eventos()
+    public function articulos()
     {
-        return $this->belongsToMany(eventos::class, 'participantes', 'usuario_id', 'evento_id');
+        return $this->hasManyThrough(articulos::class, articulosAutores::class, 'usuario_id', 'evento_id', 'articulo_id');
+    }
+
+    public function revisiones()
+    {
+        return $this->hasManyThrough(articulos::class, revisoresArticulos::class, 'usuario_id', 'evento_id', 'articulo_id');
     }
 
 

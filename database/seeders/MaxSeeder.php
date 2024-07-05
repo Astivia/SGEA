@@ -20,20 +20,24 @@ class MaxSeeder extends Seeder
         $user = usuarios::create([
             'foto' => 'DefaultH.jpg',
             'nombre'=>'Maximiliano',
-            'ap_pat'=>'Astivia',
-            'ap_mat'=>'Castellanos',
+            'ap_paterno'=>'Astivia',
+            'ap_materno'=>'Castellanos',
             'curp'=>'AICM000101HMCSSXA7',
             'email'=>'mastiviac@toluca.tecnm.mx',
-            'password'=> Hash::make('123')
+            'password'=> Hash::make('123'),
+            'telefono'=>'7226292587',
+            'estado'=>'alta,registrado'
         ]);
         $user2 = usuarios::create([
             'foto' => 'DefaultH.jpg',
             'nombre'=>'Luis Eduardo',
-            'ap_pat'=>'Gallegos',
-            'ap_mat'=>'Garcia',
+            'ap_paterno'=>'Gallegos',
+            'ap_materno'=>'Garcia',
             'curp'=>'LGGE000502HMCSSXB6',
             'email'=>'lgallegosg@toluca.tecnm.mx',
-            'password'=> Hash::make('123')
+            'password'=> Hash::make('123'),
+            'telefono'=>'7292451298',
+            'estado'=>'alta,registrado'
         ]);
         $user->assignRole(1);
         $user2->assignRole(1);

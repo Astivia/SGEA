@@ -5,31 +5,36 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class revisores_articulos extends Model
+class articulosAutores extends Model
 {
-    protected $table = 'revisores_articulos';
+    protected $table = 'articulos_autores';
 
-    protected $primaryKey = ['evento_id', 'usuario_id', 'articulo_id'];
-
+    protected $primaryKey = [
+        'evento_id', 
+        'usuario_id', 
+        'articulo_id'
+    ];
+        
     public $incrementing = false;
 
     protected $fillable = [
         'evento_id',
-        'usuario_id',
         'articulo_id',
-        'puntuacion',
-        'comentarios',
+        'usuario_id',
+        'orden',
+        'correspondencia',
+        'institucion',
+        'email'
     ];
-    
-    // Define relationships
+
     public function evento()
     {
-        return $this->belongsTo(eventos::class, 'evento_id');
+        return $this->belongsTo(eventos::class, 'evento_id','id');
     }
 
     public function usuario()
     {
-        return $this->belongsTo(usuarios::class, 'usuario_id');
+        return $this->belongsTo(usuarios::class, 'usuario_id','id');
     }
 
     public function articulo()
