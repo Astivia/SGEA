@@ -30,38 +30,11 @@ class LoginController extends Controller
     }
 
 
-    public function enviarCodigo(Request $request){
-
-        //creamos el usuario con estado "alta,no registrado"
-        $Datos=$request->all();
-        //validamos que NO exista un participante ya registrado con la misma CURP
-
-        if (usuarios::where('curp', $Datos['curp'])->exists()) {
-            return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada');
-        }
+    public function enviarCodigo(usuarios $user,$codigo){
         
-        if($Datos['curp'][10]=='H'){
-            $Datos['foto'] = 'DefaultH.jpg';
-        }else {
-            $Datos['foto'] = 'DefaultM.jpg';
-        }
-        //Encriptamos la contraseña y Creamos el usuario en la BD
-        $Datos['password'] = Hash::make($Datos['password']);
-        //establecemos un dato para el estado
-        $Datos['estado'] = "alta,no registrado";
-        $user = usuarios::create($Datos);
-        $userID=$user->id;
+         echo("<script>console.log('codigo:$codigo');</script>");
 
-
-
-
-        //////////////////////////////////////////ENVIO DE CORREO DE VERIFICACION//////////////////////////////////////////
-        $email = $request->get('email');
-        
-        $codigo = $this->generarCodigo();
-        // echo("<script>console.log('codigo:$codigo');</script>");
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
             return response()->json(['error' => 'Invalid email address'], 422);
         }
         
@@ -79,13 +52,13 @@ class LoginController extends Controller
         
             // Set sender and recipient information
             $mail->setFrom('noreply@sgea.com', 'SGEA');
-            $mail->addAddress("$email");
+            $mail->addAddress("$user->email");
             
-            $person=$request->get('nombre');
+            
             // contenido
             $mail->CharSet = 'UTF-8';
             $subject =  "Código de verificación";
-            $message = "Hola $person:\n\nTu codigo de verificacion es:<strong>$codigo</strong>\n\nNo compartas este codigo con nadie.\n\nAtentamente\nSGEA";
+            $message = "Hola $user->nombre,\n\nTu codigo de verificacion es:<strong>$codigo</strong>\n\nNo compartas este codigo con nadie.\n\nAtentamente\nSGEA";
 
             //enviamos  el codigo:
             $mail->Subject = $subject; 
@@ -95,30 +68,28 @@ class LoginController extends Controller
             // Send the email
             if (!$mail->send()) {
                 return redirect()->back()->with('error', 'Error en el envio: '.$mail->ErrorInfo);
-            } else {
-                return view('emailVerification',compact('codigo','email','userID'));
-                
-            }
+            } 
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+
     }
 
 
     public function verificarEmail(Request $request){
         $datos=$request->all();
-        
-        $user=usuarios::where('id',$datos['user-id'])->get();
+       
+        $user=usuarios::where('id',$datos['user-id'])->first();
 
 
         if($datos['input-usuario']==$datos['codigo']){
-            $user->estado = "alta,registrado";
-            $user->save(); 
+            $user->update([
+                'estado' => 'alta,registrado'
+            ]);
             return redirect('login')->with('success', 'Se verifico el Email');
         }else{
-            return redirect()->back()->with('error', 'Ocurrio un problema ');
+            return redirect('login')->with('error', 'Ocurrio un problema ');
         }
-
     }
 
     public function register(Request $request){
@@ -132,26 +103,29 @@ class LoginController extends Controller
             return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada');
         }
         
+        //definimos la imagen
         if($Datos['curp'][10]=='H'){
             $Datos['foto'] = 'DefaultH.jpg';
         }else {
-                $Datos['foto'] = 'DefaultM.jpg';
-            
+            $Datos['foto'] = 'DefaultM.jpg';
+        }   
                 
-                //Encriptamos la contraseña y Creamos el usuario en la BD
-                $Datos['password'] = Hash::make($Datos['password']);
-                //establecemos un dato para el estado
-                $Datos['estado'] = "alta,no registrado";
-                //Verificamos si el correo ya esta verificado
-                $user = usuarios::create($Datos);
+        //Encriptamos la contraseña y Creamos el usuario en la BD
+        $Datos['password'] = Hash::make($Datos['password']);
+        //establecemos un dato para el estado
+        $Datos['estado'] = "alta,no registrado";
 
-                return redirect('login');
+        $user = usuarios::create($Datos);
+        $codigo = $this->generarCodigo();
 
-                //Iniciamos sesion con el usuario recien creado y lo redirigimos al dashboard
-                // Auth::login($user);
-                // return redirect(route('home'));
-        }
-        
+        $this->enviarCodigo($user,$codigo);
+
+        return view('emailVerification',compact('user','codigo'));
+
+        //return redirect('login');
+        //Iniciamos sesion con el usuario recien creado y lo redirigimos al dashboard
+        // Auth::login($user);
+        // return redirect(route('home'));
     }
 
     public function login(Request $request){

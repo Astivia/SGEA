@@ -35,9 +35,9 @@ Route::delete('revisores_articulos/{eventoId}/{usuarioId}/{articuloId}', [Reviso
 
 //LOGIN - REGISTER
  Route::view('/login',"login")->name('login');
-//  Route::get('/registro', [LoginController::class, 'registerView'])->name('registro');
  Route::get('/registro', [LoginController::class, 'registerView'])->name('registro');
- Route::post('/enviar-codigo', [LoginController::class, 'enviarCodigo'])->name('enviar-codigo');
+//  Route::post('/enviar-codigo', [LoginController::class, 'enviarCodigo'])->name('enviar-codigo');
+ Route::post('/registrar', [LoginController::class, 'register'])->name('registrar');
  Route::post('/verificar-email', [LoginController::class, 'verificarEmail'])->name('verificar-email');
  Route::view('/home',"dashboard")->middleware('auth')->name('home');
 

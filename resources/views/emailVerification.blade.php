@@ -8,8 +8,7 @@
 <body>
 @if(session('error'))
     <script>
-    alert('{{ session('
-        error ') }}');
+        alert('{{ session('error') }}');
     </script>
     @endif
 
@@ -22,13 +21,13 @@
     <form method="POST" id="verification-form" action="{{ route('verificar-email') }}">
         @csrf
         <h1>VERIFICAR EMAIL</h1>
-        <p>Se ha enviado un codigo de verificacion al correo "{!!$email!!}"</p>
+        <p>{!!$user->nombre!!}, Introduce el codigo de verificacion<br> enviado al correo "{!!$user->email!!}"</p>
 
-        <input type="hidden" id="user-identifier" name="user-id" value="{!!$userID!!}">
+        <input type="hidden" id="user-identifier" name="user-id" value="{!!$user->id!!}">
         <input type="hidden" id="codee" name="codigo" value="{!!$codigo!!}">
 
         <label for="">Introducir Codigo:</label>
-        <input type="number" name="input-usuario" id="" placeHolder="####">
+        <input type="number" name="input-usuario" id="" placeHolder="ej: 1234">
         <br><br>
         <button type="submit" class="btn">Confirmar</button>
     </form>

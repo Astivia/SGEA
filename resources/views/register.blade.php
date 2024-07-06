@@ -47,8 +47,7 @@
 
 
                 <div class="register">
-                    <!-- <form method="POST" id="registration-form" action="{{ route('validar-registro') }}"> -->
-                    <form method="POST" id="registration-form" action="{{ route('enviar-codigo') }}">
+                    <form method="POST" id="registration-form" action="{{ route('registrar') }}">
                         @csrf
                         <h1>REGISTRARSE</h1>
 
