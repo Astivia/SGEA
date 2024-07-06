@@ -35,12 +35,18 @@ Route::delete('revisores_articulos/{eventoId}/{usuarioId}/{articuloId}', [Reviso
 
 //LOGIN - REGISTER
  Route::view('/login',"login")->name('login');
- Route::view('/registro',"register")->name('registro');
+//  Route::get('/registro', [LoginController::class, 'registerView'])->name('registro');
+ Route::get('/registro', [LoginController::class, 'registerView'])->name('registro');
+ Route::post('/enviar-codigo', [LoginController::class, 'enviarCodigo'])->name('enviar-codigo');
+ Route::post('/verificar-email', [LoginController::class, 'verificarEmail'])->name('verificar-email');
  Route::view('/home',"dashboard")->middleware('auth')->name('home');
 
 Route::post('/validar-registro',[LoginController::class,'register'])->name('validar-registro');
 Route::post ('/inicia-sesion',[LoginController::class,'login'])->name('inicia-sesion');
 Route::get('/logout',[LoginController::class,'logout'])->name('logout');
+
+// Route::post('/enviar-codigo', [LoginController::class, 'enviarCodigo'])->name('EnviarCodigo');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -68,14 +74,13 @@ Route::get('pruebas2', function () {
     return view('pruebas2');
 });
 
-Route::get('EnviarCorreo', function () {
+// Route::get('EnviarCorreo', function () {
     
-    Mail::to('mastiviac@toluca.tecnm.mx')
-        ->send(new App\Mail\TestEmail);
+//     Mail::to('mastiviac@toluca.tecnm.mx')
+//         ->send(new App\Mail\TestEmail);
+//     return "Mensaje enviado";
+// })->name('EnviarCorreo');
 
-    return "Mensaje enviado";
-
-})->name('EnviarCorreo');
 
 
 
