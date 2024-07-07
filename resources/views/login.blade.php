@@ -48,9 +48,12 @@
                         <label>Password</label>
                         <span class="toggle-password" onclick="togglePassword('login-password')"><i class='bx bxs-show'></i></span>
                     </div>
-                    <div class="remember-forgot">                       
-                        <a href="#" id="forgot-password-link">Olvidaste tu contraseña?</a>
+                    <div class="remember-forgot"> 
+                        <label for="remember_me">
+                            <input type="checkbox" id="remember_me" name="remember_me"> Mantener la sesión iniciada
+                        </label>                     
                     </div>
+                    <a href="#" id="forgot-password-link">Olvidaste tu contraseña?</a>
                     <button type="submit" class="btn">Iniciar Sesion</button>
                 </form>
                 

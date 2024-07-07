@@ -3,34 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificar Email</title>
+    <title>Confirmar Identidad</title>
 </head>
+<script>
+    console.log({!!$codigo!!});
+</script>
+
 <body>
 @if(session('error'))
     <script>
         alert('{{ session('error') }}');
     </script>
-    @endif
+@endif
 
-    @if(session('success'))
+@if(session('success'))
     <script>
-    alert('{{ session('
-        success ') }}');
+        alert('{{ session('success') }}');
     </script>
-    @endif
+@endif
+<div class="container">
+
+    <h1>Verifica la dirección de correo electrónico</h1>
+    <p>{!!$user->nombre!!}, Para verificar tu correo electrónico, hemos enviado un código a <strong> {!!$user->email!!} </strong></p>
     <form method="POST" id="verification-form" action="{{ route('verificar-email') }}">
         @csrf
-        <h1>VERIFICAR EMAIL</h1>
-        <p>{!!$user->nombre!!}, Introduce el codigo de verificacion<br> enviado al correo "{!!$user->email!!}"</p>
 
         <input type="hidden" id="user-identifier" name="user-id" value="{!!$user->id!!}">
         <input type="hidden" id="codee" name="codigo" value="{!!$codigo!!}">
 
-        <label for="">Introducir Codigo:</label>
+        <label for=""><strong>Introducir Codigo</strong></label><br>
         <input type="number" name="input-usuario" id="" placeHolder="ej: 1234">
         <br><br>
         <button type="submit" class="btn">Confirmar</button>
     </form>
+    <a href="javascript:void(0);" id="resend-code-link">Reenviar Codigo</a>
+</div>
+
+<script>
+    const resendCodeLink = document.getElementById('resend-code-link');
+
+    resendCodeLink.addEventListener('click', function() {
+        // Enviar solicitud AJAX para reenviar el código
+        fetch('{{ route('reenviar-codigo') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                'user-id': {{ $user->id }}
+            })
+        })
+        .then(response => {
+            // Check if the response is OK and contains JSON
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('Se ha reenviado un nuevo código a su correo electrónico.');
+            } else {
+                alert('Ocurrió un error al reenviar el código. Inténtalo de nuevo más tarde.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al reenviar el código:', error);
+            alert('Ocurrió un error al reenviar el código. Inténtalo de nuevo más tarde.');
+        });
+    });
+</script>
     
 </body>
 </html>
