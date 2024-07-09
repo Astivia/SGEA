@@ -13,7 +13,7 @@
 <br><br>
 
 <div class="container">
-    @if($part->isEmpty())
+    @if($part==null)
     <strong>No hay datos</strong>
     @else
     <table>

@@ -77,7 +77,7 @@ class usuarios extends AuthenticatableUser implements Authenticatable
 
     public function getNombreCompletoAttribute()
     {
-        return "{$this->ap_pat} {$this->ap_mat} {$this->nombre}";
+        return "{$this->ap_paterno} {$this->ap_materno} {$this->nombre}";
     }
 
     public function articulos()
@@ -88,6 +88,10 @@ class usuarios extends AuthenticatableUser implements Authenticatable
     public function revisiones()
     {
         return $this->hasManyThrough(articulos::class, revisoresArticulos::class, 'usuario_id', 'evento_id', 'articulo_id');
+    }
+
+    public function eventos(){
+        return $this->belongsToMany(eventos::class, 'participantes', 'usuario_id', 'evento_id');
     }
 
 

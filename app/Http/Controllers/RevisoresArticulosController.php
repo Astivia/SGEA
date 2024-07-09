@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\revisores_articulos;
+use App\Models\revisoresArticulos;
 use App\Models\eventos;
 use App\Models\articulos;
 use Illuminate\Support\Str;
@@ -24,10 +24,10 @@ class RevisoresArticulosController extends Controller
     public function index($eventoId)
     {
         $evento = eventos::find($eventoId); 
-        $RevArt= revisores_articulos::where('evento_id',$eventoId)->OrderBy('articulo_id')->get();
+        $RevArt= revisoresArticulos::where('evento_id',$eventoId)->OrderBy('articulo_id')->get();
 
         $parts = $evento->participantes->mapWithKeys(function($participante) {
-            $nombreCompleto = $participante->nombre . ' ' . $participante->ap_pat . ' ' .$participante->ap_mat;
+            $nombreCompleto = $participante->nombre . ' ' . $participante->ap_paterno . ' ' .$participante->ap_materno;
             return [$participante->id => $nombreCompleto];
         });
         $articulos = articulos::where('evento_id', $eventoId)->get();
@@ -61,14 +61,14 @@ class RevisoresArticulosController extends Controller
         $articulo->save(); 
 
         //verificamos que el dato no este registrado
-        $verificacion = revisores_articulos::whereRaw('evento_id = ? AND usuario_id = ? AND articulo_id = ?', [$datos['evento_id'], $datos['usuario_id'], $datos['articulo_id']]);
+        $verificacion = revisoresArticulos::whereRaw('evento_id = ? AND usuario_id = ? AND articulo_id = ?', [$datos['evento_id'], $datos['usuario_id'], $datos['articulo_id']]);
 
 
         if($verificacion->count() > 0){
             return redirect()->back()->with('error', 'Este usuario ya esta asignado al articulo');
 
         }else{
-            revisores_articulos::create([
+            revisoresArticulos::create([
                 'evento_id'=> $datos['evento_id'],
                 'usuario_id'=> $datos['usuario_id'],
                 'articulo_id'=>$datos['articulo_id'],
@@ -90,7 +90,7 @@ class RevisoresArticulosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(revisores_articulos $ra)
+    public function edit(revisoresArticulos $ra)
     {
         
         $eventoId = $ra['evento_id'];
@@ -118,11 +118,11 @@ class RevisoresArticulosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, revisores_articulos $RevArt)
+    public function update(Request $request, revisoresArticulos $RevArt)
     {
         $NuevosDatos = $request->all();
         dd($NuevosDatos);
-        $ra=revisores_articulos::find($id);
+        $ra=revisoresArticulos::find($id);
         $ra->update($NuevosDatos);
         return redirect('/participantes');
     }

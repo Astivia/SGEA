@@ -18,6 +18,10 @@ class eventos extends Model
         'url'
     ];
 
+    public function participantes(){
+        return $this->belongsToMany(usuarios::class, 'participantes', 'evento_id','usuario_id' );
+    }
+
     public function articulos()
     {
         return $this->hasMany(articulos::class);
@@ -31,6 +35,9 @@ class eventos extends Model
     public function autores()
     {
         return $this->hasManyThrough(usuarios::class, articulos::class);
+    }
+    public function getUrl(){
+        return $this->url;
     }
 
 }

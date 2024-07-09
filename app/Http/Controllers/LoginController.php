@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 // use App\Models\User;
 use App\Models\usuarios;
+use App\Models\eventos;
+use App\Models\participantes;
 
 
 class LoginController extends Controller
@@ -172,6 +174,20 @@ class LoginController extends Controller
         // return redirect(route('home'));
     }
 
+    public function index($eventoID){
+        $evento=eventos::find($eventoID);
+        switch ($evento->acronimo) {
+            case 'CIDICI':
+                return view('CIDICI',compact('evento'));
+                break;
+            case 'FLISOL':
+                return view('FLISOL',compact('evento'));
+                break;
+            default:
+                return redirect('home');
+        }
+    }
+
     public function login(Request $request){
         //verificamos el estado
         $user= usuarios::where('email',$request['email'])->first();
@@ -193,8 +209,15 @@ class LoginController extends Controller
                     //EL INICIO DE SESION FUE EXITOSO
                     //genera una nueva sesion
                     $request->session()->regenerate();
+                    //Verificamos si el usuario esta presente en algun evento
+                    $part=participantes::where('usuario_id',$user->id)->first();
+                    if($part){
+                        //EL USUARIO ESTA REGISTRADO EN ALGUN EVENTO
+                        // Redirigimos a la vista correspondiente 
+                        return redirect($part->evento->acronimo.'-index/'.$part->evento->id);
+                    }
                     //redirigte al usuario a la pagina que estaba intentando ingresar o al dashboard
-                    return redirect()->intended(route('home'));
+                      return redirect()->intended(route('home'));
         
                 }else{
                     //EL INICIO DE SESION NO FUE EXITOSO

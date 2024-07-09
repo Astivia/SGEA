@@ -55,7 +55,7 @@ class EventosController extends Controller
         // Obtener el archivo imagen
         $file = $datos['logo'];
         if(!is_string($file)){
-
+            //EL FORMULARIO TIENE UNA IMAGEN
             if($file){
                 // Definir la ruta donde se guardará el archivo
                 $destinationPath = public_path('assets/uploads');
@@ -73,6 +73,7 @@ class EventosController extends Controller
                 $datos['logo'] = 'NO ASIGNADO';
             }
         }
+        $datos['url'] = $datos['acronimo'];
         eventos::create($datos);
         return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
     }

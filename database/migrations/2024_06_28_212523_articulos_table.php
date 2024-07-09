@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('estado', 15)->nullable(false);
             $table->timestamps();
 
-            $table->unique(['evento_id','id']->nullable(false));
+            $table->unique(['evento_id','id'])->nullable(false);
 
             $table->foreign('evento_id')->references('id')->on('eventos');
             $table->foreign('area_id')->references('id')->on('areas');

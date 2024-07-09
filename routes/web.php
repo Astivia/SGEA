@@ -6,6 +6,7 @@ use App\Http\Controllers\AreasController;
 use App\Http\Controllers\ArticulosController;
 use App\Http\Controllers\AutoresController;
 use App\Http\Controllers\AutoresExternosController;
+use App\Http\Controllers\ArticulosAutoresController;
 use App\Http\Controllers\Comite_EditorialController;
 use App\Http\Controllers\EventosController;
 use App\Http\Controllers\ParticipantesController;
@@ -25,8 +26,11 @@ Route::get('participantes/evento/{eventoId}', [ParticipantesController::class, '
 Route::delete('participantes/{eventoId}/{usuarioId}', [ParticipantesController::class, 'destroy'])->name('participantes.destroy')->middleware('auth')->middleware('can:participantes.destroy');
 //ARTICULOS
 Route::resource('articulos', ArticulosController::class)->middleware('auth');
-Route::resource('autores', AutoresController::class)->middleware('auth');
+Route::resource('autores', ArticulosAutoresController::class)->middleware('auth');
 Route::resource('autores_externos', AutoresExternosController::class)->middleware('auth');
+
+
+
 // REVISORES DE ARTICULOS:
 Route::resource('revisores_articulos', RevisoresArticulosController::class)->middleware('auth');
 Route::get('revisores_articulos/evento/{eventoId}', [RevisoresArticulosController::class, 'index'])->name('revisores_articulos.evento.index')->middleware('auth');
@@ -35,20 +39,30 @@ Route::delete('revisores_articulos/{eventoId}/{usuarioId}/{articuloId}', [Reviso
 
 //LOGIN - REGISTER
 Route::view('/login',"login")->name('login');
-//  Route::get('/login', [LoginController::class, 'loginView'])->name('login');
  Route::get('/registro', [LoginController::class, 'registerView'])->name('registro');
-//  Route::post('/enviar-codigo', [LoginController::class, 'enviarCodigo'])->name('enviar-codigo');
  Route::post('/registrar', [LoginController::class, 'register'])->name('registrar');
  Route::post('/verificar-email', [LoginController::class, 'verificarEmail'])->name('verificar-email');
  Route::post('/reenviar-codigo', [LoginController::class, 'reenviarCodigo'])->name('reenviar-codigo');
 
+ 
+ Route::post('/validar-registro',[LoginController::class,'register'])->name('validar-registro');
+ Route::post ('/inicia-sesion',[LoginController::class,'login'])->name('inicia-sesion');
+ Route::get('/logout',[LoginController::class,'logout'])->name('logout');
+ 
+ // DASHBOARDS
  Route::view('/home',"dashboard")->middleware('auth')->name('home');
 
-Route::post('/validar-registro',[LoginController::class,'register'])->name('validar-registro');
-Route::post ('/inicia-sesion',[LoginController::class,'login'])->name('inicia-sesion');
-Route::get('/logout',[LoginController::class,'logout'])->name('logout');
+ Route::get('CIDICI-index/{eventoId}', [LoginController::class, 'index'])->middleware('auth')->name('CIDICI-index');
 
-// Route::post('/enviar-codigo', [LoginController::class, 'enviarCodigo'])->name('EnviarCodigo');
+
+
+
+//  Route::get('/Dashboards/{eventoId}', [LoginController::class, 'index'])->middleware('auth')->name('index');
+
+//  Route::get('/CIDICI-index', [LoginController::class, 'index'])->middleware('auth')->name('CIDICI-index');
+//  Route::get('/FLISOL-index', [LoginController::class, 'index'])->middleware('auth')->name('FLISOL-index');
+
+
 
 
 /*

@@ -1,11 +1,8 @@
 @extends('layouts.master')
-    <title>CiDiCi</title>
+    <title>Inicio</title>
     <link rel="stylesheet" href="./css/style-home.css">
-    <link rel="stylesheet" href="./css/style-areas.css">
 </head>
 @section('Content')
-
-
             <div class="page-header">
                 <div>
                     <h1>Analytics Dashboard</h1>

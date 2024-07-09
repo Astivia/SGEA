@@ -39,7 +39,6 @@
 .sidebar-user {
     margin: 0rem 0rem 1rem 0rem;
     text-align: center;
-    border: 1px solid white;
     padding: 5px;
 }
 /*Se aplican cambios end*/
@@ -69,13 +68,12 @@
 /*Se aplican cambios start*/
 .menu-head {
     text-transform: uppercase;
-    color: rgb(17, 6, 0);
+    color: aqua;
     font-size: .85rem;
     font-weight:600;
     margin-bottom: .5rem;
     cursor: pointer;
     padding: 10px;
-   background-color: rgb(52, 138, 167);
     
     
 }
@@ -92,7 +90,6 @@
     margin-bottom: 1.5rem;
     display: none;
     padding: 10px;
-    background-color: rgb(81, 59, 86);
     border-radius: 2px;
     
 }
