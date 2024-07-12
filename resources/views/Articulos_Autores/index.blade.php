@@ -58,6 +58,7 @@
 
         <label for="participante-name">Seleccione un Usuario del sistema:</label>
         {!! Form::select('usuario_id', $usuarios->pluck('nombre_completo', 'id'), null, ['required' => 'required']) !!}
+        
        <br>
 
         <label for="afiliacion">Afiliacion:</label>

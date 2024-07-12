@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AreasController;
 use App\Http\Controllers\ArticulosController;
+
 use App\Http\Controllers\AutoresController;
 use App\Http\Controllers\AutoresExternosController;
 use App\Http\Controllers\ArticulosAutoresController;
@@ -26,6 +27,13 @@ Route::get('participantes/evento/{eventoId}', [ParticipantesController::class, '
 Route::delete('participantes/{eventoId}/{usuarioId}', [ParticipantesController::class, 'destroy'])->name('participantes.destroy')->middleware('auth')->middleware('can:participantes.destroy');
 //ARTICULOS
 Route::resource('articulos', ArticulosController::class)->middleware('auth');
+Route::get('articulos/{evento_id}/{id}', [ArticulosController::class, 'show'])->middleware('auth');
+Route::get('articulos/{evento_id}/{id}/edit', [ArticulosController::class, 'edit'])->middleware('auth');
+Route::put('articulos/{evento_id}/{id}', [ArticulosController::class, 'update']);
+
+
+
+
 Route::resource('autores', ArticulosAutoresController::class)->middleware('auth');
 Route::resource('autores_externos', AutoresExternosController::class)->middleware('auth');
 

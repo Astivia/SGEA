@@ -214,6 +214,7 @@ class LoginController extends Controller
                     if($part){
                         //EL USUARIO ESTA REGISTRADO EN ALGUN EVENTO
                         // Redirigimos a la vista correspondiente 
+                        $request->session()->put('eventoID', $part->evento->id);
                         return redirect($part->evento->acronimo.'-index/'.$part->evento->id);
                     }
                     //redirigte al usuario a la pagina que estaba intentando ingresar o al dashboard
@@ -246,6 +247,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         $request->session()->regenerate();
-        return redirect('/login');
+        return redirect('/login')->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        ->header('Pragma', 'no-cache');
     }
 }

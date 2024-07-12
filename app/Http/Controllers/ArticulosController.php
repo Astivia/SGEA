@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+use App\Models\articulosAutores;
 use App\Models\articulos;
-use App\Models\autores;
-use App\Models\autores_externos;
 use App\Models\eventos;
 use App\Models\areas;
 
@@ -20,23 +19,9 @@ class ArticulosController extends Controller
     {
         $Articulos=articulos::OrderBy('id')->get();
         //obtenemos los catalogos correspondientes
-        $Eventos=eventos::all();
         $Areas =areas::all();
-        $autores = autores::all();
-        $autoresExternos = autores_externos::all();
-        //filtramos unicamente el id y nombre de los autores
-        $autoresSistema = $autores->mapWithKeys(
-            function ($autor) {
-                return [$autor->id => $autor->usuario->nombre_completo];
-            }
-        );
-
-        $autoresExternos = $autoresExternos->mapWithKeys(
-            function ($autorExterno) {
-                return [$autorExterno->id => $autorExterno->nombre_completo];
-            }
-        );
-        return view ('Articulos.index',compact('Articulos','Eventos','Areas','autoresSistema','autoresExternos'));
+        
+        return view ('Articulos.index',compact('Articulos','Areas'));
     }
 
     /**
@@ -52,6 +37,9 @@ class ArticulosController extends Controller
      */
     public function store(Request $request)
     {
+        
+        $evento= eventos::find($request->session()->get('eventoID'));
+
         $datos=$request->all();
         
         //validamos la carga del archivo
@@ -61,18 +49,20 @@ class ArticulosController extends Controller
         // manejo del archivo
         $archivo = $request->file('pdf');
         $nombreArchivo = $archivo->getClientOriginalName();
-        $rutaArchivo = storage_path('app/public/Articles/web/' . $datos['evento_id'] . '/' . $nombreArchivo);
+        $rutaArchivo = storage_path('app/public/Articles/web/'.$evento->acronimo.$evento->edicion.'/'.$nombreArchivo);
 
         // Guardamos el archivo con su nombre original y obtenemos la ruta completa
-        $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' . $datos['evento_id'], $nombreArchivo);
+        $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' .$evento->acronimo.$evento->edicion, $nombreArchivo);
 
         //insertamoslos datos del articulo
         $articulo = articulos::create([
+            'evento_id'=>$evento->id,
             'titulo' => $datos['titulo'],
-            'evento_id' => $datos['evento_id'],
+            'resumen' => $datos['resumen'],
+            'archivo' => $nombreArchivo,
+            'registro'=>getdate(),
             'area_id' => $datos['area_id'],
-            'estado' => 'Articulo Registrado en Sistema',
-            'pdf' => $nombreArchivo
+            'estado' => 'Recibido'
         ]);
         //verificamos que campo viene definido para el autor
         if(isset($datos['autor_id_autor'])){
@@ -88,45 +78,32 @@ class ArticulosController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($evento_id, $id)
     {
-        
-        $articulo=articulos::find($id);
-        if(!is_null($articulo->pdf)){
-            $pdfPath = 'SGEA/storage/app/public/Articles/web/viewer.html?file=' . $articulo->evento_id . '/' . $articulo->pdf;
+        $articulo = articulos::where('evento_id', $evento_id)->where('id', $id)->first();
+        if(!is_null($articulo->archivo)){
+            $pdfPath = 'SGEA/storage/app/public/Articles/web/viewer.html?file='.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.$articulo->archivo;
             $pdfUrl =  asset($pdfPath);
         }else{
             $pdfUrl=null;
         }
-        
+
+
         return view ('Articulos.read',compact('articulo','pdfUrl'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($evento_id, $id)
     {
         
-        $articulo= articulos::find($id);
+        $articulo= articulos::where('evento_id', $evento_id)->where('id', $id)->first();
+    
         //consultamos los catalogos
-        $Eventos = Eventos::all();
         $Areas = Areas::all();
-        $autores = autores::all();
-        $autoresExternos = autores_externos::all();
-        //filtramos unicamente el id y nombre de los autores
-        $autoresSistema = $autores->mapWithKeys(
-            function ($autor) {
-                return [$autor->id => $autor->usuario->nombre_completo];
-            }
-        );
-
-        $autoresExternos = $autoresExternos->mapWithKeys(
-            function ($autorExterno) {
-                return [$autorExterno->id => $autorExterno->nombre_completo];
-            }
-        );
-        return view('Articulos.edit', compact('articulo', 'Eventos', 'Areas', 'autoresSistema','autoresExternos'));
+        
+        return view('Articulos.edit', compact('articulo', 'Areas'));
     }
 
 
@@ -134,48 +111,43 @@ class ArticulosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,$evento_id, $id)
     {
-        $NuevosDatos = $request->all();
+
+        // Validación de los datos de entrada
+        $validatedData = $request->validate([
+            'titulo' => 'required|string|max:200',
+            'resumen' => 'nullable|string',
+            'area_id' => 'required|exists:areas,id',
+            'estado' => 'required|string|max:15',
+        ]);
         //buscamos el articulo
-        $articulo = articulos::find($id);
+        $articulo = articulos::where('evento_id', $evento_id)->where('id', $id)->firstOrFail();
 
-         // manejo del archivo
-
-         $archivo = $request->file('pdf');
+        // manejo del archivo
+        $archivo = $request->file('archivo');
          
-         
-         if($archivo){
-            $pdfPath = 'public/Articles/web/' . $articulo->evento_id . '/' . $articulo->pdf;
-            //verificamos ai existe el archivo en nuestra carpeta destino 
-            if (Storage::exists($pdfPath)) {
-                Storage::delete($pdfPath);
-            }
-             $nombreArchivo = $archivo->getClientOriginalName();
-             $rutaArchivo = storage_path('app/public/Articles/web/' . $articulo['evento_id'] . '/' . $nombreArchivo);
-             // Guardamos el archivo con su nombre original y obtenemos la ruta completa
-             $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' . $articulo['evento_id'], $nombreArchivo);
-         }else{
-            $nombreArchivo=$articulo->pdf;
-         }
- 
+        if($archivo){
+           $pdfPath = 'public/Articles/web/' . $articulo->evento->acronimo.$articulo->evento->edicion. '/' . $articulo->archivo;
+           //verificamos ai existe el archivo en nuestra carpeta destino 
+           if (Storage::exists($pdfPath)) {
+               Storage::delete($pdfPath);
+           }
+            $nombreArchivo = $archivo->getClientOriginalName();
+            $rutaArchivo = storage_path('app/public/Articles/web/' . $articulo->evento->acronimo.$articulo->evento->edicion. '/' . $nombreArchivo);
+            // Guardamos el archivo con su nombre original y obtenemos la ruta completa
+            $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' . $articulo->evento->acronimo.$articulo->evento->edicion, $nombreArchivo);
+        }else{
+           $nombreArchivo=$articulo->archivo;
+       }
         //insertamos en articulo
         $articulo->update([
-            'titulo'=>$NuevosDatos['titulo'],
-            'area_id'=>$NuevosDatos['area_id'],
-            'evento_id'=>$NuevosDatos['evento_id'],
-            'estado'=>$NuevosDatos['estado'],
-            'pdf'=>$nombreArchivo
+            'titulo'=> $validatedData['titulo'],
+            'resumen'=> $validatedData['resumen'],
+            'area_id'=> $validatedData['area_id'],
+            'estado'=> $validatedData['estado'],
+            'archivo'=> $nombreArchivo
         ]);
-
-        //verificamos que campo viene definido para el autor
-        if(!is_null($NuevosDatos['autor_id_autor'])){
-            $articulo->autores()->detach();
-            $articulo->autores()->attach($NuevosDatos['autor_id_autor']);
-        }elseif(!is_null($NuevosDatos['autor_id_ext'])){
-            $articulo->autoresExternos()->detach();
-            $articulo->autoresExternos()->attach($NuevosDatos['autor_id_ext']);
-        }
         return redirect('/articulos')->with('success', 'Artículo Modificado');
     }
 
@@ -190,18 +162,12 @@ class ArticulosController extends Controller
             return redirect()->back()->with('error', 'No se encontro el articulo');
         }elseif($articulo->revisores()->count()>0){
             return redirect()->back()->with('error', 'El articulo aun tiene revisores');
-        }elseif ($articulo->autores->count() > 0) {
-            $articulo->autores()->detach();
-        }else if ($articulo->autoresExternos->count() > 0) {
-            $articulo->autoresExternos()->detach();
         }
-
         // Eliminar el archivo PDF asociado
-        $pdfPath = 'public/Articles/web/' . $articulo->evento_id . '/' . $articulo->pdf;
+        $pdfPath = 'public/Articles/web/' . $articulo->evento->acronimo.$articulo->evento->edicion . '/' . $articulo->archivo;
         if (Storage::exists($pdfPath)) {
             Storage::delete($pdfPath);
         }
-
         $articulo->delete();
         return redirect()->back()->with('success', 'el artículo  se elimino correctamente');
     }

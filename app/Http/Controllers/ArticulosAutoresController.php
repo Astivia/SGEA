@@ -16,7 +16,9 @@ class ArticulosAutoresController extends Controller
      */
     public function index()
     {
+
         $autores=articulosAutores::OrderBy('usuario_id')->get();
+
         $usuarios=usuarios::All();
 
         return view ('Articulos_autores.index', compact('autores','usuarios'));
@@ -35,7 +37,7 @@ class ArticulosAutoresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->session()->put('verification_code', $codigo);
     }
 
     /**

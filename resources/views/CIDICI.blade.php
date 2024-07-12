@@ -21,7 +21,7 @@
                 <a href=""><i class="las la-book"></i>Articulos</a>
             </div>
             <div class="card">
-                <a href=""><i class="las la-book"></i>participantes</a>
+                <a href=""><i class="las la-user"></i>Participantes</a>
             </div>
             <div class="card">
                 <a href=""><i class="las la-book"></i>revisores</a>

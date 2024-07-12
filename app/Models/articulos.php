@@ -9,12 +9,8 @@ class articulos extends Model
 {
     protected $table = 'articulos';
 
-    protected $primaryKey = [
-        'evento_id', 
-        'id'
-    ];
+    protected $primaryKey = 'id';
 
-    public $incrementing = false;
 
     protected $fillable = [
         'id',

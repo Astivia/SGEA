@@ -19,9 +19,8 @@
                 @role('Organizador')
                     <span>Organizador</span>
                 @endrole
-            </div>                
-        </div>
-
+            </div>
+        </div>    
         <div class="sidebar-menu">
             <div class="menu-head">
                 <span>Catálogos</span>
@@ -31,7 +30,6 @@
                 @role(['Administrador','Organizador'])
                 <li><a href="{{ url('usuarios') }}"><span class="las la-user"></span>Usuarios</a></li>
                 <li><a href="{{ url('autores') }}"><span class="las la-pen-nib"></span>Autores</a></li>
-                <li><a href="{{ url('autores_externos') }}"><span class="las la-external-link-alt"></span>Autores externos</a></li>
                 @endrole
                 <li><a href="{{ url('articulos') }}"><span class="lar la-newspaper"></span>Artículos</a></li>
                 @role(['Administrador','Organizador'])
