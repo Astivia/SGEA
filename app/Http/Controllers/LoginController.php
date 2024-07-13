@@ -89,6 +89,12 @@ class LoginController extends Controller
                 'estado' => 'alta,registrado'
             ]);
             $request->session()->forget('verification_code');
+            if(is_null($user->password)){
+                //logica para definir password
+                return redirect('setPassword');
+
+                
+            }
             return redirect('login')->with('success', 'Se verifico el Email');
         }else{
             $request->session()->forget('verification_code');
