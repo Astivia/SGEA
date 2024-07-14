@@ -30,6 +30,7 @@
 
         <input type="hidden" id="user-identifier" name="user-id" value="{!!$user->id!!}">
         <input type="hidden" id="codee" name="codigo" value="{!!$codigo!!}">
+        <input type="hidden" id="band" name="reset" value="{!!$reset!!}">
 
         <label for=""><strong>Introducir Codigo</strong></label><br>
         <input type="number" name="input-usuario" id="" placeHolder="ej: 1234">

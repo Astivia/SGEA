@@ -53,15 +53,15 @@
                             <input type="checkbox" id="remember_me" name="remember_me"> Mantener la sesión iniciada
                         </label>                     
                     </div>
-                    <a href="#" id="forgot-password-link">Olvidaste tu contraseña?</a>
+                    <a href="forgot-password" id="forgot-password-link">Olvidaste tu contraseña?</a>
                     <button type="submit" class="btn">Iniciar Sesion</button>
                 </form>
-                
                 <div class="login-register">
-                    <!-- <p>No tienes una cuenta? <a href="registro" class="register-link">Registrarme</a></p> -->
                     <p>No tienes una cuenta? <a href="registro" class="register-link">Registrarme</a></p>
-
                 </div>
+
+                
+
             </div>
         </div>
     </div>

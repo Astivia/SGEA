@@ -26,12 +26,6 @@ class LoginController extends Controller
         return $code;
     }
 
-    public function registerView(){
-            
-        return view ('register');
-    }
-
-
     public function enviarCodigo(usuarios $user,$codigo){
         echo("<script>console.log('Se envio el correo a $user->email');</script>");
 
@@ -78,6 +72,11 @@ class LoginController extends Controller
 
     }
 
+    public function registerView(){
+            
+        return view ('register');
+    }
+    
 
     public function verificarEmail(Request $request){
         $datos=$request->all();
@@ -89,21 +88,21 @@ class LoginController extends Controller
                 'estado' => 'alta,registrado'
             ]);
             $request->session()->forget('verification_code');
-            if(is_null($user->password)){
-                //logica para definir password
-                return redirect('setPassword');
-
-                
-            }
-            return redirect('login')->with('success', 'Se verifico el Email');
+            
         }else{
             $request->session()->forget('verification_code');
             return redirect('login')->with('error', 'El codigo es Incorrecto');
         }
+        
+        if(is_null($user->password) || $user->password == '' || $datos['reset']=true){
+            //logica para definir password
+            return view('Password',compact('user'));
+            
+        }
+        return redirect('login')->with('success', 'Se verifico el Email');
     }
 
-    public function reenviarCodigo(Request $request)
-    {
+    public function reenviarCodigo(Request $request){
         try{
             $userId = $request->input('user-id');
             $user = usuarios::find($userId);
@@ -124,6 +123,20 @@ class LoginController extends Controller
         }catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Ocurrió un error al reenviar el código. Inténtalo de nuevo más tarde.'], 500);
         }
+    }
+
+    public function setPassword(Request $request){
+        $datos=$request->all();
+        $user = usuarios::find($datos['user-id']);
+
+        $datos['password'] = Hash::make($datos['password']);
+
+        $user->update([
+            'password' => $datos['password'] 
+        ]);
+    
+        return redirect('login')->with('success', 'Contraseña Definida');
+
     }
 
     public function register(Request $request){
@@ -255,5 +268,27 @@ class LoginController extends Controller
         $request->session()->regenerate();
         return redirect('/login')->header('Cache-Control', 'no-cache, no-store, must-revalidate')
         ->header('Pragma', 'no-cache');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+        $user = usuarios::where('email',$request['email'])->first();
+        if (!$user) {
+            return redirect('login')->with('error','No existe un usuario con esa dirección de correo');
+        }
+
+        if (!$request->session()->has('verification_code')) {
+            $codigo = $this->generarCodigo();
+        } else {
+            $codigo = $request->session()->get('verification_code');
+        }
+        $this->enviarCodigo($user, $codigo);
+        $request->session()->put('verification_code', $codigo);
+        $reset=true;
+        return view('emailVerification',compact('user','codigo','reset'));
+        
     }
 }

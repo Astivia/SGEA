@@ -51,6 +51,12 @@ Route::view('/login',"login")->name('login');
  Route::post('/registrar', [LoginController::class, 'register'])->name('registrar');
  Route::post('/verificar-email', [LoginController::class, 'verificarEmail'])->name('verificar-email');
  Route::post('/reenviar-codigo', [LoginController::class, 'reenviarCodigo'])->name('reenviar-codigo');
+ Route::post('/setPassword', [LoginController::class, 'setPassword'])->name('Password');
+ 
+ Route::post('/reset-password', [LoginController::class, 'resetPassword'])->name('password.reset');
+
+
+
 
  
  Route::post('/validar-registro',[LoginController::class,'register'])->name('validar-registro');
@@ -92,6 +98,11 @@ Route::view('/login',"login")->name('login');
 Route::get('/', function () {
     return view('login');
 });
+
+Route::get('/forgot-password', function () {
+    return view('ResetPass');
+});
+
 Route::get('pruebas', function () {
     return view('pruebas');
 });
