@@ -65,9 +65,14 @@ class LoginController extends Controller
             if (!$mail->send()) {
                 //NO SE ENVIO EL EMAIL
                 return redirect()->back()->with('error', 'Error en el envio: '.$mail->ErrorInfo);
-            } 
+            } else{
+                // return redirect()->back()->with('success', 'Se envio el Codigo');
+                return true;
+
+            }
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            // return response()->json(['error' => $e->getMessage()], 500);
+            return false;
         }
 
     }
@@ -94,11 +99,11 @@ class LoginController extends Controller
             return redirect('login')->with('error', 'El codigo es Incorrecto');
         }
         
-        if(is_null($user->password) || $user->password == '' || $datos['reset']=true){
+        if(is_null($user->password) || $user->password == ''||$request->session()->get('RessetPass')==1){
             //logica para definir password
             return view('Password',compact('user'));
-            
         }
+        $request->session()->forget('RessetPass');
         return redirect('login')->with('success', 'Se verifico el Email');
     }
 
@@ -112,16 +117,19 @@ class LoginController extends Controller
     
              // validamos que el usuario y el codigo existan.
              if (!$user || !$verificationCode) {
-                return response()->json(['success' => false, 'message' => 'Usuario o código no encontrado'], 404);
+                return response('Usuario o código no encontrado', 404);
             }
     
             // enviamos el codigo
-            $this->enviarCodigo(usuarios::find($userId), $verificationCode);
-
-    
-            return response()->json(['success' => true]);
+            if($this->enviarCodigo(usuarios::find($userId), $verificationCode)){
+                return response('Código reenviado exitosamente', 200);
+            }else{
+                return response('Error al enviar el código', 500);
+            }
+            // return response()->json(['success' => true]);
         }catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Ocurrió un error al reenviar el código. Inténtalo de nuevo más tarde.'], 500);
+            // return response()->json(['success' => false, 'message' => 'Ocurrió un error al reenviar el código. Inténtalo de nuevo más tarde.'], 500);
+            return response('Ocurrió un error al reenviar el código', 500);
         }
     }
 
@@ -156,8 +164,9 @@ class LoginController extends Controller
                 //El usuario NO esta dado de alta ->iniciamos el proceso para verificar el usuario
                 if (!$request->session()->has('verification_code')) {
                     $codigo = $this->generarCodigo();
-                    $this->enviarCodigo($user, $codigo);
-                    $request->session()->put('verification_code', $codigo);
+                    if($this->enviarCodigo($user, $codigo)){
+                        $request->session()->put('verification_code', $codigo);
+                    }
                 } else {
                     $codigo = $request->session()->get('verification_code');
                 }
@@ -178,8 +187,9 @@ class LoginController extends Controller
             //iniciamos el proceso para verificar el usuario
             if (!$request->session()->has('verification_code')) {
                 $codigo = $this->generarCodigo();
-                $this->enviarCodigo($user, $codigo);
-                $request->session()->put('verification_code', $codigo);
+                if($this->enviarCodigo($user, $codigo)){
+                    $request->session()->put('verification_code', $codigo);
+                }
             } else {
                 $codigo = $request->session()->get('verification_code');
                 
@@ -287,8 +297,10 @@ class LoginController extends Controller
         }
         $this->enviarCodigo($user, $codigo);
         $request->session()->put('verification_code', $codigo);
-        $reset=true;
-        return view('emailVerification',compact('user','codigo','reset'));
+        $rp=1;
+        $request->session()->put('RessetPass', $rp);
+
+        return view('emailVerification',compact('user','codigo'));
         
     }
 }

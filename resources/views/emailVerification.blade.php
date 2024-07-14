@@ -30,7 +30,6 @@
 
         <input type="hidden" id="user-identifier" name="user-id" value="{!!$user->id!!}">
         <input type="hidden" id="codee" name="codigo" value="{!!$codigo!!}">
-        <input type="hidden" id="band" name="reset" value="{!!$reset!!}">
 
         <label for=""><strong>Introducir Codigo</strong></label><br>
         <input type="number" name="input-usuario" id="" placeHolder="ej: 1234">
@@ -56,17 +55,14 @@
             })
         })
         .then(response => {
-            // Check if the response is OK and contains JSON
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                alert('Se ha reenviado un nuevo código a su correo electrónico.');
+            if (response.ok) {
+                return response.text().then(text => {
+                    alert(text);  // Mostrar mensaje de éxito
+                });
             } else {
-                alert('Ocurrió un error al reenviar el código. Inténtalo de nuevo más tarde.');
+                return response.text().then(text => {
+                    alert(text);  // Mostrar mensaje de error
+                });
             }
         })
         .catch(error => {

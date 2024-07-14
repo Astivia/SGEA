@@ -52,11 +52,8 @@ Route::view('/login',"login")->name('login');
  Route::post('/verificar-email', [LoginController::class, 'verificarEmail'])->name('verificar-email');
  Route::post('/reenviar-codigo', [LoginController::class, 'reenviarCodigo'])->name('reenviar-codigo');
  Route::post('/setPassword', [LoginController::class, 'setPassword'])->name('Password');
- 
+
  Route::post('/reset-password', [LoginController::class, 'resetPassword'])->name('password.reset');
-
-
-
 
  
  Route::post('/validar-registro',[LoginController::class,'register'])->name('validar-registro');
