@@ -4,22 +4,18 @@
 </head>
 @section('Content')
     <div class="container">
-        <h1>Artículos</h1>
+       
         <div class="search-create">
-            <input type="text" id="search-input" placeholder="Buscar artículos...">
+        <h1 id="titulo-h1">Artículos</h1>
             <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
             
-        </div>
-    </div>
-
-    <br><br>
-
-    <div class="container">
+        </div>    
       @if($Articulos->isEmpty())
             <strong>No hay datos</strong>
       @else
-        <div class="info">
-            <table border=0>
+        
+      <table id="example" class="display" style="width:100%">
+      <thead>            
                 <tr>
                     <th>EVENTO</th>
                     <th>TITULO</th>
@@ -27,6 +23,8 @@
                     <th>ESTADO</th>
                     <th>Controles</th>
                 </tr>
+                </thead>
+                <tbody>
                 @foreach ($Articulos as $art)
                 <tr>
                     <td>{!!$art->evento->acronimo!!} {!!$art->evento->edicion!!}</td>
@@ -50,8 +48,9 @@
                     </td>
                 </tr>
                 @endforeach
+                </tbody>
             </table>
-        </div>
+        
       @endif
     </div>
         
@@ -87,20 +86,51 @@
             <div id="create-author-modal" class="modal">
                 <div class="modal-content">
                     <span class="close">&times;</span>
-                    <h2>Seleccionar Autor</h2>
+                    <h2>Seleccionar Autores</h2>
                     <form id="author-form">
-                        <label for="usuario_id">ID del Usuario:</label>
+                        <a href="#" id="register-author-btn">registrar Autor</a>
+                        <!-- <label for="usuario_id">ID del Usuario:</label>                        
                         <input type="text" id="usuario_id" name="usuario_id" required>
                         <label for="institucion">Institución:</label>
                         <input type="text" id="institucion" name="institucion" required>
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email" required> -->
                         <!-- Otros campos del autor -->
+                        <label for="">Seleccione usuarios:</label>
+                        <select name="" id="">prueba</select>
+                        <button type="button" id="register-author-btn">Agregar Autor</button>
+                        <button type="button" id="add-author-btn">Eliminar Autor</button>
                         <button type="button" id="save-author-btn">Guardar Autor</button>
                     </form>
                 </div>
             </div>
 
+
+            <div id="register-author-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Registro de Autores </h2>
+                    <form id="">                        
+                        <label for="">CURP:</label>                        
+                        <input type="text" id="" name="" required>
+                        <label for="">Nombre:</label>
+                        <input type="text" id="" name="" required>
+                        <label for="">Apellido Paterno:</label>
+                        <input type="text" id="" name="" required>
+                        <label for="">Apellido Materno:</label>
+                        <input type="text" id="" name="" required>
+                        <label for="">Telefono:</label>
+                        <input type="tel" id="" name="" required>
+                        <label for="">Email:</label>
+                        <input type="email" id="" name="" required>
+                        <label for="">Institucion:</label>
+                        <input type="text" id="" name="" required>
+                        
+                        <!-- Otros campos del autor -->
+                        <button type="button" id="save-author-btn">Registrar Autor</button>
+                    </form>
+                </div>
+            </div>
 
 @endsection
 
@@ -110,8 +140,10 @@
     // Obtener los modales y los botones
     var createArticleModal = document.getElementById('create-article-modal');
     var createAuthorModal = document.getElementById('create-author-modal');
+    var registerAuthorModal = document.getElementById('register-author-modal');
     var createEventBtn = document.getElementById('create-event-btn');
     var addAuthorBtn = document.getElementById('add-author-btn');
+    var registerAuthorBtn = document.getElementById('register-author-btn');
     var saveAuthorBtn = document.getElementById('save-author-btn');
     var closeButtons = document.querySelectorAll('.modal .close');
 
@@ -124,6 +156,11 @@
     addAuthorBtn.addEventListener('click', function () {
         createArticleModal.style.display = 'none';
         createAuthorModal.style.display = 'block';
+    });
+    registerAuthorBtn.addEventListener('click', function () {        
+        createAuthorModal.style.display = 'none';
+        registerAuthorModal.style.display = 'block';
+
     });
 
     // Guardar el autor y regresar al modal de artículo

@@ -68,20 +68,20 @@
 /*Se aplican cambios start*/
 .menu-head {
     text-transform: uppercase;
-    color: aqua;
+    color:rgb(17,6,0);
     font-size: .85rem;
     font-weight:600;
     margin-bottom: .5rem;
     cursor: pointer;
     padding: 10px;
-    
+    background-color: rgb(33, 71, 148);
     
 }
 .menu-head i{
     color: white;
 }
 .menu-head:hover{
-    background-color: rgb(81, 59, 86);
+    background-color: rgb(42, 77, 147);
     border-radius: 10px;
 }
 
@@ -91,6 +91,7 @@
     display: none;
     padding: 10px;
     border-radius: 2px;
+    background-color: rgb(33, 71, 148);
     
 }
 /*Se aplican cambios end*/
@@ -131,7 +132,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 0 1.5rem;
-    border-bottom: 4px solid rgb(227, 119, 59);
+    
 }
 /*Se aplican cambios end*/
 
@@ -150,7 +151,7 @@ header .header-icons span {
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
-    border-bottom: 4px solid rgb(227, 119, 59);
+    
     border-radius: 50%;
 }
 
@@ -170,7 +171,7 @@ header .menu-toggle span {
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
-    border-bottom: 4px solid rgb(227, 119, 59);
+   
     border-radius: 50%;
 }
 
@@ -208,7 +209,7 @@ main {
     min-height: calc(100vh - 70px);
 }
 .container {
-    max-width: 1100px;
+    max-width:100%;
     margin: 0 auto;
     background-color: #fff;
     padding: 1.5rem;
@@ -219,9 +220,10 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
+ 
     margin-bottom: 1rem;
 }
-#search-input {
+#titulo-h1 {
     flex: 1;
     padding: 0.5rem;
     border: 1px solid #ccc;
@@ -329,13 +331,20 @@ table {
     margin-bottom: 1.5rem;
     font-family: 'Poppins', sans-serif;
 }
+thead input{
+    max-width: 125px;
+}
 
 th, td {
     padding: 0.75rem;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
+#img-list{
+    max-width: 50px;
+    max-height: 50px;
 
+}
 th {
     background-color: rgb(52, 138, 167);
     color: white;
@@ -346,6 +355,27 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
+/* Modificacion de elementos de la tabla */
+#example_filter{
+
+   
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    margin-bottom: 1rem;
+}
+#example_filter input{
+    flex: 1;
+    background-color: #C2E1FB;
+    color: rgb(49, 46, 46);
+    font-weight: bold;
+    width: 70%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 button {
     padding: 0.5rem 1rem;
     margin-right: 0.5rem;
@@ -389,4 +419,91 @@ td:last-child {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+}
+
+/* Se aplica la clase main modificar */
+.container h1{
+    color:white;
+    background-color: #1a2d51;
+    text-align: center;
+    
+    
+}
+.container form input, .container form select,
+.container form textarea{
+    background-color: #C2E1FB;
+    color: rgb(49, 46, 46);
+    font-weight: bold;
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.container form button{
+    background-color: #1a2d51;
+}
+
+.modal .modal-content{
+    background-color: white;
+}
+
+.modal .modal-content input,
+.modal .modal-content select,
+.modal .modal-content input,
+.modal .modal-content textarea{
+    background-color: #C2E1FB;
+    color: rgb(49, 46, 46);
+    font-weight: bold;
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+/* Aqui se aplican los cambios de la seccion main  */
+.container .search-create{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 50px;
+}
+.container .search-create input{
+    background-color: #C2E1FB;
+    color: rgb(49, 46, 46);
+    font-weight: bold;
+    width: 100%;
+    padding: 0.5rem;    
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+#create-event-btn{
+    background-color: #f99806;
+}
+.container table td a #mensaje{
+    background-color: red;
+}
+.confirmation-message {
+    color: rgb(0, 255, 136);
+    font-weight: bold;
+}
+
+/* modal validacion */
+
+/* Estilos para el modal */
+
+button {
+    margin-top: 10px;
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #d32f2f;
 }

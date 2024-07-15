@@ -4,19 +4,17 @@
 </head>
 @section('Content')
 <div class="container">
-    <h1>Usuarios</h1>
+   
     <div class="search-create">
-        <input type="text" id="search-input" placeholder="Buscar Usuario...">
+        <h1 id="titulo-h1">Usuarios</h1>
         <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
-</div>
-<br><br>
 
-<div class="container">
-    <h1>Usuarios del sistema</h1>
-    <div class="info">
-        <table>
-            <tr>
+    
+    
+    <table id="example" class="display" style="width:100%">
+            <thead>            
+    <tr>
                 <th>NOMBRE</th>
                 <th>APELLIDOS</th>
                 <th>EMAIL</th>
@@ -25,6 +23,8 @@
                 <th>Controles</th>
                 @endrole
             </tr>
+            </thead>
+            <tbody>
             @foreach ($Usuarios as $usu)
             <tr>
                 <td>{!!$usu->nombre!!}</td>
@@ -52,13 +52,13 @@
                 @endrole
             </tr>
             @endforeach
+            </tbody>
         </table>
         
 
 
-    </div>
-    <div id="events-list"></div>
-    <div id="pagination"></div>
+    
+ 
 </div>
 
 
