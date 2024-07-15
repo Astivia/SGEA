@@ -6,17 +6,45 @@
 
 @section('Content')
 <div class="container">
-    <h1>Areas</h1>
+    
     <div class="search-create">
-        <input type="text" id="search-input" placeholder="Buscar areas...">
+    <h1 id="titulo-h1">areas</h1>
         <button id="create-event-btn">Registrar nueva area</button>
     </div>
-</div>
-<br><br>
-<div class="container">
-    <h1>Lista de Areas</h1>
-    @livewire ('areas-index')
-    @livewireScripts
+
+<table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Controles</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach ($Areas as $area)
+            <tr>
+                <td>{!!$area->nombre!!}</td>
+                <td>{!!$area->descripcion!!}</td>
+                <td>
+                    <a href="{!!'areas/'.$area->id.'/edit'!!}">
+                        <button>editar</button>
+                    </a>
+                    <a href="{{url('areas/'.$area->id)}}"
+                        onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $area->id }}').submit(); }">
+                        <button>Eliminar</button>
+                    </a>
+                    <form id="delete-form-{{ $area->id }}" action="{{ url('areas/'.$area->id) }}" method="POST"
+                        style="display: none;">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+        
+    </table>
     
 </div>
 

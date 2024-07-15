@@ -10,3 +10,6 @@
     <link rel="stylesheet" href="{{ asset('SGEA/public/css/style-home.css') }}">
 
     <!-- <link rel="shortcut icon" href="{{ asset('imgs/ITTOL.ico')}}" type="image/x-icon"> --> 
+     <!-- Se agregan clases de tablas -->
+     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+     <link rel="" href="https://cdn.datatables.net/fixedheader/3.1.6/css/fixedHeader.dataTables.min.css">

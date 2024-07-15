@@ -3,20 +3,15 @@
 
 @section('Content')
 <div class="container">
-    <h1>Eventos</h1>
+    
     <div class="search-create">
-        <input type="text" id="search-input" placeholder="Buscar eventos...">
+    <h1 id="titulo-h1">Eventos</h1>
         <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
-</div>
-
-<br><br>
-
-<div class="container">
     @if($Eventos->isEmpty())
         <strong>No hay datos</strong>
     @else
-        <table id="example" class="table table-striped" style="width:100%">
+    <table id="example" class="display" style="width:100%">
             <thead>
                 <tr>
                     <th>LOGO</th>
@@ -33,7 +28,7 @@
                 <tr>
                     <td>
                         
-                        <img src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo" style="width: 150px;">
+                        <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo" >
                     </td>
                     <td>{!!$e->nombre!!}</td>
                     <td>{!!$e->acronimo!!}</td>
