@@ -31,51 +31,34 @@ Route::get('articulos/{evento_id}/{id}', [ArticulosController::class, 'show'])->
 Route::get('articulos/{evento_id}/{id}/edit', [ArticulosController::class, 'edit'])->middleware('auth');
 Route::put('articulos/{evento_id}/{id}', [ArticulosController::class, 'update']);
 
-
-
-
 Route::resource('autores', ArticulosAutoresController::class)->middleware('auth');
 Route::resource('autores_externos', AutoresExternosController::class)->middleware('auth');
-
-
 
 // REVISORES DE ARTICULOS:
 Route::resource('revisores_articulos', RevisoresArticulosController::class)->middleware('auth');
 Route::get('revisores_articulos/evento/{eventoId}', [RevisoresArticulosController::class, 'index'])->name('revisores_articulos.evento.index')->middleware('auth');
 Route::delete('revisores_articulos/{eventoId}/{usuarioId}/{articuloId}', [RevisoresArticulosController::class, 'destroy'])->name('revisores_articulos.destroy')->middleware('auth')->middleware('can:revisores_articulos.destroy');
 
-
 //LOGIN - REGISTER
 Route::view('/login',"login")->name('login');
- Route::get('/registro', [LoginController::class, 'registerView'])->name('registro');
+
  Route::post('/registrar', [LoginController::class, 'register'])->name('registrar');
+
  Route::post('/verificar-email', [LoginController::class, 'verificarEmail'])->name('verificar-email');
  Route::post('/reenviar-codigo', [LoginController::class, 'reenviarCodigo'])->name('reenviar-codigo');
  Route::post('/setPassword', [LoginController::class, 'setPassword'])->name('Password');
-
  Route::post('/reset-password', [LoginController::class, 'resetPassword'])->name('password.reset');
-
  
  Route::post('/validar-registro',[LoginController::class,'register'])->name('validar-registro');
  Route::post ('/inicia-sesion',[LoginController::class,'login'])->name('inicia-sesion');
  Route::get('/logout',[LoginController::class,'logout'])->name('logout');
  
  // DASHBOARDS
- Route::view('/home',"dashboard")->middleware('auth')->name('home');
 
- Route::get('CIDICI-index/{eventoId}', [LoginController::class, 'index'])->middleware('auth')->name('CIDICI-index');
-
-
-
-
-//  Route::get('/Dashboards/{eventoId}', [LoginController::class, 'index'])->middleware('auth')->name('index');
-
-//  Route::get('/CIDICI-index', [LoginController::class, 'index'])->middleware('auth')->name('CIDICI-index');
-//  Route::get('/FLISOL-index', [LoginController::class, 'index'])->middleware('auth')->name('FLISOL-index');
-
-
-
-
+ Route::get('/redirect', [UsuariosController::class, 'redirectToAppropriateView'])->name('user.redirect');
+ Route::get('/{acronimo}-index/{edicion}', [LoginController::class, 'index'])->name('evento.index');
+ 
+ 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -99,6 +82,13 @@ Route::get('/', function () {
 Route::get('/forgot-password', function () {
     return view('ResetPass');
 });
+Route::get('/registro', function () {
+    return view('register');
+});
+
+Route::get('/dashboard', function () {
+    return view('HomeViews.dashboard');
+})->name('dashboard');
 
 Route::get('pruebas', function () {
     return view('pruebas');
@@ -106,15 +96,3 @@ Route::get('pruebas', function () {
 Route::get('pruebas2', function () {
     return view('pruebas2');
 });
-
-// Route::get('EnviarCorreo', function () {
-    
-//     Mail::to('mastiviac@toluca.tecnm.mx')
-//         ->send(new App\Mail\TestEmail);
-//     return "Mensaje enviado";
-// })->name('EnviarCorreo');
-
-
-
-
-// Route::get('ejecutarajax/{evento_id}','AutoresController@combo_autoresPorEvento');

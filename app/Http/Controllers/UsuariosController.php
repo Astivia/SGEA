@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\usuarios;
+use App\Models\participantes;
 use App\Models\autores;
 use App\Models\comite_editorial;
 
@@ -133,5 +136,25 @@ class usuariosController extends Controller
         }
         $usuario->delete();
         return redirect('usuarios')->with('success', 'Usuario eliminado correctamente');
+    }
+
+
+
+    public function redirectToAppropriateView()
+    {
+        $user = Auth::user();
+        $part = participantes::where('usuario_id', $user->id)->first();
+
+        if ($part) {
+            // El usuario está registrado en algún evento
+            $evento = $part->evento;
+            $acronimo = $evento->acronimo;
+            $edicion = $evento->id; // Asumiendo que el ID representa la edición del evento
+
+            return redirect()->route('evento.index', ['acronimo' => $acronimo, 'edicion' => $edicion]);
+        } else {
+            // El usuario no está registrado en ningún evento
+            return redirect()->route('dashboard');
+        }
     }
 }

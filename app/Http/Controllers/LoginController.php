@@ -26,8 +26,8 @@ class LoginController extends Controller
         return $code;
     }
 
-    public function enviarCodigo(usuarios $user,$codigo){
-        echo("<script>console.log('Se envio el correo a $user->email');</script>");
+    private function enviarCodigo(usuarios $user,$codigo){
+       
 
         if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
             return response()->json(['error' => 'Invalid email address'], 422);
@@ -53,7 +53,11 @@ class LoginController extends Controller
             //Definimos el contenido
             $mail->CharSet = 'UTF-8';
             $subject =  "Código de verificación";
-            $message = "Hola $user->nombre,\n\nTu codigo de verificacion es:<strong>$codigo</strong>\n\nNo compartas este codigo con nadie.\n\nAtentamente\nSGEA";
+            $message = "Hola $user->nombre,\n\n
+                        Tu codigo de verificacion es: <strong>$codigo</strong>\n\n
+                        No compartas este codigo con nadie.\n\n
+                        Atentamente\n
+                        <strong>SGEA</strong>";
 
             //Estructuramos el correo
             $mail->Subject = $subject; 
@@ -66,7 +70,7 @@ class LoginController extends Controller
                 //NO SE ENVIO EL EMAIL
                 return redirect()->back()->with('error', 'Error en el envio: '.$mail->ErrorInfo);
             } else{
-                // return redirect()->back()->with('success', 'Se envio el Codigo');
+                echo("<script>console.log('Se envio el correo a $user->email');</script>");
                 return true;
 
             }
@@ -77,10 +81,7 @@ class LoginController extends Controller
 
     }
 
-    public function registerView(){
-            
-        return view ('register');
-    }
+    
     
 
     public function verificarEmail(Request $request){
@@ -203,17 +204,18 @@ class LoginController extends Controller
         // return redirect(route('home'));
     }
 
-    public function index($eventoID){
-        $evento=eventos::find($eventoID);
-        switch ($evento->acronimo) {
-            case 'CIDICI':
-                return view('CIDICI',compact('evento'));
-                break;
-            case 'FLISOL':
-                return view('FLISOL',compact('evento'));
-                break;
-            default:
-                return redirect('home');
+
+
+    public function index($acronimo, $edicion)
+    {
+        // Buscar el evento con el acrónimo y la edición
+        $evento = eventos::where('acronimo', $acronimo)->where('edicion', $edicion)->first();
+
+        if ($evento) {
+            return view ('HomeViews.'.$evento->acronimo,compact('evento'));
+        } else {
+            // Si no se encuentra el evento, redirigir con un mensaje de error
+            return redirect()->route('dashboard')->with('error', 'Evento no encontrado');
         }
     }
 
@@ -225,29 +227,25 @@ class LoginController extends Controller
             //EL USUARIO EXISTE -> entonces procedemos a verificar su estado
             if($user->estado=="alta,registrado"){
                 //PROCESO PARA INICIAR SESION
-                //obtenemos las credenciales ingresadas
                 $credentials =[
                     "email"=> $request['email'],
                     "password"=> $request['password']
                 ];
-                //preguntamos si el usuario quiere mantener iniciada la sesion
                 $remember = ($request->has('remember') ? true:false);
     
-                //intentamos iniciar sesion con las credenciales ingresadas
                 if(Auth::attempt($credentials,$remember)){
                     //EL INICIO DE SESION FUE EXITOSO
-                    //genera una nueva sesion
                     $request->session()->regenerate();
-                    //Verificamos si el usuario esta presente en algun evento
                     $part=participantes::where('usuario_id',$user->id)->first();
                     if($part){
                         //EL USUARIO ESTA REGISTRADO EN ALGUN EVENTO
-                        // Redirigimos a la vista correspondiente 
                         $request->session()->put('eventoID', $part->evento->id);
-                        return redirect($part->evento->acronimo.'-index/'.$part->evento->id);
+                        return redirect()->route('evento.index', ['acronimo' => $part->evento->acronimo, 'edicion' => $part->evento->edicion]);
+                        // return redirect($part->evento->acronimo.'-index/'.$part->evento->id);
+                    }else{
+                        return redirect()->route('dashboard');
                     }
-                    //redirigte al usuario a la pagina que estaba intentando ingresar o al dashboard
-                      return redirect()->intended(route('home'));
+                    //   return redirect()->intended(route('home'));
         
                 }else{
                     //EL INICIO DE SESION NO FUE EXITOSO
@@ -280,23 +278,18 @@ class LoginController extends Controller
         ->header('Pragma', 'no-cache');
     }
 
-    public function resetPassword(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
+    public function resetPassword(Request $request){
+        $request->validate(['email' => 'required|email',]);
         $user = usuarios::where('email',$request['email'])->first();
-        if (!$user) {
-            return redirect('login')->with('error','No existe un usuario con esa dirección de correo');
-        }
+        if (!$user) { return redirect('login')->with('error','No existe un usuario con esa dirección de correo');}
 
         if (!$request->session()->has('verification_code')) {
             $codigo = $this->generarCodigo();
+            $request->session()->put('verification_code', $codigo);
         } else {
             $codigo = $request->session()->get('verification_code');
         }
         $this->enviarCodigo($user, $codigo);
-        $request->session()->put('verification_code', $codigo);
         $rp=1;
         $request->session()->put('RessetPass', $rp);
 
