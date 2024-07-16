@@ -164,12 +164,20 @@ class ArticulosController extends Controller
         }elseif($articulo->revisores()->count()>0){
             return redirect()->back()->with('error', 'El articulo aun tiene revisores');
         }
+
+        
+
         // Eliminar el archivo PDF asociado
         $pdfPath = 'public/Articles/web/' . $articulo->evento->acronimo.$articulo->evento->edicion . '/' . $articulo->archivo;
         if (Storage::exists($pdfPath)) {
             Storage::delete($pdfPath);
         }
-        $articulo->delete();
-        return redirect()->back()->with('success', 'el artículo  se elimino correctamente');
+
+        try {
+            $articulo->delete();
+            return redirect()->back()->with('success', 'el artículo  se elimino correctamente');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }
