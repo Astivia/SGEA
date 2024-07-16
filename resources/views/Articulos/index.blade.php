@@ -103,6 +103,7 @@
                         <button type="button" id="plus-author-btn"><i class="las la-plus-circle"></i></button>
                         <button type="button" id="minus-author-btn"><i class="las la-minus-circle"></i></button>
                         <br><br>
+                        <Strong>Autores Seleccionados:</Strong>
                         <ul class="selectedAutors"></ul>
                         <br><br>
                         <button type="button" id="register-author-btn">Aceptar</button>
@@ -169,7 +170,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             // Add selected author to the array and display it in the list
             selectedAuthors.push(selectedValue);
             const newListItem = document.createElement('li');
-            newListItem.textContent = selectedAuthorSelect.options[selectedAuthorSelect.selectedIndex].text; // Get the displayed text
+            newListItem.textContent = selectedAuthorSelect.options[selectedAuthorSelect.selectedIndex].text;
             selectedAuthorsList.appendChild(newListItem);
 
             // Update the console to show the current vector of selected authors
