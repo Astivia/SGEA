@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->integer('edicion');
-            $table->string('url',15);
+            $table->integer('estado');
             $table->timestamps();
         });
     }

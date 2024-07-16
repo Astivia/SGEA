@@ -27,8 +27,7 @@
                 @foreach ($Eventos as $e)
                 <tr>
                     <td>
-                        
-                        <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo" >
+                        <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo" style="width: 250px;" >
                     </td>
                     <td>{!!$e->nombre!!}</td>
                     <td>{!!$e->acronimo!!}</td>
@@ -69,7 +68,6 @@
         @if (isset($sysImgs) && !empty($sysImgs))
             <div class="carousell">
                 @foreach ($sysImgs as $image)
-                
                 <img src="{{  asset('SGEA/public/assets/uploads/'.$image) }}" alt="Imagen" class="img-thumbnail img-selectable" data-img-name="{{ $image }}" style="width: 70px;">
                 @endforeach
             </div>

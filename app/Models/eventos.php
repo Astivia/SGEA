@@ -15,7 +15,8 @@ class eventos extends Model
         'fecha_inicio',
         'fecha_fin',
         'edicion',
-        'url'
+        'url',
+        'estado'
     ];
 
     public function participantes(){

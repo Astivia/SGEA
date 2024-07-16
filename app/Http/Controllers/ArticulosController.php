@@ -20,8 +20,9 @@ class ArticulosController extends Controller
         $Articulos=articulos::OrderBy('id')->get();
         //obtenemos los catalogos correspondientes
         $Areas =areas::all();
+        $Autores=articulosAutores::all();
         
-        return view ('Articulos.index',compact('Articulos','Areas'));
+        return view ('Articulos.index',compact('Articulos','Areas','Autores'));
     }
 
     /**

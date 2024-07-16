@@ -73,7 +73,7 @@ class EventosController extends Controller
                 $datos['logo'] = 'NO ASIGNADO';
             }
         }
-        $datos['url'] = $datos['acronimo'];
+        $datos['estado'] = 1;
         eventos::create($datos);
         return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
     }
