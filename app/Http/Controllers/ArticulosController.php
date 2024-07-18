@@ -16,12 +16,24 @@ class ArticulosController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+     public function checkAuthor(Request $request)
+     {
+         $authorId = $request->input('author_id');
+         $exists = articulosAutores::where('usuario_id', $authorId)->exists();
+         $user = null;
+         if (!$exists) {
+             $user = usuarios::find($authorId);
+         }
+        return response()->json(['exists' => $exists, 'user' => $user]);
+     }
+
     public function index()
     {
         $Articulos=articulos::OrderBy('id')->get();
         //obtenemos los catalogos correspondientes
         $Areas =areas::all();
-        $Autores=articulosAutores::all();
+        $Autores=ArticulosAutores::distinct('usuario_id')->get();
         
         return view ('Articulos.index',compact('Articulos','Areas','Autores'));
     }
@@ -75,7 +87,6 @@ class ArticulosController extends Controller
                         'evento_id'=>$evento->id,
                         'articulo_id'=>$articulo->id,
                         'usuario_id'=> $authorId,
-                        'orden'=>1,
                         'correspondencia'=>false,
                         'institucion'=>'ITTOL',
                         'email'=>(usuarios::find($authorId))->email
@@ -85,7 +96,6 @@ class ArticulosController extends Controller
                 echo "Error al decodificar Datos: " . json_last_error_msg();
             }
         }
-
 
         return redirect ('/articulos');
     }

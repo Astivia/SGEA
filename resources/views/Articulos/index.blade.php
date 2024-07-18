@@ -23,7 +23,15 @@
                 @foreach ($Articulos as $art)
                 <tr>
                     <td><strong>{!!$art->titulo!!}</strong></td>
-                    <td>Autor</td>
+                    <td>
+                    @foreach ($art->autores as $autor)
+                        {{ $autor->name }}, 
+                    @endforeach
+                    @empty($art->autores)
+                        No authors assigned
+                    @endforelse
+
+                    </td>
                     <td>{!!$art->estado!!}</td>
                     <td>
                     <a href="{!! url('articulos/'.$art->evento_id.'/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
