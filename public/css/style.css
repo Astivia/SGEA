@@ -388,3 +388,96 @@
     margin-top: -20px;
     margin-bottom: 10px;
 }
+
+/* Se agregan estilos para verificar cuenta y olvide contraseña  */
+
+.container .card{
+    background: transparent;
+    backdrop-filter: contrast(70%);
+    position: absolute;
+    width: 75%;
+    height: auto;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.container .card h1{
+    color: black;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    
+}
+.container .card p{
+    text-align: center;
+}
+.container .card #verification-form,
+.container .card #login-form{
+    
+    width: 70%;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.container .card #verification-form input{
+    width: 100%;
+    padding: 0.5rem;    
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: -15px;
+    color: black;
+    font-weight: bold;
+    border: none;
+    outline: none;
+}
+.container .card #login-form input{
+    width: 100%;
+    padding: 0.5rem;    
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    color: black;
+    font-weight: bold;
+    border: none;
+    outline: none;
+}
+.container .card #login-form label{
+    font-weight: bold;
+
+}
+.container .card #login-form button{
+    width: 90%;
+    margin-top: 15px;
+    height: 45px;
+    background-color: blue;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+    font-weight: 500;
+}
+.container .card #verification-form button{
+    margin-top: -35px;
+    width: 90%;
+}
+.container .header-img {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.container .header-img img{    
+    max-width: 80%;
+    padding: 0;
+    max-height: 90px;
+}

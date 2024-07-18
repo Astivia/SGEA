@@ -4,6 +4,7 @@
                 <span class="las la-bars"></span>
             </label>
         </div>
+        
         <!-- <img src="./assets/img/header.png" alt="logo" class="logo"> -->
         <div class="header-icons">
             <a href="{{ route('user.redirect') }}"><span class="las la-home"></span></a>

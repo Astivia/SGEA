@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="{{asset('SGEA/public/assets/img/ITTOL.ico')}}" type="image/x-icon">
-   
+    <link rel="stylesheet" href="./css/style.css">
     <title>Registrarse</title>
 </head>
 

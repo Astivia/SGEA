@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{{asset('SGEA/public/assets/img/ITTOL.ico')}}" type="image/x-icon">
+    <link rel="stylesheet" href="./css/style.css">
     <title>Confirmar Identidad</title>
 </head>
 <script>
@@ -22,8 +23,17 @@
         alert('{{ session('success') }}');
     </script>
 @endif
+<div class="background"></div>
 <div class="container">
-
+    
+        
+    
+    <div class="header-img">
+    <!-- <img src="{{asset('SGEA/public/assets/img/Logo itt-fn.png')}}" alt="">
+    <img src="{{asset('SGEA/public/assets/img/Logo ittol-fn.png')}}" alt=""> -->
+    <img src="{{asset('SGEA/public/assets/img/Logo ittol.png')}}" alt="">
+    </div>
+    <div class="card">
     <h1>Verifica la dirección de correo electrónico</h1>
     <p>{!!$user->nombre!!}, Para verificar tu correo electrónico, hemos enviado un código a <strong> {!!$user->email!!} </strong></p>
     <form method="POST" id="verification-form" action="{{ route('verificar-email') }}">
@@ -38,6 +48,7 @@
         <button type="submit" class="btn">Confirmar</button>
     </form>
     <a href="javascript:void(0);" id="resend-code-link">Reenviar Codigo</a>
+    </div>
 </div>
 
 <script>

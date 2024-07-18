@@ -39,25 +39,31 @@ $("#btn1").click(function(){
 $(document).ready(function(){
     var table = $('#example').DataTable({
        orderCellsTop: true,
-       fixedHeader: true 
+       fixedHeader: true ,
+       columnDefs: [
+           { orderable: false, targets: -1 }  // Deshabilitamos la ordenación en todas las columnas
+       ]
     });
 
-    //Creamos una fila en el head de la tabla y lo clonamos para cada columna
-    $('#example thead tr').clone(true).appendTo( '#example thead' );
+    $('#example thead tr').clone(true).appendTo('#example thead');
 
-    $('#example thead tr:eq(1) th').each( function (i) {
-        var title = $(this).text(); //es el nombre de la columna
-        $(this).html( '<input type="text" placeholder="Search...'+title+'" />' );
- 
-        $( 'input', this ).on( 'keyup change', function () {
-            if ( table.column(i).search() !== this.value ) {
+$('#example thead tr:eq(1) th').each(function (i) {
+    var title = $(this).text(); // es el nombre de la columna
+
+    // Verificamos si no es la última columna antes de agregar el input
+    if (i < $('#example thead tr:eq(1) th').length - 1) {
+        $(this).html('<input type="text" placeholder="' + title + '" />');
+
+        $('input', this).on('keyup change', function () {
+            if (table.column(i).search() !== this.value) {
                 table
                     .column(i)
-                    .search( this.value )
+                    .search(this.value)
                     .draw();
             }
-        } );
-    } );   
+        });
+    }
+}); 
 });
 
 function openModal(id) {
