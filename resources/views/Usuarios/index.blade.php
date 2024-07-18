@@ -28,7 +28,7 @@
             @foreach ($Usuarios as $usu)
             <tr>
                 <td>{!!$usu->nombre!!}</td>
-                <td>{!!$usu->ap_pat!!} {!!$usu->ap_mat!!}</td>
+                <td>{!!$usu->ap_paterno!!} {!!$usu->ap_materno!!}</td>
                 <td>{!!$usu->email!!}</td>
                 <td>{!!$usu->curp!!}</td>
                 @role(['Administrador','Organizador'])

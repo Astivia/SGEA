@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\articulosAutores;
 use App\Models\articulos;
+use App\Models\usuarios;
 use App\Models\eventos;
 use App\Models\areas;
 
@@ -40,7 +41,6 @@ class ArticulosController extends Controller
     {
         
         $evento= eventos::find($request->session()->get('eventoID'));
-
         $datos=$request->all();
         
         //validamos la carga del archivo
@@ -65,11 +65,25 @@ class ArticulosController extends Controller
             'area_id' => $datos['area_id'],
             'estado' => 'Recibido'
         ]);
-        //verificamos que campo viene definido para el autor
-        if(isset($datos['autor_id_autor'])){
-            $articulo->autores()->attach($datos['autor_id_autor']);
-        }elseif(isset($datos['autor_id_ext'])){
-            $articulo->autoresExternos()->attach($datos['autor_id_ext']);
+
+        if ($request->has('selected_authors')) {
+            $selectedAuthors = json_decode($request->input('selected_authors'), true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                // Recorrer el array de autores seleccionados
+                foreach ($selectedAuthors as $authorId) {
+                    articulosAutores::create([
+                        'evento_id'=>$evento->id,
+                        'articulo_id'=>$articulo->id,
+                        'usuario_id'=> $authorId,
+                        'orden'=>1,
+                        'correspondencia'=>false,
+                        'institucion'=>'ITTOL',
+                        'email'=>(usuarios::find($authorId))->email
+                    ]);
+                }
+            } else {
+                echo "Error al decodificar Datos: " . json_last_error_msg();
+            }
         }
 
 
