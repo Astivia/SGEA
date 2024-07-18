@@ -7,7 +7,12 @@
         <h1>{!!$articulo->titulo!!}</h1>
         <p><strong>Evento: </strong>{!!$articulo->evento->nombre!!} (<strong>{!!$articulo->evento->acronimo!!} {!!$articulo->evento->edicion!!}</strong>)</p>
         <p><strong>Resumen: </strong>{!!$articulo->resumen!!}</p>
-        <p><strong>Autores: </strong></p>
+        <p><strong>Autores: </strong>
+            @foreach ($autores as $autor)
+                {!!$autor->usuario->nombre_completo!!},
+            @endforeach
+        
+        </p>
         <p><strong>Area: </strong>{!!$articulo->area->nombre!!}</p>
         <p><strong>Revisores: </strong></p>
         <p><strong>Estado: </strong>{!!$articulo->estado!!}</p>

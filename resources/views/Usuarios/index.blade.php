@@ -86,6 +86,9 @@
 
         <label for="participante-pass">Contraseña:</label>
         <input type="password" id="participante-password" name="password" required>
+        
+        <label for="participante-phone">Telefono:</label>
+        <input type="tel" id="telefono" name="telefono" placeholder=" 722 1234 567" required>
 
         <button type="submit">Guardar</button>
         {!!Form::close()!!}

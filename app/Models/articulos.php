@@ -35,33 +35,12 @@ class articulos extends Model
 
     public function autores()
     {
-        return $this->hasManyThrough(usuarios::class, articulosAutores::class, 'evento_id', 'id', 'articulo_id', 'usuario_id');
+        return $this->hasMany(articulosAutores::class, 'articulo_id', 'id');
     }
 
     public function revisores()
     {
         return $this->hasManyThrough(usuarios::class, revisoresArticulos::class, 'evento_id', 'id', 'articulo_id', 'usuario_id');
     }
-
-    // public function autores()
-    // {
-    //     return $this->belongsToMany(autores::class, 'articulos_autores', 'id_articulo', 'autor_id_autor')
-    //                 ->withPivot('autor_id_ext');
-    // }
-
-    // public function autoresExternos()
-    // {
-    //     return $this->belongsToMany(autores_externos::class, 'articulos_autores', 'id_articulo', 'autor_id_ext')
-    //                 ->withPivot('autor_id_autor');
-    // }
-
-    // public function revisores()
-    // {
-    //     return $this->belongsToMany(usuarios::class, 'revisores_articulos', 'articulo_id', 'usuario_id')
-    //                ->withPivot('puntuacion', 'comentarios')
-    //                ->as('revisor'); // Define alias for clarity
-    // }
-
-
     
 }

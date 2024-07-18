@@ -15,7 +15,6 @@ class eventos extends Model
         'fecha_inicio',
         'fecha_fin',
         'edicion',
-        'url',
         'estado'
     ];
 
@@ -36,9 +35,6 @@ class eventos extends Model
     public function autores()
     {
         return $this->hasManyThrough(usuarios::class, articulos::class);
-    }
-    public function getUrl(){
-        return $this->url;
     }
 
 }

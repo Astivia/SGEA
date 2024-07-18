@@ -49,10 +49,11 @@ class usuariosController extends Controller
         //validacion de datos
         $this->validate($request, [
             'nombre' => 'required|string',
-            'ap_pat' => 'required|string',
-            'ap_mat' => 'required|string',
+            'ap_paterno' => 'required|string',
+            'ap_materno' => 'required|string',
             'curp' => 'required|string',
             'email' => 'required|email',
+            'telefono' => 'required'
         ]);
         $datos=$request->all();
 
@@ -66,8 +67,8 @@ class usuariosController extends Controller
         if (usuarios::where('curp', $datos['curp'])->exists()) {
             return redirect()->back()->with('error', 'Ya existe un participante con la CURP ingresada.No se guardaron los datos');
         }
-
         $datos['password'] = Hash::make($datos['password']);
+        $datos['estado'] = "alta,no registrado";
         usuarios::create($datos);
 
         

@@ -17,26 +17,17 @@ class ArticulosController extends Controller
      * Display a listing of the resource.
      */
 
-     public function checkAuthor(Request $request)
-     {
-         $authorId = $request->input('author_id');
-         $exists = articulosAutores::where('usuario_id', $authorId)->exists();
-         $user = null;
-         if (!$exists) {
-             $user = usuarios::find($authorId);
-         }
-        return response()->json(['exists' => $exists, 'user' => $user]);
-     }
+     
 
     public function index()
     {
-        // $Articulos=articulos::OrderBy('id')->get();
-        $Articulos=articulosAutores::distinct('articulo_id')->get();
+
+        $Articulos = articulos::with(['evento', 'area', 'autores.usuario'])->OrderBy('id')->get();
         
         //Catalogo de Areas
         $Areas =areas::all();
         //Catalogo de Autores para el combo del Form "registrar Articulo"
-        $Autores=ArticulosAutores::distinct('usuario_id')->get();
+        $Autores=articulosAutores::distinct('usuario_id')->get();
         
         return view ('Articulos.index',compact('Articulos','Areas','Autores'));
     }
@@ -56,51 +47,57 @@ class ArticulosController extends Controller
     {
         
         $evento= eventos::find($request->session()->get('eventoID'));
-        $datos=$request->all();
-        
-        //validamos la carga del archivo
-        $request->validate([
-            'pdf' => 'required|file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        ]);
-        // manejo del archivo
-        $archivo = $request->file('pdf');
-        $nombreArchivo = $archivo->getClientOriginalName();
-        $rutaArchivo = storage_path('app/public/Articles/web/'.$evento->acronimo.$evento->edicion.'/'.$nombreArchivo);
 
-        // Guardamos el archivo con su nombre original y obtenemos la ruta completa
-        $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' .$evento->acronimo.$evento->edicion, $nombreArchivo);
-
-        //insertamoslos datos del articulo
-        $articulo = articulos::create([
-            'evento_id'=>$evento->id,
-            'titulo' => $datos['titulo'],
-            'resumen' => $datos['resumen'],
-            'archivo' => $nombreArchivo,
-            'registro'=>getdate(),
-            'area_id' => $datos['area_id'],
-            'estado' => 'Recibido'
-        ]);
-
-        if ($request->has('selected_authors')) {
-            $selectedAuthors = json_decode($request->input('selected_authors'), true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                // Recorrer el array de autores seleccionados
-                foreach ($selectedAuthors as $authorId) {
-                    articulosAutores::create([
-                        'evento_id'=>$evento->id,
-                        'articulo_id'=>$articulo->id,
-                        'usuario_id'=> $authorId,
-                        'correspondencia'=>false,
-                        'institucion'=>'ITTOL',
-                        'email'=>(usuarios::find($authorId))->email
-                    ]);
+        if($evento){
+            $datos=$request->all();
+            
+            //validamos la carga del archivo
+            $request->validate([
+                'pdf' => 'required|file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            ]);
+            // manejo del archivo
+            $archivo = $request->file('pdf');
+            $nombreArchivo = $archivo->getClientOriginalName();
+            $rutaArchivo = storage_path('app/public/Articles/web/'.$evento->acronimo.$evento->edicion.'/'.$nombreArchivo);
+    
+            // Guardamos el archivo con su nombre original y obtenemos la ruta completa
+            $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' .$evento->acronimo.$evento->edicion, $nombreArchivo);
+    
+            //insertamoslos datos del articulo
+            $articulo = articulos::create([
+                'evento_id'=>$evento->id,
+                'titulo' => $datos['titulo'],
+                'resumen' => $datos['resumen'],
+                'archivo' => $nombreArchivo,
+                'registro'=>getdate(),
+                'area_id' => $datos['area_id'],
+                'estado' => 'Recibido'
+            ]);
+    
+            if ($request->has('selected_authors')) {
+                $selectedAuthors = json_decode($request->input('selected_authors'), true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    // Recorrer el array de autores seleccionados
+                    foreach ($selectedAuthors as $authorId) {
+                        articulosAutores::create([
+                            'evento_id'=>$evento->id,
+                            'articulo_id'=>$articulo->id,
+                            'usuario_id'=> $authorId,
+                            'correspondencia'=>false,
+                            'institucion'=>'ITTOL',
+                            'email'=>(usuarios::find($authorId))->email
+                        ]);
+                    }
+                } else {
+                    echo "Error al decodificar Datos: " . json_last_error_msg();
                 }
-            } else {
-                echo "Error al decodificar Datos: " . json_last_error_msg();
             }
-        }
+    
+            return redirect ('/articulos');
+        }else{
+            return redirect()->back()->with('error','No es posible insertar: el usuario no es parte de ningun evento');
 
-        return redirect ('/articulos');
+        }
     }
 
     /**
@@ -115,9 +112,9 @@ class ArticulosController extends Controller
         }else{
             $pdfUrl=null;
         }
+        $autores= articulosAutores::where('articulo_id',$id)->get();
 
-
-        return view ('Articulos.read',compact('articulo','pdfUrl'));
+        return view ('Articulos.read',compact('articulo','pdfUrl','autores'));
     }
 
     /**
@@ -207,4 +204,15 @@ class ArticulosController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function checkAuthor(Request $request)
+     {
+         $authorId = $request->input('author_id');
+         $exists = articulosAutores::where('usuario_id', $authorId)->exists();
+         $user = null;
+         if (!$exists) {
+             $user = usuarios::find($authorId);
+         }
+        return response()->json(['exists' => $exists, 'user' => $user]);
+     }
 }
