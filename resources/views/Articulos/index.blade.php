@@ -22,27 +22,22 @@
             <tbody>
                 @foreach ($Articulos as $art)
                 <tr>
-                    <td><strong>{!!$art->titulo!!}</strong></td>
+                    <td><strong>{!!$art->articulo->titulo!!}</strong></td>
                     <td>
-                    @foreach ($art->autores as $autor)
-                        {{ $autor->name }}, 
-                    @endforeach
-                    @empty($art->autores)
-                        No authors assigned
-                    @endforelse
+                    {!!$art->usuario->nombre_completo!!}
 
                     </td>
                     <td>{!!$art->estado!!}</td>
                     <td>
-                    <a href="{!! url('articulos/'.$art->evento_id.'/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
+                    <a href="{!! url('articulos/'.$art->articulo->evento_id.'/'.$art->articulo->id) !!}"><i class="las la-info-circle la-2x"></i></a>
 
-                        <a href="{!!'articulos/'.$art->evento_id.'/'.$art->id.'/edit'!!}">
+                        <a href="{!!'articulos/'.$art->articulo->evento_id.'/'.$art->articulo->id.'/edit'!!}">
                          <i class="las la-edit la-2x"></i>
                         </a>
-                        <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">
+                        <a href="{{url('articulos/'.$art->articulo->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">
                         <i class="las la-trash-alt la-2x"></i>
                         </a>
-                        <form id="delete-form-{{ $art->id }}" action="{{ url('articulos/'.$art->id) }}" method="POST" style="display: none;">
+                        <form id="delete-form-{{ $art->id }}" action="{{ url('articulos/'.$art->articulo->id) }}" method="POST" style="display: none;">
                             @method('DELETE')
                             @csrf
                         </form>
