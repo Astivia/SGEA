@@ -5,7 +5,8 @@
     <!-- <link rel="stylesheet" href="./css/style.css"> -->
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="{{asset('SGEA/public/assets/img/ITTOL.ico')}}" type="image/x-icon">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" href="./css/style.css">
     <title>Registrarse</title>
 </head>
 
@@ -53,6 +54,12 @@
 
                         <div class="input-box">
                             <span class="icon"><i class='bx bxs-user'></i></span>
+                            <input type="text" id="curp" name="curp" required>
+                            <label for="email" class="form-label">CURP</label>
+                            <span id="curp-message" style="color: red;"></span>
+                        </div>
+                        <div class="input-box">
+                            <span class="icon"><i class='bx bxs-user'></i></span>
                             <input type="text" id="register-name" name="nombre" required>
                             <label for="nombre" class="form-label">Nombre</label>
                         </div>
@@ -67,13 +74,7 @@
                             <span class="icon"><i class='bx bxs-user'></i></span>
                             <input type="text" id="noap_mat" name="ap_materno" required>
                             <label for="ap_mat" class="form-label">Apellido Materno</label>
-                        </div>
-
-                        <div class="input-box">
-                            <span class="icon"><i class='bx bxs-user'></i></span>
-                            <input type="text" id="curp" name="curp" required>
-                            <label for="email" class="form-label">CURP</label>
-                        </div>
+                        </div>                 
 
                         <div class="input-box">
                             <span class="icon"><i class='bx bxs-user'></i></span>
@@ -103,6 +104,32 @@
             </div>
         </div>
     </div>
+    <script>
+    document.getElementById('curp').addEventListener('blur', function() {
+        let curp = this.value;
+        fetch('{{ route("verify-curp") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ curp: curp })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'exists') {
+                document.getElementById('register-name').value = data.user.nombre;
+                document.getElementById('ap_pat').value = data.user.ap_paterno;
+                document.getElementById('ap_mat').value = data.user.ap_materno;
+                document.getElementById('email').value = data.user.email;
+                document.getElementById('telefono').value = data.user.telefono;
+                document.getElementById('curp-message').textContent = '';
+            } else {
+                document.getElementById('curp-message').textContent = 'Usuario no registrado en sistema';
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

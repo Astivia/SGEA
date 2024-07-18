@@ -102,15 +102,40 @@
     transform: translateX(0px);
     transition-delay: .7s;
 }
-.form-box h2 {
+.form-box .register{
+   
+    width: 70%;
+    margin: 0;
+    padding: 20px;
+}
+.form-box .register::-webkit-scrollbar{    
+    width: 2px;
+}
+.form-box .register::-webkit-scrollbar-thumb{
+    background: transparent;
+    border-radius: 5px;
+    height: 3px;
+    cursor: pointer;
+    border: 1px solid black;
+    width: 2px;
+}
+.form-box h2, .form-box h1 {
     font-size: 32px;
     text-align: center;
 }
 .form-box .input-box {
-    position: relative;
-    width: 340px;
+    position: relative;    
     height: 50px;
     border-bottom: 2px solid white;
+    border-left: white;
+    margin: 30px 0;
+}
+
+.form-box .register .input-box{
+    position: relative;    
+    height: 25px;
+    border-bottom: 2px solid white;
+    border-left: white;
     margin: 30px 0;
 }
 .input-box input {
@@ -130,6 +155,7 @@
     left: 0;
     transform: translateY(-50%);
     font-size: 16px;
+    
     font-weight: 500;
     pointer-events: none;
     transition: .5s ease;
@@ -271,6 +297,7 @@
         margin-top: 50px;
         padding: 15px;
         margin-bottom: -80px;
+        
     }
     .logreg-box .form-box.login {
         transform: translateY(0px);
