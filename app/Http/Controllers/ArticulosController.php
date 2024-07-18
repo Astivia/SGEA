@@ -30,9 +30,12 @@ class ArticulosController extends Controller
 
     public function index()
     {
-        $Articulos=articulos::OrderBy('id')->get();
-        //obtenemos los catalogos correspondientes
+        // $Articulos=articulos::OrderBy('id')->get();
+        $Articulos=articulosAutores::distinct('articulo_id')->get();
+        
+        //Catalogo de Areas
         $Areas =areas::all();
+        //Catalogo de Autores para el combo del Form "registrar Articulo"
         $Autores=ArticulosAutores::distinct('usuario_id')->get();
         
         return view ('Articulos.index',compact('Articulos','Areas','Autores'));
