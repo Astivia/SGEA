@@ -73,10 +73,10 @@
         <input type="text" id="participante-name" name="nombre" required>
 
         <label for="participante-lastName">Apellido Paterno:</label>
-        <input type="text" id="participante-lastName" name="ap_pat" required>
+        <input type="text" id="participante-lastName" name="ap_paterno" required>
 
         <label for="participante-2lastName">Apellido Materno:</label>
-        <input type="text" id="participante-2lastName" name="ap_mat" required>
+        <input type="text" id="participante-2lastName" name="ap_materno" required>
 
         <label for="participante-curp">CURP:</label>
         <input type="text" id="participante-curp" name="curp" required>

@@ -89,7 +89,7 @@
                 <strong>Autores:</strong>
                 <strong><ul class="selectedAutors"></ul></strong>
                 <br><br>
-                <p>¿No encuentra su Autor? <a href="#" id="register-author"><strong>Registrar Autor</strong></a></p>
+                <p>¿No encuentra su Autor? <a href="#" id="register-author-btn"><strong>Registrar Autor</strong></a></p>
                 <br>
                 <input type="hidden" name="selected_authors" id="selected-authors-input">
                 <button type="submit">Guardar articulo</button>
@@ -102,23 +102,24 @@
                 <div class="modal-content">
                     <span class="close">&times;</span>
                     <h2>Registrar Autor </h2>
-                    <form id="">                        
+                    <form id="register-author-form" metod="POST" action="{{route('inicia-sesion')}}">  
+                      @csrf  
+                       <input type="hidden" name="id" id="id">                    
                         <label for="">CURP:</label>                        
-                        <input type="text" id="" name="" required>
+                        <input type="text" id="" name="curp" required>
                         <label for="">Nombre:</label>
-                        <input type="text" id="" name="" required>
+                        <input type="text" id="" name="nombre" required>
                         <label for="">Apellido Paterno:</label>
-                        <input type="text" id="" name="" required>
+                        <input type="text" id="" name="ap_paterno" required>
                         <label for="">Apellido Materno:</label>
-                        <input type="text" id="" name="" required>
-                        <label for="">Telefono:</label>
-                        <input type="tel" id="" name="" required>
+                        <input type="text" id="" name="ap_materno" required>
                         <label for="">Email:</label>
-                        <input type="email" id="" name="" required>
+                        <input type="email" id="" name="email" required>
+                        <label for="">Telefono:</label>
+                        <input type="tel" id="" name="telefono" required>
                         <label for="">Institucion:</label>
-                        <input type="text" id="" name="" required>
-                        
-                        <!-- Otros campos del autor -->
+                        <input type="text" id="" name="intitucion" required>
+
                         <button type="button" id="save-author-btn">Registrar Autor</button>
                         
                     </form>
@@ -128,7 +129,7 @@
 @endsection
 
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', (event) => {
     const articleForm = document.getElementById('article-form');
     const selectedAuthorSelect = document.getElementById('selected-author');
     const selectedAuthorsList = document.querySelector('.selectedAutors');
@@ -136,7 +137,11 @@
     const minusAuthorBtn = document.getElementById('minus-author-btn');
     const selectedAuthorsInput = document.getElementById('selected-authors-input');
 
+    const createArticleModal = document.getElementById('create-article-modal');
+    const registerAuthorModal = document.getElementById('register-author-modal');
+
     let selectedAuthors = []; // Array de datos
+
 
     plusAuthorBtn.addEventListener('click', () => {
         const selectedValue = selectedAuthorSelect.value;
@@ -153,42 +158,66 @@
             return;
         }
 
-        // Agregar autor seleccionado al array y mostrarlo en la lista
-        selectedAuthors.push(selectedValue);
-        const newListItem = document.createElement('li');
-        newListItem.textContent = selectedAuthorSelect.options[selectedAuthorSelect.selectedIndex].text;
-        newListItem.setAttribute('data-value', selectedValue); // Guardar el valor del autor en el atributo data-value
-        selectedAuthorsList.appendChild(newListItem);
+        // Realizar consulta Ajax para verificar si el autor ya está en la tabla articulos_Autores
+        fetch('{{ route('revisar-existencia') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+            },
+            body: JSON.stringify({ author_id: selectedValue })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.exists) {
+                createArticleModal.style.display = 'none';
+                registerAuthorModal.style.display = 'block';
+                if (data.user) {
+                    document.querySelector('input[name="id"]').value = data.user.id || '';
+                    document.querySelector('input[name="curp"]').value = data.user.curp || '';
+                    document.querySelector('input[name="nombre"]').value = data.user.nombre || '';
+                    document.querySelector('input[name="ap_paterno"]').value = data.user.ap_paterno || '';
+                    document.querySelector('input[name="ap_materno"]').value = data.user.ap_materno || '';
+                    document.querySelector('input[name="telefono"]').value = data.user.telefono || '';
+                    document.querySelector('input[name="email"]').value = data.user.email || '';
+                }
+            } else {
+                // Agregar autor seleccionado al array y mostrarlo en la lista
+                selectedAuthors.push(selectedValue);
+                const newListItem = document.createElement('li');
+                newListItem.textContent = selectedAuthorSelect.options[selectedAuthorSelect.selectedIndex].text;
+                newListItem.setAttribute('data-value', selectedValue); // Guardar el valor del autor en el atributo data-value
+                selectedAuthorsList.appendChild(newListItem);
 
-        // Actualizar la consola para mostrar el vector actual de autores seleccionados
-        console.log('Autores seleccionados:', selectedAuthors);
+                // Actualizar la consola para mostrar el vector actual de autores seleccionados
+                console.log('Autores seleccionados:', selectedAuthors);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     });
 
     minusAuthorBtn.addEventListener('click', () => {
         const selectedValue = selectedAuthorSelect.value;
-
         // Validar selección
         if (!selectedValue) {
             alert('Por favor, seleccione un autor de la lista desplegable.');
             return; // Evitar más procesamiento si no se selecciona ningún autor
         }
-
         // Buscar el índice del autor en el array
         const authorIndex = selectedAuthors.indexOf(selectedValue);
         if (authorIndex === -1) {
             alert('El autor seleccionado no está en la lista.');
             return;
         }
-
         // Eliminar autor del array
         selectedAuthors.splice(authorIndex, 1);
-
         // Eliminar autor de la lista (ul)
         const listItem = selectedAuthorsList.querySelector(`li[data-value="${selectedValue}"]`);
         if (listItem) {
             selectedAuthorsList.removeChild(listItem);
         }
-
         // Actualizar la consola para mostrar el vector actual de autores seleccionados
         console.log('Autores seleccionados:', selectedAuthors);
     });
@@ -198,57 +227,74 @@
         selectedAuthorsInput.value = JSON.stringify(selectedAuthors);
         console.log('Campo oculto:', selectedAuthorsInput.value); // Verificar valor en consola
     });
-});
 
-</script>
+    // Evento para guardar el nuevo autor
+    document.getElementById('save-author-btn').addEventListener('click', () => {
+        const newAuthorId = document.querySelector('input[name="id"]').value;
 
-<script>
+        if (!newAuthorId) {
+            alert('El campo CURP es obligatorio.');
+            return;
+        }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Obtener los modales y los botones
-        var createEventBtn = document.getElementById('create-event-btn');
-        var createArticleModal = document.getElementById('create-article-modal');
-        var registerAuthorModal = document.getElementById('register-author-modal');
-        
-        var registerAuthorBtn = document.getElementById('register-author-btn'); //enlace al modal de registro de autor
-        var saveAuthorBtn = document.getElementById('save-author-btn'); //boton para guardar autos
-        var closeButtons = document.querySelectorAll('.modal .close');
+        selectedAuthors.push(newAuthorId);
+        const newListItem = document.createElement('li');
+        newListItem.textContent = document.querySelector('input[name="ap_paterno"]').value + ' ' +
+                                  document.querySelector('input[name="ap_materno"]').value + ' ' +
+                                  document.querySelector('input[name="nombre"]').value;
+        newListItem.setAttribute('data-value', newAuthorId);
+        selectedAuthorsList.appendChild(newListItem);
 
-        // Abrir el modal de creación de artículo
-        createEventBtn.addEventListener('click', function () {
-            createArticleModal.style.display = 'block';
-        });
+        // Actualizar la consola para mostrar el vector actual de autores seleccionados
+        console.log('Autores seleccionados:', selectedAuthors);
 
-        //Abrir Modal de Creacion de Autor
-        registerAuthorBtn.addEventListener('click', function () {        
-            createArticleModal.style.display = 'none';
-            registerAuthorModal.style.display = 'block';
+        // Ocultar el modal de registro y mostrar el de creación de artículo
+        registerAuthorModal.style.display = 'none';
+        createArticleModal.style.display = 'block';
+    });
 
-        });
+    ////////////////////////////////MODALES////////////////////////////////////
 
-        // 
-        saveAuthorBtn.addEventListener('click', function () {
-            // Aquí puedes agregar el código para guardar el autor temporalmente
-            // y luego agregarlo al formulario del artículo.
+    // Obtener los modales y los botones
+    var createEventBtn = document.getElementById('create-event-btn');
+    var registerAuthorBtn = document.getElementById('register-author-btn'); //enlace al modal de registro de autor
+    var saveAuthorBtn = document.getElementById('save-author-btn'); //boton para guardar autores
+    var closeButtons = document.querySelectorAll('.modal .close');
 
-            registerAuthorModal.style.display = 'none';
-            createArticleModal.style.display = 'block';
-        });
+    // Abrir el modal de creación de artículo
+    createEventBtn.addEventListener('click', function () {
+        createArticleModal.style.display = 'block';
+    });
 
-        // Cerrar los modales al hacer clic en la 'X'
-        closeButtons.forEach(function (closeBtn) {
-            closeBtn.addEventListener('click', function () {
-                closeBtn.parentElement.parentElement.style.display = 'none';
-            });
-        });
+    //Abrir Modal de Creacion de Autor
+    registerAuthorBtn.addEventListener('click', function () {        
+        createArticleModal.style.display = 'none';
+        registerAuthorModal.style.display = 'block';
+    });
 
-        // Cerrar el modal al hacer clic fuera del contenido del modal
-        window.addEventListener('click', function (event) {
-            if (event.target == createArticleModal) {
-                createArticleModal.style.display = 'none';
-            } else if (event.target == registerAuthorModal) {
-                registerAuthorModal.style.display = 'none';
-            }
+    // 
+    saveAuthorBtn.addEventListener('click', function () {
+        registerAuthorModal.style.display = 'none';
+        createArticleModal.style.display = 'block';
+    });
+
+    // Cerrar los modales al hacer clic en la 'X'
+    closeButtons.forEach(function (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+            closeBtn.parentElement.parentElement.style.display = 'none';
         });
     });
+
+    // Cerrar el modal al hacer clic fuera del contenido del modal
+    window.addEventListener('click', function (event) {
+        if (event.target == createArticleModal) {
+            createArticleModal.style.display = 'none';
+        } else if (event.target == registerAuthorModal) {
+            registerAuthorModal.style.display = 'none';
+        }
+    });
+});
 </script>
+
+
+
