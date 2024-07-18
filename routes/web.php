@@ -58,6 +58,9 @@ Route::view('/login',"login")->name('login');
  Route::get('/redirect', [UsuariosController::class, 'redirectToAppropriateView'])->name('user.redirect');
  Route::get('/{acronimo}-index/{edicion}', [LoginController::class, 'index'])->name('evento.index');
  
+ //verificar curp
+ Route::post('/verify-curp', [LoginController::class, 'verifyCurp'])->name('verify-curp');
+
  
 /*
 |--------------------------------------------------------------------------
