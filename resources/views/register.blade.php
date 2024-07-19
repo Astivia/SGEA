@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="{{asset('SGEA/public/assets/img/ITTOL.ico')}}" type="image/x-icon">
     <link rel="stylesheet" href="./css/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Registrarse</title>
 </head>
 
@@ -23,8 +24,13 @@
     </script>
     @endif
     <div class="background"></div>
-    <div class="container">
+    <div class="container ">
         <div class="content">
+        <div class="header-img">
+        <!-- <img src="{{asset('SGEA/public/assets/img/Logo itt-fn.png')}}" alt="">
+        <img src="{{asset('SGEA/public/assets/img/Logo ittol-fn.png')}}" alt=""> -->
+        <img src="{{asset('SGEA/public/assets/img/Logo ittol.png')}}" alt="">
+      </div>
             <h2 class="logo">SGEA<i class='bx bxs-calendar-event'></i></h2>
             @if(isset($usuarios))
             <h1>existe</h1>
@@ -51,19 +57,20 @@
                         <h1>REGISTRARSE</h1>
 
                         <div class="input-box">
-                            <span class="icon"><i class='bx bxs-user'></i></span>
+                            <span class="icon"><i class='bx bxs-id-card'></i></span>
                             <input type="text" id="curp" name="curp" required>
                             <label for="email" class="form-label">CURP</label>
                             <span id="curp-message" style="color: red;"></span>
                         </div>
                         <div class="input-box">
-                            <span class="icon"><i class='bx bxs-user'></i></span>
+                            <span class="icon"><i class='bx bx-male'></i></span>
                             <input type="text" id="register-name" name="nombre" required>
                             <label for="nombre" class="form-label">Nombre</label>
+                            
                         </div>
 
                         <div class="input-box">
-                            <span class="icon"><i class='bx bxs-user'></i></span>
+                            <span class="icon"><i class='bx bxs-user-rectangle'></i></span>
                             <input type="text" id="ap_pat" name="ap_paterno" required>
                             <label for="ap_pat" class="form-label">Apellido Paterno</label>
                         </div>
@@ -75,19 +82,19 @@
                         </div>                 
 
                         <div class="input-box">
-                            <span class="icon"><i class='bx bxs-user'></i></span>
+                            <span class="icon"><i class='bx bxs-envelope' ></i></span>
                             <input type="email" id="email" name="email" required>
                             <label for="email" class="form-label">Correo electrónico:</label>
                         </div>
 
                         <div class="input-box">
-                            <span class="icon"><i class='bx bxs-user'></i></span>
+                            <span class="icon"><i class='bx bxs-phone' ></i></span>
                             <input type="text" id="telefono" name="telefono" required>
                             <label for="telefono" class="form-label">Telefono:</label>
                         </div>
 
                         <div class="input-box">
-                            <span class="icon"><i class='bx bxs-user'></i></span>
+                            <span class="icon"><i class='bx bxs-low-vision'></i></span>
                             <input type="password" class="form-control" id="password" name="password" required>
                             <label for="password" class="form-label">Contraseña:</label>
                         </div>

@@ -19,7 +19,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 75%;
-    height: 550px;
+    height: 600px;
     background: url('../assets/img/fondo.png') no-repeat;
     background-size: cover;
     background-position: center;
@@ -36,8 +36,11 @@
     padding: 80px;
     color: white;
     display: flex;
-    justify-content: space-between;
+    gap: 50px;
     flex-direction: column;
+}
+.text-content{
+    margin-top:-25px ;
 }
 .text-content .logo {
     font-size: 30px;
@@ -84,7 +87,7 @@
     border-bottom-right-radius: 10px;
     color: white;
 }
-.logreg-box .form-box.login {
+/* .logreg-box .form-box.login {
     transform: translateX(0);
     transition: transform .6s ease;
     transition-delay: .7s;
@@ -101,12 +104,20 @@
 .logreg-box.activate .form-box.register {
     transform: translateX(0px);
     transition-delay: .7s;
-}
+} */
+
 .form-box .register{
    
     width: 70%;
-    margin: 0;
+    margin: 0;   
     padding: 20px;
+    
+}
+.form-box #login-form{
+    width: 70%;
+} 
+.form-box.register #registration-form{
+    margin: -20px;
 }
 .form-box .register::-webkit-scrollbar{    
     width: 2px;
@@ -118,6 +129,16 @@
     cursor: pointer;
     border: 1px solid black;
     width: 2px;
+}
+.form-box .register a{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+.login-register  a{
+    text-decoration: none;
+    color: white;
+    font-size: 12px;
 }
 .form-box h2, .form-box h1 {
     font-size: 32px;
@@ -146,16 +167,16 @@
     outline: none;
     font-size: 16px;
     font-weight: 500;
-    color: white;
+    color: rgb(20, 19, 19);
     padding-right: 28px;
 }
+
 .input-box label {
     position: absolute;
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    font-size: 16px;
-    
+    font-size: 13px;    
     font-weight: 500;
     pointer-events: none;
     transition: .5s ease;
@@ -222,7 +243,7 @@
 .login-register p a:hover {
     text-decoration: underline;
 }
-/* Modal styles */
+/* Modal styles
 .modal {
     display: none; 
     position: fixed; 
@@ -272,7 +293,7 @@
 #countdown {
     margin-top: 10px;
     font-size: 14px;
-}
+} */
 /* Media queries */
 @media (max-width: 768px) {
     .container {
@@ -299,27 +320,9 @@
         margin-bottom: -80px;
         
     }
-    .logreg-box .form-box.login {
-        transform: translateY(0px);
-        transition: transform .6s ease;
-        transition-delay: .7s;
-    }
-    .logreg-box.activate .form-box.login {
-        transform: translateY(-430px);
-        transition-delay: 0s;
-    }
-    .logreg-box .form-box.register {
-        transform: translateY(100%);
-        transition: transform .6s ease;
-        transition-delay: 0s;
-    }
-    .logreg-box.activate .form-box.register {
-        transform: translateY(-380px);
-        transition-delay: .7s;
-        margin-bottom: 15px;
-    }
+    
 }
-#password-strength {
+/* #password-strength {
     margin: 10px 0;
     width: 100%;
 }
@@ -387,7 +390,7 @@
     font-size: 14px;
     margin-top: -20px;
     margin-bottom: 10px;
-}
+} */
 
 /* Se agregan estilos para verificar cuenta y olvide contraseña  */
 
@@ -417,7 +420,8 @@
     text-align: center;
 }
 .container .card #verification-form,
-.container .card #login-form{
+.container .card #login-form,
+.container .card #password-form{
     
     width: 70%;
     margin-top: 10px;
@@ -438,7 +442,8 @@
     border: none;
     outline: none;
 }
-.container .card #login-form input{
+.container .card #login-form input,
+.container .card #password-form input{
     width: 100%;
     padding: 0.5rem;    
     border: 1px solid #ccc;
@@ -449,11 +454,13 @@
     border: none;
     outline: none;
 }
-.container .card #login-form label{
+.container .card #login-form label,
+.container .card #password-form label{
     font-weight: bold;
 
 }
-.container .card #login-form button{
+.container .card #login-form button,
+.container .card #password-form button{
     width: 90%;
     margin-top: 15px;
     height: 45px;
@@ -474,6 +481,7 @@
     max-width: 100%;
     display: flex;
     justify-content: center;
+   
 }
 
 .container .header-img img{    
