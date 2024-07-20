@@ -93,7 +93,7 @@
                 <button type="button" id="minus-author-btn">Quitar</button>
                 <br><br>
                 <strong>Autores:</strong>
-                <strong><ul class="selectedAutors"></ul></strong>
+                <ul class="selectedAutors"></ul>
                 <br><br>
                 <p>¿No encuentra su Autor? <a href="#" id="register-author-btn"><strong>Registrar Autor</strong></a></p>
                 <br>
@@ -146,30 +146,64 @@
         const createArticleModal = document.getElementById('create-article-modal');
         const registerAuthorModal = document.getElementById('register-author-modal');
 
-        let selectedAuthors = []; // Array de datos
+        let selectedAuthors = [];
 
+        const updateAuthorList = () => {
+            selectedAuthorsList.innerHTML = '';
+            selectedAuthors.forEach((author, index) => {
+                const newListItem = document.createElement('li');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'corresponding_author';
+                checkbox.checked = author.corresponding;
+                checkbox.addEventListener('change', () => {
+                    selectedAuthors.forEach(a => a.corresponding = false);
+                    author.corresponding = checkbox.checked;
+                    updateAuthorList();
+                });
+
+                newListItem.textContent = `${index + 1}. ${author.name} `;
+                newListItem.prepend(checkbox);
+                newListItem.setAttribute('data-value', author.id);
+                selectedAuthorsList.appendChild(newListItem);
+            });
+
+            const anyChecked = selectedAuthors.some(a => a.corresponding);
+            selectedAuthorsList.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                if (!checkbox.checked) {
+                    checkbox.disabled = anyChecked;
+                }
+            });
+        };
+
+        const updateSelectedAuthorsInput = () => {
+            const selectedAuthorsData = selectedAuthors.map(author => ({
+                id: author.id,
+                corresponding: author.corresponding
+            }));
+            selectedAuthorsInput.value = JSON.stringify(selectedAuthorsData);
+            console.log('Campo oculto:', selectedAuthorsInput.value);
+        };
 
         plusAuthorBtn.addEventListener('click', () => {
             const selectedValue = selectedAuthorSelect.value;
+            const selectedText = selectedAuthorSelect.options[selectedAuthorSelect.selectedIndex].text;
 
-            // Validar selección
             if (!selectedValue) {
                 alert('Por favor, seleccione un autor de la lista desplegable.');
-                return; // Evitar más procesamiento si no se selecciona ningún autor
+                return;
             }
 
-            // Verificar si el autor ya está seleccionado
-            if (selectedAuthors.includes(selectedValue)) {
+            if (selectedAuthors.find(author => author.id === selectedValue)) {
                 alert('El autor seleccionado ya se encuentra en la lista.');
                 return;
             }
 
-            // Realizar consulta Ajax para verificar si el autor ya está en la tabla articulos_Autores
             fetch('{{ route('revisar-existencia') }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 body: JSON.stringify({ author_id: selectedValue })
             })
@@ -188,15 +222,9 @@
                         document.querySelector('input[name="email"]').value = data.user.email || '';
                     }
                 } else {
-                    // Agregar autor seleccionado al array y mostrarlo en la lista
-                    selectedAuthors.push(selectedValue);
-                    const newListItem = document.createElement('li');
-                    newListItem.textContent = selectedAuthorSelect.options[selectedAuthorSelect.selectedIndex].text;
-                    newListItem.setAttribute('data-value', selectedValue); // Guardar el valor del autor en el atributo data-value
-                    selectedAuthorsList.appendChild(newListItem);
-
-                    // Actualizar la consola para mostrar el vector actual de autores seleccionados
-                    console.log('Autores seleccionados:', selectedAuthors);
+                    selectedAuthors.push({ id: selectedValue, name: selectedText, corresponding: false });
+                    updateAuthorList();
+                    updateSelectedAuthorsInput();
                 }
             })
             .catch(error => {
@@ -206,92 +234,69 @@
 
         minusAuthorBtn.addEventListener('click', () => {
             const selectedValue = selectedAuthorSelect.value;
-            // Validar selección
+
             if (!selectedValue) {
                 alert('Por favor, seleccione un autor de la lista desplegable.');
-                return; // Evitar más procesamiento si no se selecciona ningún autor
+                return;
             }
-            // Buscar el índice del autor en el array
-            const authorIndex = selectedAuthors.indexOf(selectedValue);
+
+            const authorIndex = selectedAuthors.findIndex(author => author.id === selectedValue);
             if (authorIndex === -1) {
                 alert('El autor seleccionado no está en la lista.');
                 return;
             }
-            // Eliminar autor del array
+
             selectedAuthors.splice(authorIndex, 1);
-            // Eliminar autor de la lista (ul)
-            const listItem = selectedAuthorsList.querySelector(`li[data-value="${selectedValue}"]`);
-            if (listItem) {
-                selectedAuthorsList.removeChild(listItem);
-            }
-            // Actualizar la consola para mostrar el vector actual de autores seleccionados
-            console.log('Autores seleccionados:', selectedAuthors);
+            updateAuthorList();
+            updateSelectedAuthorsInput();
         });
 
-        // Actualizar el campo oculto con el array de autores seleccionados antes de enviar el formulario
         articleForm.addEventListener('submit', (event) => {
-            selectedAuthorsInput.value = JSON.stringify(selectedAuthors);
-            console.log('Campo oculto:', selectedAuthorsInput.value); // Verificar valor en consola
+            updateSelectedAuthorsInput();
         });
 
-        // Evento para guardar el nuevo autor
         document.getElementById('save-author-btn').addEventListener('click', () => {
             const newAuthorId = document.querySelector('input[name="id"]').value;
+            const newAuthorName = `${document.querySelector('input[name="nombre"]').value} ${document.querySelector('input[name="ap_paterno"]').value} ${document.querySelector('input[name="ap_materno"]').value}`;
 
             if (!newAuthorId) {
                 alert('El campo CURP es obligatorio.');
                 return;
             }
 
-            selectedAuthors.push(newAuthorId);
-            const newListItem = document.createElement('li');
-            newListItem.textContent = document.querySelector('input[name="ap_paterno"]').value + ' ' +
-                                    document.querySelector('input[name="ap_materno"]').value + ' ' +
-                                    document.querySelector('input[name="nombre"]').value;
-            newListItem.setAttribute('data-value', newAuthorId);
-            selectedAuthorsList.appendChild(newListItem);
+            selectedAuthors.push({ id: newAuthorId, name: newAuthorName, corresponding: false });
+            updateAuthorList();
+            updateSelectedAuthorsInput();
 
-            // Actualizar la consola para mostrar el vector actual de autores seleccionados
-            console.log('Autores seleccionados:', selectedAuthors);
-
-            // Ocultar el modal de registro y mostrar el de creación de artículo
             registerAuthorModal.style.display = 'none';
             createArticleModal.style.display = 'block';
         });
 
-        ////////////////////////////////MODALES////////////////////////////////////
-
-        // Obtener los modales y los botones
         var createEventBtn = document.getElementById('create-event-btn');
-        var registerAuthorBtn = document.getElementById('register-author-btn'); //enlace al modal de registro de autor
-        var saveAuthorBtn = document.getElementById('save-author-btn'); //boton para guardar autores
+        var registerAuthorBtn = document.getElementById('register-author-btn');
+        var saveAuthorBtn = document.getElementById('save-author-btn');
         var closeButtons = document.querySelectorAll('.modal .close');
 
-        // Abrir el modal de creación de artículo
         createEventBtn.addEventListener('click', function () {
             createArticleModal.style.display = 'block';
         });
 
-        //Abrir Modal de Creacion de Autor
         registerAuthorBtn.addEventListener('click', function () {        
             createArticleModal.style.display = 'none';
             registerAuthorModal.style.display = 'block';
         });
 
-        // 
         saveAuthorBtn.addEventListener('click', function () {
             registerAuthorModal.style.display = 'none';
             createArticleModal.style.display = 'block';
         });
 
-        // Cerrar los modales al hacer clic en la 'X'
         closeButtons.forEach(function (closeBtn) {
             closeBtn.addEventListener('click', function () {
                 closeBtn.parentElement.parentElement.style.display = 'none';
             });
         });
 
-        // Cerrar el modal al hacer clic fuera del contenido del modal
         window.addEventListener('click', function (event) {
             if (event.target == createArticleModal) {
                 createArticleModal.style.display = 'none';
@@ -301,6 +306,7 @@
         });
     });
 </script>
+
 
 
 

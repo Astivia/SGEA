@@ -50,7 +50,6 @@ class ArticulosController extends Controller
 
         if($evento){
             $datos=$request->all();
-            
             //validamos la carga del archivo
             $request->validate([
                 'pdf' => 'required|file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -78,12 +77,15 @@ class ArticulosController extends Controller
                 $selectedAuthors = json_decode($request->input('selected_authors'), true);
                 if (json_last_error() === JSON_ERROR_NONE) {
                     // Recorrer el array de autores seleccionados
-                    foreach ($selectedAuthors as $authorId) {
+                    foreach ($selectedAuthors as $author) {
+                        $authorId = $author['id'];
+                        $isCorresponding = $author['corresponding'];
+
                         articulosAutores::create([
                             'evento_id'=>$evento->id,
                             'articulo_id'=>$articulo->id,
                             'usuario_id'=> $authorId,
-                            'correspondencia'=>false,
+                            'correspondencia'=>$isCorresponding,
                             'institucion'=>'ITTOL',
                             'email'=>(usuarios::find($authorId))->email
                         ]);
