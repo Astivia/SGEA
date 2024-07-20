@@ -21,6 +21,11 @@
     <div class="background"></div>
     <div class="container">
         <div class="content">
+        <div class="header-img">
+        <!-- <img src="{{asset('SGEA/public/assets/img/Logo itt-fn.png')}}" alt="">
+        <img src="{{asset('SGEA/public/assets/img/Logo ittol-fn.png')}}" alt=""> -->
+        <img src="{{asset('SGEA/public/assets/img/Logo ittol.png')}}" alt="">
+      </div>
             <h2 class="logo">SGEA<i class='bx bxs-calendar-event'></i></h2>
             <div class="text-content">
                 <h2>Bienvenidos! <br> <span>Sistema de Gestion de Eventos Academicos</span> </h2>
@@ -53,11 +58,12 @@
                             <input type="checkbox" id="remember_me" name="remember_me"> Mantener la sesión iniciada
                         </label>                     
                     </div>
-                    <a href="forgot-password" id="forgot-password-link">Olvidaste tu contraseña?</a>
+                    
                     <button type="submit" class="btn">Iniciar Sesion</button>
                 </form>
                 <div class="login-register">
                     <p>No tienes una cuenta? <a href="registro" class="register-link">Registrarme</a></p>
+                    <a href="forgot-password" id="forgot-password-link">Olvidaste tu contraseña?</a>
                 </div>
 
                 

@@ -10,6 +10,7 @@
 <body>
 <div class="background"></div>
     <div class="container">
+        <div class="mobile">
         <div class="header-img">
         <!-- <img src="{{asset('SGEA/public/assets/img/Logo itt-fn.png')}}" alt="">
         <img src="{{asset('SGEA/public/assets/img/Logo ittol-fn.png')}}" alt=""> -->
@@ -25,6 +26,7 @@
 
                 <button type="submit" class="button">Enviar</button>
             </form>
+        </div>
         </div>
     </div>
     
