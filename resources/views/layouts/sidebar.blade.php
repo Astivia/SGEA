@@ -1,5 +1,4 @@
 <div class="sidebar">
-   
     <div class="sidebar-main">
         <div class="sidebar-user">
             <h2>SGEA</h2>

@@ -16,6 +16,17 @@
         <div class="main-content">
             @include ('layouts.head')
             <main>
+                <div class="options-bar">
+                    <div class="menu-toggle">
+                        <label for="">
+                                <span class="las la-bars"></span>
+                        </label>
+                    </div>
+                    <div class="header-icons">
+                        <a href="{{ route('user.redirect') }}"><span class="las la-home"></span></a>
+                        <a href="{{route('logout')}}"><span class="las la-door-closed"></span></a>
+                    </div>
+                </div>
                 @yield('Content')
             </main>
         </div>
