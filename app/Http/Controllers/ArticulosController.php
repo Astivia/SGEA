@@ -78,20 +78,17 @@ class ArticulosController extends Controller
                 if (json_last_error() === JSON_ERROR_NONE) {
                     // Recorrer el array de autores seleccionados
                     foreach ($selectedAuthors as $author) {
-                        $authorId = $author['id'];
-                        $isCorresponding = $author['corresponding'];
-
                         articulosAutores::create([
                             'evento_id'=>$evento->id,
                             'articulo_id'=>$articulo->id,
-                            'usuario_id'=> $authorId,
-                            'correspondencia'=>$isCorresponding,
-                            'institucion'=>'ITTOL',
-                            'email'=>(usuarios::find($authorId))->email
+                            'usuario_id'=> $author['id'],
+                            'correspondencia'=>$author['corresponding'],
+                            'institucion'=>$author['institucion'],
+                            'email'=>(usuarios::find($author['id']))->email
                         ]);
                     }
                 } else {
-                    echo "Error al decodificar Datos: " . json_last_error_msg();
+                    echo "Error al decodificar Datos: ".json_last_error_msg();
                 }
             }
     
@@ -114,9 +111,10 @@ class ArticulosController extends Controller
         }else{
             $pdfUrl=null;
         }
-        $autores= articulosAutores::where('articulo_id',$id)->get();
-
-        return view ('Articulos.read',compact('articulo','pdfUrl','autores'));
+        $autores= articulosAutores::where('articulo_id',$id)->OrderBy('orden')->get();
+        $correspondencia= articulosAutores::where('articulo_id',$id)->where('correspondencia',true)->first();
+        
+        return view ('Articulos.read',compact('articulo','pdfUrl','autores','correspondencia'));
     }
 
     /**
@@ -126,11 +124,13 @@ class ArticulosController extends Controller
     {
         
         $articulo= articulos::where('evento_id', $evento_id)->where('id', $id)->first();
+        $autores=articulosAutores::where('articulo_id',$articulo->id)->get();
     
         //consultamos los catalogos
         $Areas = Areas::all();
-        
-        return view('Articulos.edit', compact('articulo', 'Areas'));
+        $Autores= articulosAutores::distinct('usuario_id')->get();
+
+        return view('Articulos.edit', compact('articulo', 'Areas','autores','Autores'));
     }
 
 
@@ -175,6 +175,31 @@ class ArticulosController extends Controller
             'estado'=> $validatedData['estado'],
             'archivo'=> $nombreArchivo
         ]);
+
+        if ($request->has('selected_authors')) {
+            $selectedAuthors = json_decode($request->input('selected_authors'), true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                // Eliminar autores actuales
+                articulosAutores::where('articulo_id', $articulo->id)->where('evento_id',$articulo->evento->id)->delete();
+                foreach ($selectedAuthors as $author) {
+                    articulosAutores::create([
+                        'evento_id' => $evento_id,
+                        'articulo_id' => $articulo->id,
+                        'usuario_id' => $author['id'],
+                        'correspondencia' => $author['corresponding'],
+                        'institucion' => $author['institucion'],
+                        'email' =>(usuarios::find($author['id']))->email
+                    ]);
+                }
+
+            
+            } else {
+                echo "Error al decodificar Datos: ".json_last_error_msg();
+            }
+        }
+
+
+
         return redirect('/articulos')->with('success', 'Artículo Modificado');
     }
 
@@ -187,12 +212,7 @@ class ArticulosController extends Controller
         $articulo = articulos::find($id);
         if (!$articulo){
             return redirect()->back()->with('error', 'No se encontro el articulo');
-        }elseif($articulo->revisores()->count()>0){
-            return redirect()->back()->with('error', 'El articulo aun tiene revisores');
         }
-
-        
-
         // Eliminar el archivo PDF asociado
         $pdfPath = 'public/Articles/web/' . $articulo->evento->acronimo.$articulo->evento->edicion . '/' . $articulo->archivo;
         if (Storage::exists($pdfPath)) {
@@ -200,6 +220,7 @@ class ArticulosController extends Controller
         }
 
         try {
+            articulosAutores::where('articulo_id', $articulo->id)->where('evento_id',$articulo->evento->id)->delete();
             $articulo->delete();
             return redirect()->back()->with('success', 'el artículo  se elimino correctamente');
         } catch (\Exception $e) {
@@ -209,12 +230,17 @@ class ArticulosController extends Controller
 
     public function checkAuthor(Request $request)
      {
+
          $authorId = $request->input('author_id');
          $exists = articulosAutores::where('usuario_id', $authorId)->exists();
          $user = null;
          if (!$exists) {
              $user = usuarios::find($authorId);
+         }else{
+            $user =  articulosAutores::where('usuario_id', $authorId)->first();
+            
          }
         return response()->json(['exists' => $exists, 'user' => $user]);
+        
      }
 }
