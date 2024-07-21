@@ -30,14 +30,11 @@
                 @yield('Content')
             </main>
         </div>
-        <script src="{{asset('SGEA/public/js/script.js')}}"></script>
-
     </body>
 @include ('layouts.Footer')
-
-
-    <!-- Se agrega script para tablas -->
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="{{asset('SGEA/public/js/Sidebar.js')}}"></script>
+<!-- Se agrega script para tablas -->
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script> 
 
@@ -97,8 +94,5 @@ function deleteRecord(id) {
     // Enviamos el formulario de eliminación correspondiente
     document.getElementById('delete-form-' + id).submit();
 }
-
- 
-
 </script>
              

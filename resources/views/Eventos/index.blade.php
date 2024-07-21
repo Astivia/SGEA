@@ -1,12 +1,12 @@
 @extends('layouts.master')
-<title>Eventos</title>
+    <title>Eventos</title>
 
 @section('Content')
 <div class="container">
-    
+
     <div class="search-create">
     <h1 id="titulo-h1">Eventos</h1>
-        <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
+        <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
     @if($Eventos->isEmpty())
         <strong>No hay datos</strong>
@@ -57,7 +57,7 @@
     @endif
 </div>
 
-<div id="create-event-modal" class="modal">
+<div id="create-modal" class="modal">
 <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Registro de Evento</h2>
@@ -77,7 +77,7 @@
         <br>
         <hr><br>
         <input type="file" id="logo" name="logo" accept="image/png">
-        <!-- Campo oculto para almacenar el nombre de la imagen seleccionada -->
+        
         <input type="hidden" id="selected_img" name="logo">
     </div>
 
@@ -102,35 +102,7 @@
 </div>
 
 @endsection
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const imgSelectables = document.querySelectorAll('.img-selectable');
-        const imgInput = document.getElementById('logo');
-        const selectedImgInput = document.getElementById('selected_img');
-
-        imgSelectables.forEach(function(img) {
-            img.addEventListener('click', function() {
-                // Asignar el nombre de la imagen al campo oculto
-                selectedImgInput.value = this.dataset.imgName;
-
-                // Opcional: Desactivar el campo de subir imagen para evitar confusiones
-                imgInput.disabled = true;
-
-                // Opcional: Añadir alguna clase CSS para resaltar la imagen seleccionada
-                imgSelectables.forEach(i => i.classList.remove('selected'));
-                this.classList.add('selected');
-            });
-        });
-
-        // Reactivar el campo de subir imagen si se selecciona un archivo
-        imgInput.addEventListener('change', function() {
-            selectedImgInput.value = '';
-            imgInput.disabled = false;
-            imgSelectables.forEach(i => i.classList.remove('selected'));
-        });
-    });
-</script>
+<script src="{{asset('SGEA/public/js/script-eventos.js')}}"></script>
 
 <style>
     .selected {

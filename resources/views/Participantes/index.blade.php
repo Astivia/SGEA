@@ -7,7 +7,7 @@
     <h1>Participantes del {!!$evento->acronimo!!} {!!$evento->edicion!!}</h1>
     <div class="search-create">
         <input type="text" id="search-input" placeholder="Buscar Participante...">
-        <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
+        <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
 </div>
 <br><br>
@@ -48,7 +48,7 @@
     @endif
 </div>
 
-<div id="create-event-modal" class="modal">
+<div id="create-modal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Añadir participante</h2>

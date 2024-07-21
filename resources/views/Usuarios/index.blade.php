@@ -7,7 +7,7 @@
    
     <div class="search-create">
         <h1 id="titulo-h1">Usuarios</h1>
-        <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
+        <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
 
     
@@ -62,7 +62,7 @@
 </div>
 
 
-<div id="create-event-modal" class="modal">
+<div id="create-modal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Nuevo Usuario</h2>
@@ -94,7 +94,4 @@
         {!!Form::close()!!}
     </div>
 </div>
-
-
 @endsection
-<!-- <script src="./js/script-participantes.js"></script> -->

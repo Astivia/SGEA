@@ -238,7 +238,7 @@ main {
     margin-right: 1rem;
     
 }
-#create-event-btn {
+#create-btn {
     padding: 0.5rem 1rem;
     background-color: blue;
     color: #fff;
@@ -484,7 +484,7 @@ td:last-child {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-#create-event-btn{
+#create-btn{
     background-color: #f99806;
 }
 .container table td a #mensaje{

@@ -11,7 +11,6 @@
                 @role('Organizador')
                     <span>Organizador</span>
                 @endrole
-                
             </div>
         </div>    
         <div class="sidebar-menu">

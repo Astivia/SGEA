@@ -1,11 +1,11 @@
 @extends('layouts.master')
     <title>Articulos</title>
-</head>
+
 @section('Content')
     <div class="container">
         <div class="search-create">
             <h1 id="titulo-h1">Artículos</h1>
-            <button id="create-event-btn"><i class="las la-plus-circle la-2x"></i></button>
+            <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
         </div>    
       @if($Articulos->isEmpty())
             <strong>No hay datos</strong>
@@ -53,7 +53,7 @@
       @endif
     </div>
         
-    <div id="create-article-modal" class="modal">
+    <div id="create-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Registro de Artículo</h2>
@@ -132,6 +132,7 @@
     </div>
 
 @endsection
+<script src="{{asset('SGEA/public/js/script-articulos.js')}}"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -142,7 +143,7 @@
         const minusAuthorBtn = document.getElementById('minus-author-btn');
         const selectedAuthorsInput = document.getElementById('selected-authors-input');
 
-        const createArticleModal = document.getElementById('create-article-modal');
+        const createArticleModal = document.getElementById('create-modal');
         const registerAuthorModal = document.getElementById('register-author-modal');
 
         let selectedAuthors = [];
@@ -302,14 +303,9 @@
             resetRegisterAuthorForm();
         });
 
-        var createEventBtn = document.getElementById('create-event-btn');
+  
         var registerAuthorBtn = document.getElementById('register-author-btn');
         var saveAuthorBtn = document.getElementById('save-author-btn');
-        var closeButtons = document.querySelectorAll('.modal .close');
-
-        createEventBtn.addEventListener('click', function () {
-            createArticleModal.style.display = 'block';
-        });
 
         registerAuthorBtn.addEventListener('click', function () {        
             createArticleModal.style.display = 'none';
@@ -321,19 +317,6 @@
             createArticleModal.style.display = 'block';
         });
 
-        closeButtons.forEach(function (closeBtn) {
-            closeBtn.addEventListener('click', function () {
-                closeBtn.parentElement.parentElement.style.display = 'none';
-            });
-        });
-
-        window.addEventListener('click', function (event) {
-            if (event.target == createArticleModal) {
-                createArticleModal.style.display = 'none';
-            } else if (event.target == registerAuthorModal) {
-                createAuthorModal.style.display = 'none';
-            }
-        });
     });
 
 </script>
