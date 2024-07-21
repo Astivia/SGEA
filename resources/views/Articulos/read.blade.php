@@ -5,8 +5,7 @@
 @section('Content')
     <div class="container">
         <h1>{!!$articulo->titulo!!}</h1>
-        <p><strong>Evento: </strong>{!!$articulo->evento->nombre!!} (<strong>{!!$articulo->evento->acronimo!!} {!!$articulo->evento->edicion!!}</strong>)</p>
-        <p><strong>Resumen: </strong>{!!$articulo->resumen!!}</p>
+        <br><br>
         <p><strong>Autores: </strong>
         @foreach ($autores as $index => $autor)
             @if ($index !== count($autores) - 1)
@@ -17,6 +16,8 @@
         @endforeach
         </p>
         <p><strong>Autor de correspondencia: </strong>{!! $correspondencia->usuario->nombre_completo!!}</p>
+        <p><strong>Evento: </strong>{!!$articulo->evento->nombre!!} (<strong>{!!$articulo->evento->acronimo!!} {!!$articulo->evento->edicion!!}</strong>)</p>
+        <p><strong>Resumen: </strong>{!!$articulo->resumen!!}</p>
         <p><strong>Area: </strong>{!!$articulo->area->nombre!!}</p>
         <p><strong>Revisores: </strong></p>
         <p><strong>Estado: </strong>{!!$articulo->estado!!}</p>

@@ -80,6 +80,11 @@ class usuarios extends AuthenticatableUser implements Authenticatable
         return "{$this->ap_paterno} {$this->ap_materno} {$this->nombre}";
     }
 
+    public function getNombreAutorAttribute()
+    {
+        return "{$this->ap_paterno[0]}. {$this->ap_materno [0]}. {$this->nombre}";
+    }
+
     public function articulos()
     {
         return $this->hasManyThrough(articulos::class, articulosAutores::class, 'usuario_id', 'evento_id', 'articulo_id');
