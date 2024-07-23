@@ -178,7 +178,6 @@
             .then(response => response.json())
             .then(data => {
                 if (!data.exists) {
-                    createArticleModal.style.display = 'none';
                     registerAuthorModal.style.display = 'block';
                     if (data.user) {
                         document.querySelector('input[name="id"]').value = data.user.id || '';
@@ -189,6 +188,12 @@
                         document.querySelector('input[name="email"]').value = data.user.email || '';
                         document.querySelector('input[name="telefono"]').value = data.user.telefono || '';
                         document.querySelector('input[name="institucion"]').value = data.user.institucion || '';
+                        
+                        document.querySelectorAll('#register-author-form input').forEach(input => {
+                            if (input.name !== 'institucion') {
+                                input.disabled = true;
+                            }
+                        });
                     }
                 } else {
                     selectedAuthors.push({
@@ -233,6 +238,41 @@
             event.preventDefault();
             registerAuthorModal.style.display = 'block';
         });
+
+        document.getElementById('save-author-btn').addEventListener('click', () => {
+            const newAuthorId = document.querySelector('input[name="id"]').value || '';
+            const newAuthorCurp = document.querySelector('input[name="curp"]').value || '';
+            const newAuthorNombre = document.querySelector('input[name="nombre"]').value || '';
+            const newAuthorApPaterno = document.querySelector('input[name="ap_paterno"]').value || '';
+            const newAuthorApMaterno = document.querySelector('input[name="ap_materno"]').value || '';
+            const newAuthorTelefono = document.querySelector('input[name="telefono"]').value || '';
+            const newAuthorEmail = document.querySelector('input[name="email"]').value || '';
+            const newAuthorInstitucion = document.querySelector('input[name="institucion"]').value || '';
+
+            if (!newAuthorCurp || !newAuthorNombre || !newAuthorApPaterno || !newAuthorApMaterno || !newAuthorTelefono || !newAuthorEmail || !newAuthorInstitucion) {
+                alert('Todos los campos son obligatorios.');
+                return;
+            }
+            const newAuthorName = `${newAuthorApPaterno} ${newAuthorApMaterno} ${newAuthorNombre}`;
+            // agregar el nuevo autor al combo de selección
+            const newOption = document.createElement('option');
+            newOption.value = newAuthorId;
+            newOption.text = newAuthorName;
+            selectedAuthorSelect.appendChild(newOption);
+            // agregar el  autor al array
+            selectedAuthors.push({ id: newAuthorId, name: newAuthorName, corresponding: false, institucion: newAuthorInstitucion });
+            updateAuthorList();
+            updateSelectedAuthorsInput();
+            //manejo de modales
+            registerAuthorModal.style.display = 'none';
+            //reseteamos el modal
+            const registerAuthorForm = document.getElementById('register-author-form');
+            registerAuthorForm.reset();
+            document.querySelectorAll('#register-author-form input').forEach(input => {
+                input.disabled = false;
+            });
+        });
+
         ///////////////////////////////////MODALES////////////////////////////////////////
         const registerAuthorModal = document.getElementById('register-author-modal');
         var saveAuthorBtn = document.getElementById('save-author-btn');
@@ -259,15 +299,12 @@
                 createAuthorModal.style.display = 'none';
             }
         });
-
-
         updateAuthorList();
         updateSelectedAuthorsInput();
     });
 </script>
 
 <script>
-
     document.addEventListener('DOMContentLoaded', (event) => {
         const curpInput = document.getElementById('curp');
         const idInput = document.getElementById('id');
@@ -299,14 +336,12 @@
                         apMaternoInput.value = user.ap_materno;
                         emailInput.value = user.email;
                         telefonoInput.value = user.telefono;
-                        
                         // Bloquear campos
                         nombreInput.disabled = true;
                         apPaternoInput.disabled = true;
                         apMaternoInput.disabled = true;
                         emailInput.disabled = true;
                         telefonoInput.disabled = true;
-
                         curpError.style.display = 'none';
                     } else {
                         idInput.value = '';
@@ -315,14 +350,12 @@
                         apMaternoInput.value = '';
                         emailInput.value = '';
                         telefonoInput.value = '';
-                        
                         // Desbloquear campos
                         nombreInput.disabled = false;
                         apPaternoInput.disabled = false;
                         apMaternoInput.disabled = false;
                         emailInput.disabled = false;
                         telefonoInput.disabled = false;
-
                         curpError.style.display = 'block';
                     }
                 })

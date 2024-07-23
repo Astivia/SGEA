@@ -29,9 +29,7 @@
         
     
     <div class="header-img">
-    <!-- <img src="{{asset('SGEA/public/assets/img/Logo itt-fn.png')}}" alt="">
-    <img src="{{asset('SGEA/public/assets/img/Logo ittol-fn.png')}}" alt=""> -->
-    <img src="{{asset('SGEA/public/assets/img/Logo ittol.png')}}" alt="">
+    <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">
     </div>
     <div class="card">
     <h1>Verifica la dirección de correo electrónico</h1>

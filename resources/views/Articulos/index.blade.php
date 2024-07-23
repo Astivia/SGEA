@@ -97,6 +97,7 @@
                 <br><br>
                 <p>¿No encuentra su Autor? <a href="#" id="register-author-btn"><strong>Registrar Autor</strong></a></p>
                 <br>
+                <input type="hidden" name="new_users" id="new-user-input">
                 <input type="hidden" name="selected_authors" id="selected-authors-input">
                 <button type="submit">Guardar articulo</button>
             {!! Form::close() !!}
@@ -132,7 +133,6 @@
     </div>
 
 @endsection
-<script src="{{asset('SGEA/public/js/script-articulos.js')}}"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -142,11 +142,13 @@
         const plusAuthorBtn = document.getElementById('plus-author-btn');
         const minusAuthorBtn = document.getElementById('minus-author-btn');
         const selectedAuthorsInput = document.getElementById('selected-authors-input');
+        const newUsersInput = document.getElementById('new-user-input');
 
         const createArticleModal = document.getElementById('create-modal');
         const registerAuthorModal = document.getElementById('register-author-modal');
 
         let selectedAuthors = [];
+        let NewUsers=[];
 
         const updateAuthorList = () => {
             selectedAuthorsList.innerHTML = '';
@@ -184,6 +186,20 @@
             }));
             selectedAuthorsInput.value = JSON.stringify(selectedAuthorsData);
             console.log('Campo oculto:', selectedAuthorsInput.value);
+        };
+        const updateNewUsersInput = () => {
+            const NewUsersData = NewUsers.map(user => ({
+                id: user.id,
+                curp: user.curp,
+                nombre: user.nombre,
+                ap_paterno: user.ap_paterno,
+                ap_materno: user.ap_materno,
+                telefono: user.telefono,
+                email: user.email,
+                institucion: user.institucion
+            }));
+            newUsersInput.value = JSON.stringify(NewUsersData);
+            console.log('Nuevos Usuarios:', newUsersInput.value);
         };
 
         plusAuthorBtn.addEventListener('click', () => {
@@ -260,19 +276,29 @@
         });
 
         articleForm.addEventListener('submit', (event) => {
-            updateSelectedAuthorsInput();
+            const hasCorrespondingAuthor = selectedAuthors.some(author => author.corresponding);
+            if (!hasCorrespondingAuthor) {
+                alert('Debe haber al menos un autor de correspondencia.');
+                event.preventDefault();
+                return
+            }else{
+                updateNewUsersInput();
+                updateSelectedAuthorsInput();
+            }
         });
 
         function resetRegisterAuthorForm() {
             const registerAuthorForm = document.getElementById('register-author-form');
+            //reseteamos los valores de los imputs
             registerAuthorForm.reset();
+            //habilitamos los campos 
             document.querySelectorAll('#register-author-form input').forEach(input => {
                 input.disabled = false;
             });
         }
 
-        document.getElementById('save-author-btn').addEventListener('click', () => {
-            const newAuthorId = document.querySelector('input[name="id"]').value || '';
+        document.getElementById('save-author-btn').addEventListener('click', async () => {
+            let newAuthorId = document.querySelector('input[name="id"]').value || '';
             const newAuthorCurp = document.querySelector('input[name="curp"]').value || '';
             const newAuthorNombre = document.querySelector('input[name="nombre"]').value || '';
             const newAuthorApPaterno = document.querySelector('input[name="ap_paterno"]').value || '';
@@ -280,6 +306,47 @@
             const newAuthorTelefono = document.querySelector('input[name="telefono"]').value || '';
             const newAuthorEmail = document.querySelector('input[name="email"]').value || '';
             const newAuthorInstitucion = document.querySelector('input[name="institucion"]').value || '';
+
+            if(newAuthorId === "" || newAuthorId === null){
+                //obtenemos el id de mayor valor y lo incrementamos
+                try {
+                    const response = await fetch('{{ route('nuevo-id') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const data = await response.json();
+                    const lastId = data.lastId;
+                    // Incrementar manualmente el lastId basado en los usuarios ya agregados
+                    newAuthorId = lastId + 1 + NewUsers.length;
+                } catch (error) {
+                    console.error('Error:', error);
+                    return;
+                }
+                //creamos un objeto con los datos
+                const authorData = {
+                    id: newAuthorId,
+                    curp: newAuthorCurp,
+                    nombre: newAuthorNombre,
+                    ap_paterno: newAuthorApPaterno,
+                    ap_materno: newAuthorApMaterno,
+                    telefono: newAuthorTelefono,
+                    email: newAuthorEmail,
+                    institucion: newAuthorInstitucion
+                };
+                //agregamos el objeto al array de nuevos usuarios
+                NewUsers.push(authorData);
+                console.log('Usuarios a Insertar:'+NewUsers);
+                updateNewUsersInput();
+
+            }
 
             if (!newAuthorCurp || !newAuthorNombre || !newAuthorApPaterno || !newAuthorApMaterno || !newAuthorTelefono || !newAuthorEmail || !newAuthorInstitucion) {
                 alert('Todos los campos son obligatorios.');
@@ -293,16 +360,17 @@
             newOption.value = newAuthorId;
             newOption.text = newAuthorName;
             selectedAuthorSelect.appendChild(newOption);
-            // agregar el  autor al array
+
+            // agregar el autor al array
             selectedAuthors.push({ id: newAuthorId, name: newAuthorName, corresponding: false, institucion: newAuthorInstitucion });
             updateAuthorList();
             updateSelectedAuthorsInput();
-            //manejo de modales
+
+            // manejo de modales
             registerAuthorModal.style.display = 'none';
             createArticleModal.style.display = 'block';
             resetRegisterAuthorForm();
         });
-
   
         var registerAuthorBtn = document.getElementById('register-author-btn');
         var saveAuthorBtn = document.getElementById('save-author-btn');
@@ -334,6 +402,24 @@
         const institucionInput = document.getElementById('institucion');
         const curpError = document.getElementById('curp-error');
 
+        const clearForm = () => {
+            idInput.value = '';
+            curpInput.value = '';
+            nombreInput.value = '';
+            apPaternoInput.value = '';
+            apMaternoInput.value = '';
+            emailInput.value = '';
+            telefonoInput.value = '';
+            institucionInput.value = '';
+
+            // Desbloquear todos los campos
+            nombreInput.disabled = false;
+            apPaternoInput.disabled = false;
+            apMaternoInput.disabled = false;
+            emailInput.disabled = false;
+            telefonoInput.disabled = false;
+        };
+
         curpInput.addEventListener('input', () => {
             if (curpInput.value.length === 18) {
                 fetch('{{ route('verify-curp') }}', {
@@ -355,12 +441,15 @@
                         emailInput.value = user.email;
                         telefonoInput.value = user.telefono;
                         
-                        // Bloquear campos
-                        nombreInput.disabled = true;
-                        apPaternoInput.disabled = true;
-                        apMaternoInput.disabled = true;
-                        emailInput.disabled = true;
-                        telefonoInput.disabled = true;
+                         // Bloquear los campos
+                        document.querySelectorAll('#register-author-form input').forEach(input => {
+                            if (input.name !== 'institucion') {
+                                input.disabled = true;
+                            }
+                            if (input.name == 'curp') {
+                                input.disabled = false;
+                            }
+                        });
 
                         curpError.style.display = 'none';
                     } else {
@@ -370,15 +459,16 @@
                         apMaternoInput.value = '';
                         emailInput.value = '';
                         telefonoInput.value = '';
-                        
-                        // Desbloquear campos
+                        institucionInput.value = '';
+
+                        // Desbloquear todos los campos
                         nombreInput.disabled = false;
                         apPaternoInput.disabled = false;
                         apMaternoInput.disabled = false;
                         emailInput.disabled = false;
                         telefonoInput.disabled = false;
-
                         curpError.style.display = 'block';
+
                     }
                 })
                 .catch(error => {
@@ -389,23 +479,7 @@
             }
         });
 
-        const clearForm = () => {
-            idInput.value = '';
-            curpInput.value = '';
-            nombreInput.value = '';
-            apPaternoInput.value = '';
-            apMaternoInput.value = '';
-            emailInput.value = '';
-            telefonoInput.value = '';
-            institucionInput.value = '';
-
-            // Desbloquear todos los campos
-            nombreInput.disabled = false;
-            apPaternoInput.disabled = false;
-            apMaternoInput.disabled = false;
-            emailInput.disabled = false;
-            telefonoInput.disabled = false;
-        };
+        
 
         const registerAuthorModal = document.getElementById('register-author-modal');
         const closeButtons = document.querySelectorAll('.modal .close');

@@ -82,7 +82,7 @@ class usuarios extends AuthenticatableUser implements Authenticatable
 
     public function getNombreAutorAttribute()
     {
-        return "{$this->ap_paterno[0]}. {$this->ap_materno [0]}. {$this->nombre}";
+        return "{$this->nombre[0]}.{$this->ap_paterno} ";
     }
 
     public function articulos()

@@ -13,12 +13,10 @@
 <div class="container">    
     
       <div class="header-img">
-        <!-- <img src="{{asset('SGEA/public/assets/img/Logo itt-fn.png')}}" alt="">
-        <img src="{{asset('SGEA/public/assets/img/Logo ittol-fn.png')}}" alt=""> -->
-        <img src="{{asset('SGEA/public/assets/img/Logo ittol.png')}}" alt="">
+        <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">
       </div>
       <div class="card">
-        <h1>RESTABLECER CONTRASEÑA</h1>
+        <h1>ESTABLECER CONTRASEÑA</h1>
         <p>Hola <strong>{!!$user->nombre!!}</strong> porfavor introduce una contraseña nueva</p>
         <form method="POST" id="password-form" action="{{ route('Password') }}">
             @csrf
@@ -47,8 +45,9 @@
     if (password !== confirmPassword) {
       alert("Las contraseñas no coinciden. ¡Por favor verifica!");
       return false; // Prevent form submission
+    }else{
+      return true; // Allow form submission
     }
-    return true; // Allow form submission
   }
 
   document.getElementById("password-form").addEventListener("submit", validatePassword);

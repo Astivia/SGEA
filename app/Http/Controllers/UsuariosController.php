@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\usuarios;
 use App\Models\participantes;
-use App\Models\autores;
+use App\Models\articulosAutores;
 use App\Models\comite_editorial;
 
 use Illuminate\Support\Facades\Hash;
@@ -132,7 +132,7 @@ class usuariosController extends Controller
 
         if ($usuario->eventos()->count() > 0) {
             return redirect()->back()->with('error', 'No se puede eliminar porque está registrado en uno o más eventos');
-        }else if (autores::where('usuario_id', $usuario->id)->count() > 0) {
+        }else if (articulosAutores::where('usuario_id', $usuario->id)->count() > 0) {
             return redirect()->back()->with('error', 'No se puede eliminar el usuario porque esta registrado como Autor');
         }
         $usuario->delete();
@@ -140,6 +140,11 @@ class usuariosController extends Controller
     }
 
 
+
+    public function setNewId(){
+        $ultimoId=usuarios::max('id');
+        return response()->json(['lastId' => $ultimoId]);
+    }
 
     public function redirectToAppropriateView()
     {

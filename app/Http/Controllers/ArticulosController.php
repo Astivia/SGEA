@@ -61,6 +61,33 @@ class ArticulosController extends Controller
     
             // Guardamos el archivo con su nombre original y obtenemos la ruta completa
             $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' .$evento->acronimo.$evento->edicion, $nombreArchivo);
+
+            //verificamos si debemos insertar usuarios nuevos
+            if($request->has('new_users')){
+                $newUsers=json_decode($request->input('new_users'),true);
+                if(json_last_error()=== JSON_ERROR_NONE){
+                    foreach ($newUsers as $user) {
+
+                        if($user['curp'][10]=='H'){
+                            $foto= 'DefaultH.jpg';
+                        }else {
+                            $foto = 'DefaultM.jpg';
+                        }
+                        usuarios::create([
+                            'curp'=>$user['curp'],
+                            'nombre'=>$user['nombre'],
+                            'ap_paterno'=>$user['ap_paterno'],
+                            'ap_materno'=>$user['ap_materno'],
+                            'email'=>$user['email'],
+                            'telefono'=>$user['telefono'],
+                            'foto'=>$foto,
+                            'estado'=>"alta,no registrado"
+                        ]);
+                    }
+                }else {
+                    echo "Error al decodificar Datos: ".json_last_error_msg();
+                }
+            }
     
             //insertamoslos datos del articulo
             $articulo = articulos::create([
@@ -230,7 +257,6 @@ class ArticulosController extends Controller
 
     public function checkAuthor(Request $request)
      {
-
          $authorId = $request->input('author_id');
          $exists = articulosAutores::where('usuario_id', $authorId)->exists();
          $user = null;

@@ -80,9 +80,7 @@ class LoginController extends Controller
         }
 
     }
-
-    
-    
+   
 
     public function verificarEmail(Request $request){
         $datos=$request->all();
@@ -148,7 +146,7 @@ class LoginController extends Controller
 
     }
 
-    //curp auto completar 
+    //curp 
     public function verifyCurp(Request $request) {
         $curp = $request->input('curp');
         $user = usuarios::where('curp', $curp)->first();
