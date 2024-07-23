@@ -154,8 +154,7 @@ class EventosController extends Controller
         $evento=eventos::find($id);
 
         if ((articulos::where('evento_id', $evento->id)->count() > 0) ||
-            ($evento->participantes->count() > 0)||
-            (comite_editorial::where('evento_id', $evento->id)->count() > 0) ) {
+            ($evento->participantes->count() > 0) ) {
             return redirect()->back()->with('error', 'No se puede eliminar: hay Informacion asociada con este evento');
         }
 

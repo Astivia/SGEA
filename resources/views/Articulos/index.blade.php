@@ -148,7 +148,7 @@
         const registerAuthorModal = document.getElementById('register-author-modal');
 
         let selectedAuthors = [];
-        let NewUsers=[];
+        
 
         const updateAuthorList = () => {
             selectedAuthorsList.innerHTML = '';
@@ -187,20 +187,7 @@
             selectedAuthorsInput.value = JSON.stringify(selectedAuthorsData);
             console.log('Campo oculto:', selectedAuthorsInput.value);
         };
-        const updateNewUsersInput = () => {
-            const NewUsersData = NewUsers.map(user => ({
-                id: user.id,
-                curp: user.curp,
-                nombre: user.nombre,
-                ap_paterno: user.ap_paterno,
-                ap_materno: user.ap_materno,
-                telefono: user.telefono,
-                email: user.email,
-                institucion: user.institucion
-            }));
-            newUsersInput.value = JSON.stringify(NewUsersData);
-            console.log('Nuevos Usuarios:', newUsersInput.value);
-        };
+        
 
         plusAuthorBtn.addEventListener('click', () => {
             const selectedValue = selectedAuthorSelect.value;
@@ -308,44 +295,33 @@
             const newAuthorInstitucion = document.querySelector('input[name="institucion"]').value || '';
 
             if(newAuthorId === "" || newAuthorId === null){
-                //obtenemos el id de mayor valor y lo incrementamos
-                try {
-                    const response = await fetch('{{ route('nuevo-id') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-
-                    const data = await response.json();
-                    const lastId = data.lastId;
-                    // Incrementar manualmente el lastId basado en los usuarios ya agregados
-                    newAuthorId = lastId + 1 + NewUsers.length;
-                } catch (error) {
-                    console.error('Error:', error);
-                    return;
-                }
-                //creamos un objeto con los datos
                 const authorData = {
-                    id: newAuthorId,
-                    curp: newAuthorCurp,
-                    nombre: newAuthorNombre,
-                    ap_paterno: newAuthorApPaterno,
-                    ap_materno: newAuthorApMaterno,
-                    telefono: newAuthorTelefono,
-                    email: newAuthorEmail,
-                    institucion: newAuthorInstitucion
+                    id: newAuthorId,curp: newAuthorCurp, nombre: newAuthorNombre,ap_paterno: newAuthorApPaterno,ap_materno: newAuthorApMaterno,telefono: newAuthorTelefono,
+                    email: newAuthorEmail,institucion: newAuthorInstitucion
                 };
-                //agregamos el objeto al array de nuevos usuarios
-                NewUsers.push(authorData);
-                console.log('Usuarios a Insertar:'+NewUsers);
-                updateNewUsersInput();
 
+                fetch('{{ route('insertar-usuario') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ authorData })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error); // Muestra el error si lo hay
+                    } else {
+                        console.log('Autor insertado con éxito:', data.success);
+                        let newAuthorId = data.id; 
+                        console.log('Nuevo ID del autor:', newAuthorId);
+                        
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
 
             if (!newAuthorCurp || !newAuthorNombre || !newAuthorApPaterno || !newAuthorApMaterno || !newAuthorTelefono || !newAuthorEmail || !newAuthorInstitucion) {
@@ -362,7 +338,7 @@
             selectedAuthorSelect.appendChild(newOption);
 
             // agregar el autor al array
-            selectedAuthors.push({ id: newAuthorId, name: newAuthorName, corresponding: false, institucion: newAuthorInstitucion });
+            selectedAuthors.push({ id: newAuthorId, corresponding: false, institucion: newAuthorInstitucion });
             updateAuthorList();
             updateSelectedAuthorsInput();
 

@@ -32,7 +32,7 @@ Route::resource('articulos', ArticulosController::class)->middleware('auth');
     //Rutas AJAX
     Route::post('/check-author', [ArticulosController::class, 'checkAuthor'])->name('revisar-existencia');
     Route::post('/verify-curp', [LoginController::class, 'verifyCurp'])->name('verify-curp');
-    Route::post('/setId', [UsuariosController::class, 'setNewId'])->name('nuevo-id');
+    Route::post('/insert-user', [UsuariosController::class, 'insertUser'])->name('insertar-usuario');
 
 // REVISORES DE ARTICULOS:
 Route::resource('revisores_articulos', RevisoresArticulosController::class)->middleware('auth');
