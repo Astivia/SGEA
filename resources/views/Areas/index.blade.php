@@ -12,7 +12,8 @@
     @if($Areas->isEmpty())
         <strong>No hay datos</strong>
       @else
-        <table id="example" class="display" style="width:100%">
+      <div style="overflow-x:auto; overflow-y:auto; max-height:500px;">
+      <table id="example" class="display nowrap" style="width:100%">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -44,6 +45,7 @@
             </tbody>
             
         </table>
+        </div>
     @endif
     
 </div>

@@ -48,6 +48,11 @@ $(document).ready(function(){
     var table = $('#example').DataTable({
        orderCellsTop: true,
        fixedHeader: true ,
+        // se agrega 
+        scrollY: '400px',
+        scrollX: true,
+        scrollCollapse: true,
+        paging: true,
        columnDefs: [
            { orderable: false, targets: -1 }  // Deshabilitamos la ordenación en todas las columnas
        ]
@@ -73,6 +78,7 @@ $('#example thead tr:eq(1) th').each(function (i) {
     }
 }); 
 });
+    
 
 function openModal(id) {
     var modal = document.getElementById('confirmModal');

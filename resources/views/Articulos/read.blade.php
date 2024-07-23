@@ -4,6 +4,7 @@
 </head>
 @section('Content')
     <div class="container">
+        
         <h1>{!!$articulo->titulo!!}</h1>
         <br><br>
         <p><strong>Autores: </strong>

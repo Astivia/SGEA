@@ -5,18 +5,34 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="shortcut icon" href="{{asset('SGEA/public/assets/img/ITTOL.ico')}}" type="image/x-icon">
     <title>Iniciar Sesion</title>
+    
 </head>
 <body>
     @if(session('error'))
-        <script>
+        <!-- <script>
             alert('{{ session('error') }}');
-        </script>
+        </script> -->
+        <div id="errorModal" class="modal">
+       
+            <div class="modal-content">
+                <span class="alerta-modal"><i class='bx bxs-error-alt'></i>Alerta</span>
+                <span class="close" onclick="closeModal('errorModal')">&times;</span>
+                <h1>Error de inicio de sesion </h1>
+                <p>{{ session('error') }}</p>
+            </div>
+        </div>
     @endif
 
     @if(session('success'))
-        <script>
+        <!-- <script>
             alert('{{ session('success') }}');
-            </script>
+            </script> -->
+            <div id="successModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('successModal')">&times;</span>
+                <p>{{ session('success') }}</p>
+            </div>
+        </div>
      @endif
     <div class="background"></div>
     <div class="container">
@@ -66,6 +82,6 @@
             </div>
         </div>
     </div>
-
+    <script src="./js/scriptLogin.js"> </script>
 </body>
 </html>
