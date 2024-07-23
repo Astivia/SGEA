@@ -120,7 +120,7 @@ class usuariosController extends Controller
         }
         //actualizamos
         $usuario->update($NuevosDatos);
-         return redirect('/usuarios')->with('info','Se guardaron los cambios de manera satisfactoria');
+         return redirect('/usuarios')->with('info','Informacion Actualizada');
     }
 
     /**
@@ -136,7 +136,7 @@ class usuariosController extends Controller
             return redirect()->back()->with('error', 'No se puede eliminar el usuario porque esta registrado como Autor');
         }
         $usuario->delete();
-        return redirect('usuarios')->with('success', 'Usuario eliminado correctamente');
+        return redirect('usuarios')->with('info', 'Usuario eliminado correctamente');
     }
 
 
@@ -182,7 +182,7 @@ class usuariosController extends Controller
             $institution =$authorData['institucion'];
             return response()->json(['success' => 'Usuario insertado correctamente.','id'=>$user->id , $institution]);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => $e->getMessage()], 500)->with('error',$e->getMessage() );
         }
     }
 

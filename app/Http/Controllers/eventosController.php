@@ -143,7 +143,7 @@ class EventosController extends Controller
         
 
         $evento->update($NuevosDatos);
-        return redirect('/eventos');
+        return redirect('/eventos')->with('info','Informacion Actualizada');
     }
 
     /**
@@ -160,6 +160,6 @@ class EventosController extends Controller
 
         $evento->delete();
 
-        return redirect('eventos')->with('success', 'evento eliminado de forma Satisfactoria');
+        return redirect('eventos')->with('info', 'evento eliminado de forma Satisfactoria');
     }
 }

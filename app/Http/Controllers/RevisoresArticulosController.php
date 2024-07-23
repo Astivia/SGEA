@@ -135,7 +135,7 @@ class RevisoresArticulosController extends Controller
         $RevArt=revisores_articulos::where('evento_id',$eventoId)->where('usuario_id',$usuarioId)->where('articulo_id',$articuloId);
         if ($RevArt) {
             $RevArt->delete();
-            return redirect()->back()->with('success', 'El revisor se eliminó del artículo');
+            return redirect()->back()->with('info', 'El revisor se eliminó del artículo');
         } else {
             return redirect()->back()->with('error', 'No se encontró el revisor para eliminar');
         }

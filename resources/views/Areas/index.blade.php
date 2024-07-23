@@ -5,7 +5,7 @@
 @section('Content')
 <div class="container">
     <div class="search-create">
-        <h1 id="titulo-h1">areas</h1>
+        <h1 id="titulo-h1">Areas</h1>
         <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
 

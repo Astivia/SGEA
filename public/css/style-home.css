@@ -138,8 +138,35 @@ header img{
     margin: 20px;
 }
 
-
 /*Se aplican cambios end*/
+.alert{
+    text-transform:capitalize;
+    margin: 0em auto 1.8em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    height: 5%;
+
+}
+.alert-error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-info {
+    background-color: #d9edf7;
+    border-color: #b6e0fd;
+    color: #31708f;
+}
 
 .options-bar{
     background-color: #fff;

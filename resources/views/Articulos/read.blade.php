@@ -6,17 +6,19 @@
     <div class="container">
         
         <h1>{!!$articulo->titulo!!}</h1>
-        <br><br>
-        <p><strong>Autores: </strong>
-        @foreach ($autores as $index => $autor)
-            @if ($index !== count($autores) - 1)
-                {!! $autor->orden !!}. {!! $autor->usuario->nombre_completo !!},
-            @else
-                {!! $autor->orden !!}. {!! $autor->usuario->nombre_completo !!}.
-            @endif
-        @endforeach
+        <p>
+            <strong>Autores: </strong>
+            <br>
+            @foreach ($autores as $index => $autor)
+            <strong>{!! $autor->orden !!}. </strong>
+                @if ($index !== count($autores) - 1)
+                    {!! $autor->usuario->nombre_completo !!},
+                @else
+                    {!! $autor->usuario->nombre_completo !!}.
+                @endif
+            @endforeach
         </p>
-        <p><strong>Autor de correspondencia: </strong>{!! $correspondencia->usuario->nombre_completo!!}</p>
+        <p><strong>Correspondencia: </strong>{!! $correspondencia->usuario->email!!} ({!! $correspondencia->usuario->nombre_completo!!})</p>
         <p><strong>Evento: </strong>{!!$articulo->evento->nombre!!} (<strong>{!!$articulo->evento->acronimo!!} {!!$articulo->evento->edicion!!}</strong>)</p>
         <p><strong>Resumen: </strong>{!!$articulo->resumen!!}</p>
         <p><strong>Area: </strong>{!!$articulo->area->nombre!!}</p>

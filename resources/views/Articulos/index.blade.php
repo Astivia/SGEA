@@ -27,7 +27,7 @@
                     <td>
                         <ul>
                             @foreach ($art->autores as $autor)
-                                <li>{{ $autor->orden }}. {{ $autor->usuario->nombre_completo }} <a href="{!! 'usuarios/'.$autor->usuario->id !!}"><i class="las la-info-circle la-1x"></i></a></li>
+                                <li>{{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} <a href="{!! 'usuarios/'.$autor->usuario->id !!}"><i class="las la-info-circle la-1x"></i></a></li>
                             @endforeach
                         </ul>
                     </td>
@@ -68,6 +68,7 @@
                 
                 <label for="area">Seleccionar Area :</label>
                 <select name="area_id" required>
+                    <option value="">Seleccionar...</option>
                     @foreach ($Areas as $area)
                         <option value="{{ $area->id }}">{{ $area->nombre }}</option>
                     @endforeach
@@ -99,7 +100,6 @@
                 <br><br>
                 <p>¿No encuentra su Autor? <a href="#" id="register-author-btn"><strong>Registrar Autor</strong></a></p>
                 <br>
-                <input type="hidden" name="new_users" id="new-user-input">
                 <input type="hidden" name="selected_authors" id="selected-authors-input">
                 <button type="submit">Guardar articulo</button>
             {!! Form::close() !!}
@@ -144,7 +144,6 @@
         const plusAuthorBtn = document.getElementById('plus-author-btn');
         const minusAuthorBtn = document.getElementById('minus-author-btn');
         const selectedAuthorsInput = document.getElementById('selected-authors-input');
-        const newUsersInput = document.getElementById('new-user-input');
 
         const createArticleModal = document.getElementById('create-modal');
         const registerAuthorModal = document.getElementById('register-author-modal');
@@ -182,7 +181,7 @@
 
         const updateSelectedAuthorsInput = () => {
             const selectedAuthorsData = selectedAuthors.map(author => ({
-                id: author.id,
+                id: author.id.toString(),
                 corresponding: author.corresponding,
                 institucion: author.institucion
             }));
@@ -267,11 +266,10 @@
         articleForm.addEventListener('submit', (event) => {
             const hasCorrespondingAuthor = selectedAuthors.some(author => author.corresponding);
             if (!hasCorrespondingAuthor) {
-                alert('Debe haber al menos un autor de correspondencia.');
+                alert('Seleccione un autor de correspondencia.');
                 event.preventDefault();
                 return
             }else{
-                updateNewUsersInput();
                 updateSelectedAuthorsInput();
             }
         });
@@ -296,43 +294,40 @@
             const newAuthorEmail = document.querySelector('input[name="email"]').value || '';
             const newAuthorInstitucion = document.querySelector('input[name="institucion"]').value || '';
 
-            if(newAuthorId === "" || newAuthorId === null){
-                const authorData = {
-                    id: newAuthorId,curp: newAuthorCurp, nombre: newAuthorNombre,ap_paterno: newAuthorApPaterno,ap_materno: newAuthorApMaterno,telefono: newAuthorTelefono,
-                    email: newAuthorEmail,institucion: newAuthorInstitucion
-                };
-
-                fetch('{{ route('insertar-usuario') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ authorData })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert(data.error); // Muestra el error si lo hay
-                    } else {
-                        console.log('Autor insertado con éxito:', data.success);
-                        let newAuthorId = data.id; 
-                        console.log('Nuevo ID del autor:', newAuthorId);
-                        
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
+            const newAuthorName = `${newAuthorApPaterno} ${newAuthorApMaterno} ${newAuthorNombre}`;
 
             if (!newAuthorCurp || !newAuthorNombre || !newAuthorApPaterno || !newAuthorApMaterno || !newAuthorTelefono || !newAuthorEmail || !newAuthorInstitucion) {
                 alert('Todos los campos son obligatorios.');
                 return;
             }
 
-            const newAuthorName = `${newAuthorApPaterno} ${newAuthorApMaterno} ${newAuthorNombre}`;
+            const authorData = {
+                id: newAuthorId,curp: newAuthorCurp,nombre: newAuthorNombre,
+                ap_paterno: newAuthorApPaterno,ap_materno: newAuthorApMaterno,telefono: newAuthorTelefono,email: newAuthorEmail,institucion: newAuthorInstitucion
+            };
 
+            if(newAuthorId === "" || newAuthorId === null){
+                try {
+                    const response = await fetch('{{ route('insertar-usuario') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ authorData })
+                    });
+                    const data = await response.json();
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    } else {
+                        newAuthorId = data.id.toString();
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    return;
+                }
+            }
             // agregar el nuevo autor al combo de selección
             const newOption = document.createElement('option');
             newOption.value = newAuthorId;
@@ -340,7 +335,7 @@
             selectedAuthorSelect.appendChild(newOption);
 
             // agregar el autor al array
-            selectedAuthors.push({ id: newAuthorId, corresponding: false, institucion: newAuthorInstitucion });
+            selectedAuthors.push({ id: newAuthorId, name: newAuthorName, corresponding: false, institucion: newAuthorInstitucion });
             updateAuthorList();
             updateSelectedAuthorsInput();
 

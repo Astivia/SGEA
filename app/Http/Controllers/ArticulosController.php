@@ -16,19 +16,13 @@ class ArticulosController extends Controller
     /**
      * Display a listing of the resource.
      */
-
-     
-
     public function index()
     {
-
         $Articulos = articulos::with(['evento', 'area', 'autores.usuario'])->OrderBy('id')->get();
-        
         //Catalogo de Areas
         $Areas =areas::all();
         //Catalogo de Autores para el combo del Form "registrar Articulo"
         $Autores=articulosAutores::distinct('usuario_id')->get();
-        
         return view ('Articulos.index',compact('Articulos','Areas','Autores'));
     }
 
@@ -50,45 +44,23 @@ class ArticulosController extends Controller
 
         if($evento){
             $datos=$request->all();
-            //validamos la carga del archivo
-            $request->validate([
-                'pdf' => 'required|file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-            ]);
-            // manejo del archivo
-            $archivo = $request->file('pdf');
-            $nombreArchivo = $archivo->getClientOriginalName();
-            $rutaArchivo = storage_path('app/public/Articles/web/'.$evento->acronimo.$evento->edicion.'/'.$nombreArchivo);
-    
-            // Guardamos el archivo con su nombre original y obtenemos la ruta completa
-            $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' .$evento->acronimo.$evento->edicion, $nombreArchivo);
 
-            //verificamos si debemos insertar usuarios nuevos
-            if($request->has('new_users')){
-                $newUsers=json_decode($request->input('new_users'),true);
-                if(json_last_error()=== JSON_ERROR_NONE){
-                    foreach ($newUsers as $user) {
-
-                        if($user['curp'][10]=='H'){
-                            $foto= 'DefaultH.jpg';
-                        }else {
-                            $foto = 'DefaultM.jpg';
-                        }
-                        usuarios::create([
-                            'curp'=>$user['curp'],
-                            'nombre'=>$user['nombre'],
-                            'ap_paterno'=>$user['ap_paterno'],
-                            'ap_materno'=>$user['ap_materno'],
-                            'email'=>$user['email'],
-                            'telefono'=>$user['telefono'],
-                            'foto'=>$foto,
-                            'estado'=>"alta,no registrado"
-                        ]);
-                    }
-                }else {
-                    echo "Error al decodificar Datos: ".json_last_error_msg();
-                }
+            if($request->has('pdf')){
+                //validamos la carga del archivo
+                $request->validate([
+                    'pdf' => 'required|file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                ]);
+                // manejo del archivo
+                $archivo = $request->file('pdf');
+                $nombreArchivo = $archivo->getClientOriginalName();
+                $rutaArchivo = storage_path('app/public/Articles/web/'.$evento->acronimo.$evento->edicion.'/'.$nombreArchivo);
+        
+                // Guardamos el archivo con su nombre original y obtenemos la ruta completa
+                $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' .$evento->acronimo.$evento->edicion, $nombreArchivo);
+            }else{
+                $nombreArchivo=null;
             }
-    
+            
             //insertamoslos datos del articulo
             $articulo = articulos::create([
                 'evento_id'=>$evento->id,
@@ -119,7 +91,7 @@ class ArticulosController extends Controller
                 }
             }
     
-            return redirect ('/articulos');
+            return redirect ('/articulos')->with('success','Articulo Registrado');
         }else{
             return redirect()->back()->with('error','No es posible insertar: el usuario no es parte de ningun evento');
 
@@ -224,10 +196,7 @@ class ArticulosController extends Controller
                 echo "Error al decodificar Datos: ".json_last_error_msg();
             }
         }
-
-
-
-        return redirect('/articulos')->with('success', 'Artículo Modificado');
+        return redirect('/articulos')->with('info','Informacion Actualizada');
     }
 
     /**
@@ -249,7 +218,7 @@ class ArticulosController extends Controller
         try {
             articulosAutores::where('articulo_id', $articulo->id)->where('evento_id',$articulo->evento->id)->delete();
             $articulo->delete();
-            return redirect()->back()->with('success', 'el artículo  se elimino correctamente');
+            return redirect()->back()->with('info', 'el artículo  se elimino correctamente');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -264,7 +233,6 @@ class ArticulosController extends Controller
              $user = usuarios::find($authorId);
          }else{
             $user =  articulosAutores::where('usuario_id', $authorId)->first();
-            
          }
         return response()->json(['exists' => $exists, 'user' => $user]);
         

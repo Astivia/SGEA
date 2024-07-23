@@ -35,7 +35,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+    /////////////////////////////ALERTS////////////////////////////////////////
+    // Seleccionar las alertas
+    const alerts = document.querySelectorAll('.alert');
+    // Función para desvanecer una alerta
+    function fadeOutAlert(alert) {
+        alert.style.transition = 'opacity 1s ease-in-out';
+        alert.style.opacity = 0;
+
+        setTimeout(() => {
+            // Verificar si el elemento padre existe
+            if (alert.parentNode) {
+                alert.parentNode.removeChild(alert);
+            }
+        }, 1000); // 1 segundo = 1000 milisegundos
+    }
+
+    // Recorrer las alertas y agregar un evento de click
+    alerts.forEach(alert => {
+        alert.addEventListener('click', () => {
+            fadeOutAlert(alert);
+
+        });
+    });
 });
 
     

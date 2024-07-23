@@ -63,7 +63,7 @@ class areasController extends Controller
         $NuevosDatos = $request->all();
         $area=areas::find($id);
         $area->update($NuevosDatos);
-        return redirect('/areas');
+        return redirect('/areas')->with('info', 'informacion actualizada');
     }
 
     /**
@@ -79,6 +79,6 @@ class areasController extends Controller
 
         $area->delete();
 
-        return redirect('areas')->with('success', 'Se ha eliminado correctamente');
+        return redirect('areas')->with('info', 'Se ha eliminado correctamente');
     }
 }

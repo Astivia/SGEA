@@ -93,6 +93,6 @@ class ParticipantesController extends Controller
 
         $evento->participantes()->detach($usuario);
 
-        return redirect()->back()->with('success', 'Usuario expulsado del evento.');
+        return redirect()->back()->with('info', 'Usuario expulsado del evento.');
     }
 }
