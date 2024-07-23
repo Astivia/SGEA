@@ -4,7 +4,7 @@
 </head>
 @section('Content')
 <div class="container">
-    <h1>{!!$Usu->nombre!!} {!!$Usu->ap_pat!!} {!!$Usu->ap_mat!!}</h1>
+    <h1>{!!$Usu->nombre!!} {!!$Usu->ap_paterno!!} {!!$Usu->ap_materno!!}</h1>
     <br><br>
     <img src="{{asset('SGEA/public/assets/img/'.$Usu->foto)}}" alt="foto" style="width:250px">
     <br><br>

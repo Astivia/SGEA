@@ -1,18 +1,16 @@
 <div class="sidebar">
-   
     <div class="sidebar-main">
         <div class="sidebar-user">
             <h2>SGEA</h2>
                 <img src="{{ asset('SGEA/public/assets/img/'.Auth::user()->foto) }}" alt="">
             <div>
-                <h3>@auth {{Auth::user()->nombre}}@endauth</h3>
+                <h3>@auth {{Auth::user()->nombre}} {{Auth::user()->ap_paterno}}@endauth</h3>
                 @role('Administrador')
                     <span>Administrador</span>
                 @endrole
                 @role('Organizador')
                     <span>Organizador</span>
                 @endrole
-                
             </div>
         </div>    
         <div class="sidebar-menu">

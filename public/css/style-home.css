@@ -61,7 +61,6 @@
 }
 .sidebar-menu {
     margin-top: 3rem;
-    background-color:wh;
     padding: 10px;
     border-radius: 5px;
 }
@@ -91,7 +90,7 @@
     display: none;
     padding: 10px;
     border-radius: 2px;
-    background-color: rgb(33, 71, 148);
+    
     
 }
 /*Se aplican cambios end*/
@@ -116,6 +115,7 @@
 }
 .main-content {
     margin-left: 280px;
+    
     transition: margin-left 0.3s ease;
 }
 .sidebar.active ~ .main-content {
@@ -123,51 +123,62 @@
 }
 /*Se aplican cambios start*/
 header {
-    height: 150px;
-    background-image: url(../assets/img/headercompleto.jpeg);
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
+    margin: 0em auto 0em;
+    height: 15%;
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 0 1.5rem;
-    
+    background-color: #fff;
 }
+
+header img{
+    height: 80%;
+    margin: 20px;
+}
+
+
 /*Se aplican cambios end*/
 
-
-header .header-icons {
+.options-bar{
+    background-color: #fff;
+    margin: 0em auto 1.8em;
+    padding: 5px;
     display: flex;
-    align-items: center;
-    margin-top: 120px;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
 }
 
-header .header-icons span {
+
+.options-bar .header-icons {
+    display: flex;
+    align-items: center;
+}
+
+.options-bar .header-icons span {
     font-size: 1.5rem;
     margin-left: 1.5rem;
     color: aliceblue;
-    background-color: rgb(170, 170, 170);
+    background-color: #1a2d51;
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
-    
-    border-radius: 50%;
 }
 
-header .menu-toggle {
+.options-bar .menu-toggle {
     display: flex;
     align-items: center;
-    margin-top: 120px;
-   
    
 }
 
-header .menu-toggle span {
+.options-bar .menu-toggle span {
     font-size: 1.5rem;
     color: aliceblue;
     margin-right: 1.5rem; /* Adjust the spacing as needed */
-    background-color: rgb(170, 170, 170);
+    background-color: #1a2d51;
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
@@ -177,27 +188,23 @@ header .menu-toggle span {
 
 /* Responsive design */
 @media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 0.5rem;
-        height: 70px;
-    }
 
-    header .menu-toggle {
+    header img{
+        height: 40%;
+        margin: 0px 0px 0px;
+    }
+    .options-bar .menu-toggle {
         margin-bottom: 0.5rem;
-        margin-top: 50px;
     }
 
    
 
-    header .header-icons {
+    .options-bar .header-icons {
         width: 100%;
-        margin-top: -50px;
         justify-content: flex-end;
     }
 
-    header .header-icons span {
+    .options-bar .header-icons span {
         margin-left: 0.5rem;
     }
 }
@@ -231,7 +238,7 @@ main {
     margin-right: 1rem;
     
 }
-#create-event-btn {
+#create-btn {
     padding: 0.5rem 1rem;
     background-color: blue;
     color: #fff;
@@ -315,11 +322,8 @@ form button[type="submit"] {
     }
     header{
         backdrop-filter: contrast(70%);
-        background-color: rgb(227, 119, 59);
-       
+        background-color: #ffffff;
     }
-    
-
     
 }
 
@@ -480,7 +484,7 @@ td:last-child {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-#create-event-btn{
+#create-btn{
     background-color: #f99806;
 }
 .container table td a #mensaje{

@@ -34,11 +34,9 @@
     <div class="background"></div>
     <div class="container ">
         <div class="content">
-        <div class="header-img">
-        <!-- <img src="{{asset('SGEA/public/assets/img/Logo itt-fn.png')}}" alt="">
-        <img src="{{asset('SGEA/public/assets/img/Logo ittol-fn.png')}}" alt=""> -->
-        <img src="{{asset('SGEA/public/assets/img/Logo ittol.png')}}" alt="">
-      </div>
+            <div class="header-img">
+                <img src="{{asset('SGEA/public/assets/img/TECNM.png')}}" alt="">
+            </div>
             <h2 class="logo">SGEA<i class='bx bxs-calendar-event'></i></h2>
             @if(isset($usuarios))
             <h1>existe</h1>

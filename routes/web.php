@@ -4,9 +4,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AreasController;
 use App\Http\Controllers\ArticulosController;
-
-use App\Http\Controllers\AutoresController;
-use App\Http\Controllers\AutoresExternosController;
 use App\Http\Controllers\ArticulosAutoresController;
 use App\Http\Controllers\Comite_EditorialController;
 use App\Http\Controllers\EventosController;
@@ -30,11 +27,12 @@ Route::resource('articulos', ArticulosController::class)->middleware('auth');
 Route::get('articulos/{evento_id}/{id}', [ArticulosController::class, 'show'])->middleware('auth');
 Route::get('articulos/{evento_id}/{id}/edit', [ArticulosController::class, 'edit'])->middleware('auth');
 Route::put('articulos/{evento_id}/{id}', [ArticulosController::class, 'update']);
-Route::post('/check-author', [ArticulosController::class, 'checkAuthor'])->name('revisar-existencia');
 
-
-Route::resource('autores', ArticulosAutoresController::class)->middleware('auth');
-Route::resource('autores_externos', AutoresExternosController::class)->middleware('auth');
+Route::resource('articulos', ArticulosController::class)->middleware('auth');
+    //Rutas AJAX
+    Route::post('/check-author', [ArticulosController::class, 'checkAuthor'])->name('revisar-existencia');
+    Route::post('/verify-curp', [LoginController::class, 'verifyCurp'])->name('verify-curp');
+    Route::post('/setId', [UsuariosController::class, 'setNewId'])->name('nuevo-id');
 
 // REVISORES DE ARTICULOS:
 Route::resource('revisores_articulos', RevisoresArticulosController::class)->middleware('auth');
@@ -55,9 +53,7 @@ Route::view('/login',"login")->name('login');
  Route::post ('/inicia-sesion',[LoginController::class,'login'])->name('inicia-sesion');
  Route::get('/logout',[LoginController::class,'logout'])->name('logout');
 
- //verificar curp
- Route::post('/verify-curp', [LoginController::class, 'verifyCurp'])->name('verify-curp');
- 
+
  // DASHBOARDS
 
  Route::get('/redirect', [UsuariosController::class, 'redirectToAppropriateView'])->name('user.redirect');

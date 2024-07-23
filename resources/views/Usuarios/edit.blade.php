@@ -17,11 +17,11 @@
             {!! Form::text ('nombre',$usu->nombre)!!}              
                                 
             <label for="participante-lastName">Apellido Paterno:</label>
-            {!! Form::text ('ap_pat',$usu->ap_pat)!!}
+            {!! Form::text ('ap_paterno',$usu->ap_paterno)!!}
                             
                                 
             <label for="participante-lastName">Apellido Materno:</label>
-            {!! Form::text ('ap_mat',$usu->ap_mat)!!}
+            {!! Form::text ('ap_materno',$usu->ap_materno)!!}
                
                                 
             <label for="participante-curp">CURP:</label>
