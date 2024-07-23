@@ -16,13 +16,13 @@
         error ') }}');
     </script> -->
 
-        <div id="errorModal" class="modal">
+        <!-- <div id="errorModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('errorModal')">&times;</span>
-                <h1>Error de inicio de sesion </h1>
+                <h1>Error al ingresar tu CURP </h1>
                 <p>{{ session('error') }}</p>
             </div>
-        </div>
+        </div> -->
     @endif
 
     @if(session('success'))

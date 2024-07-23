@@ -492,6 +492,7 @@
     max-height: 130px;
 }
 
+
 /* Estilos del modal */
 
 .modal {
@@ -507,7 +508,8 @@
     background-color: rgba(0, 0, 0, 0.4);
 }
 .modal-content {
-    background-color: rgb(21, 21, 153);
+    background: transparent;    
+    backdrop-filter: contrast(70%);    
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
@@ -515,7 +517,13 @@
     max-width: 400px;
     border-radius: 10px;
     text-align: center;
-    color: white;
+    color:rgb(88, 3, 3);
+}
+.alerta-modal{
+    color: rgb(88, 3, 3);
+   display: flex;
+   align-items: center;
+    font-size: 25px;
 }
 .modal-content p {
     margin-top: 10px;

@@ -13,7 +13,9 @@
             alert('{{ session('error') }}');
         </script> -->
         <div id="errorModal" class="modal">
+       
             <div class="modal-content">
+                <span class="alerta-modal"><i class='bx bxs-error-alt'></i>Alerta</span>
                 <span class="close" onclick="closeModal('errorModal')">&times;</span>
                 <h1>Error de inicio de sesion </h1>
                 <p>{{ session('error') }}</p>

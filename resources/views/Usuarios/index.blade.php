@@ -11,10 +11,11 @@
     </div>
 
     
-    
-    <table id="example" class="display" style="width:100%">
+    <div style="overflow-x:auto; overflow-y:auto; ">
+    <table id="example" class="display nowrap" style="width:100%">
             <thead>            
     <tr>
+                
                 <th>NOMBRE</th>
                 <th>APELLIDOS</th>
                 <th>EMAIL</th>
@@ -27,6 +28,7 @@
             <tbody>
             @foreach ($Usuarios as $usu)
             <tr>
+                
                 <td>{!!$usu->nombre!!}</td>
                 <td>{!!$usu->ap_paterno!!} {!!$usu->ap_materno!!}</td>
                 <td>{!!$usu->email!!}</td>
@@ -55,7 +57,7 @@
             </tbody>
         </table>
         
-
+        </div>
 
     
  
@@ -94,4 +96,5 @@
         {!!Form::close()!!}
     </div>
 </div>
+
 @endsection
