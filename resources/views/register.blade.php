@@ -11,10 +11,18 @@
 
 <body>
     @if(session('error'))
-    <script>
+    <!-- <script>
     alert('{{ session('
         error ') }}');
-    </script>
+    </script> -->
+
+        <div id="errorModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('errorModal')">&times;</span>
+                <h1>Error de inicio de sesion </h1>
+                <p>{{ session('error') }}</p>
+            </div>
+        </div>
     @endif
 
     @if(session('success'))
@@ -108,7 +116,10 @@
 
             </div>
         </div>
+        
     </div>
+    </div>
+    <script src="./js/scriptLogin.js"> </script>
     <script>
     document.getElementById('curp').addEventListener('blur', function() {
         let curp = this.value;

@@ -265,6 +265,7 @@ class LoginController extends Controller
                 }else{
                     //EL INICIO DE SESION NO FUE EXITOSO
                     return redirect('login')->with('error', 'Ocurrio un Error, verifica los datos');
+                   
                 }
             }else if($user->estado=="alta,no registrado"){
                 //PROCESO PARA VERIFICAR EMAIL -> En caso de que el usuario este registrado pero no haya verificado email
