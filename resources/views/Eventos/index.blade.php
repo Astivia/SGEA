@@ -5,56 +5,58 @@
 <div class="container">
 
     <div class="search-create">
-    <h1 id="titulo-h1">Eventos</h1>
-        <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
+        <h1 id="titulo-h1">Eventos</h1>
+        @role(['Administrador','Organizador'])
+            <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
+        @endrole
     </div>
     @if($Eventos->isEmpty())
         <strong>No hay datos</strong>
     @else
     <div style="overflow-x:auto; overflow-y:auto; max-height:500px;">
-    <table id="example" class="display nowrap" style="width:100%">
-            <thead>
-                <tr>
-                    <th>LOGO</th>
-                    <th>NOMBRE</th>
-                    <th>ACRONIMO</th>
-                    <th>ED.</th>
-                    @role('Administrador')
-                    <th> </th>
-                    @endrole
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($Eventos as $e)
-                <tr>
-                    <td>
-                        <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo" style="width: 250px;" >
-                    </td>
-                    <td>{!!$e->nombre!!}</td>
-                    <td>{!!$e->acronimo!!}</td>
-                    <td>{!!$e->edicion!!}</td>
-                    <td>
-                        <a href="{!! 'eventos/'.$e->id !!}"><i class="las la-info-circle la-2x"></i></a>
-                        @role(['Administrador', 'Organizador'])
-                        <a href="{!!'eventos/'.$e->id.'/edit'!!}">
-                            <i class="las la-pen la-2x"></i>
-                        </a>
-                        <a href="{{url('eventos/'.$e->id)}}"
-                            onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $e->id }}').submit(); }">
-                            <i class="las la-trash-alt la-2x"></i>
-                        </a>
-                        <form id="delete-form-{{ $e->id }}" action="{{ url('eventos/'.$e->id) }}" method="POST"
-                            style="display: none;">
-                            @method('DELETE')
-                            @csrf
-                        </form>
+        <table id="example" class="display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>LOGO</th>
+                        <th>NOMBRE</th>
+                        <th>ACRONIMO</th>
+                        <th>ED.</th>
+                        @role('Administrador')
+                        <th> </th>
                         @endrole
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($Eventos as $e)
+                    <tr>
+                        <td>
+                            <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo" style="width: 250px;" >
+                        </td>
+                        <td>{!!$e->nombre!!}</td>
+                        <td>{!!$e->acronimo!!}</td>
+                        <td>{!!$e->edicion!!}</td>
+                        <td>
+                            <a href="{!! 'eventos/'.$e->id !!}"><i class="las la-info-circle la-2x"></i></a>
+                            @role(['Administrador', 'Organizador'])
+                            <a href="{!!'eventos/'.$e->id.'/edit'!!}">
+                                <i class="las la-pen la-2x"></i>
+                            </a>
+                            <a href="{{url('eventos/'.$e->id)}}"
+                                onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $e->id }}').submit(); }">
+                                <i class="las la-trash-alt la-2x"></i>
+                            </a>
+                            <form id="delete-form-{{ $e->id }}" action="{{ url('eventos/'.$e->id) }}" method="POST"
+                                style="display: none;">
+                                @method('DELETE')
+                                @csrf
+                            </form>
+                            @endrole
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
 
-        </table>
+            </table>
         </div>
     @endif
 </div>

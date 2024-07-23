@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\usuarios;
-use App\Models\participantes;
 use App\Models\articulosAutores;
+use App\Models\participantes;
 use App\Models\comite_editorial;
 
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +29,7 @@ class usuariosController extends Controller
      */
     public function index()
     {
-        $Usuarios=usuarios::orderBy('id')->get();
+        $Usuarios=usuarios::where('estado',"alta,registrado")->get();
         return view ('Usuarios.index',compact('Usuarios'));
     }
 
@@ -82,14 +82,8 @@ class usuariosController extends Controller
     public function show(string $id)
     {
         $Usu = usuarios::find($id);
-        $curp=$Usu->curp;
-        if($curp[10]=='H'){
-            $sexo='Masculino';
-        }else{
-            $sexo = 'Femenino';
-        }
-        
-        return view ('Usuarios.read',compact('Usu','sexo'));
+        $articulos=articulosAutores::where('usuario_id',$Usu->id)->get();
+        return view ('Usuarios.read',compact('Usu','articulos'));
     }
 
     /**

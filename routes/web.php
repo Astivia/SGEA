@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AreasController;
 use App\Http\Controllers\ArticulosController;
+use App\Http\Controllers\ArticulosAutoresController;
 use App\Http\Controllers\Comite_EditorialController;
 use App\Http\Controllers\EventosController;
 use App\Http\Controllers\ParticipantesController;
@@ -32,6 +33,8 @@ Route::resource('articulos', ArticulosController::class)->middleware('auth');
     Route::post('/check-author', [ArticulosController::class, 'checkAuthor'])->name('revisar-existencia');
     Route::post('/verify-curp', [LoginController::class, 'verifyCurp'])->name('verify-curp');
     Route::post('/insert-user', [UsuariosController::class, 'insertUser'])->name('insertar-usuario');
+//AUTORES
+Route::resource('autores', ArticulosAutoresController::class)->middleware('auth');
 
 // REVISORES DE ARTICULOS:
 Route::resource('revisores_articulos', RevisoresArticulosController::class)->middleware('auth');

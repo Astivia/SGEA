@@ -22,7 +22,6 @@ class articulos extends Model
         'estado'
     ];
     
-    //llave foranea
     public function evento()
     {
         return $this->belongsTo(eventos::class, 'evento_id','id');
@@ -41,6 +40,12 @@ class articulos extends Model
     public function revisores()
     {
         return $this->hasManyThrough(usuarios::class, revisoresArticulos::class, 'evento_id', 'id', 'articulo_id', 'usuario_id');
+    }
+
+    public function getTituloCortoAttribute()
+    {
+        $textoCortado = substr($this->titulo, 0, 50);
+        return "{$textoCortado} ...";
     }
     
 }

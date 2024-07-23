@@ -3,13 +3,6 @@
 </head>
 @section('Content')
 <div class="container">
-        @if(session('info'))
-            <div class="alert alert-succes">
-                <strong>{{session('info')}}</strong>
-            </div>
-    
-        @endif
-
         <h1>MODIFICAR DATOS</h1>
         {!! Form::open(['method'=>'PATCH','url'=>'/usuarios/'.$usu->id]) !!}  
 
@@ -47,9 +40,9 @@
             @endforeach
                
         @endrole
-            <button type="submit">Guardar</button>
-            <a href="{{asset('SGEA/public/usuarios')}}"><button>Cancelar</button></a>
+        <button type="submit">Guardar</button>
         {!!Form::close()!!}   
+        <a href="{{ url()->previous() }}"><button>Cancelar</button></a> 
     </div>
 
     

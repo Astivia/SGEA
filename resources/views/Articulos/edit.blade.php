@@ -1,6 +1,5 @@
 @extends('layouts.master')
     <title>Modificar Datos</title>
-</head>
 @section('Content')
     <div class="container">
         <h1>MODIFICAR ARTICULO</h1>
@@ -63,9 +62,9 @@
                     <br>
             <br><br>
             <input type="hidden" name="selected_authors" id="selected-authors-input">
-            <button type="submit" id="create-event-btn">Guardar Cambios</button>
+            <button type="submit" >Guardar Cambios</button>
         {!!Form::close()!!}   
-        <a href="{{ url('articulos') }}"><button>Cancelar</button></a> 
+        <a href="{{ url()->previous() }}"><button>Cancelar</button></a> 
     </div>
 
     <div id="register-author-modal" class="modal">
