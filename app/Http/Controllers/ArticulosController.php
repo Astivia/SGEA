@@ -196,7 +196,7 @@ class ArticulosController extends Controller
                 echo "Error al decodificar Datos: ".json_last_error_msg();
             }
         }
-        return redirect()->back()->with('info','Informacion Actualizada');
+        return redirect('/articulos')->with('info','Informacion Actualizada');
     }
 
     /**

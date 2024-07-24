@@ -1,56 +1,53 @@
 @extends('layouts.master')
     <title>Articulos</title>
-
 @section('Content')
     <div class="container">
         <div class="search-create">
             <h1 id="titulo-h1">Artículos</h1>
             <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
         </div>    
-      @if($Articulos->isEmpty())
+        @if($Articulos->isEmpty())
             <strong>No hay datos</strong>
-      @else
-      <div style="overflow-x:auto; overflow-y:auto; max-height:500px;">
-      <table id="example" class="display nowrap" style="width:100%">
-            <thead>            
-                <tr>
-                    <th>TITULO</th>
-                    <th>AUTORES</th>
-                    <th>ESTADO</th>
-                    <th>Controles</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($Articulos as $art)
-                <tr>
-                    <td><strong>{{ $art->titulo }}</strong></td>
-                    <td>
-                        <ul>
-                            @foreach ($art->autores as $autor)
-                                <li>{{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} <a href="{!! 'usuarios/'.$autor->usuario->id !!}"><i class="las la-info-circle la-1x"></i></a></li>
-                            @endforeach
-                        </ul>
-                    </td>
-                    <td>{!!$art->estado!!}</td>
-                    <td>
-                    <a href="{!! url('articulos/'.$art->evento_id.'/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
-
-                        <a href="{!!'articulos/'.$art->evento_id.'/'.$art->id.'/edit'!!}">
-                         <i class="las la-edit la-2x"></i>
-                        </a>
-                        <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">
-                        <i class="las la-trash-alt la-2x"></i>
-                        </a>
-                        <form id="delete-form-{{ $art->id }}" action="{{ url('articulos/'.$art->id) }}" method="POST" style="display: none;">
-                            @method('DELETE')
-                            @csrf
-                        </form>
-
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        @else
+        <div style="overflow-x:auto; overflow-y:auto; max-height:500px;">
+            <table id="example" class="display nowrap" style="width:100%">
+                <thead>            
+                    <tr>
+                        <th>TITULO</th>
+                        <th>AUTORES</th>
+                        <th>ESTADO</th>
+                        <th>Controles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($Articulos as $art)
+                    <tr>
+                        <td><strong>{{ $art->titulo }}</strong></td>
+                        <td>
+                            <ul>
+                                @foreach ($art->autores as $autor)
+                                    <li>{{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} <a href="{!! 'usuarios/'.$autor->usuario->id !!}"><i class="las la-info-circle la-1x"></i></a></li>
+                                @endforeach
+                            </ul>
+                        </td>
+                        <td>{!!$art->estado!!}</td>
+                        <td>
+                        <a href="{!! url('articulos/'.$art->evento_id.'/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
+                            <a href="{!!'articulos/'.$art->evento_id.'/'.$art->id.'/edit'!!}">
+                            <i class="las la-edit la-2x"></i>
+                            </a>
+                            <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">
+                            <i class="las la-trash-alt la-2x"></i>
+                            </a>
+                            <form id="delete-form-{{ $art->id }}" action="{{ url('articulos/'.$art->id) }}" method="POST" style="display: none;">
+                                @method('DELETE')
+                                @csrf
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
       @endif
     </div>
@@ -133,7 +130,6 @@
             </form>
         </div>
     </div>
-
 @endsection
 
 <script>
@@ -188,6 +184,16 @@
             selectedAuthorsInput.value = JSON.stringify(selectedAuthorsData);
             console.log('Campo oculto:', selectedAuthorsInput.value);
         };
+
+        function resetRegisterAuthorForm() {
+            const registerAuthorForm = document.getElementById('register-author-form');
+            //reseteamos los valores de los imputs
+            registerAuthorForm.reset();
+            //habilitamos los campos 
+            document.querySelectorAll('#register-author-form input').forEach(input => {
+                input.disabled = false;
+            });
+        }
         
 
         plusAuthorBtn.addEventListener('click', () => {
@@ -274,15 +280,7 @@
             }
         });
 
-        function resetRegisterAuthorForm() {
-            const registerAuthorForm = document.getElementById('register-author-form');
-            //reseteamos los valores de los imputs
-            registerAuthorForm.reset();
-            //habilitamos los campos 
-            document.querySelectorAll('#register-author-form input').forEach(input => {
-                input.disabled = false;
-            });
-        }
+        
 
         document.getElementById('save-author-btn').addEventListener('click', async () => {
             let newAuthorId = document.querySelector('input[name="id"]').value || '';
@@ -302,11 +300,11 @@
             }
 
             const authorData = {
-                id: newAuthorId,curp: newAuthorCurp,nombre: newAuthorNombre,
-                ap_paterno: newAuthorApPaterno,ap_materno: newAuthorApMaterno,telefono: newAuthorTelefono,email: newAuthorEmail,institucion: newAuthorInstitucion
+                id: newAuthorId, curp: newAuthorCurp, nombre: newAuthorNombre,
+                ap_paterno: newAuthorApPaterno, ap_materno: newAuthorApMaterno, telefono: newAuthorTelefono, email: newAuthorEmail, institucion: newAuthorInstitucion
             };
 
-            if(newAuthorId === "" || newAuthorId === null){
+            if (newAuthorId === "" || newAuthorId === null) {
                 try {
                     const response = await fetch('{{ route('insertar-usuario') }}', {
                         method: 'POST',
@@ -328,21 +326,31 @@
                     return;
                 }
             }
-            // agregar el nuevo autor al combo de selección
-            const newOption = document.createElement('option');
-            newOption.value = newAuthorId;
-            newOption.text = newAuthorName;
-            selectedAuthorSelect.appendChild(newOption);
 
-            // agregar el autor al array
-            selectedAuthors.push({ id: newAuthorId, name: newAuthorName, corresponding: false, institucion: newAuthorInstitucion });
-            updateAuthorList();
-            updateSelectedAuthorsInput();
+            // Verificar si el autor ya existe en el combo o en el array
+            const isAuthorInArray = selectedAuthors.some(author => author.id === newAuthorId);
+            const isAuthorInSelect = Array.from(selectedAuthorSelect.options).some(option => option.value === newAuthorId);
 
-            // manejo de modales
-            registerAuthorModal.style.display = 'none';
-            createArticleModal.style.display = 'block';
-            resetRegisterAuthorForm();
+            if (isAuthorInArray) {
+                alert('El autor ya existe.');
+                return;
+            } else {
+                if(isAuthorInSelect===false){
+                     // agregar el nuevo autor al combo de selección
+                    const newOption = document.createElement('option');
+                    newOption.value = newAuthorId;
+                    newOption.text = newAuthorName;
+                    selectedAuthorSelect.appendChild(newOption);
+                }
+                // agregar el autor al array
+                selectedAuthors.push({ id: newAuthorId, name: newAuthorName, corresponding: false, institucion: newAuthorInstitucion });
+                updateAuthorList();
+                updateSelectedAuthorsInput();
+                // manejo de modales
+                registerAuthorModal.style.display = 'none';
+                createArticleModal.style.display = 'block';
+                resetRegisterAuthorForm();
+            }
         });
   
         var registerAuthorBtn = document.getElementById('register-author-btn');
@@ -357,13 +365,14 @@
             registerAuthorModal.style.display = 'none';
             createArticleModal.style.display = 'block';
         });
+        updateAuthorList();
+        updateSelectedAuthorsInput();
 
     });
 
 </script>
 
 <script>
-
     document.addEventListener('DOMContentLoaded', (event) => {
         const curpInput = document.getElementById('curp');
         const idInput = document.getElementById('id');

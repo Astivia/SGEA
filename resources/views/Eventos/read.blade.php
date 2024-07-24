@@ -3,7 +3,7 @@
 </head>
 @section('Content')
     <div class="container">
-        <h1>Informacion del evento {!!$evento->acronimo!!} {!!$evento->edicion!!}</h1>
+        <h1>{!!$evento->nombre!!} ({!!$evento->acronimo!!} {!!$evento->edicion!!})</h1>
         <div class="info">
             <div class="image">
                 <img src="{{asset('SGEA/public/assets/uploads/'.$evento->logo)}}" alt="" style="width:400px;">
@@ -18,15 +18,11 @@
             <p><strong>Fecha de Inicio: </strong>{!!$evento->fecha_inicio!!}</p>
             
             <p><strong>Fecha de Fin: </strong>{!!$evento->fecha_fin!!}</p>
-            <strong>Status del evento:</strong>
-            <p>{!!$message!!}</p>
+            <strong>Status del evento:</strong> <p>{!!$message!!}</p>
             <br><br>
             <a href="{{ url('eventos') }}"><button><i class="las la-arrow-left la-2x"></i></button></a>
-            <a href="{{ route('participantes.evento.index', ['eventoId' => $evento->id]) }}"><button>Ver participantes</button></a>
-            <a href="{{ route('revisores_articulos.evento.index', ['eventoId' => $evento->id]) }}"><button>Ver Revisores de Articulos</button></a>
-            <a href=""><button id="create-event-btn">Ver Articulos</button></a>
-            
-
+            <a href="{{ route('participantes.evento.index', ['eventoId' => $evento->id]) }}"><button>Participantes</button></a>
+            <a href="{{ route('comite.evento.index', ['eventoId' => $evento->id]) }}"><button>Comite Editorial</button></a>
         </div>
     </div>
 @endsection

@@ -26,10 +26,11 @@
                     <strong>Articulos en los que participa: </strong>
                     <ul style="margin-left: 4%">
                         @foreach ($articulos as $art)
-                            <li>- {!!$art->articulo->titulo_corto!!} <a href="{!! url('articulos/'.$art->evento->id.'/'.$art->articulo->id) !!}">
+                            <li>
+                            <i class="las la-arrow-right"></i>
+                                 {!!$art->articulo->titulo_corto!!} <a href="{!! url('articulos/'.$art->evento->id.'/'.$art->articulo->id) !!}">
                                 <i class="las la-info-circle" style="color:#fff;"></i></a>
                             </li>
-                            
                         @endforeach
                     </ul>
                 @endif

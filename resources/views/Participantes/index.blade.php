@@ -56,13 +56,13 @@
 
         {!! Form::open(['route' => 'participantes.store']) !!}
 
-        {!! Form::hidden('evento_id', $evento->id) !!}
+            {!! Form::hidden('evento_id', $evento->id) !!}
 
-        <label for="participante-name">Seleccionar Usuario:</label>
+            <label for="participante-name">Seleccionar Usuario:</label>
 
-        {!! Form::select('usuario_id', $usuarios->pluck('nombre_completo', 'id'), null, ['required' => 'required']) !!}
-        <br><br>
-        <button type="submit">Guardar</button>
+            {!! Form::select('usuario_id', $usuarios->pluck('nombre_completo', 'id'), null, ['required' => 'required']) !!}
+            <br><br>
+            <button type="submit">Guardar</button>
         {!!Form::close()!!}
     </div>
 </div>

@@ -30,7 +30,7 @@
                     @foreach ($Eventos as $e)
                     <tr>
                         <td>
-                            <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo" style="width: 250px;" >
+                            <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo">
                         </td>
                         <td>{!!$e->nombre!!}</td>
                         <td>{!!$e->acronimo!!}</td>

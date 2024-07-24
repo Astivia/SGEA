@@ -32,7 +32,7 @@
             <div class="menu-head">
                 <span>Administracion</span>
             </div>
-            <ul>
+            <ul class="menu-list">
                 <li><a href="{{ url('comite_editorial') }}"><span class="las la-user"></span>Comide Editorial</a></li>
                 <li><a href="{{ url('revisores_articulos') }}"><span class="las la-people-carry"></span>Revisores</a></li>     
             </ul>

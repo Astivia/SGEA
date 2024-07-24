@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AreasController;
 use App\Http\Controllers\ArticulosController;
 use App\Http\Controllers\ArticulosAutoresController;
-use App\Http\Controllers\Comite_EditorialController;
+use App\Http\Controllers\ComiteController;
 use App\Http\Controllers\EventosController;
 use App\Http\Controllers\ParticipantesController;
 use App\Http\Controllers\RevisoresArticulosController;
@@ -22,6 +22,11 @@ Route::resource('usuarios', UsuariosController::class)->middleware('auth');
 Route::resource('participantes', ParticipantesController::class)->except(['index'])->middleware('auth');
 Route::get('participantes/evento/{eventoId}', [ParticipantesController::class, 'index'])->name('participantes.evento.index')->middleware('auth');
 Route::delete('participantes/{eventoId}/{usuarioId}', [ParticipantesController::class, 'destroy'])->name('participantes.destroy')->middleware('auth')->middleware('can:participantes.destroy');
+//COMITE-EDITORIAL
+Route::get('comite/evento/{eventoId}', [ComiteController::class,'Index'])->name('comite.evento.index')->middleware('auth');
+Route::delete('comite/{eventoId}/{usuarioId}', [ComiteController::class, 'remove'])->name('comite.destroy')->middleware('auth')->middleware('can:comite.destroy');
+Route::resource('comite', ComiteController::class)->except(['index'])->middleware('auth');
+
 //ARTICULOS
 Route::resource('articulos', ArticulosController::class)->middleware('auth');
 Route::get('articulos/{evento_id}/{id}', [ArticulosController::class, 'show'])->middleware('auth');

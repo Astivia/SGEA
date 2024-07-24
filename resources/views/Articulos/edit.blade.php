@@ -152,6 +152,16 @@
             console.log('Campo oculto:', selectedAuthorsInput.value);
         };
 
+        function resetRegisterAuthorForm() {
+            const registerAuthorForm = document.getElementById('register-author-form');
+            //reseteamos los valores de los imputs
+            registerAuthorForm.reset();
+            //habilitamos los campos 
+            document.querySelectorAll('#register-author-form input').forEach(input => {
+                input.disabled = false;
+            });
+        }
+
         plusAuthorBtn.addEventListener('click', () => {
             const selectedValue = selectedAuthorSelect.value;
             const selectedText = selectedAuthorSelect.options[selectedAuthorSelect.selectedIndex].text;
@@ -228,7 +238,14 @@
         });
 
         UpdateForm.addEventListener('submit', (event) => {
-            updateSelectedAuthorsInput();
+            const hasCorrespondingAuthor = selectedAuthors.some(author => author.corresponding);
+            if (!hasCorrespondingAuthor) {
+                alert('Seleccione un autor de correspondencia.');
+                event.preventDefault();
+                return
+            }else{
+                updateSelectedAuthorsInput();
+            }
         });
 
         const registerAuthorBtn = document.getElementById('register-author-btn');
@@ -238,8 +255,8 @@
             registerAuthorModal.style.display = 'block';
         });
 
-        document.getElementById('save-author-btn').addEventListener('click', () => {
-            const newAuthorId = document.querySelector('input[name="id"]').value || '';
+        document.getElementById('save-author-btn').addEventListener('click',  async () => {
+            let newAuthorId = document.querySelector('input[name="id"]').value || '';
             const newAuthorCurp = document.querySelector('input[name="curp"]').value || '';
             const newAuthorNombre = document.querySelector('input[name="nombre"]').value || '';
             const newAuthorApPaterno = document.querySelector('input[name="ap_paterno"]').value || '';
@@ -248,36 +265,69 @@
             const newAuthorEmail = document.querySelector('input[name="email"]').value || '';
             const newAuthorInstitucion = document.querySelector('input[name="institucion"]').value || '';
 
+            const newAuthorName = `${newAuthorApPaterno} ${newAuthorApMaterno} ${newAuthorNombre}`;
+           
             if (!newAuthorCurp || !newAuthorNombre || !newAuthorApPaterno || !newAuthorApMaterno || !newAuthorTelefono || !newAuthorEmail || !newAuthorInstitucion) {
                 alert('Todos los campos son obligatorios.');
                 return;
             }
-            const newAuthorName = `${newAuthorApPaterno} ${newAuthorApMaterno} ${newAuthorNombre}`;
-            // agregar el nuevo autor al combo de selección
-            const newOption = document.createElement('option');
-            newOption.value = newAuthorId;
-            newOption.text = newAuthorName;
-            selectedAuthorSelect.appendChild(newOption);
-            // agregar el  autor al array
-            selectedAuthors.push({ id: newAuthorId, name: newAuthorName, corresponding: false, institucion: newAuthorInstitucion });
-            updateAuthorList();
-            updateSelectedAuthorsInput();
-            //manejo de modales
-            registerAuthorModal.style.display = 'none';
-            //reseteamos el modal
-            const registerAuthorForm = document.getElementById('register-author-form');
-            registerAuthorForm.reset();
-            document.querySelectorAll('#register-author-form input').forEach(input => {
-                input.disabled = false;
-            });
+
+            const authorData = {
+                id: newAuthorId,curp: newAuthorCurp,nombre: newAuthorNombre,
+                ap_paterno: newAuthorApPaterno,ap_materno: newAuthorApMaterno,telefono: newAuthorTelefono,email: newAuthorEmail,institucion: newAuthorInstitucion
+            };
+
+            if(newAuthorId === "" || newAuthorId === null){
+                try {
+                    const response = await fetch('{{ route('insertar-usuario') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ authorData })
+                    });
+                    const data = await response.json();
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    } else {
+                        newAuthorId = data.id.toString();
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    return;
+                }
+            }
+            
+            // Verificar si el autor ya existe en el combo o en el array
+            const isAuthorInArray = selectedAuthors.some(author => author.id === newAuthorId);
+            const isAuthorInSelect = Array.from(selectedAuthorSelect.options).some(option => option.value === newAuthorId);
+
+            if (isAuthorInArray) {
+                alert('El autor ya existe.');
+                return;
+            } else {
+                if(isAuthorInSelect===false){
+                     // agregar el nuevo autor al combo de selección
+                    const newOption = document.createElement('option');
+                    newOption.value = newAuthorId;
+                    newOption.text = newAuthorName;
+                    selectedAuthorSelect.appendChild(newOption);
+                }
+                // agregar el autor al array
+                selectedAuthors.push({ id: newAuthorId, name: newAuthorName, corresponding: false, institucion: newAuthorInstitucion });
+                updateAuthorList();
+                updateSelectedAuthorsInput();
+                // manejo de modales
+                registerAuthorModal.style.display = 'none';
+                resetRegisterAuthorForm();
+            }
         });
 
         ///////////////////////////////////MODALES////////////////////////////////////////
         const registerAuthorModal = document.getElementById('register-author-modal');
         var saveAuthorBtn = document.getElementById('save-author-btn');
-        var closeButtons = document.querySelectorAll('.modal .close');
-
-
        
         registerAuthorBtn.addEventListener('click', function () {        
             registerAuthorModal.style.display = 'block';
@@ -286,18 +336,7 @@
         saveAuthorBtn.addEventListener('click', function () {
             registerAuthorModal.style.display = 'none';
         });
-
-        closeButtons.forEach(function (closeBtn) {
-            closeBtn.addEventListener('click', function () {
-                closeBtn.parentElement.parentElement.style.display = 'none';
-            });
-        });
-
-        window.addEventListener('click', function (event) {
-            if (event.target == registerAuthorModal) {
-                createAuthorModal.style.display = 'none';
-            }
-        });
+        
         updateAuthorList();
         updateSelectedAuthorsInput();
     });

@@ -17,6 +17,7 @@ class EventosController extends Controller
         $this->middleware('can:eventos.destroy')->only('destroy'); 
 
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -35,9 +36,6 @@ class EventosController extends Controller
         }
          return view ('Eventos.index',compact('Eventos','sysImgs'));
     }
-
-
-
     /**
      * Show the form for creating a new resource.
      */
@@ -162,4 +160,5 @@ class EventosController extends Controller
 
         return redirect('eventos')->with('info', 'evento eliminado de forma Satisfactoria');
     }
+
 }
