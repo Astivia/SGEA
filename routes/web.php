@@ -10,7 +10,6 @@ use App\Http\Controllers\EventosController;
 use App\Http\Controllers\ParticipantesController;
 use App\Http\Controllers\RevisoresArticulosController;
 use App\Http\Controllers\UsuariosController;
-
 use App\Http\Controllers\LoginController;
 
 
@@ -28,18 +27,20 @@ Route::delete('comite/{eventoId}/{usuarioId}', [ComiteController::class, 'remove
 Route::resource('comite', ComiteController::class)->except(['index'])->middleware('auth');
 
 //ARTICULOS
-Route::resource('articulos', ArticulosController::class)->middleware('auth');
-Route::get('articulos/{evento_id}/{id}', [ArticulosController::class, 'show'])->middleware('auth');
-Route::get('articulos/{evento_id}/{id}/edit', [ArticulosController::class, 'edit'])->middleware('auth');
-Route::put('articulos/{evento_id}/{id}', [ArticulosController::class, 'update']);
-
-Route::resource('articulos', ArticulosController::class)->middleware('auth');
+Route::resource('articulos', ArticulosController::class)->except(['index'])->middleware('auth');
+Route::get('{eventoId}/articulos/', [ArticulosController::class, 'index'])->name('articulos.evento.index')->middleware('auth');
+Route::get('{evento_id}/articulo/{id}', [ArticulosController::class, 'show'])->middleware('auth');
+Route::get('{evento_id}/articulo/{id}/edit', [ArticulosController::class, 'edit'])->middleware('auth');
+Route::put('{evento_id}/articulo/{id}', [ArticulosController::class, 'update']);
     //Rutas AJAX
     Route::post('/check-author', [ArticulosController::class, 'checkAuthor'])->name('revisar-existencia');
     Route::post('/verify-curp', [LoginController::class, 'verifyCurp'])->name('verify-curp');
     Route::post('/insert-user', [UsuariosController::class, 'insertUser'])->name('insertar-usuario');
 //AUTORES
-Route::resource('autores', ArticulosAutoresController::class)->middleware('auth');
+Route::resource('autores', ArticulosAutoresController::class)->except(['index'])->middleware('auth');
+Route::get('{eventoId}/autores/', [ArticulosAutoresController::class, 'index'])->name('autores.index')->middleware('auth');
+Route::get('{eventoId}/autores/{id}/edit', [ArticulosAutoresController::class, 'edit'])->middleware('auth');
+
 
 // REVISORES DE ARTICULOS:
 Route::resource('revisores_articulos', RevisoresArticulosController::class)->middleware('auth');

@@ -145,8 +145,7 @@ class LoginController extends Controller
         return redirect('login')->with('success', 'Contraseña Definida');
 
     }
-
-    //curp 
+    
     public function verifyCurp(Request $request) {
         $curp = $request->input('curp');
         $user = usuarios::where('curp', $curp)->first();
@@ -217,15 +216,14 @@ class LoginController extends Controller
         // return redirect(route('home'));
     }
 
-
-
     public function index($acronimo, $edicion)
     {
         // Buscar el evento con el acrónimo y la edición
         $evento = eventos::where('acronimo', $acronimo)->where('edicion', $edicion)->first();
 
         if ($evento) {
-            return view ('HomeViews.'.$evento->acronimo,compact('evento'));
+            return view ('Eventos.read',compact('evento'));
+            //return view ('HomeViews.'.$evento->acronimo,compact('evento'));
         } else {
             // Si no se encuentra el evento, redirigir con un mensaje de error
             return redirect()->route('dashboard')->with('error', 'Evento no encontrado');
@@ -250,20 +248,19 @@ class LoginController extends Controller
                     //EL INICIO DE SESION FUE EXITOSO
                     $request->session()->regenerate();
                     $part=participantes::where('usuario_id',$user->id)->first();
-                    if($part){
+                    if($part!==null){
                         //EL USUARIO ESTA REGISTRADO EN ALGUN EVENTO
                         $request->session()->put('eventoID', $part->evento->id);
                         return redirect()->route('evento.index', ['acronimo' => $part->evento->acronimo, 'edicion' => $part->evento->edicion]);
                         // return redirect($part->evento->acronimo.'-index/'.$part->evento->id);
                     }else{
                         return redirect()->route('dashboard');
+                        //   return redirect()->intended(route('home'));
                     }
-                    //   return redirect()->intended(route('home'));
         
                 }else{
                     //EL INICIO DE SESION NO FUE EXITOSO
                     return redirect('login')->with('error', 'Ocurrio un Error, verifica los datos');
-                   
                 }
             }else if($user->estado=="alta,no registrado"){
                 //PROCESO PARA VERIFICAR EMAIL -> En caso de que el usuario este registrado pero no haya verificado email

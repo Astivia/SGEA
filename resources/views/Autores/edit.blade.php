@@ -1,23 +1,23 @@
 @extends('layouts.master')
     <title>Modificar Datos</title>
-</head>
 @section('Content')
     <div class="container">
-        <h1>Modificar informacion</h1>
-        {!! Form::open(['method'=>'PATCH','url'=>'/autores/'.$autor->id]) !!}
-                           
-            <label for="participante">Seleccionar usuario:</label>
-            {!! Form::select('usuario_id', $usuarios->pluck('nombre_completo', 'id'), $autor->usuario_id, ['required' => 'required']) !!}
-
-            <br><br>
-            <label for="afiliacion">Afiliacion:</label>
-            {!! Form::text ('afiliacion',$autor->afiliacion,['require'])!!}
-    
-            <br><br>
-            <button type="submit">Guardar cambios</button>
-            <a href="{{!!asset('/autores')!!}"><button>Cancelar</button></a> 
+        <h1>MODIFICAR AUTOR</h1>
+        {!! Form::open(['method'=>'PATCH','url'=>'/autores/'.$autor->usuario->id]) !!}
+            <label for="curp"><strong>CURP:</strong></label>
+            {!! Form::text ('curp',$autor->usuario->curp,['readonly' => true])!!}
+            <label for="nombre"><strong>Nombre:</strong></label>
+            {!! Form::text ('nombre',$autor->usuario->nombre_completo,['readonly' => true])!!}
+            <label for="telefono"><strong>Teléfono:</strong></label>
+            {!! Form::tel ('telefono',$autor->usuario->telefono,['readonly' => true])!!}
+            <label for="email"><strong>Email:</strong></label>
+            {!! Form::email('email',$autor->usuario->email,['readonly' => true])!!}
+            <label for="corresp-email"><strong>Email de correspondencia:</strong></label>
+            {!! Form::email('corresp-email',$autor->email)!!}
+            <label for="institucion"><strong>Institución:</strong></label>
+            {!! Form::text ('institucion',$autor->institucion)!!}
+            <button type="submit">Guardar Cambios</button>
         {!!Form::close()!!}
+        <a href="{{ url()->previous() }}"><button> Cancelar</button></a>  
     </div>
-
-    
 @endsection

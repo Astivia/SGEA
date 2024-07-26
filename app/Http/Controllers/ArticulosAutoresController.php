@@ -11,10 +11,10 @@ class ArticulosAutoresController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($eventoId)
     {
-        $autores= articulosAutores::distinct('usuario_id')->OrderBy('usuario_id')->get();
-        return view('Articulos_Autores.index',compact('autores'));
+        $autores= articulosAutores::distinct('usuario_id')->where('evento_id',$eventoId)->OrderBy('usuario_id')->get();
+        return view('Autores.index',compact('autores'));
     }
 
     /**
@@ -44,10 +44,10 @@ class ArticulosAutoresController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($eventoId, $id)
     {
-        $autor=articulosAutores::where('usuario_id',$id)->first();
-        return view('Articulos_Autores.edit',compact('autor'));
+        $autor=articulosAutores::where('usuario_id',$id)->where('evento_id',$eventoId)->first();
+        return view('Autores.edit',compact('autor'));
     }
 
     /**
@@ -60,7 +60,7 @@ class ArticulosAutoresController extends Controller
             'email' => $datos['corresp-email'],
             'institucion' => $datos['institucion'],
         ]);
-        return redirect('/autores')->with('info','Informacion Actualizada');
+        return redirect($request->session()->get('eventoID').'/autores')->with('info','Informacion Actualizada');
     }
 
     /**

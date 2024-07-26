@@ -25,7 +25,7 @@ class EventosController extends Controller
     public function index()
     {
        
-        $Eventos = eventos::all();
+        $Eventos = eventos::OrderBy('edicion')->get();
         //consultamos las imagenes en sistema
         $sysImgs = [];
         foreach ($Eventos as $evento) {
@@ -82,18 +82,8 @@ class EventosController extends Controller
     public function show(string $id)
     {
         $evento=eventos::find($id);
-        date_default_timezone_set('America/Mexico_City');
-        $today=date('Y-m-d');
-        $message='';
 
-        if( $today==($evento->fecha_inicio) && $today<($evento->fecha_fin) ){
-            $message="El evento esta en curso";
-        }else if(($evento->fecha_inicio) <$today &&($evento->fecha_fin)<$today){
-            $message="El evento ya finalizo";
-        }else{
-            $message = "El evento esta programado ";
-        }
-        return view ('Eventos.read',compact('evento','message'));
+        return view ('Eventos.read',compact('evento'));
     }
 
     /**

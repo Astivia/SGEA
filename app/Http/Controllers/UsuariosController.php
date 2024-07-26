@@ -184,14 +184,9 @@ class usuariosController extends Controller
     {
         $user = Auth::user();
         $part = participantes::where('usuario_id', $user->id)->first();
-
         if ($part) {
             // El usuario está registrado en algún evento
-            $evento = $part->evento;
-            $acronimo = $evento->acronimo;
-            $edicion = $evento->id; // Asumiendo que el ID representa la edición del evento
-
-            return redirect()->route('evento.index', ['acronimo' => $acronimo, 'edicion' => $edicion]);
+            return redirect()->route('evento.index', [$part->evento->acronimo, $part->evento->edicion]);
         } else {
             // El usuario no está registrado en ningún evento
             return redirect()->route('dashboard');

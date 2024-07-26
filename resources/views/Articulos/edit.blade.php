@@ -4,7 +4,7 @@
     <div class="container">
         <h1>MODIFICAR ARTICULO</h1>
 
-        {!! Form::open(['method'=>'PUT','url'=>'/articulos/'.$articulo->evento_id.'/'.$articulo->id, 'files' => true,'id' => 'edit-form']) !!}
+        {!! Form::open(['method'=>'PUT','url'=>$articulo->evento_id.'/articulo/'.$articulo->id, 'files' => true,'id' => 'edit-form']) !!}
             <label for="titulo"><strong>Titulo:</strong></label>
             {!! Form::text ('titulo',$articulo->titulo)!!}
 
