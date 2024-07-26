@@ -16,9 +16,12 @@ class ArticulosController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($eventoId)
     {
-        $Articulos = articulos::with(['evento', 'area', 'autores.usuario'])->OrderBy('id')->get();
+        $evento = eventos::find($eventoId); 
+        
+        $Articulos = articulos::with(['evento', 'area', 'autores.usuario'])->where('evento_id', $evento->id)->OrderBy('id')->get();
+        
         //Catalogo de Areas
         $Areas =areas::all();
         //Catalogo de Autores para el combo del Form "registrar Articulo"
@@ -91,7 +94,7 @@ class ArticulosController extends Controller
                 }
             }
     
-            return redirect ('/articulos')->with('success','Articulo Registrado');
+            return redirect ($evento->id.'/articulos')->with('success','Articulo Registrado');
         }else{
             return redirect()->back()->with('error','No es posible insertar: el usuario no es parte de ningun evento');
 
@@ -190,13 +193,11 @@ class ArticulosController extends Controller
                         'email' =>(usuarios::find($author['id']))->email
                     ]);
                 }
-
-            
             } else {
                 echo "Error al decodificar Datos: ".json_last_error_msg();
             }
         }
-        return redirect('/articulos')->with('info','Informacion Actualizada');
+        return redirect ($evento_id.'/articulos')->with('info','Informacion Actualizada');
     }
 
     /**

@@ -1,7 +1,6 @@
 @extends('layouts.master')
 <title>Autores</title>
 
-</head>
 @section('Content')
 <div class="container">
  
@@ -14,7 +13,7 @@
     @if($Autores->isEmpty())
         <strong>No hay autores registrados en este momento</strong>
     @else
-    <table id="example" class="display  responsive nowrap" style="width:100%">
+    <table id="example" class="display" style="width:100%">
         <thead>
             <tr>
                 <th>PARTICIPANTE</th>
@@ -49,25 +48,4 @@
         </table>
     @endif
     </div>
-</div>
-
-<div id="create-event-modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Registrar Autor</h2>
-        {!! Form::open(['url'=>'/autores']) !!}
-
-        <label for="participante-name">Seleccione un Usuario del sistema:</label>
-        {!! Form::select('usuario_id', $usuarios->pluck('nombre_completo', 'id'), null, ['required' => 'required']) !!}
-       <br>
-
-        <label for="afiliacion">Afiliacion:</label>
-        <input type="text" id="afiliacion" name="afiliacion" required>
-
-
-        <button type="submit">Agregar Autor</button>
-        {!!Form::close()!!}
-    </div>
-</div>
-
 @endsection

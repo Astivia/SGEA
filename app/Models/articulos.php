@@ -21,6 +21,13 @@ class articulos extends Model
         'area_id',
         'estado'
     ];
+
+    protected $appends = ['autor_correspondencia'];
+
+    public function getAutorCorrespondenciaAttribute()
+    {
+        return $this->autores->where('correspondencia', 1)->first();
+    }
     
     public function evento()
     {
@@ -36,6 +43,8 @@ class articulos extends Model
     {
         return $this->hasMany(articulosAutores::class, 'articulo_id', 'id');
     }
+
+
 
     public function revisores()
     {

@@ -15,6 +15,7 @@
                     <tr>
                         <th>TITULO</th>
                         <th>AUTORES</th>
+                        <th>email de correspondencia</th>
                         <th>ESTADO</th>
                         <th>Controles</th>
                     </tr>
@@ -25,15 +26,18 @@
                         <td><strong>{{ $art->titulo }}</strong></td>
                         <td>
                             <ul>
-                                @foreach ($art->autores as $autor)
-                                    <li>{{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} <a href="{!! 'usuarios/'.$autor->usuario->id !!}"><i class="las la-info-circle la-1x"></i></a></li>
+                                @foreach ($art->autores->sortBy('orden') as $autor)
+                                    <li>{{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} <a href="{{url ('usuarios/'.$autor->usuario->id) }}"><i class="las la-info-circle la-1x"></i></a></li>
                                 @endforeach
                             </ul>
                         </td>
+                        <td>
+                            <a href="mailto:{!!$art->autor_correspondencia->email!!}">{!!$art->autor_correspondencia->email!!}</a>
+                        </td>
                         <td>{!!$art->estado!!}</td>
                         <td>
-                        <a href="{!! url('articulos/'.$art->evento_id.'/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
-                            <a href="{!!'articulos/'.$art->evento_id.'/'.$art->id.'/edit'!!}">
+                            <a href="{!! url($art->evento_id.'/articulo/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
+                            <a href="{!! url($art->evento_id.'/articulo/'.$art->id.'/edit')!!}">
                             <i class="las la-edit la-2x"></i>
                             </a>
                             <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">

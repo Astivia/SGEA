@@ -13,7 +13,6 @@
             alert('{{ session('error') }}');
         </script> -->
         <div id="errorModal" class="modal">
-       
             <div class="modal-content">
                 <span class="alerta-modal"><i class='bx bxs-error-alt'></i>Alerta</span>
                 <span class="close" onclick="closeModal('errorModal')">&times;</span>
@@ -27,7 +26,7 @@
         <!-- <script>
             alert('{{ session('success') }}');
             </script> -->
-            <div id="successModal" class="modal">
+        <div id="successModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('successModal')">&times;</span>
                 <p>{{ session('success') }}</p>

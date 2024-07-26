@@ -614,3 +614,79 @@ button {
 button:hover {
     background-color: #d32f2f;
 }
+
+.info{
+    margin: 1em auto 1em;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+    align-items: center;
+
+}
+
+.info img{
+    margin-top: 0px;
+    background-color: #1a2d51;
+    padding: 1.5%;
+    width: 400px;
+}
+.info .data{
+    padding: 2%;
+    text-align: center;
+}
+.info strong{
+    color: #1a2d51;
+}
+.links{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.links .link-card{
+    background-color: #fff;
+    width: 8vw;
+    height: 11vh;
+    border-radius: 5px;
+    margin: 1em auto 1em;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: bold;
+    text-transform: capitalize;
+    text-align: center;
+    border: 1px solid #1a2d51;
+}
+
+.links .link-card i{
+    background-color: #1a2d51;
+    color:#fff;
+    border-radius: 50%;
+    padding: 5px ;
+}
+
+
+.links .link-card:hover{
+    background-color: #1a2d51;
+    color: #fff;
+    width: 8.5vw;
+    height: 11.5vh;
+}
+
+
+@media (max-width: 768px) {
+    .info img{
+        width: 70vw;
+        padding: 5%;
+    }
+    .links .link-card{
+        width: 80vw;
+        height: 15vh;
+    }
+}
