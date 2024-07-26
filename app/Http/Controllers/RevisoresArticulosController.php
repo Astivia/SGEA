@@ -23,13 +23,10 @@ class RevisoresArticulosController extends Controller
      */
     public function index($eventoId)
     {
-        $evento = eventos::find($eventoId); 
-        $RevArt= revisoresArticulos::where('evento_id',$eventoId)->OrderBy('articulo_id')->get();
+        $evento = eventos::find($eventoId);
+        $Revisores= revisoresArticulos::where('evento_id',$eventoId)->OrderBy('usuario_id')->get();
 
-        $parts = $evento->participantes->mapWithKeys(function($participante) {
-            $nombreCompleto = $participante->nombre . ' ' . $participante->ap_paterno . ' ' .$participante->ap_materno;
-            return [$participante->id => $nombreCompleto];
-        });
+
         $articulos = articulos::where('evento_id', $eventoId)->get();
 
         $articulosOptions = $articulos->map(function ($articulo) {
@@ -37,7 +34,7 @@ class RevisoresArticulosController extends Controller
         })->toArray();
 
         // dd($articulosOptions);
-        return view ('Revisores_Articulos.index',compact('RevArt','evento','parts','articulosOptions'));
+        return view ('Revisores_Articulos.index',compact('Revisores','articulosOptions'));
     }
 
     /**

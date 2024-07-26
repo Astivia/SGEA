@@ -15,6 +15,7 @@
                     <tr>
                         <th>TITULO</th>
                         <th>AUTORES</th>
+                        <th>email de correspondencia</th>
                         <th>ESTADO</th>
                         <th>Controles</th>
                     </tr>
@@ -25,10 +26,13 @@
                         <td><strong>{{ $art->titulo }}</strong></td>
                         <td>
                             <ul>
-                                @foreach ($art->autores as $autor)
+                                @foreach ($art->autores->sortBy('orden') as $autor)
                                     <li>{{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} <a href="{{url ('usuarios/'.$autor->usuario->id) }}"><i class="las la-info-circle la-1x"></i></a></li>
                                 @endforeach
                             </ul>
+                        </td>
+                        <td>
+                            <a href="mailto:{!!$art->autor_correspondencia->email!!}">{!!$art->autor_correspondencia->email!!}</a>
                         </td>
                         <td>{!!$art->estado!!}</td>
                         <td>

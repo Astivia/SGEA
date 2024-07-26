@@ -43,7 +43,8 @@ Route::get('{eventoId}/autores/{id}/edit', [ArticulosAutoresController::class, '
 
 
 // REVISORES DE ARTICULOS:
-Route::resource('revisores_articulos', RevisoresArticulosController::class)->middleware('auth');
+Route::resource('revisores', RevisoresArticulosController::class)->except(['index'])->middleware('auth');
+Route::get('{eventoId}/revisoresArticulos/', [RevisoresArticulosController::class, 'index'])->name('revisores.index')->middleware('auth');
 Route::get('revisores_articulos/evento/{eventoId}', [RevisoresArticulosController::class, 'index'])->name('revisores_articulos.evento.index')->middleware('auth');
 Route::delete('revisores_articulos/{eventoId}/{usuarioId}/{articuloId}', [RevisoresArticulosController::class, 'destroy'])->name('revisores_articulos.destroy')->middleware('auth')->middleware('can:revisores_articulos.destroy');
 

@@ -27,7 +27,7 @@
                 <a href="{{ route('autores.index', ['eventoId' => $evento->id]) }}" class="link-card">
                     <i class="las la-pen-nib la-3x"></i>Autores
                 </a>
-                <a href="" class="link-card">
+                <a href="{{ route('revisores.index', ['eventoId' => $evento->id]) }}" class="link-card">
                     <i class="las la-glasses la-3x"></i></i>Revisores
                 </a>
                 <a href="" class="link-card">

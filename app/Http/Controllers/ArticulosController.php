@@ -21,6 +21,7 @@ class ArticulosController extends Controller
         $evento = eventos::find($eventoId); 
         
         $Articulos = articulos::with(['evento', 'area', 'autores.usuario'])->where('evento_id', $evento->id)->OrderBy('id')->get();
+        
         //Catalogo de Areas
         $Areas =areas::all();
         //Catalogo de Autores para el combo del Form "registrar Articulo"

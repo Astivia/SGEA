@@ -27,6 +27,8 @@ class articulosAutores extends Model
         'email'
     ];
 
+    
+
     public function evento()
     {
         return $this->belongsTo(eventos::class, 'evento_id','id');

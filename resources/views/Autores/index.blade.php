@@ -24,7 +24,9 @@
                     <tr>
                         <td>{!!$autor->usuario->nombre_completo!!} </td>
                         <td>{!!$autor->institucion!!}</td>
-                        <td>{!!$autor->email!!}</td>
+                        <td>
+                            <a href="mailto:{!!$autor->email!!}">{!!$autor->email!!}</a>
+                        </td>
                         <td>
                             <a href="{{url ('usuarios/'.$autor->usuario->id) }}"><i class="las la-info-circle la-2x"></i></a>
                             @role(['Administrador','Organizador'])
