@@ -28,7 +28,7 @@
                             <a href="mailto:{!!$autor->email!!}">{!!$autor->email!!}</a>
                         </td>
                         <td>
-                            <a href="{{url ('usuarios/'.$autor->usuario->id) }}"><i class="las la-info-circle la-2x"></i></a>
+                            <a href="{{url ($autor->evento_id.'/autor/'.$autor->usuario->id) }}"><i class="las la-info-circle la-2x"></i></a>
                             @role(['Administrador','Organizador'])
                                 <a href="{!! url($autor->evento_id.'/autores/'.$autor->usuario->id.'/edit')!!}">
                                     <i class="las la-user-edit la-2x"></i>

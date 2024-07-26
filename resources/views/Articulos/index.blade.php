@@ -19,42 +19,44 @@
                         <th>Correspondencia</th>
                         <th>revisores</th>
                         @endrole
-                        <th>ESTADO</th>
+                        <th>Area</th>
                         <th>Controles</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($Articulos as $art)
                     <tr>
-                    <td><strong>{{ Helper::truncate($art->titulo, 65) }}</strong></td>
                         <td>
-                            <ul>
-                                @foreach ($art->autores->sortBy('orden') as $autor)
-                                    <li>{{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} <a href="{{url ('usuarios/'.$autor->usuario->id) }}"><i class="las la-info-circle la-1x"></i></a></li>
-                                @endforeach
-                            </ul>
-                        </td>
-                        @role(['Administrador','Organizador'])
-                        <td>
-                            <a href="mailto:{!!$art->autor_correspondencia->email!!}">{!!$art->autor_correspondencia->email!!}</a>
-                        </td>
-                        <td>No asignado</td>
-                        @endrole
-                        <td>{!!$art->estado!!}</td>
-                        <td>
-                            <a href="{!! url($art->evento_id.'/articulo/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
-                            <a href="{!! url($art->evento_id.'/articulo/'.$art->id.'/edit')!!}">
-                            <i class="las la-edit la-2x"></i>
+                            <a href="{!! url($art->evento_id.'/articulo/'.$art->id) !!}" style="color:#000;">
+                                <strong>{{ Helper::truncate($art->titulo, 65) }}</strong>
                             </a>
-                            <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">
-                            <i class="las la-trash-alt la-2x"></i>
-                            </a>
-                            <form id="delete-form-{{ $art->id }}" action="{{ url('articulos/'.$art->id) }}" method="POST" style="display: none;">
-                                @method('DELETE')
-                                @csrf
-                            </form>
                         </td>
-                    </tr>
+                            <td>
+                                <ul>
+                                    @foreach ($art->autores->sortBy('orden') as $autor)
+                                        <li>{{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} <a href="{{url ('usuarios/'.$autor->usuario->id) }}"><i class="las la-info-circle la-1x"></i></a></li>
+                                    @endforeach
+                                </ul>
+                            </td>
+                            @role(['Administrador','Organizador'])
+                            <td>
+                                <a href="mailto:{!!$art->autor_correspondencia->email!!}" style="text-decoration:underline;">{!!$art->autor_correspondencia->email!!}</a>
+                            </td>
+                            <td>No asignado</td>
+                            @endrole
+                            <td>{!!$art->area->nombre!!}</td>
+                            <td>
+                                <a href="{!! url($art->evento_id.'/articulo/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
+                                <a href="{!! url($art->evento_id.'/articulo/'.$art->id.'/edit')!!}"><i class="las la-edit la-2x"></i></a>
+                                <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">
+                                <i class="las la-trash-alt la-2x"></i>
+                                </a>
+                                <form id="delete-form-{{ $art->id }}" action="{{ url('articulos/'.$art->id) }}" method="POST" style="display: none;">
+                                    @method('DELETE')
+                                    @csrf
+                                </form>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>

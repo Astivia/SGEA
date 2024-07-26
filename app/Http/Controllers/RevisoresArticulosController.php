@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\revisoresArticulos;
-use App\Models\eventos;
+use App\Models\usuarios;
 use App\Models\articulos;
+use App\Models\areas;
 use Illuminate\Support\Str;
 
 class RevisoresArticulosController extends Controller
@@ -23,18 +24,10 @@ class RevisoresArticulosController extends Controller
      */
     public function index($eventoId)
     {
-        $evento = eventos::find($eventoId);
         $Revisores= revisoresArticulos::where('evento_id',$eventoId)->OrderBy('usuario_id')->get();
-
-
-        $articulos = articulos::where('evento_id', $eventoId)->get();
-
-        $articulosOptions = $articulos->map(function ($articulo) {
-            return [$articulo->id => Str::limit($articulo->titulo, 50)];
-        })->toArray();
-
-        // dd($articulosOptions);
-        return view ('Revisores_Articulos.index',compact('Revisores','articulosOptions'));
+        $areas= areas::all();
+        $usuarios=usuarios::where('estado',"alta,registrado")->get();
+        return view ('Revisores_Articulos.index',compact('Revisores','areas','usuarios'));
     }
 
     /**
@@ -51,29 +44,29 @@ class RevisoresArticulosController extends Controller
     public function store(Request $request)
     {
         $datos=$request->all();
-        
-        //actualizamos los datos del articulo
-        $articulo = articulos::find($datos['articulo_id']);
-        $articulo->estado = "Pendiente de revision";
-        $articulo->save(); 
 
-        //verificamos que el dato no este registrado
-        $verificacion = revisoresArticulos::whereRaw('evento_id = ? AND usuario_id = ? AND articulo_id = ?', [$datos['evento_id'], $datos['usuario_id'], $datos['articulo_id']]);
+        if ($request->has('revisores')) {
+            $Revisores = json_decode($request->input('revisores'), true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                // Recorrer el array de autores seleccionados
+                foreach ($Revisores  as $revisor) {
+                    $articuloId = $datos['articles'];
+                    revisoresArticulos::create([
+                        'evento_id'=>$request->session()->get('eventoID'),
+                        'articulo_id'=> $articuloId,
+                        'usuario_id'=> $revisor->id
+                    ]);
+                }
+            } else {
+                echo "Error al decodificar Datos: ".json_last_error_msg();
+            }
+
+            //verificamos que el dato no este registrado
+            $verificacion = revisoresArticulos::whereRaw('evento_id = ? AND usuario_id = ? AND articulo_id = ?', [$datos['evento_id'], $datos['usuario_id'], $datos['articulo_id']]);
 
 
-        if($verificacion->count() > 0){
-            return redirect()->back()->with('error', 'Este usuario ya esta asignado al articulo');
-
-        }else{
-            revisoresArticulos::create([
-                'evento_id'=> $datos['evento_id'],
-                'usuario_id'=> $datos['usuario_id'],
-                'articulo_id'=>$datos['articulo_id'],
-                'puntuacion'=>null,
-                'comentarios'=>null
-            ]);
+            return redirect()->back()->with('success', 'Se ha Registrado correctamente');
         }
-        return redirect()->back()->with('success', 'Se ha Registrado correctamente');
     }
 
     /**

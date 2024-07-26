@@ -237,4 +237,12 @@ class ArticulosController extends Controller
         return response()->json(['exists' => $exists, 'user' => $user]);
         
      }
+
+     public function getArticles($area_id)
+    {
+        $articles = articulos::where('area_id', $area_id)->get();
+
+        return response()->json($articles);
+    }
+
 }

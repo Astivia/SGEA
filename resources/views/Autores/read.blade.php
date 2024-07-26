@@ -6,21 +6,22 @@
     <div class="contenido">
         <div class="read">
             <div class="read-img">
-                <img src="{{asset('SGEA/public/assets/img/'.$Usu->foto)}}" alt="foto" style="width:250px">
+                <img src="{{asset('SGEA/public/assets/img/'.$autor->usuario->foto)}}" alt="foto" style="width:250px">
             </div>
             <div class="read-info">
-                <h1>{!!$Usu->nombre!!} {!!$Usu->ap_paterno!!} {!!$Usu->ap_materno!!}</h1>        
-                <br><br>         
-                <p><strong>CURP:</strong>  {!!$Usu->curp!!}</p>
-                <p><strong>CORREO: </strong>{!!$Usu->email!!}</p>
+                <h1>{!!$autor->usuario->nombre_completo!!}</h1> <br>       
                 <p><strong>SEXO: </strong>
-                    @if ($Usu->curp[10] === 'H')
+                    @if ($autor->usuario->curp[10] === 'H')
                         Masculino
                     @else
                         Femenino
                     @endif
-                </p>
-                <p><strong>TELEFONO: </strong>{!!$Usu->telefono!!}</p>
+                </p>         
+                <p><strong>CURP:</strong>  {!!$autor->usuario->curp!!}</p>
+                <p><strong>CORREO PERSONAL: </strong>{!!$autor->usuario->email!!}</p>
+                <p><strong>CORREO DE CORRESPONDENCIA: </strong>{!!$autor->email!!}</p>
+                
+                <p><strong>TELEFONO: </strong>{!!$autor->usuario->telefono!!}</p>
                 @if(count($articulos) > 0)
                     <strong>Articulos en los que participa: </strong>
                     <ul style="margin-left: 4%">
@@ -39,7 +40,7 @@
         <br><br>
         <a href="{{ url()->previous() }}"><button><i class="las la-arrow-left"></i> Regresar</button></a>
         @role(['Administrador','Organizador'])
-            <a href="{{url('usuarios/'.$Usu->id.'/edit')}}"><button><i class="las la-edit"></i> Modificar Usuario</button></a>
+            <a href="{{url($autor->evento->id.'/autores/'.$autor->usuario->id.'/edit')}}"><button><i class="las la-edit"></i> Modificar autorario</button></a>
         @endrole
     </div>
 

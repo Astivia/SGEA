@@ -36,9 +36,12 @@ class ArticulosAutoresController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($eventoId, $id)
     {
-        //
+        $autor=articulosAutores::where('usuario_id',$id)->where('evento_id',$eventoId)->first();
+        $articulos=articulosAutores::where('usuario_id',$id)->get();
+
+        return view('Autores.read',compact('autor','articulos'));
     }
 
     /**
