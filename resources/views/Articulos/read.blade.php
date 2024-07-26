@@ -20,9 +20,7 @@
                 @endforeach
             </ul>
         </p>
-        <p><i class="las la-envelope"></i> <strong>Correspondencia: </strong>
-            <a href="mailto:{!! $correspondencia->usuario->email!!}">{!! $correspondencia->usuario->email!!}</a> ({!! $correspondencia->usuario->nombre_completo!!})</p>
-        
+        <p><i class="las la-envelope"></i> <strong>Correspondencia: </strong><a href="mailto:{!! $articulo->autor_correspondencia->email!!}"> {!! $articulo->autor_correspondencia->email!!} </a>({!! $articulo->autor_correspondencia->usuario->nombre_completo!!})</p>
         <p><i class="las la-file-alt"></i> <strong>Resumen: </strong>{!!$articulo->resumen!!}</p>
         <p><i class="las la-id-card"></i> <strong>Area: </strong>{!!$articulo->area->nombre!!}</p>
         <p><strong>Revisores: </strong></p>

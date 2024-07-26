@@ -15,7 +15,10 @@
                     <tr>
                         <th>TITULO</th>
                         <th>AUTORES</th>
-                        <th>email de correspondencia</th>
+                        @role(['Administrador','Organizador'])
+                        <th>Correspondencia</th>
+                        <th>revisores</th>
+                        @endrole
                         <th>ESTADO</th>
                         <th>Controles</th>
                     </tr>
@@ -23,7 +26,7 @@
                 <tbody>
                     @foreach ($Articulos as $art)
                     <tr>
-                        <td><strong>{{ $art->titulo }}</strong></td>
+                    <td><strong>{{ Helper::truncate($art->titulo, 65) }}</strong></td>
                         <td>
                             <ul>
                                 @foreach ($art->autores->sortBy('orden') as $autor)
@@ -31,9 +34,12 @@
                                 @endforeach
                             </ul>
                         </td>
+                        @role(['Administrador','Organizador'])
                         <td>
                             <a href="mailto:{!!$art->autor_correspondencia->email!!}">{!!$art->autor_correspondencia->email!!}</a>
                         </td>
+                        <td>No asignado</td>
+                        @endrole
                         <td>{!!$art->estado!!}</td>
                         <td>
                             <a href="{!! url($art->evento_id.'/articulo/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>

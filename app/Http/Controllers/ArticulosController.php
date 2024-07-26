@@ -114,9 +114,8 @@ class ArticulosController extends Controller
             $pdfUrl=null;
         }
         $autores= articulosAutores::where('articulo_id',$id)->OrderBy('orden')->get();
-        $correspondencia= articulosAutores::where('articulo_id',$id)->where('correspondencia',true)->first();
         
-        return view ('Articulos.read',compact('articulo','pdfUrl','autores','correspondencia'));
+        return view ('Articulos.read',compact('articulo','pdfUrl','autores'));
     }
 
     /**
