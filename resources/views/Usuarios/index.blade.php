@@ -11,8 +11,8 @@
     </div>
 
     
-    <div style="overflow-x:auto; overflow-y:auto; ">
-    <table id="example" class="display nowrap" style="width:100%">
+    <!-- <div style="overflow-x:auto; overflow-y:auto; "> -->
+    <table id="example" class="display  responsive nowrap" style="width:100%">
             <thead>            
     <tr>
                 

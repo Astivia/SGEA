@@ -24,7 +24,6 @@
                     <tr>
                         <td>{!!$autor->usuario->nombre_completo!!} </td>
                         <td>{{ Helper::truncate($autor->institucion, 50) }}</td>
-                        <!-- <td>{!!$autor->institucion!!}</td> -->
                         <td>
                             <a href="mailto:{!!$autor->email!!}">{!!$autor->email!!}</a>
                         </td>

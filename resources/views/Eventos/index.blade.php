@@ -13,8 +13,8 @@
     @if($Eventos->isEmpty())
         <strong>No hay datos</strong>
     @else
-    <div style="overflow-x:auto; overflow-y:auto; max-height:500px;">
-        <table id="example" class="display nowrap" style="width:100%">
+    <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
+        <table id="example" class="display  responsive nowrap" style="width:100%">
                 <thead>
                     <tr>
                         <th>LOGO</th>
