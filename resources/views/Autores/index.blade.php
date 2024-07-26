@@ -14,7 +14,7 @@
     @if($Autores->isEmpty())
         <strong>No hay autores registrados en este momento</strong>
     @else
-    <table id="example" class="display" style="width:100%">
+    <table id="example" class="display  responsive nowrap" style="width:100%">
         <thead>
             <tr>
                 <th>PARTICIPANTE</th>

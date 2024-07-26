@@ -411,8 +411,14 @@ table {
     font-family: 'Poppins', sans-serif;
  
 }
+thead{
+    width: 100%;
+}
+#example thead{
+    width: 100%;
+}
 thead input{
-    max-width: 125px;
+    max-width:100%;
 }
 
 th, td {
@@ -437,9 +443,26 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-.dataTables_wrapper {
+/* .dataTables_wrapper {
     width: 100%;
-}
+} */
+
+
+        @media (max-width: 900px) {
+            #example thead input {
+                display: none;
+            }
+            thead{
+                max-width: 100%;
+            }
+         
+            tbody td{                
+                max-width: 100%;                
+                font-size: 10px;
+            }
+          
+        }
+ 
 
 /* Modificacion de elementos de la tabla */
 #example_filter{

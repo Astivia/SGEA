@@ -46,6 +46,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script> 
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 
 
 <script>
@@ -56,16 +57,17 @@
 
     $(document).ready(function(){
         var table = $('#example').DataTable({
-        orderCellsTop: true,
+        orderCellsTop: true,        
         fixedHeader: true ,
-            // se agrega 
-            scrollY: '400px',
-            scrollX: true,
-            scrollCollapse: true,
-            paging: true,
+        responsive: true,  // Hacemos la tabla responsiva
+        //     // se agrega 
+            
+            // scrollX: true,
+            // scrollCollapse: true,
+        //     paging: true,
         columnDefs: [
-            { orderable: false, targets: -1 }  // Deshabilitamos la ordenación en todas las columnas
-        ]
+          { orderable: false, targets: -1 }  // Deshabilitamos la ordenación en todas las columnas
+         ]
         });
 
         $('#example thead tr').clone(true).appendTo('#example thead');
