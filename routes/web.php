@@ -46,8 +46,7 @@ Route::get('{eventoId}/autores/{id}/edit', [ArticulosAutoresController::class, '
 // REVISORES DE ARTICULOS:
 Route::resource('revisores', RevisoresArticulosController::class)->except(['index'])->middleware('auth');
 Route::get('{eventoId}/revisoresArticulos/', [RevisoresArticulosController::class, 'index'])->name('revisores.index')->middleware('auth');
-Route::get('{evento_id}/revisoresArticulo/{articulo_id}', [RevisoresArticulosController::class, 'show'])->middleware('auth');
-Route::delete('revisores_articulos/{eventoId}/{usuarioId}/{articuloId}', [RevisoresArticulosController::class, 'destroy'])->name('revisores_articulos.destroy')->middleware('auth')->middleware('can:revisores_articulos.destroy');
+Route::get('{evento_id}/revisoresArticulo/{articulo_id}/edit', [RevisoresArticulosController::class, 'edit'])->middleware('auth');
 
     //Rutas AJAX
     Route::get('/get-articles/{area_id}', [ArticulosController::class, 'getArticles'])->name('get-articles');
