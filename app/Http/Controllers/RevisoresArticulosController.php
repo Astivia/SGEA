@@ -50,21 +50,18 @@ class RevisoresArticulosController extends Controller
             if (json_last_error() === JSON_ERROR_NONE) {
                 // Recorrer el array de autores seleccionados
                 foreach ($Revisores  as $revisor) {
-                    $articuloId = $datos['articles'];
-                    revisoresArticulos::create([
-                        'evento_id'=>$request->session()->get('eventoID'),
-                        'articulo_id'=> $articuloId,
-                        'usuario_id'=> $revisor->id
-                    ]);
+                    if (!is_null($revisor['id'])){
+                        $usu=usuarios::where('id',$revisor['id'])->first();
+                        revisoresArticulos::create([
+                            'evento_id'=>$request->session()->get('eventoID'),
+                            'articulo_id'=> $request->input('articulo_id'),
+                            'usuario_id'=> $usu->id
+                        ]);
+                    }
                 }
             } else {
                 echo "Error al decodificar Datos: ".json_last_error_msg();
             }
-
-            //verificamos que el dato no este registrado
-            $verificacion = revisoresArticulos::whereRaw('evento_id = ? AND usuario_id = ? AND articulo_id = ?', [$datos['evento_id'], $datos['usuario_id'], $datos['articulo_id']]);
-
-
             return redirect()->back()->with('success', 'Se ha Registrado correctamente');
         }
     }

@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             menuHead.nextElementSibling.classList.toggle('active');
         });
     });
+    sidebar.classList.toggle('active');
     ///////////////////////////////MODAL-CREATE///////////////////////////////
     const createBtn= document.getElementById('create-btn');
     if(createBtn!=null){
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.target.style.display = 'none';
             }
         });
+        
     }
     /////////////////////////////ALERTS////////////////////////////////////////
     // Seleccionar las alertas
