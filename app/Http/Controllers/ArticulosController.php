@@ -240,7 +240,10 @@ class ArticulosController extends Controller
 
      public function getArticles($area_id)
     {
-        $articles = articulos::where('area_id', $area_id)->get();
+        $articles = articulos::where('area_id', $area_id)
+            ->whereNotIn('id', function ($query) {
+                $query->select('articulo_id')->from('revisores_articulos');
+            })->get();
 
         return response()->json($articles);
     }

@@ -32,6 +32,7 @@
                                     {!!$ra->articulo->estado!!}
                                 </td>
                                 <td>
+                                    <a href="{url($ra->evento->id.'/revisoresArticulo/'.$ra->articulo->id)}"><i class="las la-info-circle la-2x"></i></a>
                                     <a href="{!!url('revisores_articulos/'.$ra.'/edit')!!}"><i class="las la-user-edit la-2x"></i></a>
                                     <a href="{{url('revisores_articulos/'.$ra->id)}}" onclick=" event.preventDefault(); 
                                             if (confirm('¿Estás seguro de que deseas eliminar este Revisor en este articulo?')) 
