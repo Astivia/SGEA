@@ -12,6 +12,7 @@
 
     
     <!-- <div style="overflow-x:auto; overflow-y:auto; "> -->
+    <div class="ajuste" >
     <table id="example" class="display  responsive nowrap" style="width:100%">
             <thead>            
     <tr>

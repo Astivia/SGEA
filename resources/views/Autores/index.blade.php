@@ -9,7 +9,8 @@
         @if($autores->isEmpty())
             <strong>No hay autores registrados en este momento</strong>
         @else
-        <div style="overflow-x:auto; overflow-y:auto; max-height:500px;">
+        <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
+        <div class="ajuste" >
             <table id="example" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>

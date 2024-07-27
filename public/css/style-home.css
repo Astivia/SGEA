@@ -249,7 +249,7 @@ main {
     padding: 1.5rem;
     border-radius: 10px;   
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-   
+    
 }
 .search-create {
     display: flex;
@@ -405,7 +405,12 @@ form button[type="submit"] {
 
 /* tablas */
 
-
+.ajuste{
+    width: 100%;
+    min-width: 100%;
+    overflow-y: auto;    
+    padding: 5px;
+}
 table {
     width: 100%;
     border-collapse: collapse;
@@ -634,6 +639,7 @@ button:hover {
 .info img{
     margin-top: 0px;
     background-color: #1a2d51;
+    border-radius: 5px;
     padding: 1.5%;
     width: 400px;
 }
@@ -643,6 +649,7 @@ button:hover {
 }
 .info strong{
     color: #1a2d51;
+    font-weight: bold;
 }
 .links{
     width: 100%;
@@ -656,12 +663,13 @@ button:hover {
 
 .links .link-card{
     background-color: #fff;
-    width: 8vw;
-    height: 11vh;
+    width: 10vw;
+    height: auto;
     border-radius: 5px;
     margin: 1em auto 1em;
     padding: 5px;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
     font-weight: bold;
@@ -681,8 +689,8 @@ button:hover {
 .links .link-card:hover{
     background-color: #1a2d51;
     color: #fff;
-    width: 8.5vw;
-    height: 11.5vh;
+    width: 10vw;
+    height: auto;
 }
 
 

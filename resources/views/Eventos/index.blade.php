@@ -14,6 +14,7 @@
         <strong>No hay datos</strong>
     @else
     <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
+    <div class="ajuste" >
         <table id="example" class="display  responsive nowrap" style="width:100%">
                 <thead>
                     <tr>

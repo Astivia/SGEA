@@ -61,6 +61,7 @@
         orderCellsTop: true,        
         fixedHeader: true ,
         responsive: true,  // Hacemos la tabla responsiva
+        
         //     // se agrega 
             
             // scrollX: true,
