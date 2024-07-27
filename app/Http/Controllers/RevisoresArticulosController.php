@@ -12,13 +12,6 @@ use Illuminate\Support\Str;
 class RevisoresArticulosController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware('can:revisores_articulos.index')->only('index');
-        $this->middleware('can:revisores_articulos.edit')->only('edit','update');
-        $this->middleware('can:revisores_articulos.create')->only('create','store'); 
-        $this->middleware('can:revisores_articulos.destroy')->only('destroy'); 
-
-    }
     /**
      * Display a listing of the resource.
      */
@@ -29,7 +22,6 @@ class RevisoresArticulosController extends Controller
         $usuarios=usuarios::where('estado',"alta,registrado")->get();
         return view ('Revisores_Articulos.index',compact('Revisores','areas','usuarios'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -77,41 +69,22 @@ class RevisoresArticulosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(revisoresArticulos $ra)
+    public function edit($eventoId,$id)
     {
-        
-        $eventoId = $ra['evento_id'];
-        
+        $articulo=articulos::where('id',$id)->first();
+        $revisores = revisoresArticulos::where('articulo_id',$id)->get();
 
-        $evento = eventos::find($eventoId);
-
-        $parts = $evento->participantes->mapWithKeys(function($participante) {
-            $nombreCompleto = $participante->nombre . ' ' . $participante->ap_pat . ' ' .$participante->ap_mat;
-            return [$participante->id => $nombreCompleto];
-        });
-
-        $articulos = articulos::where('evento_id', $eventoId)->get();
-        $articulosOptions = $articulos->map(function ($articulo) {
-            return [$articulo->id => Str::limit($articulo->titulo, 50)];
-        })->toArray();
-
-        // Set the currently assigned participant and article IDs
-        $selectedParticipante = $ra->usuario_id;
-        $selectedArticulo = $ra->articulo_id;
-
-        return view('Revisores_Articulos.edit', compact('ra', 'evento', 'parts', 'articulosOptions', 'selectedParticipante', 'selectedArticulo'));
+        return view('Revisores_Articulos.edit',compact('revisores','articulo'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, revisoresArticulos $RevArt)
+    public function update(Request $request, string $id)
     {
-        $NuevosDatos = $request->all();
-        dd($NuevosDatos);
-        $ra=revisoresArticulos::find($id);
-        $ra->update($NuevosDatos);
-        return redirect('/participantes');
+        $evento_id=$request->session()->get('eventoID');
+
+        return redirect ($evento_id.'/revisoresArticulos')->with('info','Informacion Actualizada');
     }
 
     /**

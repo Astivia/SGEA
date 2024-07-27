@@ -1,11 +1,11 @@
 @extends('layouts.master')
     <title>Modificar Datos</title>
-</head>
+
 @section('Content')
 <div class="container">
-
     <h1>MODIFICAR DATOS</h1>
-    {!! Form::open(['method'=>'PATCH','url'=>'/revisores_articulos/'.$ra]) !!}
+
+    {!! Form::open(['method'=>'PATCH','url'=>'/revisores/'.$articulo->id]) !!}
         
         <label for="participante">Seleccionar Revisor:</label>
         
@@ -14,8 +14,8 @@
                        
         
         <button type="submit">Guardar</button>
-        <a href="{{!!asset('/revisores_articulos')!!}"><button>Cancelar</button></a>
     {!!Form::close()!!}   
+        <a href="{{ url()->previous() }}"><button>Cancelar</button></a> 
 </div>
     
     
