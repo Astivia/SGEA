@@ -1,7 +1,6 @@
 @extends('layouts.master')
 <title>Usuarios</title>
 
-</head>
 @section('Content')
 <div class="container">
    
@@ -13,55 +12,50 @@
     
     <!-- <div style="overflow-x:auto; overflow-y:auto; "> -->
     <div class="ajuste" >
-    <table id="example" class="display  responsive nowrap" style="width:100%">
+        <table id="example" class="display  responsive nowrap" style="width:100%">
             <thead>            
-    <tr>
-                
-                <th>NOMBRE</th>
-                <th>APELLIDOS</th>
-                <th>EMAIL</th>
-                <th>CURP</th>
-                @role(['Administrador','Organizador'])
-                <th>Controles</th>
-                @endrole
-            </tr>
+                <tr>
+                    <th>NOMBRE</th>
+                    <th>APELLIDOS</th>
+                    <th>EMAIL</th>
+                    <th>CURP</th>
+                    @role(['Administrador','Organizador'])
+                    <th>Controles</th>
+                    @endrole
+                </tr>
             </thead>
             <tbody>
-            @foreach ($Usuarios as $usu)
-            <tr>
-                
-                <td>{!!$usu->nombre!!}</td>
-                <td>{!!$usu->ap_paterno!!} {!!$usu->ap_materno!!}</td>
-                <td>{!!$usu->email!!}</td>
-                <td>{!!$usu->curp!!}</td>
-                @role(['Administrador','Organizador'])
-                <td>
-                    <a href="{!! 'usuarios/'.$usu->id !!}"><i class="las la-info-circle la-2x"></i></a>
-                    <a href="{!!'usuarios/'.$usu->id.'/edit'!!}">
-                        <i class="las la-user-edit la-2x"></i>
-                    </a>
-                    <a href="{{url('usuarios/'.$usu->id)}}" onclick="
-                                            event.preventDefault(); 
-                                            if (confirm('¿Estás seguro de que deseas eliminar este registro?')) 
-                                            { document.getElementById('delete-form-{{ $usu->id }}').submit(); }">
-                        <i class="las la-user-minus la-2x"></i>
-                    </a>
-                    <form id="delete-form-{{ $usu->id }}" action="{{ url('usuarios/'.$usu->id) }}" method="POST"
-                        style="display: none;">
-                        @method('DELETE')
-                        @csrf
-                    </form>
-                </td>
-                @endrole
-            </tr>
-            @endforeach
+                @foreach ($Usuarios as $usu)
+                <tr>
+                    
+                    <td>{!!$usu->nombre!!}</td>
+                    <td>{!!$usu->ap_paterno!!} {!!$usu->ap_materno!!}</td>
+                    <td>{!!$usu->email!!}</td>
+                    <td>{!!$usu->curp!!}</td>
+                    @role(['Administrador','Organizador'])
+                    <td>
+                        <a href="{!! 'usuarios/'.$usu->id !!}"><i class="las la-info-circle la-2x"></i></a>
+                        <a href="{!!'usuarios/'.$usu->id.'/edit'!!}">
+                            <i class="las la-user-edit la-2x"></i>
+                        </a>
+                        <a href="{{url('usuarios/'.$usu->id)}}" onclick="
+                                                event.preventDefault(); 
+                                                if (confirm('¿Estás seguro de que deseas eliminar este registro?')) 
+                                                { document.getElementById('delete-form-{{ $usu->id }}').submit(); }">
+                            <i class="las la-user-minus la-2x"></i>
+                        </a>
+                        <form id="delete-form-{{ $usu->id }}" action="{{ url('usuarios/'.$usu->id) }}" method="POST"
+                            style="display: none;">
+                            @method('DELETE')
+                            @csrf
+                        </form>
+                    </td>
+                    @endrole
+                </tr>
+                @endforeach
             </tbody>
         </table>
-        
-        </div>
-
-    
- 
+    </div>
 </div>
 
 

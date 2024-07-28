@@ -28,7 +28,7 @@
                     <i class="las la-pen-nib la-3x"></i>Autores
                 </a>
                 <a href="{{ route('revisores.index', ['eventoId' => $evento->id]) }}" class="link-card">
-                    <i class="las la-glasses la-3x"></i></i>Revisores
+                    <i class="las la-glasses la-3x"></i>Revisores
                 </a>
                 <a href="" class="link-card">
                     <i class="las la-id-card la-3x"></i>Talleres
