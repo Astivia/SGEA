@@ -44,12 +44,11 @@ class articulos extends Model
         return $this->hasMany(articulosAutores::class, 'articulo_id', 'id');
     }
 
-
-
     public function revisores()
     {
-        return $this->hasManyThrough(usuarios::class, revisoresArticulos::class, 'evento_id', 'id', 'articulo_id', 'usuario_id');
+        return $this->hasMany(revisoresArticulos::class, 'articulo_id', 'id');
     }
+
 
     public function getTituloCortoAttribute()
     {

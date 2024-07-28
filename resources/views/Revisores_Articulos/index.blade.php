@@ -7,46 +7,34 @@
             <h1 id="titulo-h1">Revisores de Articulos</h1>
                 <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
         </div>
-        @if($Revisores->isEmpty())
+        @if($articulos->isEmpty())
             <strong>No hay Revisores asignados a ningun articulo en este momento</strong>
         @else
             <div style="overflow-x:auto; overflow-y:auto; max-height:500px;">
                 <table id="example" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
-                            <th>PARTICIPANTE</th>
                             <th>ARTICULO</th>
-                            <th>ESTADO</th>
+                            <th>Revisor 1</th>
+                            <th>revisor 2</th>
+                            <th>revisor 3</th>
                             <th>Controles</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($Revisores as $ra)
+                        @foreach ($articulos as $ra)
                             <tr>
-                                <td>{!!$ra->usuario->nombre_completo!!}</td>
                                 <td>
-                                    {!!$ra->articulo->titulo!!}
-                                    <a href="{!! url('articulos/'.$ra->articulo->id) !!}"><i class="las la-info-circle"></i></a>
+                                    {!!$ra->titulo!!}
+                                    <a href="{!! url('articulos/'.$ra->id) !!}"><i class="las la-info-circle"></i></a>
                                 </td>
+                                <td> </td>
                                 <td>
-                                    {!!$ra->articulo->estado!!}
-                                </td>
-                                <td>
-                                    <a href="{url($ra->evento->id.'/revisoresArticulo/'.$ra->articulo->id)}"><i class="las la-info-circle la-2x"></i></a>
                                     
-                                    <a href="{!!url($ra->evento->id.'/revisoresArticulo/'.$ra->articulo->id.'/edit')!!}"><i class="las la-user-edit la-2x"></i></a>
-
-                                    <a href="{{url('revisores_articulos/'.$ra->id)}}" onclick=" event.preventDefault(); 
-                                            if (confirm('¿Estás seguro de que deseas eliminar este Revisor en este articulo?')) 
-                                            { document.getElementById('delete-form-{{ $ra->articulo->id }}').submit(); }">
-                                        <i class="las la-trash la-2x" style="color:red;"></i>
-                                    </a>
-                                    <form id="delete-form-{{ $ra->articulo->id }}" 
-                                                action="{{ url('revisores_articulos/'.$ra->evento->id.'/'.$ra->usuario->id.'/'.$ra->articulo->id) }}"
-                                                method="POST" style="display: none;">
-                                            @method('DELETE')
-                                            @csrf
-                                    </form>
+                                    
+                                </td>
+                                <td>
+                                    
                                 </td>
                             </tr>
                         @endforeach
@@ -64,8 +52,8 @@
                 <label for="area">Seleccionar Área:</label>
                 {!! Form::select('area_id', $areas->pluck('nombre', 'id')->prepend('Seleccionar...', ''), null, ['required']) !!}
 
-                <label for="articulo_id">Seleccionar Artículo:</label>
-                {!! Form::select('articles', ['' => 'Seleccionar...'], null, ['required', 'disabled' => true]) !!}
+                <label for="articulo">Seleccionar Artículo:</label>
+                {!! Form::select('articles',$articulos->pluck('titulo','id')->prepend('Seleccionar...', ''), null, ['required']) !!}
 
                 <label for="Revisor1">Revisor 1:</label>
                 {!! Form::select('revisor1', $usuarios->pluck('nombre_completo', 'id')->prepend('Seleccionar...', ''), null) !!}

@@ -19,7 +19,6 @@
             </div>
             <ul class="menu-list active">
                 @role(['Administrador','Organizador'])
-                
                 @endrole
                 <li><a href="{{ url(session('eventoID').'/articulos') }}"><span class="lar la-newspaper"></span>Artículos</a></li>
                 <li><a href="{{ url(session('eventoID').'/autores') }}"><span class="las la-pen-nib"></span>Autores</a></li>    

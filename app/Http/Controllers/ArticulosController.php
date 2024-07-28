@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\articulosAutores;
+use App\Models\revisoresArticulos;
 use App\Models\articulos;
 use App\Models\usuarios;
 use App\Models\eventos;
@@ -20,12 +21,16 @@ class ArticulosController extends Controller
     {
         $evento = eventos::find($eventoId); 
         
-        $Articulos = articulos::with(['evento', 'area', 'autores.usuario'])->where('evento_id', $evento->id)->OrderBy('id')->get();
+        $Articulos = articulos::with(['evento', 'area', 'autores.usuario','revisores.usuario'])->where('evento_id', $evento->id)->OrderBy('id')->get();
         
         //Catalogo de Areas
         $Areas =areas::all();
         //Catalogo de Autores para el combo del Form "registrar Articulo"
-        $Autores=articulosAutores::distinct('usuario_id')->get();
+        $Autores = articulosAutores::select('usuarios.id', 'usuarios.ap_paterno', 'usuarios.nombre', 'usuarios.ap_materno')
+                    ->join('usuarios', 'articulos_autores.usuario_id', '=', 'usuarios.id')
+                    ->groupBy('usuarios.id', 'usuarios.ap_paterno', 'usuarios.ap_materno','usuarios.nombre')
+                    ->orderBy('usuarios.ap_paterno')
+                    ->get();
         return view ('Articulos.index',compact('Articulos','Areas','Autores'));
     }
 
@@ -114,8 +119,9 @@ class ArticulosController extends Controller
             $pdfUrl=null;
         }
         $autores= articulosAutores::where('articulo_id',$id)->OrderBy('orden')->get();
+        $revisores= revisoresArticulos::where('articulo_id',$articulo->id)->get();
         
-        return view ('Articulos.read',compact('articulo','pdfUrl','autores'));
+        return view ('Articulos.read',compact('articulo','pdfUrl','autores','revisores'));
     }
 
     /**
@@ -240,11 +246,11 @@ class ArticulosController extends Controller
 
      public function getArticles($area_id)
     {
-        $articles = articulos::where('area_id', $area_id)
-            ->whereNotIn('id', function ($query) {
-                $query->select('articulo_id')->from('revisores_articulos');
-            })->get();
-
+        // $articles = articulos::where('area_id', $area_id)
+        //     ->whereNotIn('id', function ($query) {
+        //         $query->select('articulo_id')->from('revisores_articulos');
+        //     })->get();
+        $articles = articulos::where('area_id', $area_id)->get();
         return response()->json($articles);
     }
 

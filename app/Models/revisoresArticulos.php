@@ -21,6 +21,7 @@ class revisoresArticulos extends Model
         'evento_id',
         'usuario_id',
         'articulo_id',
+        'orden',
         'puntuacion',
         'similitud',
         'comentarios',
@@ -34,7 +35,7 @@ class revisoresArticulos extends Model
 
     public function usuario()
     {
-        return $this->belongsTo(usuarios::class, 'usuario_id');
+        return $this->belongsTo(usuarios::class, 'usuario_id','id');
     }
 
     public function articulo()

@@ -88,6 +88,7 @@ class usuarios extends AuthenticatableUser implements Authenticatable
     public function articulos()
     {
         return $this->hasManyThrough(articulos::class, articulosAutores::class, 'usuario_id', 'evento_id', 'articulo_id');
+        
     }
 
     public function revisiones()

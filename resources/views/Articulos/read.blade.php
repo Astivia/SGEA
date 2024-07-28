@@ -12,18 +12,23 @@
             <br>
             <ul style="margin-left: 4%">
                 @foreach ($autores as $index => $autor)
-                <li>
-                    <strong>{!! $autor->orden !!}. </strong> 
-                    {!! $autor->usuario->nombre_completo !!}
-                    <a href="{{url('usuarios/'.$autor->usuario->id )}}"><i class="las la-info-circle"></i></a>
-                </li>
+                    <li>
+                        <strong>{!! $autor->orden !!}. </strong> 
+                        {!! $autor->usuario->nombre_completo !!}
+                        <a href="{{url('usuarios/'.$autor->usuario->id )}}"><i class="las la-info-circle"></i></a>
+                    </li>
                 @endforeach
             </ul>
         </p>
         <p><i class="las la-envelope"></i> <strong>Correspondencia: </strong><a href="mailto:{!! $articulo->autor_correspondencia->email!!}"> {!! $articulo->autor_correspondencia->email!!} </a>({!! $articulo->autor_correspondencia->usuario->nombre_completo!!})</p>
         <p><i class="las la-file-alt"></i> <strong>Resumen: </strong>{!!$articulo->resumen!!}</p>
         <p><i class="las la-id-card"></i> <strong>Area: </strong>{!!$articulo->area->nombre!!}</p>
-        <p><strong>Revisores: </strong></p>
+        <p><strong>Revisores: </strong>
+                @foreach ($revisores as $index => $revisor)
+                        {!! $revisor->usuario->nombre_completo !!}<a href="{{url('usuarios/'.$autor->usuario->id )}}"><i class="las la-info-circle"></i></a>
+                @endforeach
+
+        </p>
         <p><strong>Estado: </strong>{!!$articulo->estado!!}</p>
         <p><strong> Archivo: </strong>{!!$articulo->archivo!!}</p>
         @if($pdfUrl)

@@ -9,7 +9,6 @@
         @if($Articulos->isEmpty())
             <strong>No hay datos</strong>
         @else
-        <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
         <div class="ajuste" >
             <table id="example" class="display  responsive nowrap" style="width:100%">
                 <thead>            
@@ -43,7 +42,18 @@
                             <td>
                                 <a href="mailto:{!!$art->autor_correspondencia->email!!}" style="text-decoration:underline;">{!!$art->autor_correspondencia->email!!}</a>
                             </td>
-                            <td>No asignado</td>
+                            <td>
+                                <ul>
+                                    @if($art->revisores->isEmpty())
+                                        No asignados
+                                    @else
+                                        @foreach ($art->revisores as $revisor)
+                                            <li>{{ $revisor->orden}}: {{ $revisor->usuario->nombre_completo}}</li>
+                                        @endforeach
+                                    @endif
+                                    
+                                </ul>
+                            </td>
                             @endrole
                             <td>{!!$art->area->nombre!!}</td>
                             <td>
@@ -96,8 +106,8 @@
                         <option value="">Seleccionar...</option>
                         <option value="{{ Auth::user()->id }}">{{ Auth::user()->nombre_completo }}</option>
                         @foreach ($Autores as $autor)
-                            @if($autor->usuario->id !== Auth::user()->id)
-                                <option value="{{ $autor->usuario->id }}">{{ $autor->usuario->nombre_completo }}</option>
+                            @if($autor->id !== Auth::user()->id)
+                                <option value="{{ $autor->id }}">{{ $autor->ap_paterno }} {{ $autor->ap_materno }} {{ $autor->nombre}}</option>
                             @endif
                         @endforeach 
                     @endif

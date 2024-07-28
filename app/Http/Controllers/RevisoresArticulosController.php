@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\revisoresArticulos;
 use App\Models\usuarios;
+use App\Models\eventos;
 use App\Models\articulos;
 use App\Models\areas;
 use Illuminate\Support\Str;
@@ -17,10 +18,16 @@ class RevisoresArticulosController extends Controller
      */
     public function index($eventoId)
     {
-        $Revisores= revisoresArticulos::where('evento_id',$eventoId)->OrderBy('usuario_id')->get();
+        $evento = eventos::find($eventoId); 
+        
+        $Articulosaa = articulos::with(['revisores.usuario'])->where('evento_id', $evento->id)->OrderBy('titulo')->get();
+        
+
+        //catalogos 
+        $articulos=articulos::all();
         $areas= areas::all();
         $usuarios=usuarios::where('estado',"alta,registrado")->get();
-        return view ('Revisores_Articulos.index',compact('Revisores','areas','usuarios'));
+        return view ('Revisores_Articulos.index',compact('articulos','areas','usuarios'));
     }
     /**
      * Show the form for creating a new resource.
@@ -41,13 +48,15 @@ class RevisoresArticulosController extends Controller
             $Revisores = json_decode($request->input('revisores'), true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 // Recorrer el array de autores seleccionados
-                foreach ($Revisores  as $revisor) {
+
+                foreach ($Revisores  as $index => $revisor) {
                     if (!is_null($revisor['id'])){
                         $usu=usuarios::where('id',$revisor['id'])->first();
                         revisoresArticulos::create([
                             'evento_id'=>$request->session()->get('eventoID'),
                             'articulo_id'=> $request->input('articulo_id'),
-                            'usuario_id'=> $usu->id
+                            'usuario_id'=> $usu->id,
+                            'orden'=>  $index + 1 
                         ]);
                     }
                 }
