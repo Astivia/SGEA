@@ -18,16 +18,16 @@ class RevisoresArticulosController extends Controller
      */
     public function index($eventoId)
     {
-        $evento = eventos::find($eventoId); 
-        
-        $Articulosaa = articulos::with(['revisores.usuario'])->where('evento_id', $evento->id)->OrderBy('titulo')->get();
+        $articles = articulos::whereIn('id', function ($query) {
+                $query->select('articulo_id')->from('revisores_articulos');
+            })->with('revisores.usuario')->get();
         
 
         //catalogos 
-        $articulos=articulos::all();
-        $areas= areas::all();
+        $articulos = articulos::select('id', 'titulo')->OrderBy('titulo')->get();
+        $areas= areas::select('id', 'nombre')->OrderBy('nombre')->get();
         $usuarios=usuarios::where('estado',"alta,registrado")->get();
-        return view ('Revisores_Articulos.index',compact('articulos','areas','usuarios'));
+        return view ('Revisores_Articulos.index',compact('articulos','areas','usuarios','articles'));
     }
     /**
      * Show the form for creating a new resource.
@@ -72,7 +72,8 @@ class RevisoresArticulosController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $articulo=articulos::where('id',$id)->first();
+        return view ('Revisores_Articulos.read',compact('articulo'));
     }
 
     /**
@@ -81,9 +82,12 @@ class RevisoresArticulosController extends Controller
     public function edit($eventoId,$id)
     {
         $articulo=articulos::where('id',$id)->first();
-        $revisores = revisoresArticulos::where('articulo_id',$id)->get();
+        $revisores = revisoresArticulos::where('articulo_id',$id)->OrderBy('orden')->get();
 
-        return view('Revisores_Articulos.edit',compact('revisores','articulo'));
+        //catalogos 
+        $usuarios=usuarios::where('estado',"alta,registrado")->get();
+
+        return view('Revisores_Articulos.edit',compact('revisores','articulo','usuarios'));
     }
 
     /**
@@ -92,6 +96,28 @@ class RevisoresArticulosController extends Controller
     public function update(Request $request, string $id)
     {
         $evento_id=$request->session()->get('eventoID');
+
+        $datos=$request->all();
+
+        if ($request->has('revisores')) {
+            $Revisors = json_decode($request->input('revisores'), true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                // Eliminar autores actuales
+                revisoresArticulos::where('articulo_id', $id)->where('evento_id',$evento_id)->delete();
+                foreach ($Revisors as $index =>$revisor) {
+                    if (!is_null($revisor['id'])){
+                            revisoresArticulos::create([
+                            'evento_id' => $evento_id,
+                            'articulo_id' => $id,
+                            'usuario_id' => $revisor['id'],
+                            'orden'=>  $index + 1 
+                        ]);
+                    }
+                }
+            } else {
+                echo "Error al decodificar Datos: ".json_last_error_msg();
+            }
+        }
 
         return redirect ($evento_id.'/revisoresArticulos')->with('info','Informacion Actualizada');
     }

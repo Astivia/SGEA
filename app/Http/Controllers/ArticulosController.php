@@ -250,7 +250,7 @@ class ArticulosController extends Controller
         //     ->whereNotIn('id', function ($query) {
         //         $query->select('articulo_id')->from('revisores_articulos');
         //     })->get();
-        $articles = articulos::where('area_id', $area_id)->get();
+        $articles = articulos::where('area_id', $area_id)->OrderBy('titulo')->get();
         return response()->json($articles);
     }
 

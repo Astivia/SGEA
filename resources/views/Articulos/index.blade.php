@@ -34,7 +34,10 @@
                             <td>
                                 <ul>
                                     @foreach ($art->autores->sortBy('orden') as $autor)
-                                        <li>{{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} <a href="{{url ('usuarios/'.$autor->usuario->id) }}"><i class="las la-info-circle la-1x"></i></a></li>
+                                        <li>
+                                            {{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} 
+                                            <a href="{{url ('usuarios/'.$autor->usuario->id) }}"><i class="las la-info-circle la-1x"></i></a>
+                                        </li>
                                     @endforeach
                                 </ul>
                             </td>
@@ -48,7 +51,7 @@
                                         No asignados
                                     @else
                                         @foreach ($art->revisores as $revisor)
-                                            <li>{{ $revisor->orden}}: {{ $revisor->usuario->nombre_completo}}</li>
+                                            <li style="">{{ $revisor->orden}}: {{ $revisor->usuario->nombre_completo}}</li>
                                         @endforeach
                                     @endif
                                     
