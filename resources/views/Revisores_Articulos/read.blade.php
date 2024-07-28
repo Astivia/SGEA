@@ -15,7 +15,22 @@
     </div>
 
     <div class="revisores">
-        
+        @foreach($articulo->revisores as $revisor)
+            <p>
+                <strong>Revisor {!!$revisor->orden!!}: {!!$revisor->usuario->nombre_completo!!}</strong>
+            </p>
+            <p>
+                <strong>Puntuacion:</strong>
+                {!!$revisor->puntuacion!!}
+            </p>
+            <p>
+                <strong>
+                    Similitud:
+                </strong>
+                {!!$revisor->similitud!!}
+            </p>
+            
+        @endforeach
     </div>
 </div>
 @endsection
