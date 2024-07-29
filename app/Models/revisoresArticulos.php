@@ -22,6 +22,7 @@ class revisoresArticulos extends Model
         'usuario_id',
         'articulo_id',
         'orden',
+        'notificado',
         'puntuacion',
         'similitud',
         'comentarios',

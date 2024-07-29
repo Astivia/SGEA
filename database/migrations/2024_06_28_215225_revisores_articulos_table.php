@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('articulo_id');
             $table->unsignedBigInteger('usuario_id');
             $table->integer('orden')->nullable();
+            $table->boolean('notificado');
             $table->integer('puntuacion')->nullable();
             $table->string('similitud', 20)->nullable();
             $table->string('comentarios', 150)->nullable();

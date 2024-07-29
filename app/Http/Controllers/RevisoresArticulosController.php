@@ -44,9 +44,9 @@ class RevisoresArticulosController extends Controller
                             'evento_id'=>$request->session()->get('eventoID'),
                             'articulo_id'=> $request->input('articulo_id'),
                             'usuario_id'=> $usu->id,
-                            'orden'=>  $index + 1 
+                            'orden'=>  $index + 1 ,
+                            'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
                         ]);
-                        $this->NotificarUsuario($usu,$request->input('articulo_id'));
                     }
                 }
             } else {
