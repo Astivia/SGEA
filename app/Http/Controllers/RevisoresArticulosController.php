@@ -116,6 +116,7 @@ class RevisoresArticulosController extends Controller
     private function NotificarUsuario(usuarios $user, $articuloId){
 
         $articulo=articulos::find($articuloId);
+        $evento=$articulo->evento->nombre.' ('.$articulo->evento->acronimo.' '.$articulo->evento->edicion.')';
 
         if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
             return response()->json(['error' => 'Invalid email address'], 422);
@@ -132,20 +133,19 @@ class RevisoresArticulosController extends Controller
             $mail->Password = 'diulyvcniykrwacn';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
-        
-            // Set sender and recipient information
+
+            // definir Origen y destino
             $mail->setFrom('noreply@sgea.com', 'SGEA');
+            $mail->addReplyTo('noreply@sgea.com', 'SGEA');
             $mail->addAddress("$user->email");
-            
             
             //Definimos el contenido
             $mail->CharSet = 'UTF-8';
             $subject =  "Informacion Importante";
-            $message = "Hola $user->nombre:\n
-                        Este Correo se envia con el proposito de informar que usted ha sido asignado como revisor para el articulo <strong>$articulo->titulo</strong>.\n\n
-                        Atentamente\n
-                        <strong>SGEA</strong>\n\n
-                        Este mensaje es generado de forma automatica por lo que solicita No responder.";
+            $message = "Hola <strong>$user->nombre</strong>:\n
+                        El proposito de este mensaje es informar que usted ha sido asignado como revisor para el articulo <strong>$articulo->titulo</strong> en el evento <strong>$evento</strong>\n\n
+                        Atentamente:\n<strong>SGEA</strong>\n\n
+                        <footer style='font-size:80%;'>Este mensaje es generado de forma automatica por lo que no requiere una respuesta</footer>";
 
             //Estructuramos el correo
             $mail->Subject = $subject; 
@@ -163,7 +163,6 @@ class RevisoresArticulosController extends Controller
 
             }
         } catch (Exception $e) {
-            // return response()->json(['error' => $e->getMessage()], 500);
             return false;
         }
 

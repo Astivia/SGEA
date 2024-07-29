@@ -36,16 +36,7 @@ return [
     */
 
     'mailers' => [
-        'smtp' => [
-            'transport' => 'smtp',
-            'host' => 'smtp.gmail.com',
-            'port' => 465,
-            'username' => 'astiviamax@gmail.com', // Tu dirección de correo electrónico de Gmail
-            'password' => 'diulyvcniykrwacn', // La contraseña de la aplicación 
-            'encryption' => 'ssl',
-            'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN'),
-        ],
+        
 
         // 'ses' => [
         //     'transport' => 'ses',
