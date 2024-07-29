@@ -27,8 +27,6 @@ class LoginController extends Controller
     }
 
     private function enviarCodigo(usuarios $user,$codigo){
-       
-
         if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
             return response()->json(['error' => 'Invalid email address'], 422);
         }
