@@ -6,7 +6,7 @@
     <div class="contenido">
         <div class="read">
             <div class="read-img">
-                <img src="{{asset('SGEA/public/assets/img/'.$autor->usuario->foto)}}" alt="foto" style="width:250px">
+                <img src="{{asset('SGEA/public/assets/img/'.$autor->usuario->foto)}}" alt="foto" style="">
             </div>
             <div class="read-info">
                 <h1>{!!$autor->usuario->nombre_completo!!}</h1> <br>       
@@ -38,10 +38,13 @@
             
         </div>
         <br><br>
+        <div class="button-read">
         <a href="{{ url()->previous() }}"><button><i class="las la-arrow-left"></i> Regresar</button></a>
         @role(['Administrador','Organizador'])
             <a href="{{url($autor->evento->id.'/autores/'.$autor->usuario->id.'/edit')}}"><button><i class="las la-edit"></i> Modificar autorario</button></a>
         @endrole
+        </div>
+        
     </div>
 
 </div>

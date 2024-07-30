@@ -280,9 +280,11 @@ main {
 
 /* estilos read */
 .container .contenido{
-    max-width: 100%;
-    max-height: 100%;
-    
+    max-width: 100%;    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding: 30px;
 }
 .container .read{
@@ -290,10 +292,10 @@ main {
     background-color: rgb(34, 76, 156);
     max-width: 70%;
     position: relative;
-    top: 15%;
-    left: 15%; 
+    top: 15%;    
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 10%;
     padding: 35px;
     border-radius: 10px;
@@ -302,8 +304,11 @@ main {
     background-color: white;
     border: 1px solid black;
     padding: 25px;
-    margin-left: -65px;
+    
     border-radius: 10px;
+}
+.container .read .read-img img{
+    width:250px
 }
 .container .read .read-info{
     color: white;
@@ -311,6 +316,53 @@ main {
 }
 .container .read h1{    
     color: white;
+}
+.container .contenido .button-read{
+  
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+   
+}
+.container .contenido .button-read button{
+    width: 50%;
+    
+}
+@media (max-width: 800px) {
+    .container .read {
+        max-width: 100%;
+        top: 0;
+        left: 0;
+        padding: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container .read .read-img {
+        margin-left: 0;
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .container .read .read-img img{
+        width:100%;
+    }
+    .container .read .read-info {
+        width: 100%;
+        text-align: center;
+        /* padding: 10px;
+        color: #a94442;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        text-align: center; */
+    }
+
+    .container .read h1 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
 }
 .modal {
     display: none;
