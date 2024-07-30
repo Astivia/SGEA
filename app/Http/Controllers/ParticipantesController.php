@@ -20,18 +20,13 @@ class ParticipantesController extends Controller
         $this->middleware('can:participantes.destroy')->only('destroy'); 
 
     }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index($eventoId)
     {
         $evento = eventos::find($eventoId); 
-        // Obtener usuarios que asisten
         $part = $evento->participantes; 
-
-    
+        
         $usuarios=usuarios::OrderBy('ap_paterno')->get();
-
         return view ('Participantes.index',compact('part','evento','usuarios'));
     }
     /**

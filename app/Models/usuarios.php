@@ -99,6 +99,15 @@ class usuarios extends AuthenticatableUser implements Authenticatable
     public function eventos(){
         return $this->belongsToMany(eventos::class, 'participantes', 'usuario_id', 'evento_id');
     }
+    public function participantes()
+    {
+        return $this->hasMany(participantes::class, 'usuario_id', 'id');
+    }
 
+    public function getRoleInEvent($eventoID)
+    {
+        $participant = $this->participantes()->where('evento_id', $eventoID)->first();
+        return $participant ? $participant->rol : null;
+    }
 
 }
