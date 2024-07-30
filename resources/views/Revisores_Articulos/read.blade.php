@@ -32,6 +32,7 @@
                         <td>{{ $revisor->puntuacion ?? 'No definido' }}</td>
                         <td>{{$revisor->similitud ?? 'No definido'}}</td>
                         <td>{{$revisor->comentarios ?? 'No hay comentarios'}}</td>
+                        
                     </tr>
                 @endforeach
             </tbody>

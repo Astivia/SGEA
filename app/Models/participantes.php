@@ -11,7 +11,7 @@ class participantes extends Model
     protected $fillable = [
         'usuario_id',
         'evento_id',
-        'roles'
+        'rol'
     ];
 
     public function evento()

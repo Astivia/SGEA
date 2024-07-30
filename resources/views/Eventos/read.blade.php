@@ -27,9 +27,11 @@
                 <a href="{{ route('autores.index', ['eventoId' => $evento->id]) }}" class="link-card">
                     <i class="las la-pen-nib la-3x"></i>Autores
                 </a>
+                @role(['Administrador','Organizador'])
                 <a href="{{ route('revisores.index', ['eventoId' => $evento->id]) }}" class="link-card">
                     <i class="las la-glasses la-3x"></i>Revisores
                 </a>
+                @endrole
                 <a href="" class="link-card">
                     <i class="las la-id-card la-3x"></i>Talleres
                 </a>
@@ -37,7 +39,6 @@
                     <i class="las la-id-card la-3x"></i>Conferencias
                 </a>
             </div>
-            <a href="{{ url('eventos') }}"><button>Lista de eventos</button></a>
             @role(['Administrador','Organizador'])
                 @if($evento->estado===1)
                 <a href=""><button>Iniciar Evento</button></a>

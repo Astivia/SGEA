@@ -10,6 +10,7 @@ use App\Models\usuarios;
 use App\Models\eventos;
 use App\Models\articulos;
 use App\Models\areas;
+use App\Models\participantes;
 use Illuminate\Support\Str;
 
 class RevisoresArticulosController extends Controller
@@ -45,8 +46,10 @@ class RevisoresArticulosController extends Controller
                             'articulo_id'=> $request->input('articulo_id'),
                             'usuario_id'=> $usu->id,
                             'orden'=>  $index + 1 ,
-                            'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
+                            // 'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
+                            'notificado'=>true
                         ]);
+                        $this->participantSetRole($usu->id,$request->session()->get('eventoID'));
                     }
                 }
             } else {
@@ -166,5 +169,20 @@ class RevisoresArticulosController extends Controller
             return false;
         }
 
+    }
+
+    private function participantSetRole($usuID,$eventoID){
+        $participant = participantes::where('usuario_id', $usuID)->where('evento_id', $eventoID)->first();
+
+        if($participant){
+            $participant->update(['rol'=>'Revisor']);
+        }else{
+            participantes::insert([
+                'usuario_id' => $usuID,
+                'evento_id' => $eventoID,
+                'rol' => 'Revisor'
+            ]);
+            
+        }
     }
 }

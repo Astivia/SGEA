@@ -15,6 +15,7 @@
                     <thead>
                         <tr>
                             <th>ARTICULO</th>
+                            <th>estado</th>
                             <th>Revisor 1</th>
                             <th>revisor 2</th>
                             <th>revisor 3</th>
@@ -24,9 +25,8 @@
                     <tbody>
                         @foreach ($articles as $ra)
                             <tr>
-                                <td>
-                                    <a href="{!! url(session('eventoID').'/articulo/'.$ra->id) !!}" style="color:#000;">{!!$ra->titulo!!} </a>
-                                </td>
+                                <td><a href="{!! url(session('eventoID').'/articulo/'.$ra->id) !!}" style="color:#000;">{!!$ra->titulo!!} </a></td>
+                                <td>{!!$ra->estado!!}</td>
                                 @foreach ($ra->revisores as $revisor)
                                     <td><strong>{{ $revisor->usuario->nombre_completo }}</strong></td>
                                 @endforeach
