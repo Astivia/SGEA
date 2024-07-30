@@ -73,6 +73,9 @@ Route::view('/login',"login")->name('login');
  Route::get('/{acronimo}-index/{edicion}', [LoginController::class, 'index'])->name('evento.index');
  
 
+ //MIGRAR DATOS
+ Route::post('/migrate-data', [EventosController::class,'migrarDatos'])->name('migrate.data');
+
  
 /*
 |--------------------------------------------------------------------------

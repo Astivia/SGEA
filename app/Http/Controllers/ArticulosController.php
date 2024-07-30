@@ -19,6 +19,7 @@ class ArticulosController extends Controller
      */
     public function index($eventoId)
     {
+        dd($eventoId);
         $evento = eventos::find($eventoId); 
         
         $Articulos = articulos::with(['evento', 'area', 'autores.usuario','revisores.usuario'])->where('evento_id', $evento->id)->OrderBy('id')->get();
@@ -47,9 +48,7 @@ class ArticulosController extends Controller
      */
     public function store(Request $request)
     {
-        
         $evento= eventos::find($request->session()->get('eventoID'));
-
         if($evento){
             $datos=$request->all();
 
@@ -101,7 +100,7 @@ class ArticulosController extends Controller
     
             return redirect ($evento->id.'/articulos')->with('success','Articulo Registrado');
         }else{
-            return redirect()->back()->with('error','No es posible insertar: el usuario no es parte de ningun evento');
+            return redirect()->back()->with('error','No es posible agregat: el usuario actual no es parte de ningun evento');
 
         }
     }

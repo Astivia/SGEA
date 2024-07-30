@@ -39,14 +39,36 @@
                     <i class="las la-id-card la-3x"></i>Conferencias
                 </a>
             </div>
+
+            <button id="migrate-button">Migrar Informacion</button>
             @role(['Administrador','Organizador'])
                 @if($evento->estado===1)
-                <a href=""><button>Iniciar Evento</button></a>
+                    <a href=""><button>Iniciar Evento</button></a>
                 @elseif($evento->estado===3)
-                <a href=""><button>Finalizar Evento</button></a>
-                
+                    <button id="migrate-button">Migrar Informacion</button>
                 @endif
             @endrole
         </div>
     </div>
 @endsection
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#migrate-button').click(function() {
+            $.ajax({
+                url: '{{ route('migrate.data') }}',
+                type: 'POST',
+                data: {
+                _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    alert(response.message);
+                },
+                error: function(response) {
+                    alert('Migration failed: ' + response.responseJSON.error);
+                }
+            });
+        });
+    });
+</script>

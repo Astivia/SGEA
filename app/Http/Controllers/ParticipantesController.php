@@ -38,6 +38,7 @@ class ParticipantesController extends Controller
         $evento=eventos::find($datos['evento_id']);
         $usuario= usuarios::find($datos['usuario_id']);
         $evento->participantes()->attach($usuario);
+        
         return redirect()->back()->with('success', 'Se ha Registrado correctamente');
     }
 

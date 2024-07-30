@@ -249,9 +249,11 @@ class LoginController extends Controller
                     if($part!==null){
                         //EL USUARIO ESTA REGISTRADO EN ALGUN EVENTO
                         $request->session()->put('eventoID', $part->evento->id);
+                        $request->session()->put('rol', $part->rol);
                         return redirect()->route('evento.index', ['acronimo' => $part->evento->acronimo, 'edicion' => $part->evento->edicion]);
-                        // return redirect($part->evento->acronimo.'-index/'.$part->evento->id);
+                       
                     }else{
+                        $request->session()->put('eventoID', null);
                         return redirect()->route('dashboard');
                         //   return redirect()->intended(route('home'));
                     }
