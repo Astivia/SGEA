@@ -152,14 +152,14 @@ class EventosController extends Controller
         return redirect('eventos')->with('info', 'evento eliminado de forma Satisfactoria');
     }
 
-    private function migrarDatos(){
+    public function migrarDatos(Request $request) {
         try {
             DB::statement('SELECT migrar_datos()');
             return response()->json(['message' => 'Migracion de datos Satisfactoria'], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Fallo la migracion de datos:', 'error' => $e->getMessage()], 500);
+            Log::error('Error en migracion de datos: ' . $e->getMessage());
+            return response()->json(['message' => 'Fallo la migracion de datos', 'error' => $e->getMessage()], 500);
         }
-
     }
 
 }

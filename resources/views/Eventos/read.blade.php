@@ -41,20 +41,15 @@
             </div>
 
             <button id="migrate-button">Migrar Informacion</button>
-            @role(['Administrador','Organizador'])
-                @if($evento->estado===1)
-                    <a href=""><button>Iniciar Evento</button></a>
-                @elseif($evento->estado===3)
-                    <button id="migrate-button">Migrar Informacion</button>
-                @endif
-            @endrole
+            
         </div>
     </div>
 @endsection
 
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', (event)=>{
+        $(document).ready(function() {
         $('#migrate-button').click(function() {
             $.ajax({
                 url: '{{ route('migrate.data') }}',
@@ -71,4 +66,7 @@
             });
         });
     });
+
+    });
+    
 </script>

@@ -19,7 +19,7 @@ class ArticulosController extends Controller
      */
     public function index($eventoId)
     {
-        dd($eventoId);
+        
         $evento = eventos::find($eventoId); 
         
         $Articulos = articulos::with(['evento', 'area', 'autores.usuario','revisores.usuario'])->where('evento_id', $evento->id)->OrderBy('id')->get();
