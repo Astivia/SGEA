@@ -13,6 +13,9 @@
     @if($Eventos->isEmpty())
         <strong>No hay datos</strong>
     @else
+        @role('Administrador')
+        <button id="migrate-button">Migrar Toda la Informacion</button>
+        @endrole
     <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
     <div class="ajuste" >
         <table id="example" class="display  responsive nowrap" style="width:100%">
@@ -22,16 +25,16 @@
                         <th>NOMBRE</th>
                         <th>ACRONIMO</th>
                         <th>ED.</th>
-                        @role('Administrador')
                         <th> </th>
-                        @endrole
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($Eventos as $e)
                     <tr>
                         <td>
+                        <a href="{!! 'eventos/'.$e->id !!}" style="color:#000;">
                             <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo">
+                            </a>
                         </td>
                         <td><a href="{!! 'eventos/'.$e->id !!}" style="color:#000;"><strong>{!!$e->nombre!!}</strong></a></td>
                         <td>{!!$e->acronimo!!}</td>
@@ -118,6 +121,41 @@
 
 @endsection
 <script src="{{asset('SGEA/public/js/script-eventos.js')}}"></script>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', (event)=>{
+        $(document).ready(function() {
+            $('#migrate-button').click(function() {
+                $.ajax({
+                    url: '{{ route('migrate.data') }}',
+                    type: 'POST',
+                    data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        window.location.href = '{{ route('eventos.index') }}';
+                    },
+                    error: function(response) {
+                        alert('Migration failed: ' + response.responseJSON.error);
+                    }
+                });
+            });
+        });
+
+        fetchSidebar();
+    });
+
+    function fetchSidebar() {
+            fetch('{{ route('get.sidebar') }}')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('sidebar').innerHTML = html;
+                });
+        }
+    
+</script>
+
 
 <style>
     .selected {

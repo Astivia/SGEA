@@ -1,18 +1,17 @@
 @extends('layouts.master')
     <title>Informacion</title>
-</head>
 @section('Content')
     <div class="container">
         <h1>{!!$evento->nombre!!} ({!!$evento->acronimo!!} {!!$evento->edicion!!})</h1>
         <div class="info">
-            
             <img src="{{asset('SGEA/public/assets/uploads/'.$evento->logo)}}" alt="">
-            <dv class="data">
+            <div class="data">
                 <p><strong>Fecha de Inicio: </strong>{!!$evento->fecha_inicio!!}</p>
                 <p><strong>Fecha de Fin: </strong>{!!$evento->fecha_fin!!}</p>
                 <strong>Status del evento:</strong>{!!$evento->estado!!}
-            </dv>
-            <div class="links">
+            </div>
+        </div>
+        <div class="links">
                 @role(['Administrador','Organizador'])
                     <a href="{{ route('participantes.evento.index', ['eventoId' => $evento->id]) }}" class="link-card">
                         <i class="las la-users la-3x"></i>Participantes
@@ -38,27 +37,26 @@
                 <a href="" class="link-card">
                     <i class="las la-id-card la-3x"></i>Conferencias
                 </a>
-            </div>
-
-            <button id="migrate-button">Migrar Informacion</button>
-            
-        </div>
+         </div>
+        <button id="migrate-button" data-evento-id="{{ $evento->id }}">Migrar Informacion</button>
     </div>
 @endsection
 
-
 <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', (event)=>{
+    document.addEventListener('DOMContentLoaded', (event) => {
         $(document).ready(function() {
             $('#migrate-button').click(function() {
+                var eventoId = $(this).data('evento-id');
                 $.ajax({
-                    url: '{{ route('migrate.data') }}',
+                    url: '{{ url('migrar') }}/' + eventoId,
                     type: 'POST',
                     data: {
-                    _token: $('meta[name="csrf-token"]').attr('content')
+                        _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
                         alert(response.message);
+                        window.location.href = '{{ route('eventos.index') }}';
+                        
                     },
                     error: function(response) {
                         alert('Migration failed: ' + response.responseJSON.error);
@@ -66,6 +64,7 @@
                 });
             });
         });
+
+
     });
-    
 </script>

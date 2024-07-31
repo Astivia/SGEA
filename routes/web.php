@@ -73,7 +73,10 @@ Route::view('/login',"login")->name('login');
 
  Route::get('/redirect', [UsuariosController::class, 'redirectToAppropriateView'])->name('user.redirect');
  Route::get('/{acronimo}-index/{edicion}', [LoginController::class, 'index'])->name('evento.index');
+  Route::get('/sidebar', [LoginController::class, 'getSidebar'])->name('get.sidebar');
  
+  Route::post('/migrate-data', [EventosController::class,'migrarDatos'])->name('migrate.data');
+  Route::post('migrar/{evento_id}', [EventosController::class,'migrarEvento'])->name('migrate.event');
 
  //eliminacion multiple
  Route::post('areas/delete-multiple', [AreasController::class, 'deleteMultiple']);

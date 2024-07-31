@@ -16,7 +16,6 @@ class EventosController extends Controller
         $this->middleware('can:eventos.edit')->only('edit','update');
         $this->middleware('can:eventos.create')->only('create','store'); 
         $this->middleware('can:eventos.destroy')->only('destroy'); 
-
     }
 
     /**
@@ -160,6 +159,18 @@ class EventosController extends Controller
             Log::error('Error en migracion de datos: ' . $e->getMessage());
             return response()->json(['message' => 'Fallo la migracion de datos', 'error' => $e->getMessage()], 500);
         }
+    }
+
+    public function migrarEvento(Request $request, $evento_id) {
+        try {
+            DB::statement('SELECT migrar_datosPorEvento(?)', [$evento_id]);
+            $request->session()->put('eventoID',null);
+            return response()->json(['message' => 'Migracion de datos Satisfactoria'], 200);
+        } catch (\Exception $e) {
+            Log::error('Error en migracion de datos: ' . $e->getMessage());
+            return response()->json(['message' => 'Fallo la migracion de datos', 'error' => $e->getMessage()], 500);
+        }
+
     }
 
 }

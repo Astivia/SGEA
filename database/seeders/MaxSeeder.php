@@ -19,13 +19,13 @@ class MaxSeeder extends Seeder
     {
         $user = usuarios::create([
             'foto' => 'DefaultH.jpg',
-            'nombre'=>'Maximiliano',
-            'ap_paterno'=>'Astivia',
-            'ap_materno'=>'Castellanos',
-            'curp'=>'AICM000101HMCSSXA7',
-            'email'=>'mastiviac@toluca.tecnm.mx',
+            'nombre'=>'SGEA',
+            'ap_paterno'=>'',
+            'ap_materno'=>'',
+            'curp'=>'XEXX010101HNEXXXA4',
+            'email'=>'sgea@toluca.tecnm.mx',
             'password'=> Hash::make('123'),
-            'telefono'=>'7226292587',
+            'telefono'=>'0123456789',
             'estado'=>'alta,registrado'
         ]);
         $user2 = usuarios::create([
@@ -40,6 +40,5 @@ class MaxSeeder extends Seeder
             'estado'=>'alta,registrado'
         ]);
         $user->assignRole(1);
-        $user2->assignRole(1);
     }
 }

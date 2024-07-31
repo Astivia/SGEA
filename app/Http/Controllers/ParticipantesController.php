@@ -15,8 +15,6 @@ use App\Models\participantes;
 class ParticipantesController extends Controller
 {
 
-
-
     public function index($eventoId)
     {
         $evento = eventos::find($eventoId); 

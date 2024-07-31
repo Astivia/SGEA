@@ -24,5 +24,5 @@ document.addEventListener('DOMContentLoaded', () => {
             imgInput.disabled = false;
             imgSelectables.forEach(i => i.classList.remove('selected'));
         });
-
 });
+

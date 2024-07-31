@@ -16,7 +16,9 @@
                     <tr>
                         <th>AUTOR</th>
                         <th>INSTITUCION</th>
+                        @role('Administrador')
                         <th>EMAIL DE CORRESPONDENCIA</th>
+                        @endrole
                         <th>CONTROLES</th>
                     </tr>
                 </thead>
@@ -25,9 +27,11 @@
                     <tr>
                         <td>{!!$autor->usuario->nombre_completo!!} </td>
                         <td>{{ Helper::truncate($autor->institucion, 50) }}</td>
+                        @role('Administrador')
                         <td>
                             <a href="mailto:{!!$autor->email!!}">{!!$autor->email!!}</a>
                         </td>
+                        @endrole
                         <td>
                             <a href="{{url ($autor->evento_id.'/autor/'.$autor->usuario->id) }}"><i class="las la-info-circle la-2x"></i></a>
                             @role(['Administrador','Organizador'])

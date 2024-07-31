@@ -39,11 +39,6 @@ class RolesSeeder extends Seeder
         Permission::create(['name'=>'participantes.edit'])->syncRoles([$rol1,$rol2]);
         Permission::create(['name'=>'participantes.destroy'])->syncRoles([$rol1]);
 
-        Permission::create(['name'=>'autores.index'])->syncRoles([$rol1,$rol2]);
-        Permission::create(['name'=>'autores.create'])->syncRoles([$rol1,$rol2]);
-        Permission::create(['name'=>'autores.edit'])->syncRoles([$rol1,$rol2]);
-        Permission::create(['name'=>'autores.destroy'])->syncRoles([$rol1]);
-        
         Permission::create(['name'=>'articulos.index'])->syncRoles([$rol1,$rol2]);
         Permission::create(['name'=>'articulos.create'])->syncRoles([$rol1,$rol2]);
         Permission::create(['name'=>'articulos.edit'])->syncRoles([$rol1,$rol2]);
@@ -58,5 +53,8 @@ class RolesSeeder extends Seeder
         Permission::create(['name'=>'usuarios.create'])->syncRoles([$rol1,$rol2]);
         Permission::create(['name'=>'usuarios.edit'])->syncRoles([$rol1]);
         Permission::create(['name'=>'usuarios.destroy'])->syncRoles([$rol1]);
+
+        Permission::create(['name'=>'participantes.index'])->syncRoles([$rol1,$rol2]);
+        Permission::create(['name'=>'participantes.edit'])->syncRoles([$rol1,$rol2]);
     }
 }
