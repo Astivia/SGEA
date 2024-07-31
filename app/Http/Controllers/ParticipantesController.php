@@ -15,13 +15,7 @@ use App\Models\participantes;
 class ParticipantesController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware('can:participantes.index')->only('index');
-        $this->middleware('can:participantes.edit')->only('edit','update');
-        $this->middleware('can:participantes.create')->only('create','store'); 
-        $this->middleware('can:participantes.destroy')->only('destroy'); 
 
-    }
 
     public function index($eventoId)
     {
