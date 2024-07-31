@@ -433,11 +433,15 @@ form button[type="submit"] {
     .sidebar.active {
         transform: translateX(0);
         width: 100%;
+        
     }
+    
     .menu-toggle{
         transform: translateX(0);       
         z-index: 1000; 
+       
     }
+   
 
     .sidebar-menu ul {
         margin-bottom:1.5rem;
@@ -509,13 +513,18 @@ tr:nth-child(even) {
     width: 100%;
 } */
 
+.selected {
+    background-color: #e71034;
+}
 
 @media (max-width: 900px) {
-            #example thead input {
+   
+            #example thead input[type="text"] {
                 display: none;
             }
             thead{
                 max-width: 100%;
+                
             }
          
             tbody td{                

@@ -14,9 +14,11 @@
       @else
       <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
       <div class="ajuste" >
+      <button id="deleteSelected">Eliminar seleccionados</button>
         <table id="example" class="display  responsive nowrap" style="width:100%">
                 <thead>
                     <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
                         <th>Nombre</th>
                         <th>Descripcion</th>
                         <th>Controles</th>
@@ -25,7 +27,8 @@
                 </thead>
                 <tbody>
                     @foreach ($Areas as $area)
-                    <tr>
+                    <tr >
+                        <td><input type="checkbox" class="selectRow" data-id="{{ $area->id }}"></td>
                         <td>{!!$area->nombre!!}</td>
                         <td>{!!$area->descripcion!!}</td>
                         <td>

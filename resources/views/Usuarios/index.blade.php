@@ -12,9 +12,11 @@
     
     <!-- <div style="overflow-x:auto; overflow-y:auto; "> -->
     <div class="ajuste" >
+    <button id="deleteSelected">Eliminar seleccionados</button>
         <table id="example" class="display  responsive nowrap" style="width:100%">
             <thead>            
                 <tr>
+                <th><input type="checkbox" id="selectAll"></th>
                     <th>NOMBRE</th>
                     <th>APELLIDOS</th>
                     <th>EMAIL</th>
@@ -27,7 +29,7 @@
             <tbody>
                 @foreach ($Usuarios as $usu)
                 <tr>
-                    
+                <td><input type="checkbox" class="selectRow" data-id="{{ $usu->id }}"></td>
                     <td>{!!$usu->nombre!!}</td>
                     <td>{!!$usu->ap_paterno!!} {!!$usu->ap_materno!!}</td>
                     <td>{!!$usu->email!!}</td>

@@ -71,9 +71,10 @@ Route::view('/login',"login")->name('login');
 
  Route::get('/redirect', [UsuariosController::class, 'redirectToAppropriateView'])->name('user.redirect');
  Route::get('/{acronimo}-index/{edicion}', [LoginController::class, 'index'])->name('evento.index');
- 
+ //ELIMINACION MASIVA 
 
- 
+ Route::post('areas/delete-multiple', [AreasController::class, 'deleteMultiple']);
+ Route::post('usuarios/delete-multiple', [UsuariosController::class, 'deleteMultiple']);
 /*
 |--------------------------------------------------------------------------
 | Web Routes
