@@ -6,6 +6,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Http\Request;
 use App\Models\revisoresArticulos;
+use App\Models\articulosAutores;
 use App\Models\usuarios;
 use App\Models\eventos;
 use App\Models\articulos;
@@ -184,5 +185,14 @@ class RevisoresArticulosController extends Controller
             ]);
             
         }
+    }
+
+    public function pendientes($evento_id,$usuarioId){
+        $articulos = articulos::whereHas('revisores', function ($query) use ($usuarioId) {
+            $query->where('usuario_id', $usuarioId)
+                  ->whereNull('puntuacion');
+        })->with('autores.usuario')->get();
+        
+        return view ('Revisores_Articulos.pendientes',compact('articulos'));
     }
 }

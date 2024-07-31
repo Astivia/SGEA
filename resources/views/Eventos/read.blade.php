@@ -38,7 +38,14 @@
                     <i class="las la-id-card la-3x"></i>Conferencias
                 </a>
          </div>
-        <button id="migrate-button" data-evento-id="{{ $evento->id }}">Migrar Informacion</button>
+        @role('Administrador')
+            <button id="migrate-button" data-evento-id="{{ $evento->id }}">Migrar Informacion</button>
+        @endrole
+        @if(session('rol')!==null && session('rol')=="Revisor")
+
+        <a href="{{url(session('eventoID').'/ArticulosPendientes/'.Auth::user()->id)}}"><i class="las la-bell la-3x"></i> Articulos por Revisar</a>
+        
+        @endif
     </div>
 @endsection
 

@@ -19,109 +19,105 @@
             fixedHeader: true,
             // responsive: true,
             responsive: {
-            // details: true,
-            details: {
-               
-                renderer: function(api, rowIdx, columns) {
-                    var data = $.map(columns, function(col, i) {
-                        return col.hidden ?
-                            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                                '<td>' + col.title + ':' + '</td> ' +
-                                '<td>' + col.data + '</td>' +
-                            '</tr>' :
-                            '';
-                    }).join('');
+                // details: true,
+                details: {
+                    renderer: function(api, rowIdx, columns) {
+                        var data = $.map(columns, function(col, i) {
+                            return col.hidden ?
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                    '<td>' + col.title + ':' + '</td> ' +
+                                    '<td>' + col.data + '</td>' +
+                                '</tr>' :
+                                '';
+                        }).join('');
 
-                    return data ?
-                        $('<table/>').append(data) :
-                        false;
-                }
+                        return data ?
+                            $('<table/>').append(data) :
+                            false;
+                    }
+                },
+                breakpoints: [{ name: 'phone', width: 700 }]
             },
-            breakpoints: [
-                
-                { name: 'phone', width: 700 }
-            ]
-        },
         
-        columnDefs: [
-            { orderable: false, targets: [0, -1] },            
-            { responsivePriority: 1, targets: 1}
-        ],
+            columnDefs: [
+                { orderable: false, targets: [0, -1] },            
+                { responsivePriority: 1, targets: 1}
+            ],
         
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
             }
         });
-
        
         var isResponsive = false;
 
-    table.on('responsive-resize', function(e, datatable, columns) {
-        isResponsive = columns.some(function(column) {
-            return column === false;
+        table.on('responsive-resize', function(e, datatable, columns) {
+            isResponsive = columns.some(function(column) {
+                return column === false;
+            });
+
+            if (!isResponsive && $('#example thead tr').length < 2) {
+                $('#example thead tr').clone(true).appendTo('#example thead');
+
+                $('#example thead tr:eq(1) th').each(function(i) {
+                    var title = $(this).text();
+                    if (i < $('#example thead tr:eq(1) th').length - 1 && i > 0) {
+                        $(this).html('<input  type="text" placeholder="' + title + '" />');
+                        $('input', this).on('keyup change', function() {
+                            if (table.column(i).search() !== this.value) {
+                                table
+                                    .column(i)
+                                    .search(this.value)
+                                    .draw();
+                            }
+                        });
+                    }
+                });
+            }
         });
 
-        if (!isResponsive && $('#example thead tr').length < 2) {
-            $('#example thead tr').clone(true).appendTo('#example thead');
-
-            $('#example thead tr:eq(1) th').each(function(i) {
-                var title = $(this).text();
-                if (i < $('#example thead tr:eq(1) th').length - 1 && i > 0) {
-                    $(this).html('<input  type="text" placeholder="' + title + '" />');
-                    $('input', this).on('keyup change', function() {
-                        if (table.column(i).search() !== this.value) {
-                            table
-                                .column(i)
-                                .search(this.value)
-                                .draw();
-                        }
-                    });
-                }
-            });
-        }
-    });
         //eliminacion masiva 
         $('#selectAll').on('click', function(){
         var rows = table.rows({ 'search': 'applied' }).nodes();
         $('input[type="checkbox"]', rows).prop('checked', this.checked);
-    });
-
-    $('#example tbody').on('change', 'input[type="checkbox"]', function(){
-        if(!this.checked){
-            var el = $('#selectAll').get(0);
-            if(el && el.checked && ('indeterminate' in el)){
-                el.indeterminate = true;
-            }
-        }
-    });
-
-    $('#deleteSelected').on('click', function(){
-        var selectedIds = [];
-        $('.selectRow:checked').each(function(){
-            selectedIds.push($(this).data('id'));
         });
-        console.log("IDs seleccionados:", selectedIds);
-        if(selectedIds.length > 0){
-            if(confirm('¿Estás seguro de que deseas eliminar los registros seleccionados?')){
-                $.ajax({
-                    url: "{{ url('areas/delete-multiple') }}",
-                    method: 'POST',
-                    data: {
-                        ids: selectedIds,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response){                       
-                        location.reload();
-                    },
-                    error: function(response){                      
-                        alert('Error al eliminar los registros.');
-                    }
-                });
+
+        $('#example tbody').on('change', 'input[type="checkbox"]', function(){
+            if(!this.checked){
+                var el = $('#selectAll').get(0);
+                if(el && el.checked && ('indeterminate' in el)){
+                    el.indeterminate = true;
+                }
             }
-        } else {
-            alert('No hay registros seleccionados');
-        }
-    });
+        });
+
+        $('#deleteSelected').on('click', function(){
+            var selectedIds = [];
+            $('.selectRow:checked').each(function(){
+                selectedIds.push($(this).data('id'));
+            });
+            console.log("IDs seleccionados:", selectedIds);
+            if(selectedIds.length > 0){
+                if(confirm('¿Estás seguro de que deseas eliminar los registros seleccionados?')){
+                    $.ajax({
+                        url: "{{ url('areas/delete-multiple') }}",
+                        method: 'POST',
+                        data: {
+                            ids: selectedIds,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response){                       
+                            location.reload();
+                        },
+                        error: function(response){                      
+                            alert('Error al eliminar los registros.');
+                        }
+                    });
+                }
+            } else {
+                alert('No hay registros seleccionados');
+            }
+        });
     });
 
     function openModal(id) {

@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.target.style.display = 'none';
             }
         });
+
         
     }
     /////////////////////////////ALERTS////////////////////////////////////////
