@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\eventos;
 use App\Models\participantes;
 use App\Models\articulos;
@@ -149,6 +150,16 @@ class EventosController extends Controller
         $evento->delete();
 
         return redirect('eventos')->with('info', 'evento eliminado de forma Satisfactoria');
+    }
+
+    public function migrarDatos(Request $request) {
+        try {
+            DB::statement('SELECT migrar_datos()');
+            return response()->json(['message' => 'Migracion de datos Satisfactoria'], 200);
+        } catch (\Exception $e) {
+            Log::error('Error en migracion de datos: ' . $e->getMessage());
+            return response()->json(['message' => 'Fallo la migracion de datos', 'error' => $e->getMessage()], 500);
+        }
     }
 
 }

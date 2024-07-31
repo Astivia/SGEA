@@ -46,8 +46,8 @@ class RevisoresArticulosController extends Controller
                             'articulo_id'=> $request->input('articulo_id'),
                             'usuario_id'=> $usu->id,
                             'orden'=>  $index + 1 ,
-                            // 'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
-                            'notificado'=>true
+                            'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
+                            
                         ]);
                         $this->participantSetRole($usu->id,$request->session()->get('eventoID'));
                     }
@@ -175,7 +175,7 @@ class RevisoresArticulosController extends Controller
         $participant = participantes::where('usuario_id', $usuID)->where('evento_id', $eventoID)->first();
 
         if($participant){
-            $participant->update(['rol'=>'Revisor']);
+            $participant['rol'] = "Revisor";
         }else{
             participantes::insert([
                 'usuario_id' => $usuID,

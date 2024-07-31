@@ -172,3 +172,19 @@
         document.getElementById('delete-form-' + id).submit();
     }
 </script>
+
+@if(session('reload'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchSidebar();
+        });
+
+        function fetchSidebar() {
+            fetch('{{ route('get.sidebar') }}')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('sidebar').innerHTML = html;
+                });
+        }
+    </script>
+@endif

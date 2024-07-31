@@ -33,17 +33,18 @@
                         <td>
                             <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo">
                         </td>
-                        <td>{!!$e->nombre!!}</td>
+                        <td><a href="{!! 'eventos/'.$e->id !!}" style="color:#000;"><strong>{!!$e->nombre!!}</strong></a></td>
                         <td>{!!$e->acronimo!!}</td>
                         <td>{!!$e->edicion!!}</td>
                         <td>
                             <a href="{!! 'eventos/'.$e->id !!}"><i class="las la-info-circle la-2x"></i></a>
+                            
                             @role(['Administrador', 'Organizador'])
                             <a href="{!!'eventos/'.$e->id.'/edit'!!}">
                                 <i class="las la-pen la-2x"></i>
                             </a>
                             <a href="{{url('eventos/'.$e->id)}}"
-                                onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $e->id }}').submit(); }">
+                                onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este evento?')) { document.getElementById('delete-form-{{ $e->id }}').submit(); }">
                                 <i class="las la-trash-alt la-2x"></i>
                             </a>
                             <form id="delete-form-{{ $e->id }}" action="{{ url('eventos/'.$e->id) }}" method="POST"
@@ -52,6 +53,15 @@
                                 @csrf
                             </form>
                             @endrole
+                            @if ($e->id !== session('eventoID'))
+                                {!! Form::open(['route' => 'participantes.store', 'id' => 'participante-form']) !!}{!! Form::hidden('evento_id', $e->id) !!}{!! Form::hidden('usuario_id', Auth::user()->id) !!}
+                                    <button type="submit"><i class="las la-user-plus la-2x"></i> Unirme</button>
+                                {!!Form::close()!!}
+                            @else
+                                {!! Form::open(['route' => ['participantes.destroy', $e->id,Auth::user()->id], 'method' => 'delete', 'style' => 'display:inline-block;']) !!}
+                                    <button type="submit" onclick="return confirm('¿Estás seguro de que desea salir del evento?');" style="border:none;"><i class="las la-sign-out-alt la-2x"></i>Salir</button>
+                                {!! Form::close() !!}
+                            @endif
                         </td>
                     </tr>
                     @endforeach
