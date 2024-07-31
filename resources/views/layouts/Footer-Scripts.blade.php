@@ -38,18 +38,11 @@
                 }
             },
             breakpoints: [
-                // { name: 'desktop', width: Infinity },
-                // { name: 'tablet', width: 1024 },
-                // { name: 'fablet', width: 768 },
+                
                 { name: 'phone', width: 700 }
             ]
         },
-        //     columnDefs: [
-        //         { orderable: false, targets:[0,-1] }  // Deshabilitamos la ordenación en todas las columnas
-        //         ,
-        //     { responsivePriority: 1, targets: 0 }, // Prioridad alta para la columna de checkboxes
-           
-        // ],
+        
         columnDefs: [
             { orderable: false, targets: [0, -1] },            
             { responsivePriority: 1, targets: 1}
@@ -59,26 +52,6 @@
                 url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
             }
         });
-
-        // $('#example thead tr').clone(true).appendTo('#example thead');
-
-        // $('#example thead tr:eq(1) th').each(function (i) {
-        //     var title = $(this).text(); // es el nombre de la columna
-
-        //     // Verificamos si no es la última columna antes de agregar el input
-        //     if (i < $('#example thead tr:eq(1) th').length - 1 && i > 0) {
-        //         $(this).html('<input type="text" placeholder="' + title + '" />');
-
-        //         $('input', this).on('keyup change', function () {
-        //             if (table.column(i).search() !== this.value) {
-        //                 table
-        //                     .column(i)
-        //                     .search(this.value)
-        //                     .draw();
-        //             }
-        //         });
-        //     }
-        // });
 
        
         var isResponsive = false;

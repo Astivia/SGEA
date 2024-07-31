@@ -75,7 +75,9 @@ Route::view('/login',"login")->name('login');
  Route::get('/{acronimo}-index/{edicion}', [LoginController::class, 'index'])->name('evento.index');
  
 
- 
+ //eliminacion multiple
+ Route::post('areas/delete-multiple', [AreasController::class, 'deleteMultiple']);
+ Route::post('usuarios/delete-multiple', [UsuariosController::class, 'deleteMultiple']);
 /*
 |--------------------------------------------------------------------------
 | Web Routes
