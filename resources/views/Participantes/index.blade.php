@@ -27,8 +27,15 @@
                 <tbody>
                     @foreach ($part as $usu)
                         <tr>
-                            <td>{!!$usu->nombre_completo!!}</td>
-                            <td>{!!$usu->email!!}</td>
+                            <td><a href="{{url('usuarios/'.$usu->id)}}" style="color=#000;">{!!$usu->nombre_completo!!}</a></td>
+                            <td><a href="mailto:{!!$usu->email!!}">{!!$usu->email!!}</a></td>
+                            <td>
+                                @if($usu->rol===null)
+                                    No asignado
+                                @else
+                                    {!!$usu->rol!!}
+                                @endif
+                            </td>
                             @role(['Administrador','Organizador'])
                             <td>
                                 <a href="{{ url('usuarios/'.$usu->id) }}"><i class="las la-info-circle la-2x"></i></a>
@@ -54,7 +61,7 @@
         <h2>Añadir participante</h2>
         <strong>Evento: {!!$evento->acronimo!!} {!!$evento->edicion!!}</strong>
 
-        {!! Form::open(['route' => 'participantes.store']) !!}
+        {!! Form::open(['route' => 'participantes.store', 'id' => 'participante-form']) !!}
 
             {!! Form::hidden('evento_id', $evento->id) !!}
 
@@ -68,3 +75,4 @@
 </div>
 
 @endsection
+

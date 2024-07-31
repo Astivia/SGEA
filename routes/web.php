@@ -15,7 +15,9 @@ use App\Http\Controllers\LoginController;
 
 Route::resource('areas', AreasController::class)->middleware('auth')->middleware('can:areas.index');
 Route::resource('comite_editorial', Comite_EditorialController::class)->middleware('auth');
+
 Route::resource('eventos', EventosController::class)->names('eventos')->middleware('auth');
+
 Route::resource('usuarios', UsuariosController::class)->middleware('auth');
 // PARTICIPANTES
 Route::resource('participantes', ParticipantesController::class)->except(['index'])->middleware('auth');
@@ -71,7 +73,8 @@ Route::view('/login',"login")->name('login');
 
  Route::get('/redirect', [UsuariosController::class, 'redirectToAppropriateView'])->name('user.redirect');
  Route::get('/{acronimo}-index/{edicion}', [LoginController::class, 'index'])->name('evento.index');
- 
+ Route::get('/sidebar', [LoginController::class, 'getSidebar'])->name('get.sidebar');
+
 
  //MIGRAR DATOS
  Route::post('/migrate-data', [EventosController::class,'migrarDatos'])->name('migrate.data');

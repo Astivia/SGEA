@@ -21,6 +21,7 @@
                         <a href="{{route('logout')}}"><span class="las la-door-closed"></span></a>
                     </div>
                 </div>
+                
                 @if(session('error'))
                     <div class="alert alert-error" id="error-alert">
                         <i class="las la-exclamation-circle la-2x"></i>
@@ -44,6 +45,8 @@
             </main>
         </div>
     </body>
+    
+
 @include ('layouts.Footer-Scripts')
 
 

@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
 use App\Models\eventos;
 use App\Models\usuarios;
+use App\Models\participantes;
 
 
 class ParticipantesController extends Controller
@@ -34,12 +36,28 @@ class ParticipantesController extends Controller
      */
     public function store(Request $request)
     {
-        $datos=$request->all();
-        $evento=eventos::find($datos['evento_id']);
-        $usuario= usuarios::find($datos['usuario_id']);
-        $evento->participantes()->attach($usuario);
-        
-        return redirect()->back()->with('success', 'Se ha Registrado correctamente');
+        $datos = $request->all();
+
+        // Verificar que el evento y el usuario existan
+        $evento = eventos::find($datos['evento_id']);
+        $usuario = usuarios::find($datos['usuario_id']);
+    
+        if (!$evento || !$usuario) {
+            return redirect()->back()->with('error', 'Evento o usuario no encontrado.');
+        }
+
+        if(!participantes::where('evento_id',$datos['evento_id'])->where('usuario_id',$datos['usuario_id'])->first()){
+            $evento->participantes()->attach($usuario);
+        }else{
+            return redirect()->back()->with('error', 'Este usuario ya es parte del evento');
+        }
+    
+        // Verificar si el usuario autenticado es el mismo que se está registrando
+        if (Auth::user()->id === $usuario->id) {
+            $request->session()->put('eventoID', $evento->id);
+        }
+    
+        return redirect()->back()->with('success', 'Se ha añadido correctamente.')->with('reload', true);
     }
 
     /**
@@ -55,7 +73,10 @@ class ParticipantesController extends Controller
         }
 
         $evento->participantes()->detach($usuario);
+        if (Auth::user()->id === $usuario->id) {
+            session()->put('eventoID', null);
+        }    
 
-        return redirect()->back()->with('info', 'Usuario expulsado del evento.');
+        return redirect()->back()->with('info', 'Usuario expulsado del evento.')->with('reload', true);
     }
 }

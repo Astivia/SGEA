@@ -307,4 +307,10 @@ class LoginController extends Controller
         return view('emailVerification',compact('user','codigo'));
         
     }
+
+    public function getSidebar()
+    {
+        return view('layouts.sidebar');
+    }
+
 }

@@ -38,6 +38,7 @@
                         <td>{!!$e->edicion!!}</td>
                         <td>
                             <a href="{!! 'eventos/'.$e->id !!}"><i class="las la-info-circle la-2x"></i></a>
+                            
                             @role(['Administrador', 'Organizador'])
                             <a href="{!!'eventos/'.$e->id.'/edit'!!}">
                                 <i class="las la-pen la-2x"></i>
@@ -52,6 +53,16 @@
                                 @csrf
                             </form>
                             @endrole
+                            <br><br>
+                            @if ($e->id !== session('eventoID'))
+                                {!! Form::open(['route' => 'participantes.store', 'id' => 'participante-form']) !!}{!! Form::hidden('evento_id', $e->id) !!}{!! Form::hidden('usuario_id', Auth::user()->id) !!}
+                                    <button type="submit"><i class="las la-user-plus la-2x"></i> Unirme</button>
+                                {!!Form::close()!!}
+                            @else
+                                {!! Form::open(['route' => ['participantes.destroy', $e->id,Auth::user()->id], 'method' => 'delete', 'style' => 'display:inline-block;']) !!}
+                                    <button type="submit" onclick="return confirm('¿Estás seguro de que desea salir del evento?');" style="border:none;"><i class="las la-sign-out-alt la-2x"></i>Salir</button>
+                                {!! Form::close() !!}
+                            @endif
                         </td>
                     </tr>
                     @endforeach

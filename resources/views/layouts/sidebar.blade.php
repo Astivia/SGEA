@@ -1,4 +1,4 @@
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
     <div class="sidebar-main">
         <div class="sidebar-user">
             <h2>SGEA</h2>
@@ -26,27 +26,23 @@
                     @if(session('rol')===null)
                         <!-- El usuario es Admin y no tiene rol asignado -->
                         <li><a href="{{ url('areas') }}"><span class="las la-id-card"></span>Areas</a></li>
-                        <li><a href="{{ url('eventos') }}"><span class="las la-calendar-alt"></span>Eventos</a></li>
                         <li><a href="{{ url('usuarios') }}"><span class="las la-user"></span>Usuarios</a></li>
-                    @else
-                    <li><a href="{{ url(session('eventoID').'/articulos') }}"><span class="lar la-newspaper"></span>Artículos</a></li>
-                    <li><a href="{{ url(session('eventoID').'/autores') }}"><span class="las la-pen-nib"></span>Autores</a></li>
                     @endif
-                    
                 @endrole
+                <li><a href="{{ url('eventos') }}"><span class="las la-calendar-alt"></span>Eventos</a></li>
             </ul>
-            @role('Administrador')
-            <div class="menu-head">
-                <span>Administracion</span>
-            </div>
-            <ul class="menu-list">
-                
-                    <li><a href="{{ url(session('eventoID').'/articulos') }}"><span class="lar la-newspaper"></span>Artículos</a></li>
-                    <li><a href="{{ url(session('eventoID').'/autores') }}"><span class="las la-pen-nib"></span>Autores</a></li>
-                    <li><a href="{{ url(session('eventoID').'/revisoresArticulos') }}"><span class="las la-glasses"></span>Revisores</a></li>    
-                
+            @if(session('eventoID')!==null)
+                <div class="menu-head">
+                    <span>Administracion</span>
+                </div>
+                <ul class="menu-list active">
+                    
+                        <li><a href="{{ url(session('eventoID').'/articulos') }}"><span class="lar la-newspaper"></span>Artículos</a></li>
+                        <li><a href="{{ url(session('eventoID').'/autores') }}"><span class="las la-pen-nib"></span>Autores</a></li>
+                        <li><a href="{{ url(session('eventoID').'/revisoresArticulos') }}"><span class="las la-glasses"></span>Revisores</a></li>    
+                    
             </ul>
-            @endrole
+            @endif
         </div>
     </div>
 </div>

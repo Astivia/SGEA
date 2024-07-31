@@ -50,23 +50,22 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', (event)=>{
         $(document).ready(function() {
-        $('#migrate-button').click(function() {
-            $.ajax({
-                url: '{{ route('migrate.data') }}',
-                type: 'POST',
-                data: {
-                _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    alert(response.message);
-                },
-                error: function(response) {
-                    alert('Migration failed: ' + response.responseJSON.error);
-                }
+            $('#migrate-button').click(function() {
+                $.ajax({
+                    url: '{{ route('migrate.data') }}',
+                    type: 'POST',
+                    data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                    },
+                    error: function(response) {
+                        alert('Migration failed: ' + response.responseJSON.error);
+                    }
+                });
             });
         });
-    });
-
     });
     
 </script>
