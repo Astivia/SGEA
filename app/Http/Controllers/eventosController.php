@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\eventos;
 use App\Models\participantes;
 use App\Models\articulos;
-use App\Models\comite_editorial;
+use App\Models\articulosAutores;
+use App\Models\revisoresArticulos;
 
 class EventosController extends Controller
 {
@@ -17,10 +18,6 @@ class EventosController extends Controller
         $this->middleware('can:eventos.create')->only('create','store'); 
         $this->middleware('can:eventos.destroy')->only('destroy'); 
     }
-
-    /**
-     * Display a listing of the resource.
-     */
 
     public function index()
     {
@@ -36,17 +33,7 @@ class EventosController extends Controller
         }
          return view ('Eventos.index',compact('Eventos','sysImgs'));
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $datos=$request->all();
@@ -76,19 +63,13 @@ class EventosController extends Controller
         return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
         $evento=eventos::find($id);
-
         return view ('Eventos.read',compact('evento'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $evento=eventos::find($id);
@@ -104,9 +85,6 @@ class EventosController extends Controller
         return view ('Eventos.edit',compact('evento','sysImgs'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $NuevosDatos = $request->all();
@@ -134,26 +112,35 @@ class EventosController extends Controller
         return redirect('/eventos')->with('info','Informacion Actualizada');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $evento=eventos::find($id);
 
-        if ((articulos::where('evento_id', $evento->id)->count() > 0) ||
-            ($evento->participantes->count() > 0) ) {
+        if ((articulos::where('evento_id', $id)->count() > 0) ||
+            $evento->participantes->count() > 0||
+            articulosAutores::where('evento_id',$id)->count() > 0 ||
+            revisoresArticulos::where('evento_id',$id)->count() >0 ) {
             return redirect()->back()->with('error', 'No se puede eliminar: hay Informacion asociada con este evento');
         }
+        $logo = $evento->logo;
 
         $evento->delete();
 
-        return redirect('eventos')->with('info', 'evento eliminado de forma Satisfactoria');
+        $otherEventsUsingLogo = eventos::where('logo', $logo)->count();
+
+        if ($otherEventsUsingLogo == 0 && $logo != 'NO ASIGNADO') {
+            $filePath = public_path('assets/uploads/' . $logo);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+        return redirect('eventos')->with('info', 'evento eliminado');
     }
 
     public function migrarDatos(Request $request) {
         try {
             DB::statement('SELECT migrar_datos()');
+            $request->session()->put('eventoID',null);
             return response()->json(['message' => 'Migracion de datos Satisfactoria'], 200);
         } catch (\Exception $e) {
             Log::error('Error en migracion de datos: ' . $e->getMessage());

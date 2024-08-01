@@ -6,6 +6,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Http\Request;
 use App\Models\revisoresArticulos;
+use App\Models\articulosAutores;
 use App\Models\usuarios;
 use App\Models\eventos;
 use App\Models\articulos;
@@ -46,7 +47,8 @@ class RevisoresArticulosController extends Controller
                             'articulo_id'=> $request->input('articulo_id'),
                             'usuario_id'=> $usu->id,
                             'orden'=>  $index + 1 ,
-                            'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
+                            // 'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
+                            'notificado'=>true
                             
                         ]);
                         $this->participantSetRole($usu->id,$request->session()->get('eventoID'));
@@ -93,7 +95,8 @@ class RevisoresArticulosController extends Controller
                             'evento_id' => $evento_id,
                             'articulo_id' => $id,
                             'usuario_id' => $revisor['id'],
-                            'orden'=>  $index + 1 
+                            'orden'=>  $index + 1 ,
+                            'notificado'=>true
                         ]);
                     }
                 }
@@ -184,5 +187,27 @@ class RevisoresArticulosController extends Controller
             ]);
             
         }
+    }
+
+    public function pendientes($evento_id,$usuarioId){
+        $articulos = articulos::whereHas('revisores', function ($query) use ($usuarioId) {
+            $query->where('usuario_id', $usuarioId)
+                  ->whereNull('puntuacion');
+        })->with('autores.usuario')->get();
+
+        return view ('Revisores_Articulos.pendientes',compact('articulos'));
+    }
+
+    public function revision($eventoID,$articuloID){
+        $articulo = articulos::where('evento_id',$eventoID)->where('id',$articuloID)->first();
+        if(!is_null($articulo->archivo)){
+            $pdfPath = 'SGEA/storage/app/public/Articles/web/viewer.html?file='.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.$articulo->archivo;
+            $pdfUrl =  asset($pdfPath);
+        }else{
+            $pdfUrl=null;
+        }
+        $autores= articulosAutores::where('articulo_id',$articuloID)->OrderBy('orden')->get();
+
+        return view ('Revisores_Articulos.revision',compact('articulo','pdfUrl','autores'));
     }
 }
