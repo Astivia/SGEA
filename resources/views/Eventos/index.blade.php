@@ -61,11 +61,11 @@
                             @endrole
                             @if ($e->id !== session('eventoID'))
                                 {!! Form::open(['route' => 'participantes.store', 'id' => 'participante-form']) !!}{!! Form::hidden('evento_id', $e->id) !!}{!! Form::hidden('usuario_id', Auth::user()->id) !!}
-                                    <button type="submit"><i class="las la-user-plus la-2x"></i> Unirme</button>
+                                    <button id ="unirme" type="submit"><i class="las la-user-plus la-2x"></i> Unirme</button>
                                 {!!Form::close()!!}
                             @else
                                 {!! Form::open(['route' => ['participantes.destroy', $e->id,Auth::user()->id], 'method' => 'delete', 'style' => 'display:inline-block;']) !!}
-                                    <button type="submit" onclick="return confirm('¿Estás seguro de que desea salir del evento?');" style="border:none;"><i class="las la-sign-out-alt la-2x"></i>Salir</button>
+                                    <button id ="unirme" type="submit" onclick="return confirm('¿Estás seguro de que desea salir del evento?');" style="border:none;"><i class="las la-sign-out-alt la-2x"></i>Salir</button>
                                 {!! Form::close() !!}
                             @endif
                         </td>

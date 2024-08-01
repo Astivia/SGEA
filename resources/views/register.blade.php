@@ -112,6 +112,12 @@
                             <label for="confirm-password" class="form-label">Confirmar Contraseña:</label>
                             <!-- <span id="confirm-password-message" style="color: red;"></span> -->
                         </div>
+                        <div class="remember-forgot">
+                        <label for="privacy_policy">
+                            <input type="checkbox" id="privacy_policy" name="privacy_policy" required> Acepto el <a href="#" onclick="openModal('privacyModal')">aviso de privacidad</a>
+                        </label>
+                        </div>
+
 
                         <button type="submit" class="btn btn-primary">registrarse</button>
                         
@@ -129,7 +135,14 @@
         <p id="password-error-message"></p>
     </div>
 </div>
-        
+        <!-- Modal de Aviso de Privacidad -->
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('privacyModal')">&times;</span>
+            <h1>Aviso de Privacidad</h1>
+            <p>Aquí va el contenido del aviso de privacidad...</p>
+        </div>
+    </div>
     </div>
     </div>    
     <script src="{{asset('SGEA/public/js/scriptLogin.js')}}"></script>
