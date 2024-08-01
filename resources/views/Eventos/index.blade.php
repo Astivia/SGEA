@@ -94,6 +94,8 @@
         <br><hr><br>
         <input type="file" id="logo" name="logo" accept="image/png">
         <input type="hidden" id="selected_img" name="logo">
+        <br>
+        <img id="preview-image" src="#" alt="Previsualización de la imagen" style="display:none; width: 100px; margin-top: 10px;">
     </div>
     
         <label for="nombre">Nombre:</label>
@@ -118,7 +120,9 @@
 
 @endsection
 <script src="{{asset('SGEA/public/js/script-eventos.js')}}"></script>
-
+<script>
+   
+</script>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', (event)=>{
         $(document).ready(function() {

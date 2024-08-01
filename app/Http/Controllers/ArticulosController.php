@@ -252,5 +252,15 @@ class ArticulosController extends Controller
         $articles = articulos::where('area_id', $area_id)->OrderBy('titulo')->get();
         return response()->json($articles);
     }
+    //eliminacion masiva 
+    // public function deleteMultiple(Request $request)
+    // {
+    //     $ids = $request->ids;
+    //     if (!empty($ids)) {
+    //         areas::whereIn('id', $ids)->delete();
+    //         return response()->json(['success' => "Registros eliminados correctamente."]);
+    //     }
+    //     return response()->json(['error' => "No se seleccionaron registros."]);
+    // }
 
 }
