@@ -253,14 +253,14 @@ class ArticulosController extends Controller
         return response()->json($articles);
     }
     //eliminacion masiva 
-    // public function deleteMultiple(Request $request)
-    // {
-    //     $ids = $request->ids;
-    //     if (!empty($ids)) {
-    //         areas::whereIn('id', $ids)->delete();
-    //         return response()->json(['success' => "Registros eliminados correctamente."]);
-    //     }
-    //     return response()->json(['error' => "No se seleccionaron registros."]);
-    // }
+    public function deleteMultiple(Request $request)
+    {
+        $ids = $request->ids;
+        if (!empty($ids)) {
+            articulos::whereIn('id', $ids)->delete();
+            return response()->json(['success' => "Registros eliminados correctamente."]);
+        }
+        return response()->json(['error' => "No se seleccionaron registros."]);
+    }
 
 }

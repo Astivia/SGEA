@@ -10,11 +10,11 @@
             <strong>No hay datos</strong>
         @else
         <div class="ajuste" >
-        <!-- <button id="deleteSelected">Eliminar seleccionados</button> -->
+        <button id="deleteSelected">Eliminar seleccionados</button>
             <table id="example" class="display  responsive nowrap" style="width:100%">
                 <thead>            
                     <tr>
-                        <!-- <th><input type="checkbox" id="selectAll"></th> -->
+                        <th><input type="checkbox" id="selectAll"></th>
                         <th>TITULO</th>
                         <th>AUTORES</th>
                         @role(['Administrador','Organizador'])
@@ -28,7 +28,7 @@
                 <tbody>
                     @foreach ($Articulos as $art)
                     <tr>
-                        <!-- <td><input type="checkbox" class="selectRow" data-id="{{ $art->id }}"></td> -->
+                        <td><input type="checkbox" class="selectRow" data-id="{{ $art->id }}"></td>
                         <td>
                             <a href="{!! url($art->evento_id.'/articulo/'.$art->id) !!}" style="color:#000;">
                                 <strong>{{ Helper::truncate($art->titulo, 65) }}</strong>

@@ -18,19 +18,22 @@
         @endrole
     <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
     <div class="ajuste" >
+    <button id="deleteSelected">Eliminar seleccionados</button>
         <table id="example" class="display  responsive nowrap" style="width:100%">
                 <thead>
                     <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
                         <th>LOGO</th>
                         <th>NOMBRE</th>
                         <th>ACRONIMO</th>
                         <th>ED.</th>
-                        <th> </th>
+                        <th>Controles </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($Eventos as $e)
                     <tr>
+                        <td><input type="checkbox" class="selectRow" data-id="{{ $e->id }}"></td>
                         <td>
                         <a href="{!! 'eventos/'.$e->id !!}" style="color:#000;">
                             <img id="img-list" src="{{ asset('SGEA/public/assets/uploads/' . $e->logo) }}" alt="logo">

@@ -159,5 +159,15 @@ class EventosController extends Controller
         }
 
     }
+    //eliminacion masiva 
+    public function deleteMultiple(Request $request)
+    {
+        $ids = $request->ids;
+        if (!empty($ids)) {
+            eventos::whereIn('id', $ids)->delete();
+            return response()->json(['success' => "Registros eliminados correctamente."]);
+        }
+        return response()->json(['error' => "No se seleccionaron registros."]);
+    }
 
 }

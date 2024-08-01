@@ -10,10 +10,13 @@
         @if($articles->isEmpty())
             <strong>No hay Revisores asignados a ningun articulo en este momento</strong>
         @else
-            <div style="overflow-x:auto; overflow-y:auto; max-height:500px;">
+            <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
+            <div class="ajuste" >
+            <button id="deleteSelected">Eliminar seleccionados</button>
                 <table id="example" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
                             <th>ARTICULO</th>
                             <th>estado</th>
                             <th>Revisor 1</th>
@@ -25,6 +28,7 @@
                     <tbody>
                         @foreach ($articles as $ra)
                             <tr>
+                            <td><input type="checkbox" class="selectRow" data-id="{{ $ra->id }}"></td>
                                 <td><a href="{!! url(session('eventoID').'/articulo/'.$ra->id) !!}" style="color:#000;">{!!$ra->titulo!!} </a></td>
                                 <td>{!!$ra->estado!!}</td>
                                 @foreach ($ra->revisores as $revisor)

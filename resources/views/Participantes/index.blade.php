@@ -12,10 +12,12 @@
     @if(count($part)===0)
         <strong>No hay datos</strong>
     @else
-        
-            <table id="example" class="display responsive nowrap">
+    <div class="ajuste" >
+        <button id="deleteSelected">Eliminar seleccionados</button>
+            <table id="example" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>
+                    <th><input type="checkbox" id="selectAll"></th>
                         <th>NOMBRE</th>
                         <th>CORREO</th>
                         <th>ROL</th>
@@ -27,6 +29,7 @@
                 <tbody>
                     @foreach ($part as $usu)
                         <tr>
+                        <td><input type="checkbox" class="selectRow" data-id="{{ $usu->id }}"></td>
                             <td><a href="{{url('usuarios/'.$usu->id)}}" style="color=#000;">{!!$usu->nombre_completo!!}</a></td>
                             <td><a href="mailto:{!!$usu->email!!}">{!!$usu->email!!}</a></td>
                             <td>
