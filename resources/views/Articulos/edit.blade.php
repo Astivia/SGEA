@@ -27,7 +27,7 @@
             <br>
             <div class="form-group">
                 <label for="nuevo_archivo_pdf">Para cambiar el archivo, seleccione un nuevo archivo</label>
-                <input type="file" class="form-control" id="archivo" name="archivo">
+                {!! Form::file('archivo', ['id' => 'archivoPDF', 'class' => 'form-control', 'accept' => '.pdf,.docx,.doc']) !!}
             </div>
             <!-------------------------------------------------- AUTORES --------------------------------------------->
             <label for="">Seleccione Autor:</label>

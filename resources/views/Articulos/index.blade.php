@@ -101,7 +101,8 @@
                 </select>
 
                 <label for="pfd">Subir archivo pdf:</label>
-                {!! Form::file('pdf', null, null) !!}
+                {!! Form::file('pdf', ['id' => 'archivoPDF', 'class' => 'form-control', 'accept' => '.pdf,.docx,.doc']) !!}
+
                 
                 <!-------------------------------------------------- AUTORES --------------------------------------------->
                 <label for="">Seleccione Autor:</label>
