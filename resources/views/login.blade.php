@@ -93,6 +93,7 @@
             <p>Aquí va el contenido del aviso de privacidad...</p>
         </div>
     </div>
+    
     <script src="./js/scriptLogin.js"> </script>
 </body>
 </html>

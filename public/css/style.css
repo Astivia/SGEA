@@ -19,7 +19,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 70%;
-    height: 600px;
+    height: 550px;
     background: url('../assets/img/fondo.png') no-repeat;
     background-size: cover;
     background-position: center;
@@ -37,8 +37,9 @@
     padding: 80px;
     color: white;
     display: flex;
-    gap: 50px;
+    gap: 20px;
     flex-direction: column;
+    margin-top: -50px;
 }
 .text-content{
     margin-top:-25px ;
@@ -112,7 +113,7 @@
     width: 70%;
     margin: 0px;   
     padding: 20px;
-   background-color: black;
+
     
 }
 .form-box #login-form{
@@ -157,7 +158,7 @@
 
 .form-box .register .input-box{
     position: relative;    
-    height: 10px;
+    height: 15px;
     border-bottom: 2px solid white;
     border-left: white;
     margin: 30px 0;
@@ -298,7 +299,7 @@
     font-size: 14px;
 } */
 /* Media queries */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .container {
         width: 90%;
         height: auto;
@@ -324,7 +325,7 @@
         
     }
     
-}
+} */
 /* #password-strength {
     margin: 10px 0;
     width: 100%;
@@ -401,7 +402,7 @@
     background: transparent;
     backdrop-filter: contrast(70%);
     position: absolute;
-    width: 75%;
+    width: 70%;
     height: auto;
     top: 50%;
     left:50%;
