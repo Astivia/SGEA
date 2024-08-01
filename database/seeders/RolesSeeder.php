@@ -54,7 +54,5 @@ class RolesSeeder extends Seeder
         Permission::create(['name'=>'usuarios.edit'])->syncRoles([$rol1]);
         Permission::create(['name'=>'usuarios.destroy'])->syncRoles([$rol1]);
 
-        Permission::create(['name'=>'participantes.index'])->syncRoles([$rol1,$rol2]);
-        Permission::create(['name'=>'participantes.edit'])->syncRoles([$rol1,$rol2]);
     }
 }
