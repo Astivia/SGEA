@@ -1,6 +1,5 @@
 @extends('layouts.master')
     <title>Modificar Datos</title>
-
 @section('Content')
 <div class="container">
     <h1>MODIFICAR REVISORES</h1>

@@ -136,12 +136,11 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Registrar Autor </h2>
-            <form id="register-author-form" metod="POST" action="{{route('inicia-sesion')}}">  
+            <form id="register-author-form" metod="POST" >  
                 @csrf  
                 <span id="curp-error" style="color:red; display:none;">No se encontró el usuario, favor de llenar todos los campos</span>
                 <input type="hidden" name="id" id="id">
                 <label for="curp">CURP:</label>
-   
                 <input type="text" id="curp" name="curp" required>
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>

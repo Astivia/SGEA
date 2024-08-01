@@ -32,16 +32,30 @@
             @endif
         </p>
         
+
         @if($pdfUrl)
-        <a href="{{ url()->previous() }}"><button> Cancelar</button></a>
         <a href="{!!$pdfUrl !!}" target="_blank"><button><i class="las la-file-pdf"></i> Ver en nueva Pestaña</button></a>
-            <div class="LectorPDF">
-                <br><br>
-                <div id="pdf-viewer" >
-                    <iframe src="{!!$pdfUrl !!}" frameborder="0" ></iframe>
-                </div>
-                <br><br>
-            </div>
+        <div class="LectorPDF">
+            <iframe src="{!!$pdfUrl !!}" frameborder="0" ></iframe>
+        </div>
         @endif
+        <div class="revision-container">
+            {!! Form::open(['method' => 'PUT', 'url' => session('eventoID').'_'.$articulo->id.'/', 'id' => 'revision-form']) !!}
+
+                {{ Form::hidden('id_usuario', auth()->user()->id) }}
+
+                <strong>{{ Form::label('Coments', 'Comentarios:') }}</strong>
+                {!! Form::textArea('comentarios') !!}
+
+                <strong>{{ Form::label('turniting', 'Archivo Turnitin:') }}</strong>
+                {!! Form::file('similitud', ['class' => 'form-control', 'accept' => '.pdf']) !!}
+
+                <strong>{{ Form::label('puntuation', 'Asignar Puntuacion:') }}</strong>
+                {{ Form::number('puntuacion', 'required')}}
+                
+                <button type="submit" id="EndRev-btn">Finalizar Revision</button>
+            {!! Form::close() !!}
+            <a href="{{ url()->previous() }}"><button> Cancelar Revision</button></a>
+        </div>
     </div>
 @endsection

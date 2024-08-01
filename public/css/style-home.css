@@ -776,14 +776,30 @@ button:hover {
 }
 
 .LectorPDF{
+    padding: 2%;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .LectorPDF iframe{
-    width: 100%;
-    height: 70%;
+    background-color: #1a2d51;
+    padding: 20px;
+    width: 85%;
+    height: 75vh;
 }
+
+.revision-container{
+    padding-left: 9vw;
+    padding-right: 9vw;
+    padding-bottom: 5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+}
+
+
 
 /* prueba dashboard */
 .carousel {

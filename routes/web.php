@@ -56,6 +56,7 @@ Route::get('{evento_id}/revisoresArticulo/{articulo_id}/edit', [RevisoresArticul
 // RUTAS DE REVISION
 Route::get('{eventoId}/ArticulosPendientes/{usuId}', [RevisoresArticulosController::class, 'pendientes'])->middleware('auth');
 Route::get('{eventoId}_{usuId}/revision/', [RevisoresArticulosController::class, 'revision'])->middleware('auth');
+Route::put('{evento_id}_{articuloID}/', [RevisoresArticulosController::class, 'update']);
 
 //LOGIN - REGISTER
 Route::view('/login',"login")->name('login');
@@ -78,6 +79,7 @@ Route::view('/login',"login")->name('login');
  Route::get('/{acronimo}-index/{edicion}', [LoginController::class, 'index'])->name('evento.index');
   Route::get('/sidebar', [LoginController::class, 'getSidebar'])->name('get.sidebar');
  
+  //MIGRACIONES
   Route::post('/migrate-data', [EventosController::class,'migrarDatos'])->name('migrate.data');
   Route::post('migrar/{evento_id}', [EventosController::class,'migrarEvento'])->name('migrate.event');
 

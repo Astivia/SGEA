@@ -95,7 +95,8 @@
                 <strong>Aun no hay imagenes en el sistema</strong>
             @endif
         <br><hr><br>
-        <input type="file" id="logo" name="logo" accept="image/png">
+        {!! Form::file('logo', ['id' => 'logo', 'class' => 'form-control', 'accept' => 'image/jpeg, image/png, image/webp']) !!}
+
         <input type="hidden" id="selected_img" name="logo">
         <br>
         <img id="preview-image" src="#" alt="Previsualización de la imagen" style="display:none; width: 100px; margin-top: 10px;">

@@ -81,9 +81,6 @@ class RevisoresArticulosController extends Controller
     public function update(Request $request, string $id)
     {
         $evento_id=$request->session()->get('eventoID');
-
-        $datos=$request->all();
-
         if ($request->has('revisores')) {
             $Revisors = json_decode($request->input('revisores'), true);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -103,9 +100,16 @@ class RevisoresArticulosController extends Controller
             } else {
                 echo "Error al decodificar Datos: ".json_last_error_msg();
             }
+            return redirect ($evento_id.'/revisoresArticulos')->with('info','Informacion Actualizada');
+        }else{
+            $datos=$request->all();
+            $registroPorActualizar = revisoresArticulos::where('evento_id',$evento_id)
+                                                        ->where('articulo_id', $id)
+                                                        ->where('usuario_id', $datos['id_usuario'])
+                                                        ->first();
+            dd($registroPorActualizar);
         }
 
-        return redirect ($evento_id.'/revisoresArticulos')->with('info','Informacion Actualizada');
     }
 
     public function destroy($eventoId,$usuarioId,$articuloId)
