@@ -14,41 +14,41 @@
       @else
       <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
       <div class="ajuste" >
-      <button id="deleteSelected">Eliminar seleccionados</button>
-        <table id="example" class="display  responsive nowrap" style="width:100%">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="selectAll"></th>
-                        <th>Nombre</th>
-                        <th>Descripcion</th>
-                        <th>Controles</th>
-                    </tr>
+            <button id="deleteSelected">Eliminar seleccionados</button>
+            <table id="example" class="display  responsive nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
+                            <th>Nombre</th>
+                            <th>Descripcion</th>
+                            <th>Controles</th>
+                        </tr>
 
-                </thead>
-                <tbody>
-                    @foreach ($Areas as $area)
-                    <tr >
-                        <td><input type="checkbox" class="selectRow" data-id="{{ $area->id }}"></td>
-                        <td>{!!$area->nombre!!}</td>
-                        <td>{!!$area->descripcion!!}</td>
-                        <td>
-                            <a href="{!! 'areas/'.$area->id !!}"><i class="las la-info-circle la-2x"></i></a>
-                            <a href="{!!'areas/'.$area->id.'/edit'!!}"><i class="las la-pen la-2x"></i></a>
-                            <a href="{{url('areas/'.$area->id)}}"
-                                onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $area->id }}').submit(); }">
-                                <i class="las la-trash-alt la-2x"></i>
-                            </a>
-                            <form id="delete-form-{{ $area->id }}" action="{{ url('areas/'.$area->id) }}" method="POST"
-                                style="display: none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-                
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($Areas as $area)
+                        <tr >
+                            <td><input type="checkbox" class="selectRow" data-id="{{ $area->id }}"></td>
+                            <td>{!!$area->nombre!!}</td>
+                            <td>{!!$area->descripcion!!}</td>
+                            <td>
+                                <a href="{!! 'areas/'.$area->id !!}"><i class="las la-info-circle la-2x"></i></a>
+                                <a href="{!!'areas/'.$area->id.'/edit'!!}"><i class="las la-pen la-2x"></i></a>
+                                <a href="{{url('areas/'.$area->id)}}"
+                                    onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $area->id }}').submit(); }">
+                                    <i class="las la-trash-alt la-2x"></i>
+                                </a>
+                                <form id="delete-form-{{ $area->id }}" action="{{ url('areas/'.$area->id) }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    
+                </table>
         </div>
     @endif
     
