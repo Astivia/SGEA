@@ -10,22 +10,22 @@
 <body>
 <div class="background"></div>
     <div class="container">
-        <div class="mobile">
-        <div class="header-img">
-        <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">
-        </div>
-        <div class="card">
-            <h1>Ayuda con la Contraseña</h1>
-            <p>Escribe la dirección de correo electrónico asociado a tu cuenta. Si existe se enviara un codigo de verificacion</p>
-            <form id="login-form" method="POST" action="{{ route('password.reset') }}">
-            @csrf
-                <label for="email">Correo:</label>
-                <input type="email" name="email" id="correo">
+            <div class="mobile">
+                <div class="header-img">
+                    <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">
+                </div>
+                <div class="card">
+                    <h1>Ayuda con la Contraseña</h1>
+                    <p>Escribe la dirección de correo electrónico asociado a tu cuenta. Si existe se enviara un codigo de verificacion</p>
+                    <form id="login-form" method="POST" action="{{ route('password.reset') }}">
+                    @csrf
+                        <label for="email">Correo:</label>
+                        <input type="email" name="email" id="correo">
 
-                <button type="submit" class="button">Enviar</button>
-            </form>
-        </div>
-        </div>
+                        <button type="submit" class="button">Enviar</button>
+                    </form>
+                </div>
+            </div>
     </div>
     
 </body>

@@ -18,7 +18,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 75%;
+    width: 70%;
     height: 600px;
     background: url('../assets/img/fondo.png') no-repeat;
     background-size: cover;
@@ -26,6 +26,7 @@
     border-radius: 10px;
     margin-top: 10px;
 }
+
 .container .content {
     position: absolute;
     top: 0;
@@ -109,8 +110,9 @@
 .form-box .register{
    
     width: 70%;
-    margin: 0;   
+    margin: 0px;   
     padding: 20px;
+   background-color: black;
     
 }
 .form-box #login-form{
@@ -134,6 +136,7 @@
     text-decoration: none;
     color: white;
     font-weight: bold;
+    font-size: 12px;
 }
 .login-register  a{
     text-decoration: none;
@@ -141,12 +144,12 @@
     font-size: 12px;
 }
 .form-box h2, .form-box h1 {
-    font-size: 32px;
+    font-size: 20px;
     text-align: center;
 }
 .form-box .input-box {
     position: relative;    
-    height: 50px;
+    height: 30px;
     border-bottom: 2px solid white;
     border-left: white;
     margin: 30px 0;
@@ -154,7 +157,7 @@
 
 .form-box .register .input-box{
     position: relative;    
-    height: 25px;
+    height: 10px;
     border-bottom: 2px solid white;
     border-left: white;
     margin: 30px 0;
@@ -491,7 +494,54 @@
     padding: 0;
     max-height: 130px;
 }
+@media (max-width: 800px) {
+   
+    /* .container .mobile{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: auto;
+    } */
+     .container{
+        height: 600px;
+        
+     }
+    .container .card {
+        width: 90%;
+        padding: 15px;
+    }
+    
+    .container .card h1 {
+        font-size: 20px;
+    }
+    
+    .container .card p {
+        font-size: 14px;
+    }
+    
+    .container .card #login-form, 
+    .container .card #password-form {
+        width: 100%;
+    }
+    
+    .container .card #login-form input, 
+    .container .card #password-form input {
+        padding: 0.4rem;
+    }
+    
+    .container .card #login-form button, 
+    .container .card #password-form button {
+        height: 40px;
+        font-size: 14px;
+    }
+    
+    .container .header-img img {
+        max-width: 100%;
+        max-height: 100px;
 
+    }
+}
 
 /* Estilos del modal */
 

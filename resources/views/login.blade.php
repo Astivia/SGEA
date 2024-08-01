@@ -71,7 +71,11 @@
                             <input type="checkbox" id="remember_me" name="remember_me"> Mantener la sesión iniciada
                         </label>                     
                     </div>
-                    
+                    <div class="remember-forgot">
+                        <label for="privacy_policy">
+                            <input type="checkbox" id="privacy_policy" name="privacy_policy" required> Acepto el <a href="#" onclick="openModal('privacyModal')">aviso de privacidad</a>
+                        </label>
+                    </div>
                     <button type="submit" class="btn">Iniciar Sesion</button>
                 </form>
                 <div class="login-register">
@@ -79,6 +83,14 @@
                     <a href="forgot-password" id="forgot-password-link">Olvidaste tu contraseña?</a>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Modal de Aviso de Privacidad -->
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('privacyModal')">&times;</span>
+            <h1>Aviso de Privacidad</h1>
+            <p>Aquí va el contenido del aviso de privacidad...</p>
         </div>
     </div>
     <script src="./js/scriptLogin.js"> </script>

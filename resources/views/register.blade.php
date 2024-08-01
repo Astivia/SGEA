@@ -100,13 +100,22 @@
                         </div>
 
                         <div class="input-box">
-                            <span class="icon"><i class='bx bxs-low-vision'></i></span>
+                            <!-- <span class="icon"><i class='bx bxs-low-vision'></i></span> -->
+                            <span class="toggle-password" onclick="togglePassword('password')"><i class='bx bxs-show'></i></span>
                             <input type="password" class="form-control" id="password" name="password" required>
                             <label for="password" class="form-label">Contraseña:</label>
+                            <!-- <span id="password-message" style="color: red;"></span> -->
+                        </div>
+                        <div class="input-box">
+                            <span class="toggle-password" onclick="togglePassword('confirm-password')"><i class='bx bxs-show'></i></span>
+                            <input type="password" class="form-control" id="confirm-password" name="confirm-password" required>
+                            <label for="confirm-password" class="form-label">Confirmar Contraseña:</label>
+                            <!-- <span id="confirm-password-message" style="color: red;"></span> -->
                         </div>
 
                         <button type="submit" class="btn btn-primary">registrarse</button>
-
+                        
+                        
                         <!-- <button type="submit" class="btn btn-primary">Validar email</button> -->
                     </form>
                     <p>¿Ya tienes cuenta? <a href="{{route('login')}}">Iniciar Sesion</a></p>
@@ -114,36 +123,19 @@
 
             </div>
         </div>
+        <div id="password-error-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('password-error-modal')">&times;</span>
+        <p id="password-error-message"></p>
+    </div>
+</div>
         
     </div>
-    </div>
-    <script src="./js/scriptLogin.js"> </script>
+    </div>    
+    <script src="{{asset('SGEA/public/js/scriptLogin.js')}}"></script>
     <script>
-    document.getElementById('curp').addEventListener('blur', function() {
-        let curp = this.value;
-        fetch('{{ route("verify-curp") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ curp: curp })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'exists') {
-                document.getElementById('register-name').value = data.user.nombre;
-                document.getElementById('ap_pat').value = data.user.ap_paterno;
-                document.getElementById('ap_mat').value = data.user.ap_materno;
-                document.getElementById('email').value = data.user.email;
-                document.getElementById('telefono').value = data.user.telefono;
-                document.getElementById('curp-message').textContent = '';
-            } else {
-                document.getElementById('curp-message').textContent = 'Usuario no registrado en sistema';
-            }
-        });
-    });
-</script>
+       
+    </script>
 </body>
 
 </html>
