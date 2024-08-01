@@ -53,6 +53,7 @@ class ArticulosController extends Controller
             $datos=$request->all();
 
             if($request->has('pdf')){
+                $area=areas::find($datos['area_id']);
                 //validamos la carga del archivo
                 $request->validate([
                     'pdf' => 'required|file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -60,15 +61,16 @@ class ArticulosController extends Controller
                 // manejo del archivo
                 $archivo = $request->file('pdf');
                 $nombreArchivo = $archivo->getClientOriginalName();
-                $rutaArchivo = storage_path('app/public/Articles/web/'.$evento->acronimo.$evento->edicion.'/'.$nombreArchivo);
-        
-                // Guardamos el archivo con su nombre original y obtenemos la ruta completa
-                $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' .$evento->acronimo.$evento->edicion, $nombreArchivo);
+                try {
+                    $archivo->storeAs('public/Lector/web/ArticulosporEvento/'.$evento->acronimo.$evento->edicion.'/'.$area->nombre.'/'.$datos['titulo'],$nombreArchivo);
+                } catch (\Exception $e) {
+                    return back()->with('error', 'Error al subir el archivo: ' . $e->getMessage());
+                }
             }else{
                 $nombreArchivo=null;
             }
             
-            //insertamoslos datos del articulo
+            //insertamos datos del articulo
             $articulo = articulos::create([
                 'evento_id'=>$evento->id,
                 'titulo' => $datos['titulo'],
@@ -100,7 +102,7 @@ class ArticulosController extends Controller
     
             return redirect ($evento->id.'/articulos')->with('success','Articulo Registrado');
         }else{
-            return redirect()->back()->with('error','No es posible agregat: el usuario actual no es parte de ningun evento');
+            return redirect()->back()->with('error','No es posible agregar: el usuario actual no es parte de ningun evento');
 
         }
     }
@@ -112,7 +114,8 @@ class ArticulosController extends Controller
     {
         $articulo = articulos::where('evento_id', $evento_id)->where('id', $id)->first();
         if(!is_null($articulo->archivo)){
-            $pdfPath = 'SGEA/storage/app/public/Articles/web/viewer.html?file='.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.$articulo->archivo;
+            $pdfPath = 'SGEA/storage/app/public/Lector/web/viewer.html?file=ArticulosporEvento/'.
+                        $articulo->evento->acronimo.$articulo->evento->edicion.'/'.$articulo->area->nombre.'/'.$articulo->titulo.'/'.$articulo->archivo;
             $pdfUrl =  asset($pdfPath);
         }else{
             $pdfUrl=null;
@@ -128,22 +131,15 @@ class ArticulosController extends Controller
      */
     public function edit($evento_id, $id)
     {
-        
         $articulo= articulos::where('evento_id', $evento_id)->where('id', $id)->first();
         $autores=articulosAutores::where('articulo_id',$articulo->id)->get();
     
-        //consultamos los catalogos
+        //catalogos
         $Areas = Areas::all();
         $Autores= articulosAutores::distinct('usuario_id')->get();
-
         return view('Articulos.edit', compact('articulo', 'Areas','autores','Autores'));
     }
 
-
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request,$evento_id, $id)
     {
 
@@ -156,20 +152,24 @@ class ArticulosController extends Controller
         ]);
         //buscamos el articulo
         $articulo = articulos::where('evento_id', $evento_id)->where('id', $id)->firstOrFail();
-
         // manejo del archivo
-        $archivo = $request->file('archivo');
-         
-        if($archivo){
-           $pdfPath = 'public/Articles/web/' . $articulo->evento->acronimo.$articulo->evento->edicion. '/' . $articulo->archivo;
-           //verificamos ai existe el archivo en nuestra carpeta destino 
-           if (Storage::exists($pdfPath)) {
-               Storage::delete($pdfPath);
-           }
+        if($request->has('archivo')){
+            
+            $ArchivoAntiguo = 'public/Lector/web/ArticulosporEvento/'.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.
+                                $articulo->area->nombre.'/'.$articulo->titulo.'/'.$articulo->archivo;
+            //verificamos si existe el archivo en nuestra carpeta destino 
+            if (Storage::exists($ArchivoAntiguo)) {
+                Storage::delete($ArchivoAntiguo);
+            }
+            //Guardamos el Nuevo Archivo
+            $archivo = $request->file('archivo');
             $nombreArchivo = $archivo->getClientOriginalName();
-            $rutaArchivo = storage_path('app/public/Articles/web/' . $articulo->evento->acronimo.$articulo->evento->edicion. '/' . $nombreArchivo);
-            // Guardamos el archivo con su nombre original y obtenemos la ruta completa
-            $rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' . $articulo->evento->acronimo.$articulo->evento->edicion, $nombreArchivo);
+            try {
+                $archivo->storeAs('public/Lector/web/ArticulosporEvento/'.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.
+                            $articulo->area->nombre.'/'.$articulo->titulo , $nombreArchivo);
+            } catch (\Exception $e) {
+                return back()->with('error', 'Error al subir el archivo: ' . $e->getMessage());
+            }
         }else{
            $nombreArchivo=$articulo->archivo;
        }
@@ -214,18 +214,31 @@ class ArticulosController extends Controller
         if (!$articulo){
             return redirect()->back()->with('error', 'No se encontro el articulo');
         }
-        // Eliminar el archivo PDF asociado
-        $pdfPath = 'public/Articles/web/' . $articulo->evento->acronimo.$articulo->evento->edicion . '/' . $articulo->archivo;
-        if (Storage::exists($pdfPath)) {
-            Storage::delete($pdfPath);
-        }
-
-        try {
-            articulosAutores::where('articulo_id', $articulo->id)->where('evento_id',$articulo->evento->id)->delete();
-            $articulo->delete();
-            return redirect()->back()->with('info', 'el artículo  se elimino correctamente');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+        if($articulo->estado !== "En revision" ){
+            try {
+                articulosAutores::where('articulo_id', $articulo->id)->where('evento_id',$articulo->evento->id)->delete();
+                if($articulo->archivo !== null){
+                    // Eliminar la Ruta asociada
+                    $pdfPath = 'public/Lector/web/ArticulosporEvento/'.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.
+                                $articulo->area->nombre.'/'.$articulo->titulo.'/'.$articulo->archivo;
+                    $folderPath = 'public/Lector/web/ArticulosporEvento/' . $articulo->evento->acronimo . $articulo->evento->edicion . '/' .
+                                    $articulo->area->nombre.'/'.$articulo->titulo;
+    
+                    if (Storage::exists($pdfPath)) {
+                        Storage::delete($pdfPath);
+                    }
+                    // Verificar si la carpeta está vacía y eliminarla si es así
+                    if (Storage::exists($folderPath) && count(Storage::files($folderPath)) === 0) {
+                        Storage::deleteDirectory($folderPath);
+                    }
+                }
+                $articulo->delete();
+                return redirect()->back()->with('info', 'el artículo  se elimino correctamente');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }else{
+            return redirect()->back()->with('error', 'El Articulo se encuentra en revisión');
         }
     }
 
@@ -245,13 +258,10 @@ class ArticulosController extends Controller
 
      public function getArticles($area_id)
     {
-        // $articles = articulos::where('area_id', $area_id)
-        //     ->whereNotIn('id', function ($query) {
-        //         $query->select('articulo_id')->from('revisores_articulos');
-        //     })->get();
         $articles = articulos::where('area_id', $area_id)->OrderBy('titulo')->get();
         return response()->json($articles);
     }
+    
     //eliminacion masiva 
     public function deleteMultiple(Request $request)
     {
