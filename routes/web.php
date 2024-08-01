@@ -55,6 +55,7 @@ Route::get('{evento_id}/revisoresArticulo/{articulo_id}/edit', [RevisoresArticul
 
 // RUTAS DE REVISION
 Route::get('{eventoId}/ArticulosPendientes/{usuId}', [RevisoresArticulosController::class, 'pendientes'])->middleware('auth');
+Route::get('{eventoId}_{usuId}/revision/', [RevisoresArticulosController::class, 'revision'])->middleware('auth');
 
 //LOGIN - REGISTER
 Route::view('/login',"login")->name('login');
