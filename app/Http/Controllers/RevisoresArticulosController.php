@@ -103,13 +103,25 @@ class RevisoresArticulosController extends Controller
             return redirect ($evento_id.'/revisoresArticulos')->with('info','Informacion Actualizada');
         }else{
             $datos=$request->all();
-            $registroPorActualizar = revisoresArticulos::where('evento_id',$evento_id)
+            $Revisor = revisoresArticulos::where('evento_id',$evento_id)
                                                         ->where('articulo_id', $id)
                                                         ->where('usuario_id', $datos['id_usuario'])
                                                         ->first();
-            dd($registroPorActualizar);
+            // manejo del archivo
+            if($request->has('similitud')){
+                $archivo = $request->file('similitud');
+                $nombreArchivo = $archivo->getClientOriginalName();
+                // Guardamos el archivo con su nombre original y obtenemos la ruta completa
+                //$rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' .$evento->acronimo.$evento->edicion, $nombreArchivo);
+            }else{
+                $nombreArchivo=null;
+            }
+            $revisor->update([
+                'puntuacion'=>$datos->puntuacion,
+                'similitud'=>$nombreArchivo,
+                'comentarios'=>$datos->comentarios
+            ]);
         }
-
     }
 
     public function destroy($eventoId,$usuarioId,$articuloId)
