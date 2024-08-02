@@ -84,11 +84,12 @@ Route::view('/login',"login")->name('login');
   Route::post('migrar/{evento_id}', [EventosController::class,'migrarEvento'])->name('migrate.event');
 
  //eliminacion multiple
- Route::post('areas/delete-multiple', [AreasController::class, 'deleteMultiple']);
+ Route::post('/areas/delete-multiple', [AreasController::class, 'deleteMultiple'])->name('areas.deleteMultiple');
  Route::post('/usuarios/delete-multiple', [UsuariosController::class, 'deleteMultiple'])->name('usuarios.deleteMultiple');
  //  Route::post('articulos/delete-multiple', [ArticulosController::class, 'deleteMultiple']);
  Route::post('/eventos/delete-multiple', [EventosController::class, 'deleteMultiple'])->name('eventos.deleteMultiple');
  Route::post('/articulos/delete-multiple', [ArticulosController::class, 'deleteMultiple'])->name('articulos.deleteMultiple');
+ Route::post('/participantes/delete-multiple', [ParticipantesController::class, 'deleteMultiple'])->name('participantes.deleteMultiple');
  /*
 |--------------------------------------------------------------------------
 | Web Routes

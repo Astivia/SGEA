@@ -78,48 +78,85 @@
         });
 
         //eliminacion masiva 
-        $('#selectAll').on('click', function(){
-        var rows = table.rows({ 'search': 'applied' }).nodes();
-        $('input[type="checkbox"]', rows).prop('checked', this.checked);
-        });
+    //     $('#selectAll').on('click', function(){
+    //     var rows = table.rows({ 'search': 'applied' }).nodes();
+    //     $('input[type="checkbox"]', rows).prop('checked', this.checked);
+    //     });
 
-        $('#example tbody').on('change', 'input[type="checkbox"]', function(){
-            if(!this.checked){
-                var el = $('#selectAll').get(0);
-                if(el && el.checked && ('indeterminate' in el)){
-                    el.indeterminate = true;
-                }
-            }
-        });
+    //     $('#example tbody').on('change', 'input[type="checkbox"]', function(){
+    //         if(!this.checked){
+    //             var el = $('#selectAll').get(0);
+    //             if(el && el.checked && ('indeterminate' in el)){
+    //                 el.indeterminate = true;
+    //             }
+    //         }
+    //     });
 
-        $('#deleteSelected').on('click', function(){
-            var selectedIds = [];
-            $('.selectRow:checked').each(function(){
-                selectedIds.push($(this).data('id'));
-            });
-            console.log("IDs seleccionados:", selectedIds);
-            if(selectedIds.length > 0){
-                if(confirm('¿Estás seguro de que deseas eliminar los registros seleccionados?')){
-                    $.ajax({
-                        url: "{{ url('areas/delete-multiple') }}",
-                        method: 'POST',
-                        data: {
-                            ids: selectedIds,
-                            _token: "{{ csrf_token() }}"
-                        },
-                        success: function(response){                       
-                            location.reload();
-                        },
-                        error: function(response){                      
-                            alert('Error al eliminar los registros.');
-                        }
-                    });
-                }
-            } else {
-                alert('No hay registros seleccionados');
-            }
-        });
-    });
+    //     $('#deleteSelected').on('click', function(){
+    //         var selectedIds = [];
+    //         $('.selectRow:checked').each(function(){
+    //             selectedIds.push($(this).data('id'));
+    //         });
+    //         console.log("IDs seleccionados:", selectedIds);
+    //         // if(selectedIds.length > 0){
+    //         //     if(confirm('¿Estás seguro de que deseas eliminar los registros seleccionados?')){
+    //         //         $.ajax({
+    //         //             url: "{{ url('areas/delete-multiple') }}",
+    //         //             method: 'POST',
+    //         //             data: {
+    //         //                 ids: selectedIds,
+    //         //                 _token: "{{ csrf_token() }}"
+    //         //             },
+    //         //             success: function(response){                       
+    //         //                 location.reload();
+    //         //             },
+    //         //             error: function(response){                      
+    //         //                 alert('Error al eliminar los registros.');
+    //         //             }
+    //         //         });
+    //         //     }
+    //         // } else {
+    //         //     alert('No hay registros seleccionados');
+    //         // }
+    //         if (selectedIds.length > 0) {
+    //     Swal.fire({
+    //         title: '¿Estás seguro?',
+    //         text: '¿aaaaaaa?',
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonText: 'Sí, eliminar',
+    //         cancelButtonText: 'No, cancelar'
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             $.ajax({
+    //                 url: "{{ url('areas/delete-multiple') }}",
+    //                 method: 'POST',
+    //                 data: {
+    //                     ids: selectedIds,
+    //                     _token: "{{ csrf_token() }}"
+    //                 },
+    //                 success: function(response) {                       
+    //                     location.reload();
+    //                 },
+    //                 error: function(response) {                      
+    //                     Swal.fire({
+    //                         icon: 'error',
+    //                         title: 'Error',
+    //                         text: 'Error al eliminar los registros.'
+    //                     });
+    //                 }
+    //             });
+    //         }
+    //     });
+    // } else {
+    //     Swal.fire({
+    //         icon: 'info',
+    //         title: 'Información',
+    //         text: 'No hay registros seleccionados'
+    //     });
+    // }
+    //     });
+    // });
 
     function openModal(id) {
         var modal = document.getElementById('confirmModal');

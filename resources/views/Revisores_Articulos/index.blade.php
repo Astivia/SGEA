@@ -12,11 +12,11 @@
         @else
             <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
             <div class="ajuste" >
-            <button id="deleteSelected">Eliminar seleccionados</button>
+            <!-- <button id="deleteSelected">Eliminar seleccionados</button> -->
                 <table id="example" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="selectAll"></th>
+                            <!-- <th><input type="checkbox" id="selectAll"></th> -->
                             <th>ARTICULO</th>
                             <th>estado</th>
                             <th>Revisor 1</th>
@@ -28,7 +28,7 @@
                     <tbody>
                         @foreach ($articles as $ra)
                             <tr>
-                            <td><input type="checkbox" class="selectRow" data-id="{{ $ra->id }}"></td>
+                            <!-- <td><input type="checkbox" class="selectRow" data-id="{{ $ra->id }}"></td> -->
                                 <td><a href="{!! url(session('eventoID').'/articulo/'.$ra->id) !!}" style="color:#000;">{!!$ra->titulo!!} </a></td>
                                 <td>{!!$ra->estado!!}</td>
                                 @foreach ($ra->revisores as $revisor)
@@ -107,7 +107,12 @@
                     });
                     const data = await response.json();
                     if (data.error) {
-                        alert(data.error);
+                        // alert(data.error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Cuidado!',
+                            text: data.error
+                        });
                         return;
                     } else {
                         articlesSelect.innerHTML = '<option value="">Seleccionar...</option>';
