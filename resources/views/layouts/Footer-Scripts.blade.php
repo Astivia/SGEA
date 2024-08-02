@@ -20,24 +20,24 @@
             // responsive: true,
             lengthMenu:[10,25,50,100],
             responsive: {
-                details: true,
-                // details: {
-                //     renderer: function(api, rowIdx, columns) {
-                //         var data = $.map(columns, function(col, i) {
-                //             return col.hidden ?
-                //                 '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                //                     '<td>' + col.title + ':' + '</td> ' +
-                //                     '<td>' + col.data + '</td>' +
-                //                 '</tr>' :
-                //                 '';
-                //         }).join('');
+                // details: true,
+                details: {
+                    renderer: function(api, rowIdx, columns) {
+                        var data = $.map(columns, function(col, i) {
+                            return col.hidden ?
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                    '<td>' + col.title + ':' + '</td> ' +
+                                    '<td>' + col.data + '</td>' +
+                                '</tr>' :
+                                '';
+                        }).join('');
 
-                //         return data ?
-                //             $('<table/>').append(data) :
-                //             false;
-                //     }
-                // },
-                // breakpoints: [{ name: 'phone', width: 700 }]
+                        return data ?
+                            $('<table/>').append(data) :
+                            false;
+                    }
+                },
+                breakpoints: [{ name: 'phone', width: 700 }]
             },
         
             columnDefs: [
@@ -156,7 +156,7 @@
     //     });
     // }
     //     });
-    // });
+    });
 
     function openModal(id) {
         var modal = document.getElementById('confirmModal');

@@ -283,7 +283,7 @@ class ArticulosController extends Controller
             }
         }
 
-        return response()->json(['success' => "Registros eliminados correctamente."]);
+        return response()->json(['success' => "Registros eliminados correctamente pppp."]);
     }
 
     return response()->json(['error' => "No se seleccionaron registros."], 400);
