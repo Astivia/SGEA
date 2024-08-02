@@ -170,26 +170,57 @@
             });
 
             if (ids.length > 0) {
-                fetch('{{ route('eventos.deleteMultiple') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ ids: ids })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Eventos eliminados correctamente.');
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.error);
+                Swal.fire({
+                    title: '¿Está seguro?',
+                    text: '¡No podrá revertir esto!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('{{ route('eventos.deleteMultiple') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({ ids: ids })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: 'Eventos eliminados correctamente.'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Error: ' + data.error
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Ha ocurrido un error al eliminar los eventos.'
+                            });
+                        });
                     }
-                })
-                .catch(error => console.error('Error:', error));
+                });
             } else {
-                alert('No se seleccionaron eventos.');
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Información',
+                    text: 'No se seleccionaron eventos.'
+                });
             }
         });
     }
@@ -215,11 +246,21 @@
                     _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        alert(response.message);
+                        // alert(response.message);
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Información',
+                            text: response.message
+                        });
                         window.location.href = '{{ route('eventos.index') }}';
                     },
                     error: function(response) {
-                        alert('Migration failed: ' + response.responseJSON.error);
+                        // alert('Migration failed: ' + response.responseJSON.error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Migration failed: ' + response.responseJSON.error
+                        });
                     }
                 });
             });

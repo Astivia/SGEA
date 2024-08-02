@@ -188,7 +188,133 @@
         </div>
     </div>
 @endsection
+<!-- <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteSelected = document.getElementById('deleteSelected');
+    const selectAll = document.getElementById('selectAll');
 
+    if (deleteSelected) {
+        deleteSelected.addEventListener('click', function() {
+            const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
+            let ids = [];
+            selectedCheckboxes.forEach(function(checkbox) {
+                ids.push(checkbox.getAttribute('data-id'));
+            });
+
+            if (ids.length > 0) {
+                fetch('{{ route('articulos.deleteMultiple') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ ids: ids })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Registros eliminados correctamente.');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('No se seleccionaron registros.');
+            }
+        });
+    }
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.selectRow');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAll.checked;
+            });
+        });
+    }
+});
+</script> -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteSelected = document.getElementById('deleteSelected');
+    const selectAll = document.getElementById('selectAll');
+
+    if (deleteSelected) {
+        deleteSelected.addEventListener('click', function() {
+            const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
+            let ids = [];
+            selectedCheckboxes.forEach(function(checkbox) {
+                ids.push(checkbox.getAttribute('data-id'));
+            });
+
+            if (ids.length > 0) {
+                Swal.fire({
+                    title: '¿Está seguro?',
+                    text: '¡No podrá revertir esto!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('{{ route('articulos.deleteMultiple') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({ ids: ids })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: 'Registros eliminados correctamente.'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Error: ' + data.error
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Ha ocurrido un error al eliminar los registros.'
+                            });
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Información',
+                    text: 'No se seleccionaron registros.'
+                });
+            }
+        });
+    }
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.selectRow');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAll.checked;
+            });
+        });
+    }
+});
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -417,7 +543,12 @@
                     });
                     const data = await response.json();
                     if (data.error) {
-                        alert(data.error);
+                        // alert(data.error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.error
+                        });
                         return;
                     } else {
                         newAuthorId = data.id.toString();

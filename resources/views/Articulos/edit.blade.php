@@ -167,12 +167,22 @@
             const selectedText = selectedAuthorSelect.options[selectedAuthorSelect.selectedIndex].text;
 
             if (!selectedValue) {
-                alert('Por favor, seleccione un autor de la lista desplegable.');
+                // alert('Por favor, seleccione un autor de la lista desplegable.');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'Por favor, seleccione un autor de la lista desplegable.',
+                    icon:'warning'
+                });
                 return;
             }
 
             if (selectedAuthors.find(author => author.id === selectedValue)) {
-                alert('El autor seleccionado ya se encuentra en la lista.');
+                // alert('El autor seleccionado ya se encuentra en la lista.');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'El autor seleccionado ya se encuentra en la lista.',
+                    icon:'warning'
+                });
                 return;
             }
 
@@ -223,13 +233,23 @@
             const selectedValue = selectedAuthorSelect.value;
 
             if (!selectedValue) {
-                alert('Por favor, seleccione un autor de la lista desplegable.');
+                // alert('Por favor, seleccione un autor de la lista desplegable.');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'Por favor, seleccione un autor de la lista desplegable.',
+                    icon:'warning'
+                });
                 return;
             }
 
             const authorIndex = selectedAuthors.findIndex(author => author.id === selectedValue);
             if (authorIndex === -1) {
-                alert('El autor seleccionado no está en la lista.');
+                // alert('El autor seleccionado no está en la lista.');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'El autor seleccionado no está en la lista.',
+                    icon:'warning'
+                });
                 return;
             }
             selectedAuthors.splice(authorIndex, 1);
@@ -240,7 +260,12 @@
         UpdateForm.addEventListener('submit', (event) => {
             const hasCorrespondingAuthor = selectedAuthors.some(author => author.corresponding);
             if (!hasCorrespondingAuthor) {
-                alert('Seleccione un autor de correspondencia.');
+                // alert('Seleccione un autor de correspondencia.');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'Seleccione un autor de correspondencia.',
+                    icon:'warning'
+                });
                 event.preventDefault();
                 return
             }else{
@@ -268,7 +293,12 @@
             const newAuthorName = `${newAuthorApPaterno} ${newAuthorApMaterno} ${newAuthorNombre}`;
            
             if (!newAuthorCurp || !newAuthorNombre || !newAuthorApPaterno || !newAuthorApMaterno || !newAuthorTelefono || !newAuthorEmail || !newAuthorInstitucion) {
-                alert('Todos los campos son obligatorios.');
+                // alert('Todos los campos son obligatorios.');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'Todos los campos son obligatorios.',
+                    icon:'warning'
+                });
                 return;
             }
 
@@ -289,13 +319,19 @@
                     });
                     const data = await response.json();
                     if (data.error) {
-                        alert(data.error);
+                        // alert(data.error);
+                        Swal.fire({
+                            title:'Cuidado!',
+                            text:data.error,
+                            icon:'warning'
+                        });
                         return;
                     } else {
                         newAuthorId = data.id.toString();
                     }
                 } catch (error) {
                     console.error('Error:', error);
+
                     return;
                 }
             }
@@ -305,7 +341,12 @@
             const isAuthorInSelect = Array.from(selectedAuthorSelect.options).some(option => option.value === newAuthorId);
 
             if (isAuthorInArray) {
-                alert('El autor ya existe.');
+                // alert('El autor ya existe.');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'El autor ya existe.',
+                    icon:'warning'
+                });
                 return;
             } else {
                 if(isAuthorInSelect===false){

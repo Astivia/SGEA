@@ -49,7 +49,12 @@
         select.addEventListener('change', function() {
             const userId = this.value;
             if (userId && selectedUsers.includes(userId)) {
-                alert("Este usuario ya es Revisor en este articulo");
+                // alert("Este usuario ya es Revisor en este articulo");
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cuidado!',
+                    text: 'Este usuario ya es Revisor en este articulo'
+                });
                 // Regresamos al valor anterior
                 this.value = previousValue;
             } else {
@@ -64,7 +69,12 @@
         // Verificamos si al menos un revisor ha sido seleccionado
         const hasSelectedRevisor = revisoresSelects.some(select => select.value !== '');
             if (!hasSelectedRevisor) {
-                alert("Debe seleccionarse al menos un Revisor");
+                // alert("Debe seleccionarse al menos un Revisor");
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cuidado!',
+                    text: 'Debe seleccionarse al menos un Revisor'
+                });
                 event.preventDefault(); // Evitamos el envío del formulario
                 return;
             }

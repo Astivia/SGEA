@@ -71,4 +71,29 @@ class ParticipantesController extends Controller
 
         return redirect()->back()->with('info', 'Usuario expulsado del evento.')->with('reload', true);
     }
+    // Eliminacion multiple
+    public function deleteMultiple(Request $request, $eventoId)
+{
+    $userIds = $request->userIds;
+
+    if (!empty($userIds)) {
+        foreach ($userIds as $userId) {
+            $evento = eventos::find($eventoId);
+            $usuario = usuarios::find($userId);
+
+            if (!$evento || !$usuario) {
+                return response()->json(['error' => "Evento o Usuario no encontrado. Evento ID: $eventoId, Usuario ID: $userId"], 404);
+            }
+
+            $evento->participantes()->detach($usuario);
+
+            if (Auth::user()->id === $usuario->id) {
+                session()->put('eventoID', null);
+            }
+        }
+        return response()->json(['success' => "Usuarios expulsados del evento correctamente."]);
+    }
+
+    return response()->json(['error' => "No se seleccionaron usuarios."], 400);
+}
 }

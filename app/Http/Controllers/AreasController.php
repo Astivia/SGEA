@@ -81,14 +81,28 @@ class areasController extends Controller
 
         return redirect('areas')->with('info', 'Se ha eliminado correctamente');
     }
-    //eliminacion masiva 
+   
     public function deleteMultiple(Request $request)
-    {
-        $ids = $request->ids;
-        if (!empty($ids)) {
-            areas::whereIn('id', $ids)->delete();
-            return response()->json(['success' => "Registros eliminados correctamente."]);
+{
+    $areaIds = $request->areaIds;
+
+    if (!empty($areaIds)) {
+        foreach ($areaIds as $id) {
+            $area = areas::find($id);
+
+            if (!$area) {
+                return response()->json(['error' => "Área no encontrada. ID: $id"], 404);
+            }
+
+            if (articulos::where('area_id', $area->id)->count() > 0) {
+                return response()->json(['error' => "No se puede eliminar: hay artículos asociados con el área ID: $id"], 400);
+            }
+
+            $area->delete();
         }
-        return response()->json(['error' => "No se seleccionaron registros."]);
+        return response()->json(['success' => "Áreas eliminadas correctamente."]);
     }
+
+    return response()->json(['error' => "No se seleccionaron áreas."], 400);
+}
 }

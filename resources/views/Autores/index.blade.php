@@ -11,11 +11,11 @@
         @else
         <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
         <div class="ajuste" >
-        <button id="deleteSelected">Eliminar seleccionados</button>
+        <!-- <button id="deleteSelected">Eliminar seleccionados</button> -->
             <table id="example" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>
-                    <th><input type="checkbox" id="selectAll"></th>
+                    <!-- <th><input type="checkbox" id="selectAll"></th> -->
                         <th>AUTOR</th>
                         <th>INSTITUCION</th>
                         @role('Administrador')
@@ -27,13 +27,9 @@
                 <tbody>
                     @foreach ($autores as $autor)
                     <tr>
-                    <td><input type="checkbox" class="selectRow" data-id="{{ $autor->id }}"></td>
-                        <td>
-                            <a href="{{url ($autor->evento_id.'/autor/'.$autor->usuario->id) }}" style="color:#000;">
-                            {!!$autor->usuario->nombre_completo!!} 
-                            </a>
-                        </td>
-                        <td><strong>{{ Helper::truncate($autor->institucion, 50) }}</strong></td>
+                    <!-- <td><input type="checkbox" class="selectRow" data-id="{{ $autor->id }}"></td> -->
+                        <td>{!!$autor->usuario->nombre_completo!!} </td>
+                        <td>{{ Helper::truncate($autor->institucion, 50) }}</td>
                         @role('Administrador')
                         <td>
                             <a href="mailto:{!!$autor->email!!}">{!!$autor->email!!}</a>

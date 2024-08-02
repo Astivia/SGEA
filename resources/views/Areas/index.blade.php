@@ -90,3 +90,85 @@
 
 
 @endsection
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteSelected = document.getElementById('deleteSelected');
+    const selectAll = document.getElementById('selectAll');
+
+    if (deleteSelected) {
+        deleteSelected.addEventListener('click', function() {
+            const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
+            let areaIds = [];
+            selectedCheckboxes.forEach(function(checkbox) {
+                let areaId = checkbox.getAttribute('data-id');
+                areaIds.push(areaId);
+            });
+
+            if (areaIds.length > 0) {
+                Swal.fire({
+                    title: '¿Está seguro?',
+                    text: '¡No podrá revertir esto!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('{{ route('areas.deleteMultiple') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({ areaIds: areaIds })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: 'Áreas eliminadas correctamente.'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Error: ' + data.error
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Ha ocurrido un error al eliminar las áreas.'
+                            });
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Información',
+                    text: 'No se seleccionaron áreas.'
+                });
+            }
+        });
+    }
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.selectRow');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAll.checked;
+            });
+        });
+    }
+});
+
+</script>
