@@ -49,10 +49,6 @@
                             <a href="{!!'eventos/'.$e->id.'/edit'!!}">
                                 <i class="las la-pen la-2x"></i>
                             </a>
-                            <!-- <a href="{{url('eventos/'.$e->id)}}"
-                                onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este evento?')) { document.getElementById('delete-form-{{ $e->id }}').submit(); }">
-                                <i class="las la-trash-alt la-2x"></i>
-                            </a> -->
                             <a href="{{url('eventos/'.$e->id)}}"
                                 onclick="event.preventDefault(); 
                                     Swal.fire({
@@ -117,24 +113,26 @@
         <span class="close">&times;</span>
         <h2>Registro de Evento</h2>
         {!! Form::open(['url'=>'/eventos', 'enctype' => 'multipart/form-data']) !!}
-        <div class="container">
-            <label for="logo">Imagenes en sistema:</label>
-            @if (isset($sysImgs) && !empty($sysImgs))
-                <div class="carousell">
-                    @foreach ($sysImgs as $image)
-                    <img src="{{  asset('SGEA/public/assets/uploads/'.$image) }}" alt="Imagen" class="img-thumbnail img-selectable" data-img-name="{{ $image }}" style="width: 70px;">
-                    @endforeach
-                </div>
-            @else
-                <strong>Aun no hay imagenes en el sistema</strong>
-            @endif
-        <br><hr><br>
-        {!! Form::file('logo', ['id' => 'logo', 'class' => 'form-control', 'accept' => 'image/jpeg, image/png, image/webp']) !!}
+            
+                <label for="logo">Imagenes en sistema:</label>
+                @if (isset($sysImgs) && !empty($sysImgs))
+                    <div class="carousell">
+                        @foreach ($sysImgs as $image)
+                        <img src="{{  asset('SGEA/public/assets/uploads/'.$image) }}" alt="Imagen" class="img-thumbnail img-selectable" data-img-name="{{ $image }}" style="width: 70px;">
+                        @endforeach
+                    </div>
+                @else
+                    <strong>Aun no hay imagenes en el sistema</strong>
+                @endif
+                <br><hr><br>
+                {!! Form::file('logo', ['id' => 'logo', 'class' => 'form-control', 'accept' => 'image/jpeg, image/png, image/webp']) !!}
 
-        <input type="hidden" id="selected_img" name="logo">
-        <br>
-        <img id="preview-image" src="#" alt="Previsualización de la imagen" style="display:none; width: 100px; margin-top: 10px;">
-    </div>
+                <input type="hidden" id="selected_img" name="logo">
+                <br>
+                <div class="loaded-img" style="display:flex;justify-content:center;align-items:center;">
+                    <img id="preview-image" src="#" alt="Previsualización de la imagen" style="display:none; width:8vw; margin-top: 10px;background-color:#1a2d51;padding:2%;">
+                </div>
+            
     
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" required>

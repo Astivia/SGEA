@@ -16,6 +16,7 @@
                     <th>EMAIL</th>
                     <th>CURP</th>
                     @role(['Administrador','Organizador'])
+                    <th>Estado</th>
                     <th>Controles</th>
                     @endrole
                 </tr>
@@ -24,12 +25,15 @@
                 @foreach ($Usuarios as $usu)
                 <tr>
                 <td><input type="checkbox" class="selectRow" data-id="{{ $usu->id }}"></td>
-                    <td>{!!$usu->nombre!!} {!!$usu->ap_paterno!!} {!!$usu->ap_materno!!}</td>
+                    <td>
+                        <a href="{{url('/usuarios/'.$usu->id)}}" style="color:#000;">{!!$usu->nombre!!} {!!$usu->ap_paterno!!} {!!$usu->ap_materno!!}</a>
+                    </td>
                     <td>
                         <a href="mailto:{!!$usu->email!!}">{!!$usu->email!!}</a>
                     </td>
                     <td>{!!$usu->curp!!}</td>
                     @role(['Administrador','Organizador'])
+                    <td>{!!$usu->estado!!}</td>
                     <td>
                         <a href="{!! 'usuarios/'.$usu->id !!}"><i class="las la-info-circle la-2x"></i></a>
                         <a href="{!!'usuarios/'.$usu->id.'/edit'!!}">

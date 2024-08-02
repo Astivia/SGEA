@@ -27,7 +27,11 @@ class usuariosController extends Controller
 
     public function index()
     {
-        $Usuarios=usuarios::where('estado',"alta,registrado")->get();
+        $Usuarios = usuarios::whereNotIn('id', function($query) {
+            $query->select('usuario_id')
+                  ->from('articulos_autores')
+                  ->where('correspondencia', false);
+        })->get();
         return view ('Usuarios.index',compact('Usuarios'));
     }
 

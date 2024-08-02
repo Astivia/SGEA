@@ -52,7 +52,7 @@ class RevisoresArticulosController extends Controller
                             'notificado'=>true
                             
                         ]);
-                        $this->participantSetRole($usu->id,$request->session()->get('eventoID'));
+                        
                     }
                 }
             } else {
@@ -205,21 +205,6 @@ class RevisoresArticulosController extends Controller
             return false;
         }
 
-    }
-
-    private function participantSetRole($usuID,$eventoID){
-        $participant = participantes::where('usuario_id', $usuID)->where('evento_id', $eventoID)->first();
-
-        if($participant){
-            $participant['rol'] = "Revisor";
-        }else{
-            participantes::insert([
-                'usuario_id' => $usuID,
-                'evento_id' => $eventoID,
-                'rol' => "Revisor"
-            ]);
-            
-        }
     }
 
     public function pendientes($evento_id,$usuarioId){

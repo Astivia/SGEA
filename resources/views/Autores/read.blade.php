@@ -20,9 +20,9 @@
 
                     </ul>
                     
-                    <p class="descripcion"><strong>TELEFONO: </strong><a href="tel:+52 1 {!!$autor->usuario->telefono!!}">{!!$autor->usuario->telefono!!}</a></p>
+                    <p class="descripcion"><strong>TELEFONO </strong>(<a href="tel:+52 1 {!!$autor->usuario->telefono!!}">{!!$autor->usuario->telefono!!}</a>)</p>
                     @if(count($articulos) > 0)
-                        <strong class="descripcion" >Articulos en los que participa: </strong>
+                        <strong class="descripcion" >ARTICULOS</strong>
                         <ul style="margin-left: 1vw;">
                             @foreach ($articulos as $art)
                                 <li>

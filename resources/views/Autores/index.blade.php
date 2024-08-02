@@ -28,8 +28,12 @@
                     @foreach ($autores as $autor)
                     <tr>
                     <td><input type="checkbox" class="selectRow" data-id="{{ $autor->id }}"></td>
-                        <td>{!!$autor->usuario->nombre_completo!!} </td>
-                        <td>{{ Helper::truncate($autor->institucion, 50) }}</td>
+                        <td>
+                            <a href="{{url ($autor->evento_id.'/autor/'.$autor->usuario->id) }}" style="color:#000;">
+                            {!!$autor->usuario->nombre_completo!!} 
+                            </a>
+                        </td>
+                        <td><strong>{{ Helper::truncate($autor->institucion, 50) }}</strong></td>
                         @role('Administrador')
                         <td>
                             <a href="mailto:{!!$autor->email!!}">{!!$autor->email!!}</a>
