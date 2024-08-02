@@ -50,9 +50,7 @@ class RevisoresArticulosController extends Controller
                             'orden'=>  $index + 1 ,
                             // 'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
                             'notificado'=>true
-                            
                         ]);
-                        
                     }
                 }
             } else {
@@ -64,7 +62,7 @@ class RevisoresArticulosController extends Controller
 
     public function show(string $id)
     {
-        $articulo=articulos::where('id',$id)->first();
+        $articulo=articulos::where('id',$id)->with('revisores.usuario')->first();
         return view ('Revisores_Articulos.read',compact('articulo'));
     }
 
@@ -135,6 +133,8 @@ class RevisoresArticulosController extends Controller
                     'comentarios' => isset($datos['comentarios']) ? $datos['comentarios'] : null,
                 ]);
             //envair comentarios al Autor de correspondencia
+
+            $correspondig=articulosAutores::where('correspondencia',true)->where('evento_id',$evento_id)->where('articulo_id',$id);
 
 
             return redirect ($evento_id.'/ArticulosPendientes'.'/'.$datos['id_usuario'])->with('info','Se ha calificado el Articulo');

@@ -21,22 +21,28 @@
                     <th>Revisor</th>
                     <th>Puntuacion</th>
                     <th>similitud</th>
-                    <th>comentarios</th>
+                    <th style="width:50vw;">comentarios</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($articulo->revisores as $revisor)
+                @foreach($articulo->revisores->sortBy('orden') as $revisor)
                     <tr>
-                        <td><strong>Revisor {!!$revisor->orden!!}: {!!$revisor->usuario->nombre_completo!!}</strong></td>
-                        
-                        <td>{{ $revisor->puntuacion ?? 'No definido' }}</td>
+                        <td><strong >Revisor {!!$revisor->orden!!}:</strong><br>
+                            <a href="{{ url('usuarios/'.$revisor->usuario->id) }}">{!!$revisor->usuario->nombre_completo!!}</a> 
+                       </td>
+                        <td><strong style="font-size:20px;"> {{ $revisor->puntuacion ?? 'No definido' }}</strong>
+                           
+                        </td>
                         <td>{{$revisor->similitud ?? 'No definido'}}</td>
-                        <td>{{$revisor->comentarios ?? 'No hay comentarios'}}</td>
-                        
+                        <td style="width:50vw;text-align:justify;">{{$revisor->comentarios ?? 'No hay comentarios'}}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+    </div>
+
+    <div class="calificar">
+        <button>Calificar</button>
     </div>
 </div>
 @endsection

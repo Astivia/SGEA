@@ -17,10 +17,9 @@ class ParticipantesController extends Controller
 
     public function index($eventoId)
     {
-        $evento = eventos::find($eventoId); 
-        $part = $evento->participantes; 
-        
+        $part = participantes::where('evento_id',$eventoId)->get(); 
         $usuarios=usuarios::OrderBy('ap_paterno')->get();
+        $evento=eventos::find($eventoId);
         return view ('Participantes.index',compact('part','evento','usuarios'));
     }
     /**

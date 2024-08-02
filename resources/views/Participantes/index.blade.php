@@ -29,31 +29,29 @@
                 <tbody>
                     @foreach ($part as $usu)
                         <tr>
-                        <td><input type="checkbox" class="selectRow" data-id="{{ $usu->id }}"></td>
-                            <td><a href="{{url('usuarios/'.$usu->id)}}" style="color=#000;">{!!$usu->nombre_completo!!}</a></td>
-                            <td><a href="mailto:{!!$usu->email!!}">{!!$usu->email!!}</a></td>
+                        <td><input type="checkbox" class="selectRow" data-id="{{ $usu->usuario->id }}"></td>
+                            <td><a href="{{url('usuarios/'.$usu->usuario->id)}}" style="color=#000;">{!!$usu->usuario->nombre_completo!!}</a></td>
+                            <td><a href="mailto:{!!$usu->usuario->email!!}">{!!$usu->usuario->email!!}</a></td>
                             <td>
                                 @if($usu->rol===null)
                                     No asignado
                                 @else
-                                    {!!$usu->rol!!}
+                                    <strong>{!!$usu->rol!!}</strong>
                                 @endif
                             </td>
                             @role(['Administrador','Organizador'])
                             <td>
-                                <a href="{{ url('usuarios/'.$usu->id) }}"><i class="las la-info-circle la-2x"></i></a>
-                                {!! Form::open(['route' => ['participantes.destroy', $evento->id, $usu->id], 'method' => 'delete', 'style' => 'display:inline-block;']) !!}
-                                    <!-- <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este participante?');" style="border:none; background:none;">
-                                        <i class="las la-trash la-2x" style="color:red;"></i>
-                                    </button> -->
+                                <a href="{{ url('usuarios/'.$usu->usuario->id) }}"><i class="las la-info-circle la-2x"></i></a>
+                                {!! Form::open(['route' => ['participantes.destroy', $evento->id, $usu->usuario->id], 'method' => 'delete', 'style' => 'display:inline-block;']) !!}
+                                    
                                     <button type="button" 
                                         onclick="
                                             Swal.fire({
                                                 title: '¿Estás seguro?',
-                                                text: '¿Estás seguro de que deseas eliminar este participante?',
+                                                text: '¿Estás seguro de que deseas expulsar a este participante?',
                                                 icon: 'warning',
                                                 showCancelButton: true,
-                                                confirmButtonText: 'Sí, eliminar',
+                                                confirmButtonText: 'Sí, expulsar',
                                                 cancelButtonText: 'No, cancelar'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
