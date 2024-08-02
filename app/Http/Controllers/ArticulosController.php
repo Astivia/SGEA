@@ -102,7 +102,7 @@ class ArticulosController extends Controller
     
             return redirect ($evento->id.'/articulos')->with('success','Articulo Registrado');
         }else{
-            return redirect()->back()->with('error','No es posible agregar: el usuario actual no es parte de ningun evento');
+            return redirect()->back()->with('error','No es posible agregar: el usuario no es parte del evento');
 
         }
     }

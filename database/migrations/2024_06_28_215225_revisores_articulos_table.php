@@ -19,9 +19,8 @@ return new class extends Migration
             $table->boolean('notificado');
             $table->integer('puntuacion')->nullable();
             $table->string('similitud', 20)->nullable();
-            $table->string('comentarios', 150)->nullable();
+            $table->text('comentarios')->nullable();
             $table->timestamps();
-
             $table->primary(['evento_id', 'articulo_id', 'usuario_id']);
             $table->foreign(['evento_id', 'articulo_id'])->references(['evento_id', 'id'])->on('articulos');
             $table->foreign('usuario_id')->references('id')->on('usuarios');
