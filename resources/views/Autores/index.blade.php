@@ -27,7 +27,7 @@
                 <tbody>
                     @foreach ($autores as $autor)
                     <tr>
-                    <td><input type="checkbox" class="selectRow" data-id="{{ $autor->id }}"></td>
+                    <!-- <td><input type="checkbox" class="selectRow" data-id="{{ $autor->id }}"></td> -->
                         <td>{!!$autor->usuario->nombre_completo!!} </td>
                         <td>{{ Helper::truncate($autor->institucion, 50) }}</td>
                         @role('Administrador')

@@ -193,26 +193,57 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             if (ids.length > 0) {
-                fetch('{{ route('articulos.deleteMultiple') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ ids: ids })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Registros eliminados correctamente.');
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.error);
+                Swal.fire({
+                    title: '¿Está seguro?',
+                    text: '¡No podrá revertir esto!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('{{ route('articulos.deleteMultiple') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({ ids: ids })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: 'Registros eliminados correctamente.'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Error: ' + data.error
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Ha ocurrido un error al eliminar los registros.'
+                            });
+                        });
                     }
-                })
-                .catch(error => console.error('Error:', error));
+                });
             } else {
-                alert('No se seleccionaron registros.');
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Información',
+                    text: 'No se seleccionaron registros.'
+                });
             }
         });
     }
