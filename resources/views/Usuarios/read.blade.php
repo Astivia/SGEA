@@ -10,18 +10,18 @@
                 <div class="profile-header">
                     <img src="{{asset('SGEA/public/assets/img/'.$Usu->foto)}}" alt="foto" >
                     <h2 class="name">{!!$Usu->nombre!!} {!!$Usu->ap_paterno!!} {!!$Usu->ap_materno!!}</h2>
-                    <p class="title"><strong>CURP:</strong>  {!!$Usu->curp!!}</p>
+                    <p class="title"> {!!$Usu->curp!!}</p>
                 </div>
                 <div class="profile-body">
-                <p class="descripcion"><strong>CORREO: </strong>{!!$Usu->email!!}</p>
-                    <p class="descripcion"><strong>SEXO: </strong>
+                <p class="descripcion"><strong>Correo:</strong> <a href="mailto:{!!$Usu->email!!}">{!!$Usu->email!!}</a></p>
+                    <p class="descripcion"><strong>Sexo: </strong>
                         @if ($Usu->curp[10] === 'H')
                             Masculino
                         @else
                             Femenino
                         @endif
                     </p>
-                    <p class="descripcion"><strong>TELEFONO: </strong>{!!$Usu->telefono!!}</p>
+                    <p class="descripcion"><strong>Telefono: </strong><a href="tel:+52 1 {!!$Usu->telefono!!}">{!!$Usu->telefono!!}</a></p>
                     @if(count($articulos) > 0)
                         <strong>Articulos en los que participa: </strong>
                         <ul style="margin-left: 4%">

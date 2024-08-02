@@ -36,7 +36,8 @@ Route::get('{evento_id}/articulo/{id}/edit', [ArticulosController::class, 'edit'
 Route::put('{evento_id}/articulo/{id}', [ArticulosController::class, 'update']);
     //Rutas AJAX
     Route::post('/check-author', [ArticulosController::class, 'checkAuthor'])->name('revisar-existencia');
-    Route::post('/verify-curp', [LoginController::class, 'verifyCurp'])->name('verify-curp');
+    Route::post('/verify-curp', [UsuariosController::class, 'verifyCurp'])->name('verify-curp');
+    Route::post('/verify-email', [UsuariosController::class, 'verifyEmail'])->name('verify-email');
     Route::post('/insert-user', [UsuariosController::class, 'insertUser'])->name('insertar-usuario');
 //AUTORES
 Route::resource('autores', ArticulosAutoresController::class)->except(['index'])->middleware('auth');

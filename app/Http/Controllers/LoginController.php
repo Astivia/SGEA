@@ -144,20 +144,6 @@ class LoginController extends Controller
 
     }
     
-    public function verifyCurp(Request $request) {
-        $curp = $request->input('curp');
-        $user = usuarios::where('curp', $curp)->first();
-    
-        if ($user) {
-            return response()->json([
-                'status' => 'exists',
-                'user' => $user
-            ]);
-        } else {
-            return response()->json(['status' => 'not_exists']);
-        }
-    }
-    
     public function register(Request $request){
 
         //recolectamos los datos en una variable
@@ -218,12 +204,9 @@ class LoginController extends Controller
     {
         // Buscar el evento con el acrónimo y la edición
         $evento = eventos::where('acronimo', $acronimo)->where('edicion', $edicion)->first();
-
         if ($evento) {
             return view ('Eventos.read',compact('evento'));
-            //return view ('HomeViews.'.$evento->acronimo,compact('evento'));
         } else {
-            // Si no se encuentra el evento, redirigir con un mensaje de error
             return redirect()->route('dashboard')->with('error', 'Evento no encontrado');
         }
     }

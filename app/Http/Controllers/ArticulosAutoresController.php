@@ -17,25 +17,6 @@ class ArticulosAutoresController extends Controller
         return view('Autores.index',compact('autores'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show($eventoId, $id)
     {
         $autor=articulosAutores::where('usuario_id',$id)->where('evento_id',$eventoId)->first();
@@ -44,18 +25,13 @@ class ArticulosAutoresController extends Controller
         return view('Autores.read',compact('autor','articulos'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit($eventoId, $id)
     {
         $autor=articulosAutores::where('usuario_id',$id)->where('evento_id',$eventoId)->first();
         return view('Autores.edit',compact('autor'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $datos=$request->all();
@@ -66,9 +42,7 @@ class ArticulosAutoresController extends Controller
         return redirect($request->session()->get('eventoID').'/autores')->with('info','Informacion Actualizada');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
         $usuario=usuarios::find($id);

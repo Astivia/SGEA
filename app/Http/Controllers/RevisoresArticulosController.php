@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+
 use App\Models\revisoresArticulos;
 use App\Models\articulosAutores;
 use App\Models\usuarios;
@@ -46,11 +48,11 @@ class RevisoresArticulosController extends Controller
                             'articulo_id'=> $request->input('articulo_id'),
                             'usuario_id'=> $usu->id,
                             'orden'=>  $index + 1 ,
-                            'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
-                            // 'notificado'=>true
+                            // 'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
+                            'notificado'=>true
                             
                         ]);
-                        $this->participantSetRole($usu->id,$request->session()->get('eventoID'));
+                        
                     }
                 }
             } else {
@@ -111,8 +113,11 @@ class RevisoresArticulosController extends Controller
                 $nombreCortado = substr($tituloSinEspacios, 0, 7);
                 $nombreArchivo = 'turnitin-' . $nombreCortado . '.' . $archivo->getClientOriginalExtension();
                 try {
-                    $archivo->storeAs('public/Lector/web/ArticulosporEvento/'.$Revisor->evento->acronimo.$Revisor->evento->edicion.'/'.
-                                $Revisor->articulo->area->nombre.'/'.$Revisor->articulo->titulo, $nombreArchivo);
+                    $path = 'public/Lector/web/ArticulosporEvento/' . $Revisor->evento->acronimo . $Revisor->evento->edicion . '/' .
+                            $Revisor->articulo->area->nombre . '/' . $Revisor->articulo->titulo;
+                    if (!Storage::exists($path)) {Storage::makeDirectory($path);}
+                    //almacenamos el PDF
+                    $archivo->storeAs($path,$nombreArchivo);
                 } catch (\Exception $e) {
                     return back()->with('error', 'Error al subir el archivo: ' . $e->getMessage());
                 }
@@ -200,21 +205,6 @@ class RevisoresArticulosController extends Controller
             return false;
         }
 
-    }
-
-    private function participantSetRole($usuID,$eventoID){
-        $participant = participantes::where('usuario_id', $usuID)->where('evento_id', $eventoID)->first();
-
-        if($participant){
-            $participant['rol'] = "Revisor";
-        }else{
-            participantes::insert([
-                'usuario_id' => $usuID,
-                'evento_id' => $eventoID,
-                'rol' => 'Revisor'
-            ]);
-            
-        }
     }
 
     public function pendientes($evento_id,$usuarioId){

@@ -24,26 +24,17 @@ class usuariosController extends Controller
         $this->middleware('can:usuarios.destroy')->only('destroy'); 
 
     }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $Usuarios=usuarios::where('estado',"alta,registrado")->get();
+        $Usuarios = usuarios::whereNotIn('id', function($query) {
+            $query->select('usuario_id')
+                  ->from('articulos_autores')
+                  ->where('correspondencia', false);
+        })->get();
         return view ('Usuarios.index',compact('Usuarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //validacion de datos
@@ -70,15 +61,10 @@ class usuariosController extends Controller
         $datos['password'] = Hash::make($datos['password']);
         $datos['estado'] = "alta,no registrado";
         usuarios::create($datos);
-
-        
-        // return redirect('/usuarios')->with('success', 'Se ha Registrado correctamente');
         return redirect()->back()->with('success', 'Se ha Registrado correctamente');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
         $Usu = usuarios::find($id);
@@ -86,9 +72,6 @@ class usuariosController extends Controller
         return view ('Usuarios.read',compact('Usu','articulos'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $usu = usuarios::find($id);
@@ -96,9 +79,7 @@ class usuariosController extends Controller
         return view ('Usuarios.edit',compact('usu','roles'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id)
     {
         $usuario=usuarios::find($id);
@@ -117,9 +98,6 @@ class usuariosController extends Controller
          return redirect('/usuarios')->with('info','Informacion Actualizada');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $usuario=usuarios::find($id);
@@ -132,8 +110,6 @@ class usuariosController extends Controller
         $usuario->delete();
         return redirect('usuarios')->with('info', 'Usuario eliminado correctamente');
     }
-
-
 
     public function insertUser(Request $request){
         //validamos datos
@@ -204,27 +180,50 @@ class usuariosController extends Controller
     // }
     
     public function deleteMultiple(Request $request){
-    $ids = $request->ids;
+        $ids = $request->ids;
 
-    if (!empty($ids)) {
-        foreach ($ids as $id) {
-            $usuario = usuarios::find($id);
+        if (!empty($ids)) {
+            foreach ($ids as $id) {
+                $usuario = usuarios::find($id);
 
-            if (!$usuario) {
-                return response()->json(['error' => "No se encontró el usuario con id: $id"], 404);
+                if (!$usuario) {
+                    return response()->json(['error' => "No se encontró el usuario con id: $id"], 404);
+                }
+
+                if ($usuario->eventos()->count() > 0) {
+                    return response()->json(['error' => "No se puede eliminar el usuario con id: $id porque está registrado en uno o más eventos"], 400);
+                } else if (articulosAutores::where('usuario_id', $usuario->id)->count() > 0) {
+                    return response()->json(['error' => "No se puede eliminar el usuario con id: $id porque está registrado como Autor"], 400);
+                }
+
+                $usuario->delete();
             }
-
-            if ($usuario->eventos()->count() > 0) {
-                return response()->json(['error' => "No se puede eliminar el usuario con id: $id porque está registrado en uno o más eventos"], 400);
-            } else if (articulosAutores::where('usuario_id', $usuario->id)->count() > 0) {
-                return response()->json(['error' => "No se puede eliminar el usuario con id: $id porque está registrado como Autor"], 400);
-            }
-
-            $usuario->delete();
+            return response()->json(['success' => "Usuarios eliminados correctamente."]);
         }
-        return response()->json(['success' => "Usuarios eliminados correctamente."]);
+        return response()->json(['error' => "No se seleccionaron usuarios."], 400);
     }
 
-    return response()->json(['error' => "No se seleccionaron usuarios."], 400);
-}
+    public function verifyCurp(Request $request) {
+        $curp = $request->input('curp');
+        $user = usuarios::where('curp', $curp)->first();
+    
+        if ($user) {
+            return response()->json([
+                'status' => 'exists',
+                'user' => $user
+            ]);
+        } else {
+            return response()->json(['status' => 'not_exists']);
+        }
+    }
+
+    public function verifyEmail(Request $request) {
+        if (usuarios::where('email', $request->input('email'))->exists()) {
+            return response()->json(['status' => 'exists']);
+        } else {
+            return response()->json(['status' => 'not_exists']);
+        }
+    }
+
+    
 }
