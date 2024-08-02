@@ -263,14 +263,49 @@ class ArticulosController extends Controller
     }
     
     //eliminacion masiva 
-    public function deleteMultiple(Request $request)
-    {
-        $ids = $request->ids;
-        if (!empty($ids)) {
-            articulos::whereIn('id', $ids)->delete();
-            return response()->json(['success' => "Registros eliminados correctamente."]);
+    public function deleteMultiple(Request $request){
+    $ids = $request->ids;
+
+    if (!empty($ids)) {
+        foreach ($ids as $id) {
+            // Buscar el artículo a eliminar
+            $articulo = articulos::find($id);
+            if (!$articulo) {
+                return response()->json(['error' => "No se encontró el artículo con id: $id"], 404);
+            }
+
+            if ($articulo->estado !== "En revision") {
+                try {
+                    articulosAutores::where('articulo_id', $articulo->id)->where('evento_id', $articulo->evento->id)->delete();
+
+                    if ($articulo->archivo !== null) {
+                        // Eliminar la Ruta asociada
+                        $pdfPath = 'public/Lector/web/ArticulosporEvento/' . $articulo->evento->acronimo . $articulo->evento->edicion . '/' .
+                                   $articulo->area->nombre . '/' . $articulo->titulo . '/' . $articulo->archivo;
+                        $folderPath = 'public/Lector/web/ArticulosporEvento/' . $articulo->evento->acronimo . $articulo->evento->edicion . '/' .
+                                      $articulo->area->nombre . '/' . $articulo->titulo;
+
+                        if (Storage::exists($pdfPath)) {
+                            Storage::delete($pdfPath);
+                        }
+                        // Verificar si la carpeta está vacía y eliminarla si es así
+                        if (Storage::exists($folderPath) && count(Storage::files($folderPath)) === 0) {
+                            Storage::deleteDirectory($folderPath);
+                        }
+                    }
+
+                    $articulo->delete();
+                } catch (\Exception $e) {
+                    return response()->json(['error' => "Error al eliminar el artículo con id: $id. Detalle: " . $e->getMessage()], 500);
+                }
+            } else {
+                return response()->json(['error' => "El artículo con id: $id se encuentra en revisión"], 403);
+            }
         }
-        return response()->json(['error' => "No se seleccionaron registros."]);
+
+        return response()->json(['success' => "Registros eliminados correctamente."]);
     }
 
+    return response()->json(['error' => "No se seleccionaron registros."], 400);
+}
 }

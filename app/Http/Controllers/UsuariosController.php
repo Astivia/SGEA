@@ -192,15 +192,39 @@ class usuariosController extends Controller
             return redirect()->route('dashboard');
         }
     }
-    //eliminacion multiple
-    public function deleteMultiple(Request $request)
-    {
-        $ids = $request->ids;
-        if (!empty($ids)) {
-            usuarios::whereIn('id', $ids)->delete();
-            return response()->json(['success' => "Registros eliminados correctamente."]);
+    // //eliminacion multiple
+    // public function deleteMultiple(Request $request)
+    // {
+    //     $ids = $request->ids;
+    //     if (!empty($ids)) {
+    //         usuarios::whereIn('id', $ids)->delete();
+    //         return response()->json(['success' => "Registros eliminados correctamente."]);
+    //     }
+    //     return response()->json(['error' => "No se seleccionaron registros."]);
+    // }
+    
+    public function deleteMultiple(Request $request){
+    $ids = $request->ids;
+
+    if (!empty($ids)) {
+        foreach ($ids as $id) {
+            $usuario = usuarios::find($id);
+
+            if (!$usuario) {
+                return response()->json(['error' => "No se encontró el usuario con id: $id"], 404);
+            }
+
+            if ($usuario->eventos()->count() > 0) {
+                return response()->json(['error' => "No se puede eliminar el usuario con id: $id porque está registrado en uno o más eventos"], 400);
+            } else if (articulosAutores::where('usuario_id', $usuario->id)->count() > 0) {
+                return response()->json(['error' => "No se puede eliminar el usuario con id: $id porque está registrado como Autor"], 400);
+            }
+
+            $usuario->delete();
         }
-        return response()->json(['error' => "No se seleccionaron registros."]);
+        return response()->json(['success' => "Usuarios eliminados correctamente."]);
     }
 
+    return response()->json(['error' => "No se seleccionaron usuarios."], 400);
+}
 }

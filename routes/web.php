@@ -85,10 +85,10 @@ Route::view('/login',"login")->name('login');
 
  //eliminacion multiple
  Route::post('areas/delete-multiple', [AreasController::class, 'deleteMultiple']);
- Route::post('usuarios/delete-multiple', [UsuariosController::class, 'deleteMultiple']);
- Route::post('articulos/delete-multiple', [ArticulosController::class, 'deleteMultiple']);
- Route::post('eventos/delete-multiple', [EventosController::class, 'deleteMultiple']);
-
+ Route::post('/usuarios/delete-multiple', [UsuariosController::class, 'deleteMultiple'])->name('usuarios.deleteMultiple');
+ //  Route::post('articulos/delete-multiple', [ArticulosController::class, 'deleteMultiple']);
+ Route::post('/eventos/delete-multiple', [EventosController::class, 'deleteMultiple'])->name('eventos.deleteMultiple');
+ Route::post('/articulos/delete-multiple', [ArticulosController::class, 'deleteMultiple'])->name('articulos.deleteMultiple');
  /*
 |--------------------------------------------------------------------------
 | Web Routes

@@ -160,14 +160,50 @@ class EventosController extends Controller
 
     }
     //eliminacion masiva 
-    public function deleteMultiple(Request $request)
-    {
-        $ids = $request->ids;
-        if (!empty($ids)) {
-            eventos::whereIn('id', $ids)->delete();
-            return response()->json(['success' => "Registros eliminados correctamente."]);
+    // public function deleteMultiple(Request $request)
+    // {
+    //     $ids = $request->ids;
+    //     if (!empty($ids)) {
+    //         eventos::whereIn('id', $ids)->delete();
+    //         return response()->json(['success' => "Registros eliminados correctamente."]);
+    //     }
+    //     return response()->json(['error' => "No se seleccionaron registros."]);
+    // }
+    public function deleteMultiple(Request $request){
+    $ids = $request->ids;
+
+    if (!empty($ids)) {
+        foreach ($ids as $id) {
+            $evento = eventos::find($id);
+
+            if (!$evento) {
+                return response()->json(['error' => "No se encontró el evento con id: $id"], 404);
+            }
+
+            if ((articulos::where('evento_id', $id)->count() > 0) ||
+                $evento->participantes->count() > 0 ||
+                articulosAutores::where('evento_id', $id)->count() > 0 ||
+                revisoresArticulos::where('evento_id', $id)->count() > 0) {
+                return response()->json(['error' => "No se puede eliminar el evento con id: $id: hay información asociada con este evento"], 400);
+            }
+
+            $logo = $evento->logo;
+
+            $evento->delete();
+
+            $otherEventsUsingLogo = eventos::where('logo', $logo)->count();
+
+            if ($otherEventsUsingLogo == 0 && $logo != 'NO ASIGNADO') {
+                $filePath = public_path('assets/uploads/' . $logo);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
         }
-        return response()->json(['error' => "No se seleccionaron registros."]);
+        return response()->json(['success' => "Eventos eliminados correctamente."]);
     }
+
+    return response()->json(['error' => "No se seleccionaron eventos."], 400);
+}
 
 }

@@ -113,3 +113,51 @@
 </div>
 
 @endsection
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const deleteSelected = document.getElementById('deleteSelected');
+    const selectAll = document.getElementById('selectAll');
+
+    if (deleteSelected) {
+        deleteSelected.addEventListener('click', function() {
+            const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
+            let ids = [];
+            selectedCheckboxes.forEach(function(checkbox) {
+                ids.push(checkbox.getAttribute('data-id'));
+            });
+
+            if (ids.length > 0) {
+                fetch('{{ route('usuarios.deleteMultiple') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ ids: ids })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Usuarios eliminados correctamente.');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('No se seleccionaron usuarios.');
+            }
+        });
+    }
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.selectRow');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAll.checked;
+            });
+        });
+    }
+});
+</script>
