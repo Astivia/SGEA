@@ -14,34 +14,34 @@
                     <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="card">
-                                    <div class="infoCard">
-                                        <div class="header-img">
-                                            <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">
-                                        </div>
-                                        <h1>Eventos Disponibles</h1>
-
+                                    <div class="profile-header">                                        
+                                            <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">                                        
+                                            <h2 class="name">Eventos Disponibles</h2>
+                                    </div>
+                                    <div class="profile-body">
+                                        <p class="descripcion">Estos son los eventos disponibles</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="card">
-                                <div class="infoCard">
-                                <div class="header-img">
-                                            <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">
+                                    <div class="profile-header">                                        
+                                                <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">                                        
+                                                <h2 class="name">Articulos Disponibles</h2>
                                         </div>
-                                        <h1>Articulos Disponibles</h1>
-                                        
-                                    </div>
+                                        <div class="profile-body">
+                                            <p class="descripcion">Estos son los articulos disponibles</p>
+                                        </div>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="card">
-                                <div class="infoCard">
-                                <div class="header-img">
-                                            <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">
-                                        </div>
-                                        <h1>Talleres Disponibles</h1>
-                                        
+                                <div class="profile-header">                                        
+                                            <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">                                        
+                                            <h2 class="name">Autores Disponibles</h2>
+                                    </div>
+                                    <div class="profile-body">
+                                        <p class="descripcion">Estos son los autores que han publicado articulos</p>
                                     </div>
                                 </div>
                             </div>
