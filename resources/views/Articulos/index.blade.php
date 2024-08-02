@@ -105,13 +105,13 @@
             <span class="close">&times;</span>
             <h2>Registro de Artículo</h2>
             {!! Form::open(['url' => '/articulos', 'enctype' => 'multipart/form-data', 'id' => 'article-form']) !!}
-                <label for="titulo">Titulo:</label>
+                {!! Form::label('title', 'Titulo del Articulo:') !!}
                 <input type="text" id="titulo" name="titulo" required>
                 
-                <label for="desc">Resumen:</label>
+                {!! Form::label('desc', 'Resumen del Articulo:') !!}
                 <textarea rows="4" cols="50" id="description" name="resumen"></textarea>
                 
-                <label for="area">Seleccionar Area :</label>
+                {!! Form::label('are', 'Area del Articulo:') !!}
                 <select name="area_id" required>
                     <option value="">Seleccionar...</option>
                     @foreach ($Areas as $area)
@@ -122,15 +122,27 @@
                 <label for="pfd">Subir archivo pdf:</label>
                 {!! Form::file('pdf', ['id' => 'archivoPDF', 'class' => 'form-control', 'accept' => '.pdf,.docx,.doc']) !!}
 
-                
+                <br><hr><br>
                 <!-------------------------------------------------- AUTORES --------------------------------------------->
-                <label for="">Seleccione Autor:</label>
+                
+                {!! Form::hidden('selected_authors',null,['id'=> 'selected-authors-input'])!!}
+
+                <h3>{!! Form::label('', 'Autores del Articulo:') !!}</h3>
+                
+                <div class="showList" style ="display:flex;justify-content:center;align-items:cener;padding:3%;">
+                    <span id="No-Autors"><strong>No hay autores Asignados</strong></span>
+                    <ul class="selectedAutors" ></ul>
+                </div>
+
+                {!! Form::label('label_instruction', 'Seleccionar Autor:') !!}
                 <select name="autor" id="selected-author">
                     @if($Autores=== null)
                         <option value="">Aun no se han registrado autores</option>
                     @else
                         <option value="">Seleccionar...</option>
-                        <option value="{{ Auth::user()->id }}">{{ Auth::user()->nombre_completo }}</option>
+                        @if(Auth::user()->id!==1)
+                            <option value="{{ Auth::user()->id }}">{{ Auth::user()->nombre_completo }}</option>
+                        @endif
                         @foreach ($Autores as $autor)
                             @if($autor->id !== Auth::user()->id)
                                 <option value="{{ $autor->id }}">{{ $autor->ap_paterno }} {{ $autor->ap_materno }} {{ $autor->nombre}}</option>
@@ -138,16 +150,13 @@
                         @endforeach 
                     @endif
                 </select>
-                <button type="button" id="plus-author-btn">Agregar</button>
-                <button type="button" id="minus-author-btn">Quitar</button>
-                <br><br>
-                <strong>Autores:</strong>
-                <ul class="selectedAutors"></ul>
-                <br><br>
+                <span id="corresp-instructions"style ="display:none; color:#348aa7; font-size:15px">Marcar casilla para seleccionar autor de contacto </span>
+                <div class="cntrls" style="display:flex;align-items:center;justify-content:space-evenly;margin-bottom:2vh;">
+                    <button type="button" id="plus-author-btn" style="color:#fff;background-color:#1a2d51;">Asignar</button>
+                    <button type="button" id="minus-author-btn" style="color:#fff;background-color:#1a2d51;">Quitar</button>
+                </div>
                 <p>¿No encuentra su Autor? <a href="#" id="register-author-btn"><strong>Registrar Autor</strong></a></p>
-                <br>
-                <input type="hidden" name="selected_authors" id="selected-authors-input">
-                <button type="submit">Guardar articulo</button>
+                <button type="submit" style="background-color:#1a2d51;color:#fff;">Guardar articulo</button>
             {!! Form::close() !!}
         </div>
     </div>
@@ -158,10 +167,10 @@
             <h2>Registrar Autor </h2>
             <form id="register-author-form" metod="POST" >  
                 @csrf  
-                <span id="curp-error" style="color:red; display:none;">No se encontró el usuario, favor de llenar todos los campos</span>
                 <input type="hidden" name="id" id="id">
                 <label for="curp">CURP:</label>
                 <input type="text" id="curp" name="curp" required>
+                <span id="curp-info" style="color:green; display:none;">Se verifico la CURP, favor de llenar todos los campos</span>
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>
                 <label for="ap_paterno">Apellido Paterno:</label>
@@ -184,6 +193,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
         const articleForm = document.getElementById('article-form');
+        const noAutorsText = document.getElementById('No-Autors');
+        const ci = document.getElementById('corresp-instructions');
         const selectedAuthorSelect = document.getElementById('selected-author');
         const selectedAuthorsList = document.querySelector('.selectedAutors');
         const plusAuthorBtn = document.getElementById('plus-author-btn');
@@ -198,10 +209,20 @@
 
         const updateAuthorList = () => {
             selectedAuthorsList.innerHTML = '';
+
+            if (selectedAuthors.length === 0) {
+                noAutorsText.style.display = 'block';
+                ci.style.display = 'none';
+            } else {
+                noAutorsText.style.display = 'none'; 
+                ci.style.display = 'block'; 
+            }
+
             selectedAuthors.forEach((author, index) => {
                 const checkbox = document.createElement('input');
                 const newListItem = document.createElement('li');
                 checkbox.type = 'checkbox';
+                checkbox.class='correspondencia';
                 checkbox.name = 'corresponding_author';
                 checkbox.checked = author.corresponding;
                 checkbox.addEventListener('change', () => {
@@ -222,6 +243,7 @@
                     checkbox.disabled = anyChecked;
                 }
             });
+
         };
 
         const updateSelectedAuthorsInput = () => {
@@ -232,6 +254,7 @@
             }));
             selectedAuthorsInput.value = JSON.stringify(selectedAuthorsData);
             console.log('Campo oculto:', selectedAuthorsInput.value);
+            
         };
 
         function resetRegisterAuthorForm() {
@@ -302,6 +325,7 @@
                     selectedAuthors.push({ id: selectedValue, name: selectedText, corresponding: false, institucion: data.user.institucion });
                     updateAuthorList();
                     updateSelectedAuthorsInput();
+                    noAutorsText.style.display = 'none';
                 }
             })
             .catch(error => {
@@ -334,8 +358,8 @@
             }
 
             selectedAuthors.splice(authorIndex, 1);
-            updateAuthorList();
             updateSelectedAuthorsInput();
+            updateAuthorList();
         });
 
         articleForm.addEventListener('submit', (event) => {
@@ -428,6 +452,7 @@
                 selectedAuthors.push({ id: newAuthorId, name: newAuthorName, corresponding: false, institucion: newAuthorInstitucion });
                 updateAuthorList();
                 updateSelectedAuthorsInput();
+                noAutorsText.style.display = 'none';
                 // manejo de modales
                 registerAuthorModal.style.display = 'none';
                 createArticleModal.style.display = 'block';
@@ -464,7 +489,7 @@
         const emailInput = document.getElementById('email');
         const telefonoInput = document.getElementById('telefono');
         const institucionInput = document.getElementById('institucion');
-        const curpError = document.getElementById('curp-error');
+        const curpInfo = document.getElementById('curp-info');
 
         const clearForm = () => {
             idInput.value = '';
@@ -515,7 +540,7 @@
                             }
                         });
 
-                        curpError.style.display = 'none';
+                        curpInfo.style.display = 'none';
                     } else {
                         idInput.value = '';
                         nombreInput.value = '';
@@ -531,7 +556,7 @@
                         apMaternoInput.disabled = false;
                         emailInput.disabled = false;
                         telefonoInput.disabled = false;
-                        curpError.style.display = 'block';
+                        curpInfo.style.display = 'block';
 
                     }
                 })
@@ -539,7 +564,7 @@
                     console.error('Error:', error);
                 });
             } else {
-                curpError.style.display = 'none';
+                curpInfo.style.display = 'none';
             }
         });
 
@@ -565,50 +590,66 @@
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteSelected = document.getElementById('deleteSelected');
-    const selectAll = document.getElementById('selectAll');
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteSelected = document.getElementById('deleteSelected');
+        const selectAll = document.getElementById('selectAll');
 
-    if (deleteSelected) {
-        deleteSelected.addEventListener('click', function() {
-            const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
-            let ids = [];
-            selectedCheckboxes.forEach(function(checkbox) {
-                ids.push(checkbox.getAttribute('data-id'));
+        if (deleteSelected) {
+            deleteSelected.addEventListener('click', function() {
+                const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
+                let ids = [];
+                selectedCheckboxes.forEach(function(checkbox) {
+                    ids.push(checkbox.getAttribute('data-id'));
+                });
+
+                if (ids.length > 0) {
+                    fetch('{{ route('articulos.deleteMultiple') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ ids: ids })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Registros eliminados correctamente.');
+                            location.reload();
+                        } else {
+                            alert('Error: ' + data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                } else {
+                    alert('No se seleccionaron registros.');
+                }
             });
+        }
 
-            if (ids.length > 0) {
-                fetch('{{ route('articulos.deleteMultiple') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ ids: ids })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Registros eliminados correctamente.');
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.error);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            } else {
-                alert('No se seleccionaron registros.');
-            }
-        });
-    }
-
-    if (selectAll) {
-        selectAll.addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('.selectRow');
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = selectAll.checked;
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.selectRow');
+                checkboxes.forEach(function(checkbox) {
+                    checkbox.checked = selectAll.checked;
+                });
             });
-        });
-    }
-});
+        }
+    });
 </script>
+
+<style>
+    .selectedAutors li{
+        display:flex;
+        flex-direction:row-reverse;
+        align-items:center;
+        white-space: nowrap;
+    }
+
+    .selectedAutors li .correspondencia{
+        
+        background-color:red;
+        
+
+    }
+</style>
