@@ -1,16 +1,11 @@
 @extends('layouts.master')
 <title>Usuarios</title>
-
 @section('Content')
 <div class="container">
-   
     <div class="search-create">
         <h1 id="titulo-h1">Usuarios</h1>
         <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
     </div>
-
-    
-    <!-- <div style="overflow-x:auto; overflow-y:auto; "> -->
     <div class="ajuste" >
     <button id="deleteSelected">Eliminar seleccionados</button>
         <table id="example" class="display  responsive nowrap" style="width:100%">
@@ -18,7 +13,6 @@
                 <tr>
                 <th><input type="checkbox" id="selectAll"></th>
                     <th>NOMBRE</th>
-                    <th>APELLIDOS</th>
                     <th>EMAIL</th>
                     <th>CURP</th>
                     @role(['Administrador','Organizador'])
@@ -30,9 +24,10 @@
                 @foreach ($Usuarios as $usu)
                 <tr>
                 <td><input type="checkbox" class="selectRow" data-id="{{ $usu->id }}"></td>
-                    <td>{!!$usu->nombre!!}</td>
-                    <td>{!!$usu->ap_paterno!!} {!!$usu->ap_materno!!}</td>
-                    <td>{!!$usu->email!!}</td>
+                    <td>{!!$usu->nombre!!} {!!$usu->ap_paterno!!} {!!$usu->ap_materno!!}</td>
+                    <td>
+                        <a href="mailto:{!!$usu->email!!}">{!!$usu->email!!}</a>
+                    </td>
                     <td>{!!$usu->curp!!}</td>
                     @role(['Administrador','Organizador'])
                     <td>
@@ -40,18 +35,12 @@
                         <a href="{!!'usuarios/'.$usu->id.'/edit'!!}">
                             <i class="las la-user-edit la-2x"></i>
                         </a>
-                        <!-- <a href="{{url('usuarios/'.$usu->id)}}" onclick="
-                                                event.preventDefault(); 
-                                                if (confirm('¿Estás seguro de que deseas eliminar este registro?')) 
-                                                { document.getElementById('delete-form-{{ $usu->id }}').submit(); }">
-                            <i class="las la-user-minus la-2x"></i>
-                        </a> -->
                         <a href="{{url('usuarios/'.$usu->id)}}" 
                             onclick="
                                 event.preventDefault(); 
                                 Swal.fire({
                                     title: '¿Estás seguro?',
-                                    text: '¿Estás seguro de que deseas eliminar este registro?',
+                                    text: '¿Realmente desea Eliminar este Usuario?',
                                     icon: 'warning',
                                     showCancelButton: true,
                                     confirmButtonText: 'Sí, eliminar',
@@ -82,32 +71,33 @@
 <div id="create-modal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Nuevo Usuario</h2>
-        {!! Form::open(['url'=>'/usuarios']) !!}
+        <h2>Registrar Usuario</h2>
+        {!! Form::open(['url'=>'/usuarios' , 'id' => 'usuario-register-form']) !!}
+            
+            {{ Form::label('usuario-nombre', 'Nombre:') }}
+            <input type="text" id="usuario-name" name="nombre" required>
 
+            {{ Form::label('usuario-lastName', 'Apellido Paterno:') }}
+            <input type="text" id="usuario-lastName" name="ap_paterno" required>
 
-        <label for="participante-name">Nombre:</label>
-        <input type="text" id="participante-name" name="nombre" required>
+            {{ Form::label('usuario-2lastName', 'Apellido Materno:') }}
+            <input type="text" id="usuario-2lastName" name="ap_materno" required>
 
-        <label for="participante-lastName">Apellido Paterno:</label>
-        <input type="text" id="participante-lastName" name="ap_paterno" required>
+            {{ Form::label('usuario-CURP', 'CURP:') }}
+            <input type="text" id="usuario-curp" name="curp" required>
+            <span id="curp-error" style="color:red; display:none;">Esta CURP ya se ha registrado en otro usuario</span>
 
-        <label for="participante-2lastName">Apellido Materno:</label>
-        <input type="text" id="participante-2lastName" name="ap_materno" required>
+            {{ Form::label('usuario-mail', 'Email:') }}
+            <input type="text" id="usuario-email" name="email" required>
+            <span id="email-error" style="color:red; display:none;">Este Correo ya se encuentra registrado en otro usuario</span>
 
-        <label for="participante-curp">CURP:</label>
-        <input type="text" id="participante-curp" name="curp" required>
+            {{ Form::label('usuario-pass', 'Contraseña:') }}
+            <input type="password" id="usuario-password" name="password" required>
 
-        <label for="participante-email">Email:</label>
-        <input type="text" id="participante-email" name="email" required>
+            {{ Form::label('usuario-phone', 'Telefono:') }}
+            <input type="tel" id="telefono" name="telefono" required>
 
-        <label for="participante-pass">Contraseña:</label>
-        <input type="password" id="participante-password" name="password" required>
-        
-        <label for="participante-phone">Telefono:</label>
-        <input type="tel" id="telefono" name="telefono" placeholder=" 722 1234 567" required>
-
-        <button type="submit">Guardar</button>
+            <button type="submit">Guardar</button>
         {!!Form::close()!!}
     </div>
 </div>
@@ -117,6 +107,11 @@
   document.addEventListener('DOMContentLoaded', function() {
     const deleteSelected = document.getElementById('deleteSelected');
     const selectAll = document.getElementById('selectAll');
+    const curpInput = document.getElementById('usuario-curp');
+    const emailInput = document.getElementById('usuario-email');
+    const curpError = document.getElementById('curp-error');
+    const emailError = document.getElementById('email-error');
+    const usuarioRegisterForm = document.getElementById('usuario-register-form');
 
     if (deleteSelected) {
         deleteSelected.addEventListener('click', function() {
@@ -159,5 +154,62 @@
             });
         });
     }
+
+    curpInput.addEventListener('input', () => {
+        fetch('{{ route('verify-curp') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ curp: curpInput.value })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'exists') {
+                curpError.style.display = 'block';
+            } else {
+                curpError.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+    
+    emailInput.addEventListener('input', () => {
+        fetch('{{ route('verify-email') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ email: emailInput.value })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'exists') {
+                emailError.style.display = 'block';
+            } else{
+                emailError.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    usuarioRegisterForm.addEventListener('submit', function(event) {
+        if (curpError.style.display === 'block' || emailError.style.display === 'block') {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Informacion',
+                text: 'No es posible registrar, favor de verificar la informacion',
+                icon: 'warning'
+            })
+            return;
+        }
+    });
+
 });
 </script>

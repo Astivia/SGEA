@@ -14,9 +14,7 @@ use App\Models\areas;
 
 class ArticulosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index($eventoId)
     {
         
@@ -35,17 +33,6 @@ class ArticulosController extends Controller
         return view ('Articulos.index',compact('Articulos','Areas','Autores'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $evento= eventos::find($request->session()->get('eventoID'));
@@ -107,9 +94,7 @@ class ArticulosController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+    
     public function show($evento_id, $id)
     {
         $articulo = articulos::where('evento_id', $evento_id)->where('id', $id)->first();
@@ -126,9 +111,7 @@ class ArticulosController extends Controller
         return view ('Articulos.read',compact('articulo','pdfUrl','autores','revisores'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    
     public function edit($evento_id, $id)
     {
         $articulo= articulos::where('evento_id', $evento_id)->where('id', $id)->first();
@@ -204,9 +187,6 @@ class ArticulosController extends Controller
         return redirect ($evento_id.'/articulos')->with('info','Informacion Actualizada');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         // Buscar el artículo a eliminar

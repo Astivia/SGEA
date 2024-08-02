@@ -15,7 +15,7 @@
                     <li>
                         <strong>{!! $autor->orden !!}. </strong> 
                         {!! $autor->usuario->nombre_completo !!}
-                        <a href="{{url('usuarios/'.$autor->usuario->id )}}"><i class="las la-info-circle"></i></a>
+                        <a href="{{url(session('eventoID').'/autor/'.$autor->usuario->id )}}"><i class="las la-info-circle"></i></a>
                     </li>
                 @endforeach
             </ul>
@@ -31,23 +31,13 @@
                 @endforeach
 
         </p>
-<<<<<<< HEAD
         <p class="pRead"><i class="las la-history"></i><strong>Estado: </strong>{!!$articulo->estado!!}</p>
         <p class="pRead"><i class="las la-folder"></i><strong> Archivo: </strong>{!!$articulo->archivo!!}</p>
-=======
-        <p><strong>Estado: </strong>{!!$articulo->estado!!}</p>
-        <p><strong> Archivo: </strong>{!!$articulo->archivo!!}</p>
-        <a href="{{ url()->previous() }}"><button><i class="las la-arrow-left"></i> Regresar</button></a>
-
->>>>>>> fcd24288b020fa16cf337f5d64a939beabe72db4
         @if($pdfUrl)
             <a href="{{url($articulo->evento->id.'/articulo/'.$articulo->id.'/edit')}}"><button><i class="las la-edit"></i> Modificar Articulo</button></a>
             <a href="{!!$pdfUrl !!}" target="_blank"><button><i class="las la-file-pdf"></i> Ver en nueva Pestaña</button></a>
-<<<<<<< HEAD
 
             <br><br>
-=======
->>>>>>> fcd24288b020fa16cf337f5d64a939beabe72db4
             <div id="pdf-viewer" >
                 <iframe src="{!!$pdfUrl !!}" frameborder="0" style="width:90%; height: 70%;"></iframe>
             </div>

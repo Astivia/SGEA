@@ -865,7 +865,7 @@ button:hover {
     border-radius: 5px;
     padding: 20px;
     text-align: center;
-    height: 400px;
+    height: 30vh;
 }
 
 .carousel-control-prev,

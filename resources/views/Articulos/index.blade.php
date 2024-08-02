@@ -38,8 +38,9 @@
                                 <ul>
                                     @foreach ($art->autores->sortBy('orden') as $autor)
                                         <li>
-                                            {{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} 
-                                            <a href="{{url ('usuarios/'.$autor->usuario->id) }}"><i class="las la-info-circle la-1x"></i></a>
+                                            <a href="{{url(session('eventoID').'/autor/'.$autor->usuario->id )}}" style="color:#000;">
+                                                {{ $autor->orden }}. {{ $autor->usuario->nombre_autor}} 
+                                            </a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -54,7 +55,12 @@
                                         No asignados
                                     @else
                                         @foreach ($art->revisores as $revisor)
-                                            <li style="">{{ $revisor->orden}}: {{ $revisor->usuario->nombre_completo}}</li>
+                                            <li style="">
+                                                {{ $revisor->orden}}:
+                                                <a href="{{url('/usuarios/'.$revisor->usuario->id )}}">
+                                                    {{ $revisor->usuario->nombre_completo}}
+                                                </a>
+                                            </li>
                                         @endforeach
                                     @endif
                                     
@@ -65,13 +71,10 @@
                             <td>
                                 <a href="{!! url($art->evento_id.'/articulo/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
                                 <a href="{!! url($art->evento_id.'/articulo/'.$art->id.'/edit')!!}"><i class="las la-edit la-2x"></i></a>
-                                <!-- <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">
-                                <i class="las la-trash-alt la-2x"></i>
-                                </a> -->
                                 <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); 
                                         Swal.fire({
                                             title: '¿Estás seguro?',
-                                            text: '¿Estás seguro de que deseas eliminar este registro?',
+                                            text: '¿Realmente desea eliminar este articulo?',
                                             icon: 'warning',
                                             showCancelButton: true,
                                             confirmButtonText: 'Sí, eliminar',
@@ -176,54 +179,7 @@
         </div>
     </div>
 @endsection
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteSelected = document.getElementById('deleteSelected');
-    const selectAll = document.getElementById('selectAll');
 
-    if (deleteSelected) {
-        deleteSelected.addEventListener('click', function() {
-            const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
-            let ids = [];
-            selectedCheckboxes.forEach(function(checkbox) {
-                ids.push(checkbox.getAttribute('data-id'));
-            });
-
-            if (ids.length > 0) {
-                fetch('{{ route('articulos.deleteMultiple') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ ids: ids })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Registros eliminados correctamente.');
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.error);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            } else {
-                alert('No se seleccionaron registros.');
-            }
-        });
-    }
-
-    if (selectAll) {
-        selectAll.addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('.selectRow');
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = selectAll.checked;
-            });
-        });
-    }
-});
-</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -396,9 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }else{
                 updateSelectedAuthorsInput();
             }
-        });
-
-        
+        });       
 
         document.getElementById('save-author-btn').addEventListener('click', async () => {
             let newAuthorId = document.querySelector('input[name="id"]').value || '';
@@ -608,4 +562,53 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteSelected = document.getElementById('deleteSelected');
+    const selectAll = document.getElementById('selectAll');
+
+    if (deleteSelected) {
+        deleteSelected.addEventListener('click', function() {
+            const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
+            let ids = [];
+            selectedCheckboxes.forEach(function(checkbox) {
+                ids.push(checkbox.getAttribute('data-id'));
+            });
+
+            if (ids.length > 0) {
+                fetch('{{ route('articulos.deleteMultiple') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ ids: ids })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Registros eliminados correctamente.');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('No se seleccionaron registros.');
+            }
+        });
+    }
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.selectRow');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAll.checked;
+            });
+        });
+    }
+});
 </script>
