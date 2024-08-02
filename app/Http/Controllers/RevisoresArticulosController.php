@@ -38,7 +38,6 @@ class RevisoresArticulosController extends Controller
             $Revisores = json_decode($request->input('revisores'), true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 // Recorrer el array de autores seleccionados
-
                 foreach ($Revisores  as $index => $revisor) {
                     if (!is_null($revisor['id'])){
                         $usu=usuarios::where('id',$revisor['id'])->first();
@@ -47,8 +46,8 @@ class RevisoresArticulosController extends Controller
                             'articulo_id'=> $request->input('articulo_id'),
                             'usuario_id'=> $usu->id,
                             'orden'=>  $index + 1 ,
-                            // 'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
-                            'notificado'=>true
+                            'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
+                            // 'notificado'=>true
                             
                         ]);
                         $this->participantSetRole($usu->id,$request->session()->get('eventoID'));
@@ -103,24 +102,37 @@ class RevisoresArticulosController extends Controller
             return redirect ($evento_id.'/revisoresArticulos')->with('info','Informacion Actualizada');
         }else{
             $datos=$request->all();
-            $Revisor = revisoresArticulos::where('evento_id',$evento_id)
-                                                        ->where('articulo_id', $id)
-                                                        ->where('usuario_id', $datos['id_usuario'])
-                                                        ->first();
             // manejo del archivo
             if($request->has('similitud')){
-                $archivo = $request->file('similitud');
-                $nombreArchivo = $archivo->getClientOriginalName();
-                // Guardamos el archivo con su nombre original y obtenemos la ruta completa
-                //$rutaCompletaArchivo = $archivo->storeAs('public/Articles/web/' .$evento->acronimo.$evento->edicion, $nombreArchivo);
+                $Revisor=revisoresArticulos::where('articulo_id',$id)->where('evento_id', $evento_id)->where('usuario_id',$datos['id_usuario'])->first();
+                $archivo = $request->file('similitud');;
+                //generamos nuevo nombre
+                $tituloSinEspacios = str_replace(' ', '', strtoupper($Revisor->articulo->titulo));
+                $nombreCortado = substr($tituloSinEspacios, 0, 7);
+                $nombreArchivo = 'turnitin-' . $nombreCortado . '.' . $archivo->getClientOriginalExtension();
+                try {
+                    $archivo->storeAs('public/Lector/web/ArticulosporEvento/'.$Revisor->evento->acronimo.$Revisor->evento->edicion.'/'.
+                                $Revisor->articulo->area->nombre.'/'.$Revisor->articulo->titulo, $nombreArchivo);
+                } catch (\Exception $e) {
+                    return back()->with('error', 'Error al subir el archivo: ' . $e->getMessage());
+                }
             }else{
                 $nombreArchivo=null;
             }
-            $revisor->update([
-                'puntuacion'=>$datos->puntuacion,
-                'similitud'=>$nombreArchivo,
-                'comentarios'=>$datos->comentarios
-            ]);
+            //Actualizar el registro
+            \DB::table('revisores_articulos')
+                ->where('evento_id', $evento_id)
+                ->where('articulo_id', $id)
+                ->where('usuario_id', $datos['id_usuario'])
+                ->update([
+                    'puntuacion' =>  $datos['puntuacion'],
+                    'similitud' => $nombreArchivo,
+                    'comentarios' => isset($datos['comentarios']) ? $datos['comentarios'] : null,
+                ]);
+            //envair comentarios al Autor de correspondencia
+
+
+            return redirect ($evento_id.'/ArticulosPendientes'.'/'.$datos['id_usuario'])->with('info','Se ha calificado el Articulo');
         }
     }
 
@@ -217,7 +229,8 @@ class RevisoresArticulosController extends Controller
     public function revision($eventoID,$articuloID){
         $articulo = articulos::where('evento_id',$eventoID)->where('id',$articuloID)->first();
         if(!is_null($articulo->archivo)){
-            $pdfPath = 'SGEA/storage/app/public/Articles/web/viewer.html?file='.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.$articulo->archivo;
+            $pdfPath = 'SGEA/storage/app/public/Lector/web/viewer.html?file=ArticulosporEvento/'.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.
+                        $articulo->area->nombre.'/'.$articulo->titulo.'/'.$articulo->archivo;
             $pdfUrl =  asset($pdfPath);
         }else{
             $pdfUrl=null;
