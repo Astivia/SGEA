@@ -65,9 +65,25 @@
                             <td>
                                 <a href="{!! url($art->evento_id.'/articulo/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
                                 <a href="{!! url($art->evento_id.'/articulo/'.$art->id.'/edit')!!}"><i class="las la-edit la-2x"></i></a>
-                                <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">
+                                <!-- <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $art->id }}').submit(); }">
                                 <i class="las la-trash-alt la-2x"></i>
-                                </a>
+                                </a> -->
+                                <a href="{{url('articulos/'.$art->id)}}" onclick="event.preventDefault(); 
+                                        Swal.fire({
+                                            title: '¿Estás seguro?',
+                                            text: '¿Estás seguro de que deseas eliminar este registro?',
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Sí, eliminar',
+                                            cancelButtonText: 'No, cancelar'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                document.getElementById('delete-form-{{ $art->id }}').submit();
+                                            }
+                                        });
+                                    ">
+                                        <i class="las la-trash-alt la-2x"></i>
+                                    </a>
                                 <form id="delete-form-{{ $art->id }}" action="{{ url('articulos/'.$art->id) }}" method="POST" style="display: none;">
                                     @method('DELETE')
                                     @csrf
@@ -230,12 +246,22 @@
             const selectedText = selectedAuthorSelect.options[selectedAuthorSelect.selectedIndex].text;
 
             if (!selectedValue) {
-                alert('Por favor, seleccione un autor de la lista desplegable.');
+                // swal('Por favor, seleccione un autor de la lista desplegable.',' ','error');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'Por favor, seleccione un autor de la lista desplegable.',
+                    icon:'warning',
+                });
                 return;
             }
 
             if (selectedAuthors.find(author => author.id === selectedValue)) {
-                alert('El autor seleccionado ya se encuentra en la lista.');
+                // swal('El autor seleccionado ya se encuentra en la lista.',' ','error');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'El autor seleccionado ya se encuentra en la lista.',
+                    icon:'warning',
+                });
                 return;
             }
 
@@ -283,13 +309,23 @@
             const selectedValue = selectedAuthorSelect.value;
 
             if (!selectedValue) {
-                alert('Por favor, seleccione un autor de la lista desplegable.');
+                // swal('Por favor, seleccione un autor de la lista desplegable.',' ','error');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'Por favor, seleccione un autor de la lista desplegable.',
+                    icon:'warning',
+                });
                 return;
             }
 
             const authorIndex = selectedAuthors.findIndex(author => author.id === selectedValue);
             if (authorIndex === -1) {
-                alert('El autor seleccionado no está en la lista.');
+                // swal('El autor seleccionado no está en la lista.',' ','error');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'El autor seleccionado no está en la lista.',
+                    icon:'warning',
+                });
                 return;
             }
 
@@ -301,7 +337,12 @@
         articleForm.addEventListener('submit', (event) => {
             const hasCorrespondingAuthor = selectedAuthors.some(author => author.corresponding);
             if (!hasCorrespondingAuthor) {
-                alert('Seleccione un autor de correspondencia.');
+                // swal('Seleccione un autor de correspondencia.',' ','error');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'Seleccione un autor de correspondencia.',
+                    icon:'warning',
+                });
                 event.preventDefault();
                 return
             }else{
@@ -324,7 +365,12 @@
             const newAuthorName = `${newAuthorApPaterno} ${newAuthorApMaterno} ${newAuthorNombre}`;
 
             if (!newAuthorCurp || !newAuthorNombre || !newAuthorApPaterno || !newAuthorApMaterno || !newAuthorTelefono || !newAuthorEmail || !newAuthorInstitucion) {
-                alert('Todos los campos son obligatorios.');
+                // swal('Todos los campos son obligatorios.',' ','error');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'Todos los campos son obligatorios. ',
+                    icon:'warning',
+                });
                 return;
             }
 
@@ -361,7 +407,12 @@
             const isAuthorInSelect = Array.from(selectedAuthorSelect.options).some(option => option.value === newAuthorId);
 
             if (isAuthorInArray) {
-                alert('El autor ya existe.');
+                // swal('El autor ya existe.',' ','error');
+                Swal.fire({
+                    title:'Cuidado!',
+                    text:'El autor ya existe.',
+                    icon:'warning',
+                });
                 return;
             } else {
                 if(isAuthorInSelect===false){

@@ -40,10 +40,28 @@
                         <a href="{!!'usuarios/'.$usu->id.'/edit'!!}">
                             <i class="las la-user-edit la-2x"></i>
                         </a>
-                        <a href="{{url('usuarios/'.$usu->id)}}" onclick="
+                        <!-- <a href="{{url('usuarios/'.$usu->id)}}" onclick="
                                                 event.preventDefault(); 
                                                 if (confirm('¿Estás seguro de que deseas eliminar este registro?')) 
                                                 { document.getElementById('delete-form-{{ $usu->id }}').submit(); }">
+                            <i class="las la-user-minus la-2x"></i>
+                        </a> -->
+                        <a href="{{url('usuarios/'.$usu->id)}}" 
+                            onclick="
+                                event.preventDefault(); 
+                                Swal.fire({
+                                    title: '¿Estás seguro?',
+                                    text: '¿Estás seguro de que deseas eliminar este registro?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Sí, eliminar',
+                                    cancelButtonText: 'No, cancelar'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.getElementById('delete-form-{{ $usu->id }}').submit();
+                                    }
+                                });
+                            ">
                             <i class="las la-user-minus la-2x"></i>
                         </a>
                         <form id="delete-form-{{ $usu->id }}" action="{{ url('usuarios/'.$usu->id) }}" method="POST"

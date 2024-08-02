@@ -43,7 +43,25 @@
                             <td>
                                 <a href="{{ url('usuarios/'.$usu->id) }}"><i class="las la-info-circle la-2x"></i></a>
                                 {!! Form::open(['route' => ['participantes.destroy', $evento->id, $usu->id], 'method' => 'delete', 'style' => 'display:inline-block;']) !!}
-                                    <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este participante?');" style="border:none; background:none;">
+                                    <!-- <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este participante?');" style="border:none; background:none;">
+                                        <i class="las la-trash la-2x" style="color:red;"></i>
+                                    </button> -->
+                                    <button type="button" 
+                                        onclick="
+                                            Swal.fire({
+                                                title: '¿Estás seguro?',
+                                                text: '¿Estás seguro de que deseas eliminar este participante?',
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonText: 'Sí, eliminar',
+                                                cancelButtonText: 'No, cancelar'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    this.form.submit();
+                                                }
+                                            });
+                                        " 
+                                        style="border:none; background:none;">
                                         <i class="las la-trash la-2x" style="color:red;"></i>
                                     </button>
                                 {!! Form::close() !!}

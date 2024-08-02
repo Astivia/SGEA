@@ -146,7 +146,12 @@
 
             if (selectedArticleId) {
                 if (articlesWithRevisores.includes(selectedArticleId)) {
-                    alert("Este artículo ya tiene revisores asignados");
+                    // alert("Este artículo ya tiene revisores asignados");
+                    Swal.fire({
+                        title:'Cuidado!',
+                        text:'Este artículo ya tiene revisores asignados',
+                        icon:'warning',
+                    });
                     this.selectedIndex = 0; // Regresamos a "Seleccionar..."
                     toggleRevisoresSelects(false);
                 } else {
@@ -164,7 +169,12 @@
             select.addEventListener('change', function() {
                 const userId = this.value;
                 if (selectedUsers.includes(userId)) {
-                    alert("El revisor ya ha sido asignado en el artículo");
+                    // alert("El revisor ya ha sido asignado en el artículo");
+                    Swal.fire({
+                        title:'Cuidado!',
+                        text:'El revisor ya ha sido asignado en el artículo',
+                        icon:'warning',
+                    });
                     // Regresamos a la opción "Seleccionar..."
                     this.selectedIndex = 0; 
                 } else {
@@ -182,7 +192,12 @@
            // Verificamos si al menos un revisor ha sido seleccionado
             const hasSelectedRevisor = revisoresSelects.some(select => select.value !== '');
             if (!hasSelectedRevisor) {
-                alert("Debe seleccionarse al menos un revisor");
+                // alert("Debe seleccionarse al menos un revisor");
+                Swal.fire({
+                        title:'Cuidado!',
+                        text:'Debe seleccionarse al menos un revisor',
+                        icon:'warning',
+                    });
                 event.preventDefault(); // Evitamos el envío del formulario
                 return;
             }

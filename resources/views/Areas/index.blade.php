@@ -34,8 +34,25 @@
                             <td>
                                 <a href="{!! 'areas/'.$area->id !!}"><i class="las la-info-circle la-2x"></i></a>
                                 <a href="{!!'areas/'.$area->id.'/edit'!!}"><i class="las la-pen la-2x"></i></a>
-                                <a href="{{url('areas/'.$area->id)}}"
+                                <!-- <a href="{{url('areas/'.$area->id)}}"
                                     onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este registro?')) { document.getElementById('delete-form-{{ $area->id }}').submit(); }">
+                                    <i class="las la-trash-alt la-2x"></i>
+                                </a> -->
+                                <a href="{{url('areas/'.$area->id)}}"
+                                    onclick="event.preventDefault(); 
+                                        Swal.fire({
+                                            title: '¿Estás seguro?',
+                                            text: '¿Estás seguro de que deseas eliminar este registro?',
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Sí, eliminar',
+                                            cancelButtonText: 'No, cancelar'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                document.getElementById('delete-form-{{ $area->id }}').submit();
+                                            }
+                                        });
+                                    ">
                                     <i class="las la-trash-alt la-2x"></i>
                                 </a>
                                 <form id="delete-form-{{ $area->id }}" action="{{ url('areas/'.$area->id) }}" method="POST"

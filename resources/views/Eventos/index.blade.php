@@ -49,8 +49,25 @@
                             <a href="{!!'eventos/'.$e->id.'/edit'!!}">
                                 <i class="las la-pen la-2x"></i>
                             </a>
-                            <a href="{{url('eventos/'.$e->id)}}"
+                            <!-- <a href="{{url('eventos/'.$e->id)}}"
                                 onclick="event.preventDefault(); if (confirm('¿Estás seguro de que deseas eliminar este evento?')) { document.getElementById('delete-form-{{ $e->id }}').submit(); }">
+                                <i class="las la-trash-alt la-2x"></i>
+                            </a> -->
+                            <a href="{{url('eventos/'.$e->id)}}"
+                                onclick="event.preventDefault(); 
+                                    Swal.fire({
+                                        title: '¿Estás seguro?',
+                                        text: '¿Estás seguro de que deseas eliminar este evento?',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Sí, eliminar',
+                                        cancelButtonText: 'No, cancelar'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById('delete-form-{{ $e->id }}').submit();
+                                        }
+                                    });
+                                ">
                                 <i class="las la-trash-alt la-2x"></i>
                             </a>
                             <form id="delete-form-{{ $e->id }}" action="{{ url('eventos/'.$e->id) }}" method="POST"
@@ -65,7 +82,24 @@
                                 {!!Form::close()!!}
                             @else
                                 {!! Form::open(['route' => ['participantes.destroy', $e->id,Auth::user()->id], 'method' => 'delete', 'style' => 'display:inline-block;']) !!}
-                                    <button id ="unirme" type="submit" onclick="return confirm('¿Estás seguro de que desea salir del evento?');" style="border:none;"><i class="las la-sign-out-alt la-2x"></i>Salir</button>
+                                    <!-- <button id ="unirme" type="submit" onclick="return confirm('¿Estás seguro de que desea salir del evento?');" style="border:none;"><i class="las la-sign-out-alt la-2x"></i>Salir</button> -->
+                                    <button id="unirme" type="button" 
+                                        onclick="
+                                            Swal.fire({
+                                                title: '¿Estás seguro?',
+                                                text: '¿Estás seguro de que desea salir del evento?',
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonText: 'Sí, salir',
+                                                cancelButtonText: 'No, cancelar'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    document.getElementById('unirme').form.submit();
+                                                }
+                                            });
+                                        " style="border:none;">
+                                        <i class="las la-sign-out-alt la-2x"></i>Salir
+                                    </button>
                                 {!! Form::close() !!}
                             @endif
                         </td>
