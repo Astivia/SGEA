@@ -4,11 +4,11 @@
     <div class="container">
         <h1>MODIFICAR ARTICULO</h1>
 
-        {!! Form::open(['method'=>'PUT','url'=>$articulo->evento_id.'/articulo/'.$articulo->id, 'files' => true,'id' => 'edit-form']) !!}
-            <label for="titulo"><strong>Titulo:</strong></label>
+        {!! Form::open(['method'=>'PUT','url'=>$articulo->evento_id.'/articulo/'.$articulo->id, 'files' => true, 'id' => 'edit-form']) !!}
+            <strong> {!! Form::label('title', 'Titulo del Articulo:') !!}</strong>
             {!! Form::text ('titulo',$articulo->titulo)!!}
 
-            <label for="desc"><strong>Resumen:</strong></label>
+            <strong> {!! Form::label('desc', 'Resumen del Articulo:') !!}</strong>
             <textarea rows="4" cols="50" id="description" name="resumen" >{!!$articulo->resumen!!}</textarea>
             
             <label for="area"><strong>Area : </strong>
@@ -20,9 +20,6 @@
                     @endforeach
                 </select>
             </label>
-            <strong>Estado:</strong>
-            {!! Form::text ('estado', $articulo->estado) !!}
-            <br><br>
             <p><Strong>Archivo actual: </Strong>{!!$articulo->archivo!!}</p>
             <br>
             <div class="form-group">
@@ -36,7 +33,9 @@
                             <option value="">Aun no se han registrado autores</option>
                         @else
                             <option value="">Seleccionar...</option>
+                            @if(Auth::user()->id !== 1)
                             <option value="{{ Auth::user()->id }}">{{ Auth::user()->nombre_completo }}</option>
+                            @endif
                             @foreach ($Autores as $autor)
                                 @if($autor->usuario->id !== Auth::user()->id)
                                     <option value="{{ $autor->usuario->id }}">{{ $autor->usuario->nombre_completo }}</option>
@@ -51,10 +50,7 @@
                     <ul class="selectedAutors">
                         @foreach ($autores as $index => $autor)
                             <input type="checkbox" name="corresponding_author" {{ $autor->correspondencia ? 'checked' : '' }}>
-                            <li> 
-                                {!! $autor->orden !!}. {!! $autor->usuario->nombre_completo !!}
-                                
-                            </li>
+                            <li> {!! $autor->orden !!}. {!! $autor->usuario->nombre_completo !!}</li>
                         @endforeach
                     </ul>
                     <br><br>
@@ -77,6 +73,7 @@
                 <input type="hidden" name="id" id="id">
                 <label for="curp">CURP:</label>
                 <input type="text" id="curp" name="curp" required>
+                <span id="curp-info" style="color:green; display:none;">Se verifico la CURP, favor de llenar todos los campos</span>
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>
                 <label for="ap_paterno">Apellido Paterno:</label>
@@ -384,7 +381,7 @@
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
+     document.addEventListener('DOMContentLoaded', (event) => {
         const curpInput = document.getElementById('curp');
         const idInput = document.getElementById('id');
         const nombreInput = document.getElementById('nombre');
@@ -393,92 +390,86 @@
         const emailInput = document.getElementById('email');
         const telefonoInput = document.getElementById('telefono');
         const institucionInput = document.getElementById('institucion');
-        const curpError = document.getElementById('curp-error');
+        const curpInfo = document.getElementById('curp-info');
+
+        function resetRegisterAuthorForm() {
+            const registerAuthorForm = document.getElementById('register-author-form');
+            //reseteamos los valores de los inputs
+            registerAuthorForm.reset();
+        }
+
+        function fillForm(userData){
+            if (typeof userData === 'object') {
+                idInput.value = userData.id || '';
+                nombreInput.value = userData.nombre || '';
+                nombreInput.disabled=true;
+                apPaternoInput.value = userData.ap_paterno || '';
+                apPaternoInput.disabled=true
+                apMaternoInput.value = userData.ap_materno || '';
+                apMaternoInput.disabled=true;
+                emailInput.value = userData.email || '';
+                emailInput.disabled=true;
+                telefonoInput.value = userData.telefono || '';
+                telefonoInput.disabled=true;
+            }else {
+                console.error('Invalid user data provided to fillForm function!');
+            }
+        }
+
+        function unlockInputs(){
+            document.querySelectorAll('#register-author-form input').forEach(input => {
+                if (input.name !== 'institucion'|| input.name == 'curp') {
+                    input.disabled = false;
+                }
+                if (input.name == 'curp') {
+                    input.disabled = false;
+                }
+            });
+        }
 
         curpInput.addEventListener('input', () => {
-            if (curpInput.value.length === 18) {
-                fetch('{{ route('verify-curp') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ curp: curpInput.value })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'exists') {
-                        const user = data.user;
-                        idInput.value = user.id;
-                        nombreInput.value = user.nombre;
-                        apPaternoInput.value = user.ap_paterno;
-                        apMaternoInput.value = user.ap_materno;
-                        emailInput.value = user.email;
-                        telefonoInput.value = user.telefono;
-                        // Bloquear campos
-                        nombreInput.disabled = true;
-                        apPaternoInput.disabled = true;
-                        apMaternoInput.disabled = true;
-                        emailInput.disabled = true;
-                        telefonoInput.disabled = true;
-                        curpError.style.display = 'none';
-                    } else {
-                        idInput.value = '';
-                        nombreInput.value = '';
-                        apPaternoInput.value = '';
-                        apMaternoInput.value = '';
-                        emailInput.value = '';
-                        telefonoInput.value = '';
-                        // Desbloquear campos
-                        nombreInput.disabled = false;
-                        apPaternoInput.disabled = false;
-                        apMaternoInput.disabled = false;
-                        emailInput.disabled = false;
-                        telefonoInput.disabled = false;
-                        curpError.style.display = 'block';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            } else {
-                curpError.style.display = 'none';
-            }
+            fetch('{{ route('verify-curp') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ curp: curpInput.value })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'exists') {
+                    fillForm(data.user);
+                    curpInfo.textContent="El usuario ya existe, favor de llenar los datos que faltan";
+                    curpInfo.style.display = 'block';
+                } else {
+                    curpInfo.style.display = 'none';
+                    unlockInputs();
+                    idInput.value = '';
+                    nombreInput.value =  '';
+                    apPaternoInput.value = '';
+                    apMaternoInput.value = '';
+                    emailInput.value =  '';
+                    telefonoInput.value =  '';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
 
-        const clearForm = () => {
-            idInput.value = '';
-            curpInput.value = '';
-            nombreInput.value = '';
-            apPaternoInput.value = '';
-            apMaternoInput.value = '';
-            emailInput.value = '';
-            telefonoInput.value = '';
-            institucionInput.value = '';
 
-            // Desbloquear todos los campos
-            nombreInput.disabled = false;
-            apPaternoInput.disabled = false;
-            apMaternoInput.disabled = false;
-            emailInput.disabled = false;
-            telefonoInput.disabled = false;
-        };
 
         const registerAuthorModal = document.getElementById('register-author-modal');
+        const createArticleModal = document.getElementById('create-modal');
         const closeButtons = document.querySelectorAll('.modal .close');
 
         closeButtons.forEach(function (closeBtn) {
             closeBtn.addEventListener('click', function () {
-                clearForm();
+                resetRegisterAuthorForm();unlockInputs();
+                createArticleModal.style.display='block';
                 closeBtn.parentElement.parentElement.style.display = 'none';
             });
-        });
-
-        window.addEventListener('click', function (event) {
-            if (event.target == registerAuthorModal) {
-                clearForm();
-                registerAuthorModal.style.display = 'none';
-            }
         });
     });
 </script>

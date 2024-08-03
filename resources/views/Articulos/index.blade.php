@@ -10,7 +10,7 @@
             <strong>No hay datos</strong>
         @else
         <div class="ajuste" >
-        <button id="deleteSelected">Eliminar seleccionados</button>
+            <button id="deleteSelected">Eliminar seleccionados</button>
             <table id="example" class="display  responsive nowrap" style="width:100%">
                 <thead>            
                     <tr>
@@ -133,7 +133,8 @@
                     <span id="No-Autors"><strong>No hay autores Asignados</strong></span>
                     <ul class="selectedAutors" ></ul>
                 </div>
-
+                <span id="corresp-instructions"style ="display:none; color:#348aa7; font-size:15px"><i class="las la-info-circle"></i>Marcar  casilla para seleccionar autor de contacto </span>
+               
                 {!! Form::label('label_instruction', 'Seleccionar Autor:') !!}
                 <select name="autor" id="selected-author">
                     @if($Autores=== null)
@@ -150,13 +151,13 @@
                         @endforeach 
                     @endif
                 </select>
-                <span id="corresp-instructions"style ="display:none; color:#348aa7; font-size:15px">Marcar casilla para seleccionar autor de contacto </span>
-                <div class="cntrls" style="display:flex;align-items:center;justify-content:space-evenly;margin-bottom:2vh;">
+                 <div class="cntrls" style="display:flex;align-items:center;justify-content:space-evenly;margin-bottom:2vh;">
                     <button type="button" id="plus-author-btn" style="color:#fff;background-color:#1a2d51;">Asignar</button>
                     <button type="button" id="minus-author-btn" style="color:#fff;background-color:#1a2d51;">Quitar</button>
                 </div>
                 <p>¿No encuentra su Autor? <a href="#" id="register-author-btn"><strong>Registrar Autor</strong></a></p>
                 <button type="submit" style="background-color:#1a2d51;color:#fff;">Guardar articulo</button>
+                
             {!! Form::close() !!}
         </div>
     </div>
@@ -177,7 +178,8 @@
                 <input type="text" id="ap_paterno" name="ap_paterno" required>
                 <label for="ap_materno">Apellido Materno:</label>
                 <input type="text" id="ap_materno" name="ap_materno" required>
-                <label for="email">Email:</label>
+                <label for="email" id= "email-input">Email:</label>
+                <span id="email-error" style="color:red; display:none;">Este Correo ya se encuentra registrado en otro usuario</span>
                 <input type="email" id="email" name="email" required>
                 <label for="telefono">Teléfono:</label>
                 <input type="tel" id="telefono" name="telefono" required>
@@ -621,101 +623,107 @@ document.addEventListener('DOMContentLoaded', function() {
         const telefonoInput = document.getElementById('telefono');
         const institucionInput = document.getElementById('institucion');
         const curpInfo = document.getElementById('curp-info');
+        const emailError = document.getElementById('email-error');
 
-        const clearForm = () => {
-            idInput.value = '';
-            curpInput.value = '';
-            nombreInput.value = '';
-            apPaternoInput.value = '';
-            apMaternoInput.value = '';
-            emailInput.value = '';
-            telefonoInput.value = '';
-            institucionInput.value = '';
+        function resetRegisterAuthorForm() {
+            const registerAuthorForm = document.getElementById('register-author-form');
+            //reseteamos los valores de los inputs
+            registerAuthorForm.reset();
+        }
 
-            // Desbloquear todos los campos
-            nombreInput.disabled = false;
-            apPaternoInput.disabled = false;
-            apMaternoInput.disabled = false;
-            emailInput.disabled = false;
-            telefonoInput.disabled = false;
-        };
+        function fillForm(userData){
+            if (typeof userData === 'object') {
+                idInput.value = userData.id || '';
+                nombreInput.value = userData.nombre || '';
+                nombreInput.disabled=true;
+                apPaternoInput.value = userData.ap_paterno || '';
+                apPaternoInput.disabled=true
+                apMaternoInput.value = userData.ap_materno || '';
+                apMaternoInput.disabled=true;
+                emailInput.value = userData.email || '';
+                emailInput.disabled=true;
+                telefonoInput.value = userData.telefono || '';
+                telefonoInput.disabled=true;
+            }else {
+                console.error('Invalid user data provided to fillForm function!');
+            }
+        }
+
+        function unlockInputs(){
+            document.querySelectorAll('#register-author-form input').forEach(input => {
+                if (input.name !== 'institucion'|| input.name == 'curp') {
+                    input.disabled = false;
+                }
+                if (input.name == 'curp') {
+                    input.disabled = false;
+                }
+            });
+        }
 
         curpInput.addEventListener('input', () => {
-            if (curpInput.value.length === 18) {
-                fetch('{{ route('verify-curp') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ curp: curpInput.value })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'exists') {
-                        const user = data.user;
-                        idInput.value = user.id;
-                        nombreInput.value = user.nombre;
-                        apPaternoInput.value = user.ap_paterno;
-                        apMaternoInput.value = user.ap_materno;
-                        emailInput.value = user.email;
-                        telefonoInput.value = user.telefono;
-                        
-                         // Bloquear los campos
-                        document.querySelectorAll('#register-author-form input').forEach(input => {
-                            if (input.name !== 'institucion') {
-                                input.disabled = true;
-                            }
-                            if (input.name == 'curp') {
-                                input.disabled = false;
-                            }
-                        });
-
-                        curpInfo.style.display = 'none';
-                    } else {
-                        idInput.value = '';
-                        nombreInput.value = '';
-                        apPaternoInput.value = '';
-                        apMaternoInput.value = '';
-                        emailInput.value = '';
-                        telefonoInput.value = '';
-                        institucionInput.value = '';
-
-                        // Desbloquear todos los campos
-                        nombreInput.disabled = false;
-                        apPaternoInput.disabled = false;
-                        apMaternoInput.disabled = false;
-                        emailInput.disabled = false;
-                        telefonoInput.disabled = false;
-                        curpInfo.style.display = 'block';
-
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            } else {
-                curpInfo.style.display = 'none';
-            }
+            fetch('{{ route('verify-curp') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ curp: curpInput.value })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'exists') {
+                    fillForm(data.user);
+                    curpInfo.textContent="El usuario ya existe, favor de llenar los datos que faltan";
+                    curpInfo.style.display = 'block';
+                } else {
+                    curpInfo.style.display = 'none';
+                    unlockInputs();
+                    idInput.value = '';
+                    nombreInput.value =  '';
+                    apPaternoInput.value = '';
+                    apMaternoInput.value = '';
+                    emailInput.value =  '';
+                    telefonoInput.value =  '';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
 
-        
+        emailInput.addEventListener('input', () => {
+        fetch('{{ route('verify-email') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ email: emailInput.value })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'exists') {
+                emailError.style.display = 'block';
+            } else{
+                emailError.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
 
         const registerAuthorModal = document.getElementById('register-author-modal');
+        const createArticleModal = document.getElementById('create-modal');
         const closeButtons = document.querySelectorAll('.modal .close');
 
         closeButtons.forEach(function (closeBtn) {
             closeBtn.addEventListener('click', function () {
-                clearForm();
+                resetRegisterAuthorForm();unlockInputs();
+                createArticleModal.style.display='block';
                 closeBtn.parentElement.parentElement.style.display = 'none';
             });
-        });
-
-        window.addEventListener('click', function (event) {
-            if (event.target == registerAuthorModal) {
-                clearForm();
-                registerAuthorModal.style.display = 'none';
-            }
         });
     });
 </script>

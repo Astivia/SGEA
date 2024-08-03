@@ -28,7 +28,12 @@ class RevisoresArticulosController extends Controller
         //catalogos 
         $articulos = articulos::select('id', 'titulo')->OrderBy('titulo')->get();
         $areas= areas::select('id', 'nombre')->OrderBy('nombre')->get();
-        $usuarios=usuarios::where('estado',"alta,registrado")->get();
+        
+        $usuarios=usuarios::where('id','!=',1)->whereNotIn('id', function($query) {
+                    $query->select('usuario_id')
+                    ->from('articulos_autores');
+                })->get();
+
         return view ('Revisores_Articulos.index',compact('articulos','areas','usuarios','articles'));
     }
 

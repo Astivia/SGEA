@@ -79,15 +79,11 @@
         <span class="close">&times;</span>
         <h2>Añadir participante</h2>
         <strong>Evento: {!!$evento->acronimo!!} {!!$evento->edicion!!}</strong>
-
         {!! Form::open(['route' => 'participantes.store', 'id' => 'participante-form']) !!}
-
-            {!! Form::hidden('evento_id', $evento->id) !!}
-
             <label for="participante-name">Seleccionar Usuario:</label>
-
             {!! Form::select('usuario_id', $usuarios->pluck('nombre_completo', 'id'), null, ['required' => 'required']) !!}
-            <br><br>
+
+            
             <button type="submit">Guardar</button>
         {!!Form::close()!!}
     </div>

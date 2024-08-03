@@ -1,7 +1,6 @@
 @extends('layouts.master')
-    <title>Modificar Datos</title>
-    
-</head>
+    <title>Detalles del articulo</title>
+
 @section('Content')
     <div class="container">
         <h1>{!!$articulo->titulo!!}</h1>
@@ -29,14 +28,13 @@
                 @foreach ($revisores as $index => $revisor)
                         {!! $revisor->usuario->nombre_completo !!}<a href="{{url('usuarios/'.$autor->usuario->id )}}"><i class="las la-info-circle"></i></a>
                 @endforeach
-
         </p>
         <p class="pRead"><i class="las la-history"></i><strong>Estado: </strong>{!!$articulo->estado!!}</p>
         <p class="pRead"><i class="las la-folder"></i><strong> Archivo: </strong>{!!$articulo->archivo!!}</p>
+        <a href="{{ url()->previous() }}"><button><i class="las la-arrow-circle-left"></i> Regresar</button></a> 
+        <a href="{{url($articulo->evento->id.'/articulo/'.$articulo->id.'/edit')}}"><button><i class="las la-edit"></i> Modificar Articulo</button></a>
         @if($pdfUrl)
-            <a href="{{url($articulo->evento->id.'/articulo/'.$articulo->id.'/edit')}}"><button><i class="las la-edit"></i> Modificar Articulo</button></a>
             <a href="{!!$pdfUrl !!}" target="_blank"><button><i class="las la-file-pdf"></i> Ver en nueva Pestaña</button></a>
-
             <br><br>
             <div id="pdf-viewer" >
                 <iframe src="{!!$pdfUrl !!}" frameborder="0" style="width:90%; height: 70%;"></iframe>

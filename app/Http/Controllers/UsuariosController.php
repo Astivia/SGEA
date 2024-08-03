@@ -27,11 +27,7 @@ class usuariosController extends Controller
 
     public function index()
     {
-        $Usuarios = usuarios::whereNotIn('id', function($query) {
-            $query->select('usuario_id')
-                  ->from('articulos_autores')
-                  ->where('correspondencia', false);
-        })->get();
+        $Usuarios = usuarios::where('id','!=',1)->get();
         return view ('Usuarios.index',compact('Usuarios'));
     }
 
@@ -181,7 +177,6 @@ class usuariosController extends Controller
     
     public function deleteMultiple(Request $request){
         $ids = $request->ids;
-
         if (!empty($ids)) {
             foreach ($ids as $id) {
                 $usuario = usuarios::find($id);

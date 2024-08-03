@@ -16,9 +16,6 @@
                     <a href="{{ route('participantes.evento.index', ['eventoId' => $evento->id]) }}" class="link-card">
                         <i class="las la-users la-3x"></i>Participantes
                     </a>
-                    <a href="{{ route('comite.evento.index', ['eventoId' => $evento->id]) }}" class="link-card">
-                        <i class="las la-user-shield la-3x"></i>Comite Edit.
-                    </a>
                 @endrole
                 <a href="{{ route('articulos.evento.index', ['eventoId' => $evento->id]) }}" class="link-card">
                     <i class="lar la-newspaper la-3x"></i>Articulos
@@ -31,12 +28,6 @@
                     <i class="las la-glasses la-3x"></i>Revisores
                 </a>
                 @endrole
-                <a href="" class="link-card">
-                    <i class="las la-id-card la-3x"></i>Talleres
-                </a>
-                <a href="" class="link-card">
-                    <i class="las la-id-card la-3x"></i>Conferencias
-                </a>
          </div>
         @role('Administrador')
             <button id="migrate-button" data-evento-id="{{ $evento->id }}">Migrar Informacion</button>

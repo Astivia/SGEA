@@ -67,7 +67,6 @@ class ArticulosController extends Controller
                 'area_id' => $datos['area_id'],
                 'estado' => 'Recibido'
             ]);
-    
             if ($request->has('selected_authors')) {
                 $selectedAuthors = json_decode($request->input('selected_authors'), true);
                 if (json_last_error() === JSON_ERROR_NONE) {
@@ -118,73 +117,70 @@ class ArticulosController extends Controller
         $autores=articulosAutores::where('articulo_id',$articulo->id)->get();
     
         //catalogos
-        $Areas = Areas::all();
-        $Autores= articulosAutores::distinct('usuario_id')->get();
+        $Areas = Areas::select('nombre','id')->get();
+        $Autores= articulosAutores::distinct('usuario_id')->where('usuario_id','!=',1)->get();
         return view('Articulos.edit', compact('articulo', 'Areas','autores','Autores'));
     }
 
     public function update(Request $request,$evento_id, $id)
     {
-
-        // Validación de los datos de entrada
-        $validatedData = $request->validate([
-            'titulo' => 'required|string|max:200',
-            'resumen' => 'nullable|string',
-            'area_id' => 'required|exists:areas,id',
-            'estado' => 'required|string|max:15',
-        ]);
-        //buscamos el articulo
-        $articulo = articulos::where('evento_id', $evento_id)->where('id', $id)->firstOrFail();
-        // manejo del archivo
-        if($request->has('archivo')){
-            
-            $ArchivoAntiguo = 'public/Lector/web/ArticulosporEvento/'.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.
-                                $articulo->area->nombre.'/'.$articulo->titulo.'/'.$articulo->archivo;
-            //verificamos si existe el archivo en nuestra carpeta destino 
-            if (Storage::exists($ArchivoAntiguo)) {
-                Storage::delete($ArchivoAntiguo);
-            }
-            //Guardamos el Nuevo Archivo
-            $archivo = $request->file('archivo');
-            $nombreArchivo = $archivo->getClientOriginalName();
-            try {
-                $archivo->storeAs('public/Lector/web/ArticulosporEvento/'.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.
-                            $articulo->area->nombre.'/'.$articulo->titulo , $nombreArchivo);
-            } catch (\Exception $e) {
-                return back()->with('error', 'Error al subir el archivo: ' . $e->getMessage());
-            }
-        }else{
-           $nombreArchivo=$articulo->archivo;
-       }
-        //insertamos en articulo
-        $articulo->update([
-            'titulo'=> $validatedData['titulo'],
-            'resumen'=> $validatedData['resumen'],
-            'area_id'=> $validatedData['area_id'],
-            'estado'=> $validatedData['estado'],
-            'archivo'=> $nombreArchivo
-        ]);
-
-        if ($request->has('selected_authors')) {
-            $selectedAuthors = json_decode($request->input('selected_authors'), true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                // Eliminar autores actuales
-                articulosAutores::where('articulo_id', $articulo->id)->where('evento_id',$articulo->evento->id)->delete();
-                foreach ($selectedAuthors as $author) {
-                    articulosAutores::create([
-                        'evento_id' => $evento_id,
-                        'articulo_id' => $articulo->id,
-                        'usuario_id' => $author['id'],
-                        'correspondencia' => $author['corresponding'],
-                        'institucion' => $author['institucion'],
-                        'email' =>(usuarios::find($author['id']))->email
-                    ]);
+        $evento= eventos::find($request->session()->get('eventoID'));
+        if($evento){
+            $datos=$request->all();
+            //buscamos el articulo a editar
+            $articulo = articulos::where('evento_id', $evento_id)->where('id', $id)->first();
+            // manejo del archivo
+            if($request->has('archivo')){
+                $ArchivoAntiguo = 'public/Lector/web/ArticulosporEvento/'.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.
+                                    $articulo->area->nombre.'/'.$articulo->titulo.'/'.$articulo->archivo;
+                //verificamos si existe el archivo en nuestra carpeta destino 
+                if (Storage::exists($ArchivoAntiguo)) {
+                    Storage::delete($ArchivoAntiguo);
                 }
-            } else {
-                echo "Error al decodificar Datos: ".json_last_error_msg();
+                //Guardamos el Nuevo Archivo
+                $archivo = $request->file('archivo');
+                $nombreArchivo = $archivo->getClientOriginalName();
+                try {
+                    $archivo->storeAs('public/Lector/web/ArticulosporEvento/'.$articulo->evento->acronimo.$articulo->evento->edicion.'/'.
+                                $articulo->area->nombre.'/'.$articulo->titulo , $nombreArchivo);
+                } catch (\Exception $e) {
+                    return back()->with('error', 'Error al subir el archivo: ' . $e->getMessage());
+                }
+            }else{
+               $nombreArchivo=$articulo->archivo;
+           }
+            //insertamos en articulo
+            $articulo->update([
+                'titulo'=> $datos['titulo'],
+                'resumen'=> $datos['resumen'],
+                'area_id'=> $datos['area_id'],
+                'estado' => $articulo['estado'],
+                'archivo'=> $nombreArchivo
+            ]);
+    
+            if ($request->has('selected_authors')) {
+                $selectedAuthors = json_decode($request->input('selected_authors'), true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    // Eliminar autores actuales
+                    articulosAutores::where('articulo_id', $articulo->id)->where('evento_id',$articulo->evento->id)->delete();
+                    foreach ($selectedAuthors as $author) {
+                        articulosAutores::create([
+                            'evento_id' => $evento_id,
+                            'articulo_id' => $articulo->id,
+                            'usuario_id' => $author['id'],
+                            'correspondencia' => $author['corresponding'],
+                            'institucion' => $author['institucion'],
+                            'email' =>(usuarios::find($author['id']))->email
+                        ]);
+                    }
+                } else {
+                    echo "Error al decodificar Datos: ".json_last_error_msg();
+                }
             }
+            return redirect ($evento_id.'/articulos')->with('info','Informacion Actualizada');
+        }else{
+            return redirect()->back()->with('error','No es posible agregar: el usuario no es parte del evento');
         }
-        return redirect ($evento_id.'/articulos')->with('info','Informacion Actualizada');
     }
 
     public function destroy(string $id)
@@ -244,48 +240,48 @@ class ArticulosController extends Controller
     
     //eliminacion masiva 
     public function deleteMultiple(Request $request){
-    $ids = $request->ids;
+        $ids = $request->ids;
 
-    if (!empty($ids)) {
-        foreach ($ids as $id) {
-            // Buscar el artículo a eliminar
-            $articulo = articulos::find($id);
-            if (!$articulo) {
-                return response()->json(['error' => "No se encontró el artículo con id: $id"], 404);
-            }
-
-            if ($articulo->estado !== "En revision") {
-                try {
-                    articulosAutores::where('articulo_id', $articulo->id)->where('evento_id', $articulo->evento->id)->delete();
-
-                    if ($articulo->archivo !== null) {
-                        // Eliminar la Ruta asociada
-                        $pdfPath = 'public/Lector/web/ArticulosporEvento/' . $articulo->evento->acronimo . $articulo->evento->edicion . '/' .
-                                   $articulo->area->nombre . '/' . $articulo->titulo . '/' . $articulo->archivo;
-                        $folderPath = 'public/Lector/web/ArticulosporEvento/' . $articulo->evento->acronimo . $articulo->evento->edicion . '/' .
-                                      $articulo->area->nombre . '/' . $articulo->titulo;
-
-                        if (Storage::exists($pdfPath)) {
-                            Storage::delete($pdfPath);
-                        }
-                        // Verificar si la carpeta está vacía y eliminarla si es así
-                        if (Storage::exists($folderPath) && count(Storage::files($folderPath)) === 0) {
-                            Storage::deleteDirectory($folderPath);
-                        }
-                    }
-
-                    $articulo->delete();
-                } catch (\Exception $e) {
-                    return response()->json(['error' => "Error al eliminar el artículo con id: $id. Detalle: " . $e->getMessage()], 500);
+        if (!empty($ids)) {
+            foreach ($ids as $id) {
+                // Buscar el artículo a eliminar
+                $articulo = articulos::find($id);
+                if (!$articulo) {
+                    return response()->json(['error' => "No se encontró el artículo con id: $id"], 404);
                 }
-            } else {
-                return response()->json(['error' => "El artículo con id: $id se encuentra en revisión"], 403);
+
+                if ($articulo->estado !== "En revision") {
+                    try {
+                        articulosAutores::where('articulo_id', $articulo->id)->where('evento_id', $articulo->evento->id)->delete();
+
+                        if ($articulo->archivo !== null) {
+                            // Eliminar la Ruta asociada
+                            $pdfPath = 'public/Lector/web/ArticulosporEvento/' . $articulo->evento->acronimo . $articulo->evento->edicion . '/' .
+                                    $articulo->area->nombre . '/' . $articulo->titulo . '/' . $articulo->archivo;
+                            $folderPath = 'public/Lector/web/ArticulosporEvento/' . $articulo->evento->acronimo . $articulo->evento->edicion . '/' .
+                                        $articulo->area->nombre . '/' . $articulo->titulo;
+
+                            if (Storage::exists($pdfPath)) {
+                                Storage::delete($pdfPath);
+                            }
+                            // Verificar si la carpeta está vacía y eliminarla si es así
+                            if (Storage::exists($folderPath) && count(Storage::files($folderPath)) === 0) {
+                                Storage::deleteDirectory($folderPath);
+                            }
+                        }
+
+                        $articulo->delete();
+                    } catch (\Exception $e) {
+                        return response()->json(['error' => "Error al eliminar el artículo con id: $id. Detalle: " . $e->getMessage()], 500);
+                    }
+                } else {
+                    return response()->json(['error' => "El artículo con id: $id se encuentra en revisión"], 403);
+                }
             }
+
+            return response()->json(['success' => "Registros eliminados correctamente pppp."]);
         }
 
-        return response()->json(['success' => "Registros eliminados correctamente pppp."]);
+        return response()->json(['error' => "No se seleccionaron registros."], 400);
     }
-
-    return response()->json(['error' => "No se seleccionaron registros."], 400);
-}
 }

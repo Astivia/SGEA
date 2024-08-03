@@ -40,7 +40,7 @@
         <div class="button-read">
         <a href="{{ url()->previous() }}"><button><i class="las la-arrow-left"></i> Regresar</button></a>
         @role(['Administrador','Organizador'])
-            <a href="{{url($autor->evento->id.'/autores/'.$autor->usuario->id.'/edit')}}"><button><i class="las la-edit"></i> Modificar autorario</button></a>
+            <a href="{{url($autor->evento->id.'/autores/'.$autor->usuario->id.'/edit')}}"><button><i class="las la-edit"></i> Modificar autor</button></a>
         @endrole
         </div>
         
