@@ -54,7 +54,7 @@
                                     @if($art->revisores->isEmpty())
                                         No asignados
                                     @else
-                                        @foreach ($art->revisores as $revisor)
+                                        @foreach ($art->revisores->sortBy('orden') as $revisor)
                                             <li style="">
                                                 {{ $revisor->orden}}:
                                                 <a href="{{url('/usuarios/'.$revisor->usuario->id )}}">

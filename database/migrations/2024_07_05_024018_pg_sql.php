@@ -261,7 +261,56 @@ return new class extends Migration
             DELETE FROM public.eventos WHERE id = eventoID;
         END;
         $$ LANGUAGE plpgsql;
+        ");
 
+        DB::unprepared("
+            CREATE OR REPLACE FUNCTION clasificar_articulo()
+            RETURNS TRIGGER AS $$
+            DECLARE
+                promedio_puntuacion NUMERIC;
+                total_revisores INT;
+                revisores_evaluados INT;
+            BEGIN
+                -- Obtener el total de revisores asignados al artículo
+                SELECT COUNT(*) 
+                INTO total_revisores
+                FROM revisores_articulos
+                WHERE articulo_id = NEW.articulo_id AND evento_id = NEW.evento_id;
+
+                -- Obtener el total de revisores que ya han asignado una puntuación
+                SELECT COUNT(*) 
+                INTO revisores_evaluados
+                FROM revisores_articulos
+                WHERE articulo_id = NEW.articulo_id AND evento_id = NEW.evento_id AND puntuacion IS NOT NULL;
+
+                -- Si todos los revisores han evaluado
+                IF revisores_evaluados = total_revisores THEN
+                    -- Calcular el promedio de las puntuaciones
+                    SELECT AVG(puntuacion) INTO promedio_puntuacion
+                    FROM revisores_articulos
+                    WHERE articulo_id = NEW.articulo_id AND evento_id = NEW.evento_id;
+
+                    -- Actualizar el estado del artículo basado en el promedio de las puntuaciones
+                    IF promedio_puntuacion >= 21 THEN 
+                        UPDATE articulos
+                        SET estado = 'aprobado'
+                        WHERE id = NEW.articulo_id;
+                    ELSE
+                        UPDATE articulos
+                        SET estado = 'rechazado'
+                        WHERE id = NEW.articulo_id;
+                    END IF;
+                END IF;
+                RETURN NEW;
+            END;
+            $$ LANGUAGE plpgsql;
+        ");
+
+        DB::unprepared("
+            CREATE TRIGGER trigger_calificar_articulo
+            AFTER UPDATE ON revisores_articulos
+            FOR EACH ROW
+            EXECUTE PROCEDURE clasificar_articulo();
         ");
     }
 
@@ -280,5 +329,7 @@ return new class extends Migration
         DB::unprepared('DROP FUNCTION IF EXISTS convertirEnRevisor()');
         DB::unprepared('DROP FUNCTION IF EXISTS migrar_datos()');
         DB::unprepared('DROP FUNCTION IF EXISTS migrar_datosPorEvento(integer)');
+        DB::unprepared('DROP TRIGGER IF EXISTS trigger_calificar_articulo ON revisores_articulos');
+        DB::unprepared('DROP FUNCTION IF EXISTS clasificar_articulo()');
     }
 };

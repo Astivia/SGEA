@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use PdfParser\PdfParser;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Storage;
@@ -111,9 +110,8 @@ class RevisoresArticulosController extends Controller
             if($request->has('similitud')){
                 $Revisor=revisoresArticulos::where('articulo_id',$id)->where('evento_id', $evento_id)->where('usuario_id',$datos['id_usuario'])->first();
                 $archivo = $request->file('similitud');
-                $similitud= $this->procesarArchivo($archivo);
                 //generamos nuevo nombre
-                $nombreArchivo = 'tntn-'.$Revisor->articulo->id.'.'.$archivo->getClientOriginalExtension().'-'.$similitud;
+                $nombreArchivo = 'tntn-'.$Revisor->articulo->id.'.'.$archivo->getClientOriginalExtension();
                 try {
                     $path = 'public/Lector/web/ArticulosporEvento/' . $Revisor->evento->acronimo . $Revisor->evento->edicion . '/' .
                             $Revisor->articulo->area->nombre . '/' . $Revisor->articulo->titulo;
@@ -138,10 +136,6 @@ class RevisoresArticulosController extends Controller
                 ]);
             return redirect ($evento_id.'/ArticulosPendientes'.'/'.$datos['id_usuario'])->with('info','se ha calificado el Articulo correctamente');
         }
-    }
-
-    private function procesarArchivo($archivo){
-        
     }
 
     public function destroy($eventoId,$usuarioId,$articuloId)
