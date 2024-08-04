@@ -8,12 +8,8 @@
                 @role('Administrador')
                     <span>Administrador</span>
                 @endrole
-                @role('Organizador')
-                    <span>Organizador</span>
-                @endrole
                 @if(session('rol')!== null)
                     <span>{{session('rol')}}</span>
-
                 @endif
             </div>
         </div>    

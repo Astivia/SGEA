@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PdfParser\PdfParser;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Storage;
@@ -24,7 +25,6 @@ class RevisoresArticulosController extends Controller
                 $query->select('articulo_id')->from('revisores_articulos');
             })->with('revisores.usuario')->get();
         
-
         //catalogos 
         $articulos = articulos::select('id', 'titulo')->OrderBy('titulo')->get();
         $areas= areas::select('id', 'nombre')->OrderBy('nombre')->get();
@@ -110,11 +110,10 @@ class RevisoresArticulosController extends Controller
             // manejo del archivo
             if($request->has('similitud')){
                 $Revisor=revisoresArticulos::where('articulo_id',$id)->where('evento_id', $evento_id)->where('usuario_id',$datos['id_usuario'])->first();
-                $archivo = $request->file('similitud');;
+                $archivo = $request->file('similitud');
+                $similitud= $this->procesarArchivo($archivo);
                 //generamos nuevo nombre
-                $tituloSinEspacios = str_replace(' ', '', strtoupper($Revisor->articulo->titulo));
-                $nombreCortado = substr($tituloSinEspacios, 0, 7);
-                $nombreArchivo = 'turnitin-' . $nombreCortado . '.' . $archivo->getClientOriginalExtension();
+                $nombreArchivo = 'tntn-'.$Revisor->articulo->id.'.'.$archivo->getClientOriginalExtension().'-'.$similitud;
                 try {
                     $path = 'public/Lector/web/ArticulosporEvento/' . $Revisor->evento->acronimo . $Revisor->evento->edicion . '/' .
                             $Revisor->articulo->area->nombre . '/' . $Revisor->articulo->titulo;
@@ -137,13 +136,12 @@ class RevisoresArticulosController extends Controller
                     'similitud' => $nombreArchivo,
                     'comentarios' => isset($datos['comentarios']) ? $datos['comentarios'] : null,
                 ]);
-            //envair comentarios al Autor de correspondencia
-
-            $correspondig=articulosAutores::where('correspondencia',true)->where('evento_id',$evento_id)->where('articulo_id',$id);
-
-
-            return redirect ($evento_id.'/ArticulosPendientes'.'/'.$datos['id_usuario'])->with('info','Se ha calificado el Articulo');
+            return redirect ($evento_id.'/ArticulosPendientes'.'/'.$datos['id_usuario'])->with('info','se ha calificado el Articulo correctamente');
         }
+    }
+
+    private function procesarArchivo($archivo){
+        
     }
 
     public function destroy($eventoId,$usuarioId,$articuloId)
@@ -157,7 +155,7 @@ class RevisoresArticulosController extends Controller
         }
     }
 
-    private function NotificarUsuario(usuarios $user, $articuloId){
+    private function NotificarUsuario(usuarios $user, $articuloId, $RevOaut){
 
         $articulo=articulos::find($articuloId);
         $evento=$articulo->evento->nombre.' ('.$articulo->evento->acronimo.' '.$articulo->evento->edicion.')';
@@ -186,10 +184,12 @@ class RevisoresArticulosController extends Controller
             //Definimos el contenido
             $mail->CharSet = 'UTF-8';
             $subject =  "Informacion Importante";
+           
             $message = "Hola <strong>$user->nombre</strong>:\n
-                        El proposito de este mensaje es informar que usted ha sido asignado como revisor para el articulo <strong>$articulo->titulo</strong> en el evento <strong>$evento</strong>\n\n
-                        Atentamente:\n<strong>SGEA</strong>\n\n
-                        <footer style='font-size:80%;'>Este mensaje es generado de forma automatica por lo que no requiere una respuesta</footer>";
+                            El proposito de este mensaje es informar que usted ha sido asignado como revisor para el articulo <strong>$articulo->titulo</strong> en el evento <strong>$evento</strong>\n\n
+                            Atentamente:\n<strong>SGEA</strong>\n\n
+                            <footer style='font-size:80%;'>Este mensaje es generado de forma automatica por lo que no requiere una respuesta</footer>";
+            
 
             //Estructuramos el correo
             $mail->Subject = $subject; 
@@ -233,5 +233,11 @@ class RevisoresArticulosController extends Controller
         $autores= articulosAutores::where('articulo_id',$articuloID)->OrderBy('orden')->get();
 
         return view ('Revisores_Articulos.revision',compact('articulo','pdfUrl','autores'));
+    }
+
+    public function revisados($eventoID,$usuarioId){
+        $articulos= revisoresArticulos::where('evento_id',$eventoID)->where('usuario_id',$usuarioId)->where('puntuacion','!=',null)->get();
+
+        return view('Revisores_Articulos.terminados',compact('articulos'));
     }
 }

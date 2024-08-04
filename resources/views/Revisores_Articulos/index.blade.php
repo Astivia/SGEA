@@ -1,6 +1,5 @@
 @extends('layouts.master')
 <title>Revisores de articulos</title>
-
 @section('Content')
     <div class="container">
         <div class="search-create">
@@ -32,7 +31,9 @@
                                 <td><a href="{!! url(session('eventoID').'/articulo/'.$ra->id) !!}" style="color:#000;">{!!$ra->titulo!!} </a></td>
                                 <td>{!!$ra->estado!!}</td>
                                 @foreach ($ra->revisores as $revisor)
-                                    <td><strong>{{ $revisor->usuario->nombre_completo }}</strong></td>
+                                    <td><strong>
+                                        <a href="{{ url('usuarios/'.$revisor->usuario->id) }}"  style="color:#000;">{{ $revisor->usuario->nombre_completo }}</a>
+                                    </strong></td>
                                 @endforeach
                                 @for ($i = count($ra->revisores); $i < 3; $i++)
                                     <td>No asignado</td>

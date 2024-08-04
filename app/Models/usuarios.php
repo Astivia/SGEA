@@ -99,7 +99,8 @@ class usuarios extends AuthenticatableUser implements Authenticatable
     public function eventos(){
         return $this->belongsToMany(eventos::class, 'participantes', 'usuario_id', 'evento_id');
     }
-    public function participantes()
+
+    public function participante()
     {
         return $this->hasMany(participantes::class, 'usuario_id', 'id');
     }

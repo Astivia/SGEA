@@ -234,9 +234,9 @@ class LoginController extends Controller
                         $request->session()->put('eventoID', $part->evento->id);
                         $request->session()->put('rol', $part->rol);
                         return redirect()->route('evento.index', ['acronimo' => $part->evento->acronimo, 'edicion' => $part->evento->edicion]);
-                       
                     }else{
                         $request->session()->put('eventoID', null);
+                        $request->session()->put('rol', null);
                         return redirect()->route('dashboard');
                         //   return redirect()->intended(route('home'));
                     }

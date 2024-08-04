@@ -30,6 +30,7 @@ class ArticulosController extends Controller
                     ->groupBy('usuarios.id', 'usuarios.ap_paterno', 'usuarios.ap_materno','usuarios.nombre')
                     ->orderBy('usuarios.ap_paterno')
                     ->get();
+
         return view ('Articulos.index',compact('Articulos','Areas','Autores'));
     }
 
@@ -114,7 +115,7 @@ class ArticulosController extends Controller
     public function edit($evento_id, $id)
     {
         $articulo= articulos::where('evento_id', $evento_id)->where('id', $id)->first();
-        $autores=articulosAutores::where('articulo_id',$articulo->id)->get();
+        $autores= articulosAutores::where('articulo_id',$articulo->id)->get();
     
         //catalogos
         $Areas = Areas::select('nombre','id')->get();

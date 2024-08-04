@@ -20,7 +20,7 @@
             </ul>
         </p>
         @role('Administrador')
-        <p class="pRead"><i class="las la-envelope"></i> <strong>Correspondencia: </strong><a href="mailto:{!! $articulo->autor_correspondencia->email!!}"> {!! $articulo->autor_correspondencia->email!!} </a>({!! $articulo->autor_correspondencia->usuario->nombre_completo!!})</p>
+            <p class="pRead"><i class="las la-envelope"></i> <strong>Correspondencia: </strong><a href="mailto:{!! $articulo->autor_correspondencia->email!!}"> {!! $articulo->autor_correspondencia->email!!} </a>({!! $articulo->autor_correspondencia->usuario->nombre_completo!!})</p>
         @endrole
         <p class="pRead"><i class="las la-file-alt"></i> <strong>Resumen: </strong>{!!$articulo->resumen!!}</p>
         <p class="pRead"><i class="las la-id-card"></i> <strong>Area: </strong>{!!$articulo->area->nombre!!}</p>
@@ -32,7 +32,9 @@
         <p class="pRead"><i class="las la-history"></i><strong>Estado: </strong>{!!$articulo->estado!!}</p>
         <p class="pRead"><i class="las la-folder"></i><strong> Archivo: </strong>{!!$articulo->archivo!!}</p>
         <a href="{{ url()->previous() }}"><button><i class="las la-arrow-circle-left"></i> Regresar</button></a> 
-        <a href="{{url($articulo->evento->id.'/articulo/'.$articulo->id.'/edit')}}"><button><i class="las la-edit"></i> Modificar Articulo</button></a>
+        @role('Administrador')
+            <a href="{{url($articulo->evento->id.'/articulo/'.$articulo->id.'/edit')}}"><button><i class="las la-edit"></i> Modificar Articulo</button></a>
+        @endrole
         @if($pdfUrl)
             <a href="{!!$pdfUrl !!}" target="_blank"><button><i class="las la-file-pdf"></i> Ver en nueva Pestaña</button></a>
             <br><br>

@@ -43,4 +43,5 @@ class revisoresArticulos extends Model
     {
         return $this->belongsTo(articulos::class, 'articulo_id','id');
     }
+
 }
