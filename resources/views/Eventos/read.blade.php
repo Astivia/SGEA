@@ -13,6 +13,9 @@
         </div>
         <div class="links">
             @role('Administrador')
+                <a href="{{ route('articulos.evento.index', ['eventoId' => $evento->id]) }}" class="link-card">
+                    <i class="lar la-newspaper la-3x"></i>Articulos
+                </a>
                 <a href="{{ route('autores.index', ['eventoId' => $evento->id]) }}" class="link-card">
                     <i class="las la-pen-nib la-3x"></i>Autores
                 </a>
@@ -22,20 +25,15 @@
                 <a href="{{ route('revisores.index', ['eventoId' => $evento->id]) }}" class="link-card">
                     <i class="las la-glasses la-3x"></i>Revisores
                 </a>
-                <a href="{{ route('articulos.evento.index', ['eventoId' => $evento->id]) }}" class="link-card">
-                    <i class="lar la-newspaper la-3x"></i>Articulos
-                </a>
             @endrole           
             @if(session('rol')==='Autor')
-                <a href="{{url(session('eventoID').'/ArticulosCorresp/'.Auth::user()->id)}}" class="link-card">
-                    <i class="las la-bell la-3x"></i> Articulos Propios
+                <a href="{{url(session('eventoID').'_'.Auth::user()->id.'/MisArticulos/')}}" class="link-card">
+                    <i class="las la-newspaper la-3x"></i> Mis Articulos
                 </a>
-                <a href="{{url(session('eventoID').'/ArticulosCorresp/'.Auth::user()->id)}}" class="link-card">
-                    <i class="las la-bell la-3x"></i> Articulos Rechazados
+                <a href="{{url(session('eventoID').'_'.Auth::user()->id.'/Evaluaciones/')}}" class="link-card">
+                    <i class="las la-newspaper la-3x"></i>Historial de Evaluaciones
                 </a>
-                <a href="{{url(session('eventoID').'/ArticulosCorresp/'.Auth::user()->id)}}" class="link-card">
-                    <i class="las la-bell la-3x"></i> Articulos Aceptados
-                </a>
+                
             @elseif(session('rol')==='Revisor')
                 <a href="{{url(session('eventoID').'/ArticulosPendientes/'.Auth::user()->id)}}" class="link-card">
                     <i class="las la-inbox la-3x"></i> Articulos por Revisar

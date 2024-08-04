@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 use App\Models\articulosAutores;
 use App\Models\revisoresArticulos;
@@ -86,8 +88,12 @@ class ArticulosController extends Controller
                     echo "Error al decodificar Datos: ".json_last_error_msg();
                 }
             }
-    
-            return redirect ($evento->id.'/articulos')->with('success','Articulo Registrado');
+            if($request->session()->get('rol') === "Autor"){
+                return redirect ($evento->id.'_'.Auth::user()->id.'/MisArticulos')->with('success','Articulo Registrado');
+            }else{
+                return redirect ($evento->id.'/articulos')->with('success','Articulo Registrado');
+            }
+
         }else{
             return redirect()->back()->with('error','No es posible agregar: el usuario no es parte del evento');
 
@@ -115,12 +121,18 @@ class ArticulosController extends Controller
     public function edit($evento_id, $id)
     {
         $articulo= articulos::where('evento_id', $evento_id)->where('id', $id)->first();
-        $autores= articulosAutores::where('articulo_id',$articulo->id)->get();
-    
-        //catalogos
-        $Areas = Areas::select('nombre','id')->get();
-        $Autores= articulosAutores::distinct('usuario_id')->where('usuario_id','!=',1)->get();
-        return view('Articulos.edit', compact('articulo', 'Areas','autores','Autores'));
+        if($articulo->estado === "Recibido"){
+            
+            $autores= articulosAutores::where('articulo_id',$articulo->id)->get();
+        
+            //catalogos
+            $Areas = Areas::select('nombre','id')->get();
+            $Autores= articulosAutores::distinct('usuario_id')->where('usuario_id','!=',1)->get();
+            return view('Articulos.edit', compact('articulo', 'Areas','autores','Autores'));
+        }else{
+            return redirect()->back()->with('error','El articulo ya ha sido calificado o esta en revision');
+        }
+
     }
 
     public function update(Request $request,$evento_id, $id)
@@ -191,7 +203,7 @@ class ArticulosController extends Controller
         if (!$articulo){
             return redirect()->back()->with('error', 'No se encontro el articulo');
         }
-        if($articulo->estado !== "En revision" ){
+        if($articulo->estado === "Recibido" ){
             try {
                 articulosAutores::where('articulo_id', $articulo->id)->where('evento_id',$articulo->evento->id)->delete();
                 if($articulo->archivo !== null){
@@ -215,7 +227,7 @@ class ArticulosController extends Controller
                 return redirect()->back()->with('error', $e->getMessage());
             }
         }else{
-            return redirect()->back()->with('error', 'El Articulo se encuentra en revisión');
+            return redirect()->back()->with('error', 'El Articulo ya ha sido evaluado o se encuentra en revision');
         }
     }
 
@@ -239,7 +251,6 @@ class ArticulosController extends Controller
         return response()->json($articles);
     }
     
-    //eliminacion masiva 
     public function deleteMultiple(Request $request){
         $ids = $request->ids;
 
@@ -285,4 +296,35 @@ class ArticulosController extends Controller
 
         return response()->json(['error' => "No se seleccionaron registros."], 400);
     }
+
+    public function AuthorArticles($evento_id, $id){
+        $Articulos = articulos::where('evento_id', $evento_id)
+            ->whereHas('autores', function($query) use ($id) {
+            $query->where('usuario_id', $id);
+        })
+        ->get();
+
+        //catalogos
+        $Areas =areas::select('nombre','id')->get();
+        $Autores = articulosAutores::select('usuarios.id', 'usuarios.ap_paterno', 'usuarios.nombre', 'usuarios.ap_materno')
+                    ->join('usuarios', 'articulos_autores.usuario_id', '=', 'usuarios.id')
+                    ->groupBy('usuarios.id', 'usuarios.ap_paterno', 'usuarios.ap_materno','usuarios.nombre')
+                    ->orderBy('usuarios.ap_paterno')
+                    ->get();
+
+        return view ('Articulos.index',compact ('Articulos','Areas','Autores'));
+    }
+
+    public function Evaluations ($evento_id,$id){
+        $articulos = revisoresArticulos::distinct('articulo_id')->where('evento_id', $evento_id)
+                    ->whereNotNull('puntuacion')
+                    ->whereHas('articulo.autores', function ($query) use ($id) {
+                        $query->where('usuario_id', $id)
+                            ->where('correspondencia', true);
+                    })->get();
+        
+        return view('Revisores_Articulos.terminados',compact('articulos'));
+        
+    }
+
 }

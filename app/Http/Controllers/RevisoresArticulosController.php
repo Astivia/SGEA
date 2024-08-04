@@ -27,11 +27,13 @@ class RevisoresArticulosController extends Controller
         //catalogos 
         $articulos = articulos::select('id', 'titulo')->OrderBy('titulo')->get();
         $areas= areas::select('id', 'nombre')->OrderBy('nombre')->get();
-        
-        $usuarios=usuarios::where('id','!=',1)->whereNotIn('id', function($query) {
-                    $query->select('usuario_id')
-                    ->from('articulos_autores');
-                })->get();
+        //usuarios que no sean autores
+        // $usuarios=usuarios::where('id','!=',1)->whereNotIn('id', function($query) {
+        //             $query->select('usuario_id')
+        //             ->from('articulos_autores');
+        //         })->get();
+        //Todos los ususarios
+        $usuarios=usuarios::select('nombre','ap_paterno','ap_materno','id')->where('id','!=',1)->get();
 
         return view ('Revisores_Articulos.index',compact('articulos','areas','usuarios','articles'));
     }
@@ -66,7 +68,7 @@ class RevisoresArticulosController extends Controller
 
     public function show(string $id)
     {
-        $articulo=articulos::where('id',$id)->with('revisores.usuario')->first();
+        $articulo=articulos::where('id',$id)->first();
         return view ('Revisores_Articulos.read',compact('articulo'));
     }
 

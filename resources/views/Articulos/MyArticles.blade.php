@@ -1,13 +1,9 @@
 @extends('layouts.master')
-    <title>Articulos</title>
+    <title>Mis Articulos</title>
 @section('Content')
     <div class="container">
         <div class="search-create">
-            @if(session('rol')==='Autor')
-                <h1 id="titulo-h1">Mis Artículos</h1>
-            @else
-                <h1 id="titulo-h1">Artículos</h1>
-            @endif
+            <h1 id="titulo-h1"> Mis Artículos</h1>
             <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
         </div>    
         @if($Articulos->isEmpty())
@@ -21,12 +17,7 @@
                         <th><input type="checkbox" id="selectAll"></th>
                         <th>TITULO</th>
                         <th>AUTORES</th>
-                        <th>Correspondencia</th>
-                        @role('Administrador')
-                        <th>revisores</th>
-                        @endrole
                         <th>Area</th>
-                        <th>Estado</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -50,10 +41,10 @@
                                     @endforeach
                                 </ul>
                             </td>
+                            @role(['Administrador','Organizador'])
                             <td>
                                 <a href="mailto:{!!$art->autor_correspondencia->email!!}" style="text-decoration:underline;">{!!$art->autor_correspondencia->email!!}</a>
                             </td>
-                            @role(['Administrador','Organizador'])
                             <td>
                                 <ul>
                                     @if($art->revisores->isEmpty())
@@ -68,12 +59,10 @@
                                             </li>
                                         @endforeach
                                     @endif
-                                    
                                 </ul>
                             </td>
                             @endrole
                             <td>{!!$art->area->nombre!!}</td>
-                            <td>{!!$art->estado!!}</td>
                             <td>
                                 <a href="{!! url($art->evento_id.'/articulo/'.$art->id) !!}"><i class="las la-info-circle la-2x"></i></a>
                                 <a href="{!! url($art->evento_id.'/articulo/'.$art->id.'/edit')!!}"><i class="las la-edit la-2x"></i></a>
@@ -196,54 +185,7 @@
         </div>
     </div>
 @endsection
-<!-- <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteSelected = document.getElementById('deleteSelected');
-    const selectAll = document.getElementById('selectAll');
 
-    if (deleteSelected) {
-        deleteSelected.addEventListener('click', function() {
-            const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
-            let ids = [];
-            selectedCheckboxes.forEach(function(checkbox) {
-                ids.push(checkbox.getAttribute('data-id'));
-            });
-
-            if (ids.length > 0) {
-                fetch('{{ route('articulos.deleteMultiple') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ ids: ids })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Registros eliminados correctamente.');
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.error);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            } else {
-                alert('No se seleccionaron registros.');
-            }
-        });
-    }
-
-    if (selectAll) {
-        selectAll.addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('.selectRow');
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = selectAll.checked;
-            });
-        });
-    }
-});
-</script> -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const deleteSelected = document.getElementById('deleteSelected');
@@ -619,122 +561,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const curpInput = document.getElementById('curp');
-        const idInput = document.getElementById('id');
-        const nombreInput = document.getElementById('nombre');
-        const apPaternoInput = document.getElementById('ap_paterno');
-        const apMaternoInput = document.getElementById('ap_materno');
-        const emailInput = document.getElementById('email');
-        const telefonoInput = document.getElementById('telefono');
-        const institucionInput = document.getElementById('institucion');
-        const curpInfo = document.getElementById('curp-info');
-        const emailError = document.getElementById('email-error');
-
-        function resetRegisterAuthorForm() {
-            const registerAuthorForm = document.getElementById('register-author-form');
-            //reseteamos los valores de los inputs
-            registerAuthorForm.reset();
-        }
-
-        function fillForm(userData){
-            if (typeof userData === 'object') {
-                idInput.value = userData.id || '';
-                nombreInput.value = userData.nombre || '';
-                nombreInput.disabled=true;
-                apPaternoInput.value = userData.ap_paterno || '';
-                apPaternoInput.disabled=true
-                apMaternoInput.value = userData.ap_materno || '';
-                apMaternoInput.disabled=true;
-                emailInput.value = userData.email || '';
-                emailInput.disabled=true;
-                telefonoInput.value = userData.telefono || '';
-                telefonoInput.disabled=true;
-            }else {
-                console.error('Invalid user data provided to fillForm function!');
-            }
-        }
-
-        function unlockInputs(){
-            document.querySelectorAll('#register-author-form input').forEach(input => {
-                if (input.name !== 'institucion'|| input.name == 'curp') {
-                    input.disabled = false;
-                }
-                if (input.name == 'curp') {
-                    input.disabled = false;
-                }
-            });
-        }
-
-        curpInput.addEventListener('input', () => {
-            fetch('{{ route('verify-curp') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ curp: curpInput.value })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'exists') {
-                    fillForm(data.user);
-                    curpInfo.textContent="El usuario ya existe, favor de llenar los datos que faltan";
-                    curpInfo.style.display = 'block';
-                } else {
-                    curpInfo.style.display = 'none';
-                    unlockInputs();
-                    idInput.value = '';
-                    nombreInput.value =  '';
-                    apPaternoInput.value = '';
-                    apMaternoInput.value = '';
-                    emailInput.value =  '';
-                    telefonoInput.value =  '';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-
-        emailInput.addEventListener('input', () => {
-        fetch('{{ route('verify-email') }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ email: emailInput.value })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'exists') {
-                emailError.style.display = 'block';
-            } else{
-                emailError.style.display = 'none';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-
-
-        const registerAuthorModal = document.getElementById('register-author-modal');
-        const createArticleModal = document.getElementById('create-modal');
-        const closeButtons = document.querySelectorAll('.modal .close');
-
-        closeButtons.forEach(function (closeBtn) {
-            closeBtn.addEventListener('click', function () {
-                resetRegisterAuthorForm();unlockInputs();
-                createArticleModal.style.display='block';
-                closeBtn.parentElement.parentElement.style.display = 'none';
-            });
-        });
-    });
-</script>
-
-<script>
     document.addEventListener('DOMContentLoaded', function() {
         const deleteSelected = document.getElementById('deleteSelected');
         const selectAll = document.getElementById('selectAll');
@@ -792,9 +618,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     .selectedAutors li .correspondencia{
-        
         background-color:red;
-        
-
     }
 </style>

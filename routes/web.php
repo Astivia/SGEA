@@ -39,26 +39,30 @@ Route::put('{evento_id}/articulo/{id}', [ArticulosController::class, 'update']);
     Route::post('/verify-curp', [UsuariosController::class, 'verifyCurp'])->name('verify-curp');
     Route::post('/verify-email', [UsuariosController::class, 'verifyEmail'])->name('verify-email');
     Route::post('/insert-user', [UsuariosController::class, 'insertUser'])->name('insertar-usuario');
+
+
 //AUTORES
 Route::resource('autores', ArticulosAutoresController::class)->except(['index'])->middleware('auth');
 Route::get('{eventoId}/autores/', [ArticulosAutoresController::class, 'index'])->name('autores.index')->middleware('auth');
 Route::get('{evento_id}/autor/{id}', [ArticulosAutoresController::class, 'show'])->middleware('auth');
 Route::get('{eventoId}/autores/{id}/edit', [ArticulosAutoresController::class, 'edit'])->middleware('auth');
 
+Route::get('{eventoId}_{id}/MisArticulos/', [ArticulosController::class, 'AuthorArticles'])->middleware('auth');
+Route::get('{eventoId}_{id}/Evaluaciones/', [ArticulosController::class, 'Evaluations'])->middleware('auth');
+Route::get('{eventoId}_{id}/detalle/', [ArticulosController::class, 'Details'])->middleware('auth');
 
 // REVISORES DE ARTICULOS (ADMIN)
 Route::resource('revisores', RevisoresArticulosController::class)->except(['index'])->middleware('auth');
 Route::get('{eventoId}/revisoresArticulos/', [RevisoresArticulosController::class, 'index'])->name('revisores.index')->middleware('auth');
 Route::get('{evento_id}/revisoresArticulo/{articulo_id}/edit', [RevisoresArticulosController::class, 'edit'])->middleware('auth');
-
     //Rutas AJAX
     Route::get('/get-articles/{area_id}', [ArticulosController::class, 'getArticles'])->name('get-articles');
 
-    // RUTAS DE REVISION (REVISOR)
-    Route::get('{eventoId}/ArticulosPendientes/{usuId}', [RevisoresArticulosController::class, 'pendientes'])->middleware('auth');
-    Route::get('{eventoId}_{usuId}/ArticulosRevisados/', [RevisoresArticulosController::class, 'revisados'])->middleware('auth');
-    Route::get('{eventoId}_{usuId}/revision/', [RevisoresArticulosController::class, 'revision'])->middleware('auth');
-    Route::put('Calificar_{articuloID}/', [RevisoresArticulosController::class, 'update']);
+// RUTAS DE REVISION (REVISOR)
+Route::get('{eventoId}/ArticulosPendientes/{usuId}', [RevisoresArticulosController::class, 'pendientes'])->middleware('auth');
+Route::get('{eventoId}_{usuId}/ArticulosRevisados/', [RevisoresArticulosController::class, 'revisados'])->middleware('auth');
+Route::get('{eventoId}_{usuId}/revision/', [RevisoresArticulosController::class, 'revision'])->middleware('auth');
+Route::put('Calificar_{articuloID}/', [RevisoresArticulosController::class, 'update']);
 
 //LOGIN - REGISTER
 Route::view('/login',"login")->name('login');

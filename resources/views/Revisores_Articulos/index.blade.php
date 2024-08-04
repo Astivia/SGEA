@@ -3,7 +3,7 @@
 @section('Content')
     <div class="container">
         <div class="search-create">
-            <h1 id="titulo-h1">Articulos en Revision</h1>
+            <h1 id="titulo-h1">Revision de Articulos</h1>
                 <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
         </div>
         @if($articles->isEmpty())
