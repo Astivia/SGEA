@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-
-
 use App\Models\articulosAutores;
 use App\Models\revisoresArticulos;
 use App\Models\articulos;
@@ -19,17 +17,14 @@ class ArticulosController extends Controller
 
     public function index($eventoId)
     {
-        
         $evento = eventos::find($eventoId); 
-        
         $Articulos = articulos::with(['evento', 'area', 'autores.usuario','revisores.usuario'])->where('evento_id', $evento->id)->OrderBy('id')->get();
-        
         //Catalogo de Areas
         $Areas =areas::all();
         //Catalogo de Autores para el combo del Form "registrar Articulo"
         $Autores = articulosAutores::select('usuarios.id', 'usuarios.ap_paterno', 'usuarios.nombre', 'usuarios.ap_materno')
                     ->join('usuarios', 'articulos_autores.usuario_id', '=', 'usuarios.id')
-                    ->groupBy('usuarios.id', 'usuarios.ap_paterno', 'usuarios.ap_materno','usuarios.nombre')
+                    ->groupBy('usuarios.id', 'usuarios.ap_paterno', 'usuarios.ap_materno','usuarios.nombre')->where('id','!=',1)
                     ->orderBy('usuarios.ap_paterno')
                     ->get();
 
@@ -41,7 +36,6 @@ class ArticulosController extends Controller
         $evento= eventos::find($request->session()->get('eventoID'));
         if($evento){
             $datos=$request->all();
-
             if($request->has('pdf')){
                 $area=areas::find($datos['area_id']);
                 //validamos la carga del archivo
@@ -59,7 +53,6 @@ class ArticulosController extends Controller
             }else{
                 $nombreArchivo=null;
             }
-            
             //insertamos datos del articulo
             $articulo = articulos::create([
                 'evento_id'=>$evento->id,
@@ -70,6 +63,7 @@ class ArticulosController extends Controller
                 'area_id' => $datos['area_id'],
                 'estado' => 'Recibido'
             ]);
+            //Verificamos si el Form tiene un archivo JSON con los autores del articulo
             if ($request->has('selected_authors')) {
                 $selectedAuthors = json_decode($request->input('selected_authors'), true);
                 if (json_last_error() === JSON_ERROR_NONE) {
@@ -242,7 +236,6 @@ class ArticulosController extends Controller
             $user =  articulosAutores::where('usuario_id', $authorId)->first();
          }
         return response()->json(['exists' => $exists, 'user' => $user]);
-        
      }
 
      public function getArticles($area_id)
@@ -299,12 +292,12 @@ class ArticulosController extends Controller
 
     public function AuthorArticles($evento_id, $id){
         $Articulos = articulos::where('evento_id', $evento_id)
-            ->whereHas('autores', function($query) use ($id) {
-            $query->where('usuario_id', $id);
-        })
-        ->get();
+                    ->whereHas('autores', function($query) use ($id) {
+                        $query->where('usuario_id', $id);
+                    })
+                    ->get();
 
-        //catalogos
+        //Catalogos necesarios
         $Areas =areas::select('nombre','id')->get();
         $Autores = articulosAutores::select('usuarios.id', 'usuarios.ap_paterno', 'usuarios.nombre', 'usuarios.ap_materno')
                     ->join('usuarios', 'articulos_autores.usuario_id', '=', 'usuarios.id')

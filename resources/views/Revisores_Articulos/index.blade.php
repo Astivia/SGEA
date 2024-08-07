@@ -88,10 +88,7 @@
         const selectedArticleInput = document.getElementById('selected-article-input');
 
         let selectedUsers = [null, null, null];
-
-        // Guardamos todos los artículos
         const initialArticles = @json($articulos->pluck('titulo', 'id'));
-        // Guardamos los artículos con revisores
         const articlesWithRevisores = @json($articles->pluck('id'));
 
         areaSelect.addEventListener('change', async function() {
@@ -109,20 +106,13 @@
                     const data = await response.json();
                     if (data.error) {
                         // alert(data.error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Cuidado!',
-                            text: data.error
-                        });
-                        return;
+                        Swal.fire({icon: 'error',title: 'Cuidado!',text: data.error});return;
                     } else {
                         articlesSelect.innerHTML = '<option value="">Seleccionar...</option>';
                         if (data.length > 0) {
                             const sortedData = data.sort((a, b) => titleComparator([a.id, a.titulo], [b.id, b.titulo]));
                             sortedData.forEach(article => {
-                                let option = document.createElement('option');
-                                option.value = article.id;
-                                option.textContent = article.titulo;
+                                let option = document.createElement('option');option.value = article.id;option.textContent = article.titulo;
                                 articlesSelect.appendChild(option);
                             });
                             articlesSelect.disabled = false;
@@ -152,13 +142,13 @@
 
             if (selectedArticleId) {
                 if (articlesWithRevisores.includes(selectedArticleId)) {
-                    // alert("Este artículo ya tiene revisores asignados");
+                    
                     Swal.fire({
                         title:'Cuidado!',
                         text:'Este artículo ya tiene revisores asignados',
                         icon:'warning',
                     });
-                    this.selectedIndex = 0; // Regresamos a "Seleccionar..."
+                    this.selectedIndex = 0; 
                     toggleRevisoresSelects(false);
                 } else {
                     toggleRevisoresSelects(true);
@@ -175,13 +165,11 @@
             select.addEventListener('change', function() {
                 const userId = this.value;
                 if (selectedUsers.includes(userId)) {
-                    // alert("El revisor ya ha sido asignado en el artículo");
                     Swal.fire({
                         title:'Cuidado!',
                         text:'El revisor ya ha sido asignado en el artículo',
                         icon:'warning',
                     });
-                    // Regresamos a la opción "Seleccionar..."
                     this.selectedIndex = 0; 
                 } else {
                     if (userId === '') {
@@ -198,13 +186,12 @@
            // Verificamos si al menos un revisor ha sido seleccionado
             const hasSelectedRevisor = revisoresSelects.some(select => select.value !== '');
             if (!hasSelectedRevisor) {
-                // alert("Debe seleccionarse al menos un revisor");
                 Swal.fire({
                         title:'Cuidado!',
                         text:'Debe seleccionarse al menos un revisor',
                         icon:'warning',
                     });
-                event.preventDefault(); // Evitamos el envío del formulario
+                event.preventDefault(); 
                 return;
             }
             updateSelectedUsersInput();

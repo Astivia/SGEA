@@ -5,7 +5,7 @@
     <h1>{!! $articulo->titulo !!}</h1>
     <div class="info">
         <p>
-            @foreach ($articulo->autores->sortBy('orden') as $autor)           
+             @foreach ($articulo->autores->sortBy('orden') as $autor)           
                 <a href="{{ url(session('eventoID').'/autor/'.$autor->usuario->id) }}" style="color:#000;">{{ $autor->usuario->nombre_autor }} </a> ,   
             @endforeach
         </p>
@@ -36,13 +36,12 @@
                     <tr>
                         <td><strong >Revisor {!!$revisor->orden!!}</strong><br>
                             @if(session('rol')!== "Autor")
-                            <a href="{{ url('usuarios/'.$revisor->usuario->id) }}">{!!$revisor->usuario->nombre_completo!!}</a> 
+                                <a href="{{ url('usuarios/'.$revisor->usuario->id) }}">{!!$revisor->usuario->nombre_completo!!}</a> 
                             @endif
                        </td>
                        @if(session('rol')!== "Autor")
-                        <td><strong style="font-size:20px;" class = "puntuacion"> {{ $revisor->puntuacion ?? 'No definido' }}</strong>
+                        <td><strong style="font-size:20px;" class = "puntuacion"> {{ $revisor->puntuacion ?? 'No definido' }}</strong></td>
                         @endif
-                        </td>
                         <td>{{$revisor->similitud ?? 'No definido'}}</td>
                         <td style="width:50vw;text-align:justify;">{{$revisor->comentarios ?? 'No hay comentarios'}}</td>
                     </tr>
@@ -56,7 +55,7 @@
 @endsection
 
 <script>
-  // Función para calcular el promedio de las puntuaciones
+
   function calcularPromedio() {
     const puntuaciones = document.querySelectorAll(".puntuacion");
     let suma = 0;

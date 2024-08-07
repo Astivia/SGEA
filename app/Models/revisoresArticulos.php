@@ -28,7 +28,6 @@ class revisoresArticulos extends Model
         'comentarios',
     ];
     
-    // Define relationships
     public function evento()
     {
         return $this->belongsTo(eventos::class, 'evento_id');

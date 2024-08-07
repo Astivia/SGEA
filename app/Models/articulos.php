@@ -8,10 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class articulos extends Model
 {
     protected $table = 'articulos';
-
     protected $primaryKey = 'id';
-
-
     protected $fillable = [
         'id',
         'evento_id',
@@ -48,7 +45,6 @@ class articulos extends Model
     {
         return $this->hasMany(revisoresArticulos::class, 'articulo_id', 'id');
     }
-
 
     public function getTituloCortoAttribute()
     {

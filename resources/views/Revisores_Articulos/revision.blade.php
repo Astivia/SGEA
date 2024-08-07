@@ -1,6 +1,5 @@
 @extends('layouts.master')
 <title>Revision de Articulo</title>
-
 @section('Content')
     <div class="container">
         <h1>{!! $articulo->titulo !!}</h1><br>

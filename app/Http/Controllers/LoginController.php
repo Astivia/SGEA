@@ -17,7 +17,7 @@ use App\Models\participantes;
 class LoginController extends Controller
 {
     private function generarCodigo(){
-        //Generamos CODIGO DE VERIFICACION para correo
+        //Generamos CODIGO DE VERIFICACION 
         $characters = '0123456789';
         $code = '';
         for ($i = 0; $i < 4; $i++) {
@@ -34,19 +34,11 @@ class LoginController extends Controller
         $mail = new PHPMailer();
         try {
             // Configuracion de protocolo SMTP
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'astiviamax@gmail.com';
-            $mail->Password = 'diulyvcniykrwacn';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->SMTPDebug = 0;$mail->isSMTP();$mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;$mail->Username = 'astiviamax@gmail.com';
+            $mail->Password = 'diulyvcniykrwacn';$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; $mail->Port = 587;
         
-            // Set sender and recipient information
-            $mail->setFrom('noreply@sgea.com', 'SGEA');
-            $mail->addAddress("$user->email");
-            
+            $mail->setFrom('noreply@sgea.com', 'SGEA'); $mail->addAddress("$user->email");
             
             //Definimos el contenido
             $mail->CharSet = 'UTF-8';
@@ -62,7 +54,6 @@ class LoginController extends Controller
             $mail->Body = nl2br($message);
             $mail->isHTML(true);
 
-
             // enviamos el email
             if (!$mail->send()) {
                 //NO SE ENVIO EL EMAIL
@@ -70,13 +61,10 @@ class LoginController extends Controller
             } else{
                 echo("<script>console.log('Se envio el correo a $user->email');</script>");
                 return true;
-
             }
         } catch (Exception $e) {
-            // return response()->json(['error' => $e->getMessage()], 500);
             return false;
         }
-
     }
    
 
@@ -84,20 +72,17 @@ class LoginController extends Controller
         $datos=$request->all();
        
         $user=usuarios::where('id',$datos['user-id'])->first();
-
         if($datos['input-usuario']==$datos['codigo']){
             $user->update([
                 'estado' => 'alta,registrado'
             ]);
             $request->session()->forget('verification_code');
-            
         }else{
             $request->session()->forget('verification_code');
             return redirect('login')->with('error', 'El codigo es Incorrecto');
         }
-        
         if(is_null($user->password) || $user->password == ''||$request->session()->get('RessetPass')==1){
-            //logica para definir password
+            //Interfaz para definir password
             return view('Password',compact('user'));
         }
         $request->session()->forget('RessetPass');
@@ -133,32 +118,26 @@ class LoginController extends Controller
     public function setPassword(Request $request){
         $datos=$request->all();
         $user = usuarios::find($datos['user-id']);
-
         $datos['password'] = Hash::make($datos['password']);
-
         $user->update([
             'password' => $datos['password'] 
         ]);
-    
         return redirect('login')->with('success', 'Contraseña Definida');
 
     }
     
     public function register(Request $request){
-
         //recolectamos los datos en una variable
         $Datos=$request->all();
-
+        //Verificamos si existe el usuario por medio de su curp
         $user = usuarios::where('curp', $Datos['curp'])->first();
-
         if ($user !== null) {
             //EL USUARIO EXISTE
             //verificamos su estado
             if ( $user->estado == "alta,registrado"){
-                //El usuario ya esta dado de alta
                 return redirect('login')->with('error', 'Ya existe un usuario con la CURP ingresada');
             }else if ($user->estado =="alta,no registrado"){
-                //El usuario NO esta dado de alta ->iniciamos el proceso para verificar el usuario
+                //Iniciamos el proceso para verificar el usuario
                 if (!$request->session()->has('verification_code')) {
                     $codigo = $this->generarCodigo();
                     if($this->enviarCodigo($user, $codigo)){
@@ -169,17 +148,13 @@ class LoginController extends Controller
                 }
                 return view('emailVerification',compact('user','codigo'));
             }
-
         }else{
             //EL USUARIO NO EXISTE -> iniciamos proceso para registrar
-            //1) Definimos la imagen default que tendra
-            if($Datos['curp'][10]=='H'){$Datos['foto'] = 'DefaultH.jpg';}
-            else {$Datos['foto'] = 'DefaultM.jpg';}   
-            //2) Encriptamos la contraseña y Creamos el usuario en la BD
+            if($Datos['curp'][10]=='H'){$Datos['foto'] = 'DefaultH.jpg';} else {$Datos['foto'] = 'DefaultM.jpg';}   
             $Datos['password'] = Hash::make($Datos['password']);
-            //3) Establecemos el estado
+            //Establecemos el estado
             $Datos['estado'] = "alta,no registrado";
-            //4) Creamos el usuario
+            //Creamos el usuario
             $user = usuarios::create($Datos);
             //iniciamos el proceso para verificar el usuario
             if (!$request->session()->has('verification_code')) {
@@ -189,15 +164,9 @@ class LoginController extends Controller
                 }
             } else {
                 $codigo = $request->session()->get('verification_code');
-                
             }
             return view('emailVerification',compact('user','codigo'));
         }
-        
-        //return redirect('login');
-        //Iniciamos sesion con el usuario recien creado y lo redirigimos al dashboard
-        // Auth::login($user);
-        // return redirect(route('home'));
     }
 
     public function index($acronimo, $edicion)
@@ -212,7 +181,7 @@ class LoginController extends Controller
     }
 
     public function login(Request $request){
-        //verificamos el estado
+        //Buscamos el usuario por medio de su email
         $user= usuarios::where('email',$request['email'])->first();
 
         if ($user !== null){
@@ -231,22 +200,18 @@ class LoginController extends Controller
                     $part=participantes::where('usuario_id',$user->id)->first();
                     if($part!==null){
                         //EL USUARIO ESTA REGISTRADO EN ALGUN EVENTO
-                        $request->session()->put('eventoID', $part->evento->id);
-                        $request->session()->put('rol', $part->rol);
+                        $request->session()->put('eventoID', $part->evento->id);$request->session()->put('rol', $part->rol);
                         return redirect()->route('evento.index', ['acronimo' => $part->evento->acronimo, 'edicion' => $part->evento->edicion]);
                     }else{
-                        $request->session()->put('eventoID', null);
-                        $request->session()->put('rol', null);
+                        $request->session()->put('eventoID', null);$request->session()->put('rol', null);
                         return redirect()->route('dashboard');
-                        //   return redirect()->intended(route('home'));
                     }
-        
                 }else{
                     //EL INICIO DE SESION NO FUE EXITOSO
                     return redirect('login')->with('error', 'Ocurrio un Error, verifica los datos');
                 }
             }else if($user->estado=="alta,no registrado"){
-                //PROCESO PARA VERIFICAR EMAIL -> En caso de que el usuario este registrado pero no haya verificado email
+                //El usuario registrado no ha verificado su email
                 //generamos nuevo codigo
                 if (!$request->session()->has('verification_code')) {
                     $codigo = $this->generarCodigo();

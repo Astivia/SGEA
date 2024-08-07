@@ -22,7 +22,6 @@ class usuariosController extends Controller
         $this->middleware('can:usuarios.edit')->only('edit','update');
         $this->middleware('can:usuarios.create')->only('create','store'); 
         $this->middleware('can:usuarios.destroy')->only('destroy'); 
-
     }
 
     public function index()
@@ -107,51 +106,6 @@ class usuariosController extends Controller
         return redirect('usuarios')->with('info', 'Usuario eliminado correctamente');
     }
 
-    public function insertUser(Request $request){
-        //validamos datos
-        try {
-            $validatedData = $request->validate([
-                'authorData.curp' => 'required|string|max:18',
-                'authorData.nombre' => 'required|string|max:255',
-                'authorData.ap_paterno' => 'required|string|max:255',
-                'authorData.ap_materno' => 'required|string|max:255',
-                'authorData.telefono' => 'required|string|max:15',
-                'authorData.email' => 'required|string|email|max:255',
-                'authorData.institucion' => 'required|string|max:255',
-            ]);
-
-            $authorData = $validatedData['authorData'];
-            
-
-            if($authorData['curp'][10]=='H'){
-                $authorData['foto'] = 'DefaultH.jpg';
-            }else {
-                $authorData['foto'] = 'DefaultM.jpg';
-            }
-            
-            //verificamos que no exista la curp
-            if (usuarios::where('curp', $authorData['curp'])->exists()) {
-                $error='Ya existe un participante con la CURP ingresada. No se guardaron los datos';
-                return response()->json(['error' => $error]);
-            }
-            $user = new usuarios();
-            $user->foto=$authorData['foto'];
-            $user->curp = $authorData['curp'];
-            $user->nombre = $authorData['nombre'];
-            $user->ap_paterno = $authorData['ap_paterno'];
-            $user->ap_materno = $authorData['ap_materno'];
-            $user->telefono = $authorData['telefono'];
-            $user->email = $authorData['email'];
-            $user->estado = "alta,no registrado";
-            $user->save();
-
-            $institution =$authorData['institucion'];
-            return response()->json(['success' => 'Usuario insertado correctamente.','id'=>$user->id , $institution]);
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500)->with('error',$e->getMessage() );
-        }
-    }
-
     public function redirectToAppropriateView()
     {
         $user = Auth::user();
@@ -196,6 +150,37 @@ class usuariosController extends Controller
             return response()->json(['success' => "Usuarios eliminados correctamente."]);
         }
         return response()->json(['error' => "No se seleccionaron usuarios."], 400);
+    }
+
+    public function insertUser(Request $request){
+        try {
+            //validamos datos
+            $validatedData = $request->validate(['authorData.curp' => 'required|string|max:18','authorData.nombre' => 'required|string|max:255',
+                'authorData.ap_paterno' => 'required|string|max:255','authorData.ap_materno' => 'required|string|max:255',
+                'authorData.telefono' => 'required|string|max:15','authorData.email' => 'required|string|email|max:255',
+                'authorData.institucion' => 'required|string|max:255',
+            ]);
+            $authorData = $validatedData['authorData'];
+
+            //verificamos que no exista la curp
+            if (usuarios::where('curp', $authorData['curp'])->exists()) {
+                $error='Ya existe un participante con la CURP ingresada. No se guardaron los datos';
+                return response()->json(['error' => $error]);
+            }
+            //definimos la foto que tendra el usuario
+            if($authorData['curp'][10]=='H'){$authorData['foto'] = 'DefaultH.jpg';}else {$authorData['foto'] = 'DefaultM.jpg';}
+            //creamos el usuario
+            $user = new usuarios();
+            $user->foto=$authorData['foto'];$user->curp = $authorData['curp'];$user->nombre = $authorData['nombre'];
+            $user->ap_paterno = $authorData['ap_paterno'];$user->ap_materno = $authorData['ap_materno'];
+            $user->telefono = $authorData['telefono'];$user->email = $authorData['email'];$user->estado = "alta,no registrado";
+            $user->save();
+            //definimos la institucion
+            $institution =$authorData['institucion'];
+            return response()->json(['success' => 'Usuario insertado correctamente.','id'=>$user->id , $institution]);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500)->with('error',$e->getMessage() );
+        }
     }
 
     public function verifyCurp(Request $request) {

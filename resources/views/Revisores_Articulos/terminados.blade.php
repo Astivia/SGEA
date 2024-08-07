@@ -42,7 +42,7 @@
                             <tr>
                                 <td><a href="{!! url(session('eventoID').'/articulo/'.$ra->articulo->id) !!}" style="color:#000;">{!!$ra->articulo->titulo!!} </a></td>
                                 @if(session('rol') !== 'Autor')
-                                <td><strong>{!!$ra->puntuacion!!} / 30</strong></td>
+                                    <td><strong>{!!$ra->puntuacion!!} / 30</strong></td>
                                 @endif
                                 <td>
                                     <strong>{!!$ra->articulo->estado!!}</strong>

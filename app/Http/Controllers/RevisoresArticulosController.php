@@ -23,17 +23,17 @@ class RevisoresArticulosController extends Controller
         $articles = articulos::whereIn('id', function ($query) {
                 $query->select('articulo_id')->from('revisores_articulos');
             })->with('revisores.usuario')->get();
-        
         //catalogos 
         $articulos = articulos::select('id', 'titulo')->OrderBy('titulo')->get();
         $areas= areas::select('id', 'nombre')->OrderBy('nombre')->get();
-        //usuarios que no sean autores
+                //usuarios que no sean autores
         // $usuarios=usuarios::where('id','!=',1)->whereNotIn('id', function($query) {
         //             $query->select('usuario_id')
         //             ->from('articulos_autores');
         //         })->get();
         //Todos los ususarios
-        $usuarios=usuarios::select('nombre','ap_paterno','ap_materno','id')->where('id','!=',1)->get();
+        $usuarios=usuarios::select('nombre','ap_paterno','ap_materno','id')
+                    ->where('id','!=',1)->OrderBy('ap_paterno')->get();
 
         return view ('Revisores_Articulos.index',compact('articulos','areas','usuarios','articles'));
     }
@@ -54,8 +54,8 @@ class RevisoresArticulosController extends Controller
                             'articulo_id'=> $request->input('articulo_id'),
                             'usuario_id'=> $usu->id,
                             'orden'=>  $index + 1 ,
-                            // 'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
-                            'notificado'=>true
+                            'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
+                            //'notificado'=>true
                         ]);
                     }
                 }
@@ -151,28 +151,22 @@ class RevisoresArticulosController extends Controller
         }
     }
 
-    private function NotificarUsuario(usuarios $user, $articuloId, $RevOaut){
+    private function NotificarUsuario(usuarios $user, $articuloId){
 
         $articulo=articulos::find($articuloId);
         $evento=$articulo->evento->nombre.' ('.$articulo->evento->acronimo.' '.$articulo->evento->edicion.')';
-
         if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
             return response()->json(['error' => 'Invalid email address'], 422);
         }
-        
         $mail = new PHPMailer();
         try {
             // Configuracion de protocolo SMTP
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'astiviamax@gmail.com';
-            $mail->Password = 'diulyvcniykrwacn';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->SMTPDebug = 0; $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';$mail->SMTPAuth = true;
+            $mail->Username = 'astiviamax@gmail.com';$mail->Password = 'diulyvcniykrwacn';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;$mail->Port = 587;
 
-            // definir Origen y destino
+            // Definir Origen y destino
             $mail->setFrom('noreply@sgea.com', 'SGEA');
             $mail->addReplyTo('noreply@sgea.com', 'SGEA');
             $mail->addAddress("$user->email");
@@ -180,19 +174,14 @@ class RevisoresArticulosController extends Controller
             //Definimos el contenido
             $mail->CharSet = 'UTF-8';
             $subject =  "Informacion Importante";
-           
             $message = "Hola <strong>$user->nombre</strong>:\n
                             El proposito de este mensaje es informar que usted ha sido asignado como revisor para el articulo <strong>$articulo->titulo</strong> en el evento <strong>$evento</strong>\n\n
                             Atentamente:\n<strong>SGEA</strong>\n\n
                             <footer style='font-size:80%;'>Este mensaje es generado de forma automatica por lo que no requiere una respuesta</footer>";
-            
-
             //Estructuramos el correo
             $mail->Subject = $subject; 
             $mail->Body = nl2br($message);
             $mail->isHTML(true);
-
-
             // enviamos el email
             if (!$mail->send()) {
                 //NO SE ENVIO EL EMAIL
@@ -205,7 +194,6 @@ class RevisoresArticulosController extends Controller
         } catch (Exception $e) {
             return false;
         }
-
     }
 
     public function pendientes($evento_id,$usuarioId){
@@ -232,7 +220,9 @@ class RevisoresArticulosController extends Controller
     }
 
     public function revisados($eventoID,$usuarioId){
-        $articulos= revisoresArticulos::where('evento_id',$eventoID)->where('usuario_id',$usuarioId)->where('puntuacion','!=',null)->get();
+        $articulos= revisoresArticulos::where('evento_id',$eventoID)
+                    ->where('usuario_id',$usuarioId)
+                    ->where('puntuacion','!=',null)->get();
 
         return view('Revisores_Articulos.terminados',compact('articulos'));
     }

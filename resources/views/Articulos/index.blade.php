@@ -112,35 +112,27 @@
             <h2>Registro de Artículo</h2>
             {!! Form::open(['url' => '/articulos', 'enctype' => 'multipart/form-data', 'id' => 'article-form']) !!}
                 {!! Form::label('title', 'Titulo del Articulo:') !!}
-                <input type="text" id="titulo" name="titulo" required>
+                {!! Form::text('titulo', null, ['id'=>'titulo','required']) !!}
                 
                 {!! Form::label('desc', 'Resumen del Articulo:') !!}
-                <textarea rows="4" cols="50" id="description" name="resumen"></textarea>
+                {!! Form::textarea('resumen',null,['rows'=>4,'cols'=>50,'id'=>'description']) !!}
                 
-                {!! Form::label('are', 'Area del Articulo:') !!}
-                <select name="area_id" required>
-                    <option value="">Seleccionar...</option>
-                    @foreach ($Areas as $area)
-                        <option value="{{ $area->id }}">{{ $area->nombre }}</option>
-                    @endforeach
-                </select>
+                {!! Form::label('area', 'Area del Articulo:') !!}
+                {!! Form::select('area', $Areas->pluck('nombre', 'id'), null, ['placeholder' => 'Seleccionar...', 'required']) !!}
 
-                <label for="pfd">Subir archivo pdf:</label>
+                {!! Form::label('pdf', 'Subir archivo pdf:') !!}
                 {!! Form::file('pdf', ['id' => 'archivoPDF', 'class' => 'form-control', 'accept' => '.pdf,.docx,.doc']) !!}
-
                 <br><hr><br>
                 <!-------------------------------------------------- AUTORES --------------------------------------------->
-                
                 {!! Form::hidden('selected_authors',null,['id'=> 'selected-authors-input'])!!}
-
-                <h3>{!! Form::label('', 'Autores del Articulo:') !!}</h3>
-                
+                <h3>{!! Form::label('', 'Autores del Articulo') !!}</h3>
                 <div class="showList" style ="display:flex;justify-content:center;align-items:cener;padding:3%;">
                     <span id="No-Autors"><strong>No hay autores Asignados</strong></span>
                     <ul class="selectedAutors" ></ul>
                 </div>
-                <span id="corresp-instructions"style ="display:none; color:#348aa7; font-size:15px"><i class="las la-info-circle"></i>Marcar  casilla para seleccionar autor de contacto </span>
-               
+                <span id="corresp-instructions"style ="display:none; color:#348aa7; font-size:15px"><i class="las la-info-circle"></i>
+                    Marcar  casilla para seleccionar autor de contacto
+                </span>            
                 {!! Form::label('label_instruction', 'Seleccionar Autor:') !!}
                 <select name="autor" id="selected-author">
                     @if($Autores=== null)
@@ -162,8 +154,7 @@
                     <button type="button" id="minus-author-btn" style="color:#fff;background-color:#1a2d51;">Quitar</button>
                 </div>
                 <p>¿No encuentra su Autor? <a href="#" id="register-author-btn"><strong>Registrar Autor</strong></a></p>
-                <button type="submit" style="background-color:#1a2d51;color:#fff;">Guardar articulo</button>
-                
+                {!! Form::button('Guardar articulo', ['type' => 'submit', 'style' => 'background-color:#1a2d51;color:#fff;']) !!}
             {!! Form::close() !!}
         </div>
     </div>
@@ -172,26 +163,27 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Registrar Autor </h2>
-            <form id="register-author-form" metod="POST" >  
-                @csrf  
-                <input type="hidden" name="id" id="id">
-                <label for="curp">CURP:</label>
-                <input type="text" id="curp" name="curp" required>
+
+            {!! Form::open(['id' => 'register-author-form', 'method' => 'POST']) !!}
+                {!! Form::hidden('id', null, ['id' => 'id']) !!}
+                {!! Form::label('curp', 'CURP:') !!}
+                {!! Form::text('curp', null, ['id'=>'curp','required']) !!}
                 <span id="curp-info" style="color:green; display:none;">Se verifico la CURP, favor de llenar todos los campos</span>
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required>
-                <label for="ap_paterno">Apellido Paterno:</label>
-                <input type="text" id="ap_paterno" name="ap_paterno" required>
-                <label for="ap_materno">Apellido Materno:</label>
-                <input type="text" id="ap_materno" name="ap_materno" required>
-                <label for="email" id= "email-input">Email:</label>
+                {!! Form::label('nombre', 'Nombre:') !!}
+                {!! Form::text('nombre', null, ['id'=>'nombre','required']) !!}
+                {!! Form::label('ap_paterno', 'Apellido Paterno:') !!}
+                {!! Form::text('ap_paterno', null, ['id'=>'ap_paterno','required']) !!}
+                {!! Form::label('ap_materno', 'Apellido Materno:') !!}
+                {!! Form::text('ap_materno', null, ['id'=>'ap_materno','required']) !!}
+                {!! Form::label('email', 'Email:',['id'=>'email-input']) !!}
                 <span id="email-error" style="color:red; display:none;">Este Correo ya se encuentra registrado en otro usuario</span>
-                <input type="email" id="email" name="email" required>
-                <label for="telefono">Teléfono:</label>
-                <input type="tel" id="telefono" name="telefono" required>
-                <label for="institucion">Institución:</label>
-                <input type="text" id="institucion" name="institucion" required>
-                <button type="button" id="save-author-btn">Registrar Autor</button>
+                {!! Form::email('email', null, ['id'=>'email','required']) !!}
+                {!! Form::label('telefono', 'Teléfono:') !!}
+                {!! Form::tel('telefono', null, ['id'=>'telefono','required']) !!}
+                {!! Form::label('institucion', 'Institución:') !!}
+                {!! Form::text('institucion', null, ['id'=>'institucion','required']) !!}
+
+                {!! Form::button('Registrar Autor', ['type' => 'button', 'id' => 'save-author-btn']) !!}
             </form>
         </div>
     </div>
@@ -405,27 +397,12 @@ document.addEventListener('DOMContentLoaded', function() {
         plusAuthorBtn.addEventListener('click', () => {
             const selectedValue = selectedAuthorSelect.value;
             const selectedText = selectedAuthorSelect.options[selectedAuthorSelect.selectedIndex].text;
-
             if (!selectedValue) {
-                // swal('Por favor, seleccione un autor de la lista desplegable.',' ','error');
-                Swal.fire({
-                    title:'Cuidado!',
-                    text:'Por favor, seleccione un autor de la lista desplegable.',
-                    icon:'warning',
-                });
-                return;
+                Swal.fire({title:'Cuidado!',text:'Por favor, seleccione un autor de la lista desplegable.',icon:'warning',});return;
             }
-
             if (selectedAuthors.find(author => author.id === selectedValue)) {
-                // swal('El autor seleccionado ya se encuentra en la lista.',' ','error');
-                Swal.fire({
-                    title:'Cuidado!',
-                    text:'El autor seleccionado ya se encuentra en la lista.',
-                    icon:'warning',
-                });
-                return;
+                Swal.fire({title:'Cuidado!',text:'El autor seleccionado ya se encuentra en la lista.',icon:'warning',});return;
             }
-
             fetch('{{ route('revisar-existencia') }}', {
                 method: 'POST',
                 headers: {
@@ -447,7 +424,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.querySelector('input[name="ap_materno"]').value = data.user.ap_materno || '';
                         document.querySelector('input[name="telefono"]').value = data.user.telefono || '';
                         document.querySelector('input[name="email"]').value = data.user.email || '';
-
                         // Bloquear los campos
                         document.querySelectorAll('#register-author-form input').forEach(input => {
                             if (input.name !== 'institucion') {
@@ -457,9 +433,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 } else {
                     selectedAuthors.push({ id: selectedValue, name: selectedText, corresponding: false, institucion: data.user.institucion });
-                    updateAuthorList();
-                    updateSelectedAuthorsInput();
-                    noAutorsText.style.display = 'none';
+                    updateAuthorList();updateSelectedAuthorsInput();noAutorsText.style.display = 'none';
                 }
             })
             .catch(error => {
@@ -471,7 +445,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const selectedValue = selectedAuthorSelect.value;
 
             if (!selectedValue) {
-                // swal('Por favor, seleccione un autor de la lista desplegable.',' ','error');
                 Swal.fire({
                     title:'Cuidado!',
                     text:'Por favor, seleccione un autor de la lista desplegable.',
@@ -482,7 +455,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const authorIndex = selectedAuthors.findIndex(author => author.id === selectedValue);
             if (authorIndex === -1) {
-                // swal('El autor seleccionado no está en la lista.',' ','error');
                 Swal.fire({
                     title:'Cuidado!',
                     text:'El autor seleccionado no está en la lista.',
@@ -499,7 +471,6 @@ document.addEventListener('DOMContentLoaded', function() {
         articleForm.addEventListener('submit', (event) => {
             const hasCorrespondingAuthor = selectedAuthors.some(author => author.corresponding);
             if (!hasCorrespondingAuthor) {
-                // swal('Seleccione un autor de correspondencia.',' ','error');
                 Swal.fire({
                     title:'Cuidado!',
                     text:'Seleccione un autor de correspondencia.',
@@ -620,20 +591,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
-        const curpInput = document.getElementById('curp');
-        const idInput = document.getElementById('id');
-        const nombreInput = document.getElementById('nombre');
-        const apPaternoInput = document.getElementById('ap_paterno');
-        const apMaternoInput = document.getElementById('ap_materno');
-        const emailInput = document.getElementById('email');
-        const telefonoInput = document.getElementById('telefono');
-        const institucionInput = document.getElementById('institucion');
-        const curpInfo = document.getElementById('curp-info');
-        const emailError = document.getElementById('email-error');
+        const curpInput = document.getElementById('curp');const idInput = document.getElementById('id');
+        const nombreInput = document.getElementById('nombre');const apPaternoInput = document.getElementById('ap_paterno');
+        const apMaternoInput = document.getElementById('ap_materno');const emailInput = document.getElementById('email');
+        const telefonoInput = document.getElementById('telefono');const institucionInput = document.getElementById('institucion');
+        const curpInfo = document.getElementById('curp-info');const emailError = document.getElementById('email-error');
 
         function resetRegisterAuthorForm() {
             const registerAuthorForm = document.getElementById('register-author-form');
-            //reseteamos los valores de los inputs
             registerAuthorForm.reset();
         }
 
