@@ -233,11 +233,11 @@
         }
 
         //////////////////////////////VALIDACIONES///////////////////////
-
         // Obtener elementos del DOM
         const fechaInicio = document.getElementById('fecha_inicio');
         const fechaFin = document.getElementById('fecha_fin');
-        const fechaHoy = new Date().setHours(0, 0, 0, 0); 
+        const fechaHoy = new Date(); 
+        fechaHoy.setUTCHours(0,0,0,0);
         fechaInicio.addEventListener('input', validarFechaInicio);
         fechaFin.addEventListener('input', validarFechaFin);
 
@@ -249,8 +249,8 @@
             // Limpiar mensajes de error anteriores
             limpiarErrores(fechaInicio);
 
-            console.log('Fecha de inicio:', new Date(fechaInicio.value));
-            console.log('Fecha de hoy:', new Date(fechaHoy));
+            console.log('Fecha de inicio:',fechaInicio.value.toString());
+            console.log('Fecha de hoy:', fechaHoy);
 
             // Validar que la fecha de inicio no sea anterior a la fecha actual
             
