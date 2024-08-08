@@ -147,17 +147,7 @@ class usuariosController extends Controller
             return redirect()->route('dashboard');
         }
     }
-    // //eliminacion multiple
-    // public function deleteMultiple(Request $request)
-    // {
-    //     $ids = $request->ids;
-    //     if (!empty($ids)) {
-    //         usuarios::whereIn('id', $ids)->delete();
-    //         return response()->json(['success' => "Registros eliminados correctamente."]);
-    //     }
-    //     return response()->json(['error' => "No se seleccionaron registros."]);
-    // }
-    
+
     public function deleteMultiple(Request $request){
         $ids = $request->ids;
         if (!empty($ids)) {

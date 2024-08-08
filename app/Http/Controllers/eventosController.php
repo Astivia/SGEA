@@ -38,8 +38,20 @@ class EventosController extends Controller
 
     public function store(Request $request)
     {
-        
-        $datos=$request->all();
+         // Validar los datos de entrada
+        $validatedData = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'acronimo' => 'required|string|max:255',
+            'fecha_inicio' => 'required|date|after_or_equal:today',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+            'edicion' => 'required|integer|min:1',
+            'logo' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
+        ]);
+        // Verificar si ya existe un evento con el mismo acrónimo y edición
+        if (eventos::where('acronimo', $datos['acronimo'])->where('edicion', $datos['edicion'])->exists()) {
+            return redirect()->back()->with('error', 'Ya existe este evento');
+        }
+
         // Obtener el archivo imagen
         $file = $datos['logo'];
         if(!is_string($file)){

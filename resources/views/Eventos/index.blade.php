@@ -115,7 +115,7 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Registro de Evento</h2>
-        {!! Form::open(['url'=>'/eventos', 'enctype' => 'multipart/form-data']) !!}
+        {!! Form::open(['url'=>'/eventos', 'enctype' => 'multipart/form-data', 'id' => 'evento-form']) !!}
             {!! Form::label('logo', 'Imagenes en sistema:') !!}
                 @if (isset($sysImgs) && !empty($sysImgs))
                     <div class="carousell">
@@ -231,6 +231,76 @@
                 });
             });
         }
+
+        //////////////////////////////VALIDACIONES///////////////////////
+
+        // Obtener elementos del DOM
+        const fechaInicio = document.getElementById('fecha_inicio');
+        const fechaFin = document.getElementById('fecha_fin');
+        const fechaHoy = new Date().setHours(0, 0, 0, 0); 
+        fechaInicio.addEventListener('input', validarFechaInicio);
+        fechaFin.addEventListener('input', validarFechaFin);
+
+        function validarFechaInicio() {
+            // Obtener el valor de la fecha de inicio y convertirla a la medianoche
+            const startDate = new Date(fechaInicio.value);
+            startDate.setUTCHours(0, 0, 0, 0); // Convertir la fecha a medianoche en UTC
+            
+            // Limpiar mensajes de error anteriores
+            limpiarErrores(fechaInicio);
+
+            console.log('Fecha de inicio:', new Date(fechaInicio.value));
+            console.log('Fecha de hoy:', new Date(fechaHoy));
+
+            // Validar que la fecha de inicio no sea anterior a la fecha actual
+            
+            if (startDate < fechaHoy  ) {
+                showError(fechaInicio, 'La fecha de inicio no puede ser anterior a la fecha actual.');
+            }
+            // Validar la fecha de fin solo si ya tiene un valor
+            if (fechaFin.value) {
+                validarFechaFin();
+            }
+        }
+
+        function validarFechaFin() {
+            // Obtener los valores de las fechas
+            const startDate = new Date(fechaInicio.value).setHours(0, 0, 0, 0);
+            const endDate = new Date(fechaFin.value).setHours(0, 0, 0, 0);
+            
+            // Limpiar mensajes de error anteriores
+            limpiarErrores(fechaFin);
+
+            // Validar que la fecha de fin no sea anterior a la fecha de inicio
+            if (endDate < startDate) {
+                showError(fechaFin, 'La fecha de fin no puede ser anterior a la de inicio.');
+            }
+        }
+
+        function showError(element, message) {
+            element.style.borderColor = 'red';
+
+            let errorMessage = document.createElement('span');
+            errorMessage.className = 'error-message';
+            errorMessage.style.color = 'red';
+            errorMessage.innerText = message;
+
+            element.parentNode.insertBefore(errorMessage, element.nextSibling);
+        }
+
+        function limpiarErrores(element) {
+            element.style.borderColor = '';
+            let nextElement = element.nextSibling;
+
+            // Verificar si nextElement no es null antes de acceder a sus propiedades
+            while (nextElement && nextElement.nodeType !== 1) {
+                nextElement = nextElement.nextSibling;
+            }
+
+            if (nextElement && nextElement.classList.contains('error-message')) {
+                nextElement.remove();
+            }
+        }
     });
 </script>
 <script type="text/javascript">
@@ -283,5 +353,3 @@
         border: 2px solid blue;
     }
 </style>
-
-
