@@ -4,7 +4,7 @@
     <div class="container">
         <h1>{!!$evento->nombre!!} ({!!$evento->acronimo!!} {!!$evento->edicion!!})</h1>
         <div class="info">
-            <img src="{{asset('SGEA/public/assets/uploads/'.$evento->logo)}}" alt="">
+            <img src="{{asset($evento->logo)}}" alt="">
             <div class="data">
                 <p><strong>Fecha de Inicio: </strong>{!!$evento->fecha_inicio!!}</p>
                 <p><strong>Fecha de Fin: </strong>{!!$evento->fecha_fin!!}</p>

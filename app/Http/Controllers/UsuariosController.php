@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\usuarios;
+use App\Models\eventos;
 use App\Models\articulosAutores;
 use App\Models\participantes;
 use App\Models\comite_editorial;
@@ -17,12 +18,7 @@ use Spatie\Permission\Models\Role;
 class usuariosController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware('can:usuarios.index')->only('index');
-        $this->middleware('can:usuarios.edit')->only('edit','update');
-        $this->middleware('can:usuarios.create')->only('create','store'); 
-        $this->middleware('can:usuarios.destroy')->only('destroy'); 
-    }
+    
 
     public function index()
     {
@@ -71,6 +67,8 @@ class usuariosController extends Controller
     {
         $usu = usuarios::find($id);
         $roles =Role::All();
+        $usu->foto = public_path('assets/img/'.$usu->foto);
+        
         return view ('Usuarios.edit',compact('usu','roles'));
     }
 
@@ -110,6 +108,7 @@ class usuariosController extends Controller
     {
         $user = Auth::user();
         $part = participantes::where('usuario_id', $user->id)->first();
+        
         if ($part) {
             // El usuario está registrado en algún evento
             return redirect()->route('evento.index', [$part->evento->acronimo, $part->evento->edicion]);

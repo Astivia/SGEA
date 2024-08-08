@@ -5,26 +5,25 @@
 <div class="container">
         <h1>MODIFICAR DATOS</h1>
         {!! Form::open(['method'=>'PATCH','url'=>'/usuarios/'.$usu->id]) !!}  
+            {{$usu->foto}}
+            <img src="{{ asset($usu->foto)}}" alt="Imagen" style="width: 4vw;">
 
-            <label for="participante-name">Nombre:</label>
+            {!! Form::label('nombre', 'Nombre:') !!}
             {!! Form::text ('nombre',$usu->nombre)!!}              
                                 
-            <label for="participante-lastName">Apellido Paterno:</label>
+            {!! Form::label('ap_paterno', 'Apellido Paterno:') !!}
             {!! Form::text ('ap_paterno',$usu->ap_paterno)!!}
-                            
                                 
-            <label for="participante-lastName">Apellido Materno:</label>
+            {!! Form::label('ap_materno', 'Apellido Materno:') !!}
             {!! Form::text ('ap_materno',$usu->ap_materno)!!}
-               
                                 
-            <label for="participante-curp">CURP:</label>
+            {!! Form::label('curp', 'CURP:') !!}
             {!! Form::text ('curp',$usu->curp)!!}
 
-            <label for="participante-email">Email:</label>
+            {!! Form::label('email', 'Email:') !!}
             {!! Form::text ('email',$usu->email)!!}
-                 
-                                
-            <label for="participante-pass">Nueva Contraseña:</label>
+
+            {!! Form::label('password', 'Nueva Contraseña:') !!}
             {!! Form::text ('password',null)!!}
 
         @role('Administrador')
