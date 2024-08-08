@@ -66,9 +66,10 @@ class usuariosController extends Controller
     public function edit(string $id)
     {
         $usu = usuarios::find($id);
-        $roles =Role::All();
-        $usu->foto = public_path('assets/img/'.$usu->foto);
-        
+        $roles = Role::All();
+        $url= 'SGEA/public/assets/img';
+        $usu->foto = $url.'/'.$usu->foto;
+
         return view ('Usuarios.edit',compact('usu','roles'));
     }
 

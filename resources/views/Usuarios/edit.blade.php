@@ -5,8 +5,13 @@
 <div class="container">
         <h1>MODIFICAR DATOS</h1>
         {!! Form::open(['method'=>'PATCH','url'=>'/usuarios/'.$usu->id]) !!}  
-            {{$usu->foto}}
-            <img src="{{ asset($usu->foto)}}" alt="Imagen" style="width: 4vw;">
+            {!! Form::label('foto', 'Foto Actual:') !!}
+            <div class="profile-photo">
+                <img src="{{ asset($usu->foto)}}" alt="Imagen" id="actual-img" style="width: 15vw;">
+
+                {!! Form::file('logo', ['id' => 'logo', 'class' => 'form-control', 'accept' => 'image/jpeg, image/png, image/webp']) !!}
+                {!! Form::hidden('logo', null, ['id' => 'selected_img']) !!}
+            </div>
 
             {!! Form::label('nombre', 'Nombre:') !!}
             {!! Form::text ('nombre',$usu->nombre)!!}              
