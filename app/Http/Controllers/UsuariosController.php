@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\usuarios;
+use App\Models\eventos;
 use App\Models\articulosAutores;
 use App\Models\participantes;
 use App\Models\comite_editorial;
@@ -17,12 +18,7 @@ use Spatie\Permission\Models\Role;
 class usuariosController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware('can:usuarios.index')->only('index');
-        $this->middleware('can:usuarios.edit')->only('edit','update');
-        $this->middleware('can:usuarios.create')->only('create','store'); 
-        $this->middleware('can:usuarios.destroy')->only('destroy'); 
-    }
+    
 
     public function index()
     {
@@ -63,6 +59,11 @@ class usuariosController extends Controller
     public function show(string $id)
     {
         $Usu = usuarios::find($id);
+        if($Usu->foto === "DefaultH.jpg" || $Usu->foto === "DefaultM.jpg"){
+            $Usu->foto= 'SGEA/storage/app/public/users/profile/'.$Usu->foto;
+        }else{
+            $Usu->foto = 'SGEA/storage/app/public/users/profile/'.$Usu->curp.'/'.$Usu->foto;
+        }
         $articulos=articulosAutores::where('usuario_id',$Usu->id)->get();
         return view ('Usuarios.read',compact('Usu','articulos'));
     }
@@ -70,8 +71,18 @@ class usuariosController extends Controller
     public function edit(string $id)
     {
         $usu = usuarios::find($id);
-        $roles =Role::All();
-        return view ('Usuarios.edit',compact('usu','roles'));
+        if($usu->id !==1){
+            $roles = Role::All();
+            if($usu->foto === "DefaultH.jpg" || $usu->foto === "DefaultM.jpg"){
+                $url= 'SGEA/storage/app/public/Users/profile/'.$usu->foto;
+            }else{
+                $url= 'SGEA/storage/app/public/Users/profile/'.$usu->curp.'/'.$usu->foto;
+            }
+            $usu->foto = $url;
+            return view ('Usuarios.edit',compact('usu','roles'));
+        }else{
+            return redirect()->back()->with ('error','No es posible modificar al Administrador del sistema');
+        }
     }
 
 
@@ -79,6 +90,23 @@ class usuariosController extends Controller
     {
         $usuario=usuarios::find($id);
         $NuevosDatos = $request->all();
+        if($NuevosDatos['newPhoto']){
+            // Definir la ruta donde se guardará el archivo
+            $destinationPath = storage_path('app/public/Users/profile/'.$usuario->curp);
+            // Crear la carpeta si no existe
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            // Generar un nombre único para el archivo
+            $fileName = time().'.'.$NuevosDatos['newPhoto']->getClientOriginalExtension();
+            // Mover el archivo a la ruta especificada
+            $NuevosDatos['newPhoto']->move($destinationPath, $fileName);
+            //guardamos solo el nombre en la BD
+            $NuevosDatos['foto'] = $fileName;
+        }
+        else{
+            $NuevosDatos['foto'] = $usuario->foto;
+        }
         //asignamos Rol elejido
         $usuario->roles()->sync($request->roles);
 
@@ -110,6 +138,7 @@ class usuariosController extends Controller
     {
         $user = Auth::user();
         $part = participantes::where('usuario_id', $user->id)->first();
+        
         if ($part) {
             // El usuario está registrado en algún evento
             return redirect()->route('evento.index', [$part->evento->acronimo, $part->evento->edicion]);

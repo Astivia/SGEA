@@ -1,6 +1,5 @@
 @extends('layouts.master')
 <title>Autores</title>
-
 @section('Content')
     <div class="container">
         <div class="search-create">

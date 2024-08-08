@@ -60,7 +60,23 @@ document.addEventListener('DOMContentLoaded', () => {
             fadeOutAlert(alert);
 
         });
+        setTimeout(() => {
+            fadeOutAlert(alert);
+        }, 2000); // 3 segundos = 3000 milisegundos
     });
+
+    /////////////////////////////PROFILE EDIT-VALIDATION////////////////////////
+    const profileEditLink = document.querySelector('.sidebar-user a[data-user-id]');
+    if (profileEditLink) {
+        const userId = profileEditLink.getAttribute('data-user-id');
+        profileEditLink.addEventListener('click', (event) => {
+            if (userId === '1') {
+                event.preventDefault();
+                alert('El usuario Administrador no puede Modificarse.');
+            }
+        });
+    }
+
 });
 
     

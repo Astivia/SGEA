@@ -21,21 +21,24 @@ class EventosController extends Controller
 
     public function index()
     {
-       
         $Eventos = eventos::OrderBy('edicion')->get();
         //consultamos las imagenes en sistema
-        $sysImgs = [];
+        $sysImgs = []; 
         foreach ($Eventos as $evento) {
-            $imageName = $evento->logo; 
-            if (!in_array($imageName, $sysImgs)) {
-                $sysImgs[] = $imageName;
+            $url= 'SGEA/storage/app/public/EventImgs/'.$evento->acronimo.$evento->edicion.'/logo';
+            if (!in_array( $evento->logo, $sysImgs)) {
+                $sysImgs[] = $url.'/'. $evento->logo;
+                $evento->logo = $url.'/'. $evento->logo;
             }
         }
+
+
          return view ('Eventos.index',compact('Eventos','sysImgs'));
     }
 
     public function store(Request $request)
     {
+        
         $datos=$request->all();
         // Obtener el archivo imagen
         $file = $datos['logo'];
@@ -43,13 +46,13 @@ class EventosController extends Controller
             //EL FORMULARIO TIENE UNA IMAGEN
             if($file){
                 // Definir la ruta donde se guardará el archivo
-                $destinationPath = public_path('assets/uploads');
+                $destinationPath = storage_path('app/public/EventImgs/'.$datos['acronimo'].$datos['edicion'].'/logo');
                 // Crear la carpeta si no existe
                 if (!file_exists($destinationPath)) {
                     mkdir($destinationPath, 0755, true);
                 }
                 // Generar un nombre único para el archivo
-                $fileName = time() . '.' . $file->getClientOriginalExtension();
+                $fileName = time().'.'. $file->getClientOriginalExtension();
                 // Mover el archivo a la ruta especificada
                 $file->move($destinationPath, $fileName);
                 //guardamos solo el nombre en la BD
@@ -67,6 +70,9 @@ class EventosController extends Controller
     public function show(string $id)
     {
         $evento=eventos::find($id);
+        $url= 'SGEA/storage/app/public/EventImgs/'.$evento->acronimo.$evento->edicion.'/logo';
+        $evento->logo = $url.'/'. $evento->logo;
+
         return view ('Eventos.read',compact('evento'));
     }
 

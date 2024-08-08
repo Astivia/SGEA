@@ -130,9 +130,7 @@
                     <span id="No-Autors"><strong>No hay autores Asignados</strong></span>
                     <ul class="selectedAutors" ></ul>
                 </div>
-                <span id="corresp-instructions"style ="display:none; color:#348aa7; font-size:15px"><i class="las la-info-circle"></i>
-                    Marcar  casilla para seleccionar autor de contacto
-                </span>            
+                <span id="corresp-instructions"style ="display:none; color:#348aa7; font-size:15px"><i class="las la-info-circle"></i> Marcar  casilla para seleccionar autor de contacto</span>            
                 {!! Form::label('label_instruction', 'Seleccionar Autor:') !!}
                 <select name="autor" id="selected-author">
                     @if($Autores=== null)
@@ -163,7 +161,6 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Registrar Autor </h2>
-
             {!! Form::open(['id' => 'register-author-form', 'method' => 'POST']) !!}
                 {!! Form::hidden('id', null, ['id' => 'id']) !!}
                 {!! Form::label('curp', 'CURP:') !!}
@@ -184,7 +181,7 @@
                 {!! Form::text('institucion', null, ['id'=>'institucion','required']) !!}
 
                 {!! Form::button('Registrar Autor', ['type' => 'button', 'id' => 'save-author-btn']) !!}
-            </form>
+            {!! Form::close() !!}
         </div>
     </div>
 @endsection
