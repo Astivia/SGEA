@@ -244,7 +244,7 @@ header img{
 .options-bar .menu-toggle span {
     font-size: 1.5rem;
     color: aliceblue;
-    margin-right: 1.5rem; /* Adjust the spacing as needed */
+    margin-right: 1.5rem;
     background-color: #1a2d51;
     border-radius: 50%;
     padding: 10px;
@@ -252,6 +252,42 @@ header img{
    
     border-radius: 50%;
 }
+
+.profile-photo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3vh;
+}
+
+.profile-photo img{
+    border-radius: 50%;
+    border: 10px solid #1a2d51;
+    margin-bottom: 2vh;
+    width: 15vw; 
+    height: 15vw; 
+    object-fit: cover; 
+}
+
+.custom-file-input {
+    cursor: pointer;
+}
+
+.custom-file-label {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+}
+
+.custom-file-label::after {
+    border-left: 1px solid #ced4da;
+    border-radius: 0 0.25rem 0.25rem 0;
+    padding: 0.375rem 0.75rem;
+}
+
+
 
 /* Responsive design */
 @media (max-width: 768px) {

@@ -3,7 +3,12 @@
         <div class="sidebar-user">
             <h2>SGEA</h2>
             <a href="{{ url('usuarios/'.Auth::user()->id.'/edit') }}"  data-user-id="{{ Auth::user()->id }}">
-                <img src="{{ asset('SGEA/public/assets/img/'.Auth::user()->foto) }}" alt="">
+                @if(Auth::user()->foto === "DefaultH.jpg" || Auth::user()->foto === "DefaultM.jpg")
+                    <img src="{{ asset('SGEA/storage/app/public/Users/profile/'.Auth::user()->foto) }}" alt="">
+                @else
+                    <img src="{{ asset('SGEA/storage/app/public/Users/profile/'.Auth::user()->curp.'/'.Auth::user()->foto) }}" alt="">
+
+                @endif
                 <i class="las la-pen profile-edit-icon"></i>
             </a>
             <div>
