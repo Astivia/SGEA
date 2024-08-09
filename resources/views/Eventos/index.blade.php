@@ -48,7 +48,7 @@
                         <td><a href="{!! 'eventos/'.$e->id !!}" style="color:#000;"><strong>{!!$e->nombre!!}</strong></a></td>
                         <td>{!!$e->acronimo!!}</td>
                         <td>{!!$e->edicion!!}</td>
-                        <th>{!!$e->estado!!}</th>
+                        <td>{!!$e->estado!!}</td>
                         <td>
                             @if($e->acronimo === 'CIDICI')
                                 <a href=""><i class="las la-cog la-2x"></i></a>
@@ -88,7 +88,7 @@
                                 {!!Form::close()!!}
                             @else
                                 {!! Form::open(['route' => ['participantes.destroy', $e->id,Auth::user()->id], 'method' => 'delete', 'style' => 'display:inline-block;']) !!}
-                                    <button id="unirme" type="button" 
+                                    <button id="salir" type="button" 
                                         onclick="
                                             Swal.fire({
                                                 title: '¿Estás seguro?',
@@ -99,13 +99,13 @@
                                                 cancelButtonText: 'No, cancelar'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
-                                                    document.getElementById('unirme').form.submit();
+                                                    document.getElementById('salir').form.submit();
                                                 }
                                             });
-                                        " style="border:none;">
+                                        "style="border:none;">
                                         <i class="las la-sign-out-alt la-2x"></i>Salir
                                     </button>
-     
+    
                                 {!! Form::close() !!}
                             @endif
                             

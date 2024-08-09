@@ -39,12 +39,12 @@ class eventos extends Model
     }
 
     // Mutators
-    public function getFechaInicioAttribute($value)
+    public function getFechaInicioNormalAttribute($value)
     {
         return Carbon::parse($value)->locale('es')->isoFormat('dddd DD [de] MMMM [de] YYYY');
     }
 
-    public function getFechaFinAttribute($value)
+    public function getFechaFinNormalAttribute($value)
     {
         return Carbon::parse($value)->locale('es')->isoFormat('dddd DD [de] MMMM [de] YYYY');
     }

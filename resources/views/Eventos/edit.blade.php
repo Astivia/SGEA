@@ -8,7 +8,7 @@
     <h1>Modificar Evento</h1>
     {!! Form::open(['method' => 'PATCH', 'url' => '/eventos/'.$evento->id, 'files' => true]) !!}
         <div>
-            <img src="{{ asset('SGEA/public/assets/uploads/' . $evento->logo) }}" alt="logo" style="width: 400px;">
+            <img src="{{ asset( $actualLogo) }}" alt="logo" style="width: 400px;">
             <p>Nombre de la imagen: {{ ( $evento->logo) }}</p>
         </div>
 
@@ -18,7 +18,7 @@
             @if (isset($sysImgs) && !empty($sysImgs))
                 <div class="carousell">
                     @foreach ($sysImgs as $image)
-                    <img src="{{  asset('SGEA/public/assets/uploads/'.$image) }}" alt="Imagen" class="img-thumbnail img-selectable" data-img-name="{{ $image }}" style="width: 70px;">
+                    <img src="{{  asset($image) }}" alt="Imagen" class="img-thumbnail img-selectable" data-img-name="{{ $image }}" style="width: 70px;">
                     @endforeach
                 </div>
             @else
@@ -34,27 +34,17 @@
         <label for="nombre">Nombre:</label>
         {!! Form::text ('nombre',$evento->nombre)!!}
 
-  
-
         <label for="acronimo">Acrónimo:</label>
         {!! Form::text ('acronimo',$evento->acronimo)!!}
 
-    
-
         <label for="fecha_inicio">Fecha de inicio:</label>
         {!! Form::date ('fecha_inicio',$evento->fecha_inicio)!!}
-
     
-
         <label for="fecha_fin">Fecha de fin:</label>
         {!! Form::date ('fecha_fin',$evento->fecha_fin)!!}
 
-     
-
         <label for="edicion">Edición:</label>
         {!! Form::number ('edicion',$evento->edicion)!!}
-
-       
 
         <button type="submit">Guardar evento</button>
         {!!Form::close()!!}   

@@ -14,6 +14,8 @@ use App\Http\Controllers\LoginController;
 
 Route::resource('areas', AreasController::class)->middleware('auth');
 Route::resource('eventos', EventosController::class)->middleware('auth');
+Route::get('/eventos/cancel/{evento_id}', [EventosController::class, 'cancelEvent'])->name('evento.cancel');
+
 Route::resource('usuarios', UsuariosController::class)->middleware('auth');
 
 // PARTICIPANTES

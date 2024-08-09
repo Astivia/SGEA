@@ -112,14 +112,19 @@
 
                 <strong>{{ Form::label('Coments', 'Comentarios:') }}</strong>
                 {!! Form::textArea('comentarios',null,['required']) !!}
+
+                <strong>{{Form::label('similitud','Similitud (%):')}}</strong>
+                {!! Form::number('similitud',null,['required']) !!}
                 
                 <strong>{{ Form::label('turniting', 'Archivo Turnitin:') }}</strong>
-                {!! Form::file('similitud', ['class' => 'form-control', 'accept' => '.pdf']) !!}
+                {!! Form::file('turniting', ['class' => 'form-control', 'accept' => '.pdf' , 'id' => 'turniting']) !!}
                 
                 {{ Form::hidden('puntuacion', null, ['required']) }}
                 {{ Form::hidden('id_usuario', auth()->user()->id) }}
                 
-                <button type="submit" id="EndRev-btn">Finalizar Revision</button>
+                
+                {!! Form::button('Finalizar Revision', ['type' => 'submit', 'style' => 'background-color:#1a2d51;color:#fff;', 'id' => 'EndRev-btn']) !!}
+
             {!! Form::close() !!}
             <a href="{{ url()->previous() }}"><button> Cancelar Revision</button></a>
         </div>

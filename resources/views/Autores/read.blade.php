@@ -8,7 +8,7 @@
         <div class="read">
             <div class="profile-card">
                 <div class="profile-header">
-                    <img src="{{asset('SGEA/public/assets/img/'.$autor->usuario->foto)}}" alt="foto" style="">
+                    <img src="{{asset($autor->usuario->foto)}}" alt="foto" style="">
                     <h2 class="name">{!!$autor->usuario->nombre_completo!!}</h2>
                     <p class="title"><strong></strong>  {!!$autor->usuario->curp!!}</p>
                 </div>

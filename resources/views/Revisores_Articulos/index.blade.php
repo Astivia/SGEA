@@ -72,7 +72,7 @@
                 </div>
                 
                 {!! Form::hidden('selected_users',null,['id'=> 'selected-users'])!!}
-
+                
                 {!! Form::button('Guardar', ['type' => 'submit', 'style' => 'background-color:#1a2d51;color:#fff;']) !!}
 
             {!! Form::close() !!} 
@@ -89,6 +89,7 @@
         const removeBtn = document.getElementById('remove-revisor');
         const selectedUsersInput = document.getElementById('selected-users');
         const selectedUsersSelect = document.getElementById('user-combo');
+        const noRevsTxt = document.getElementById('No-Revs');
 
 
         const initialArticles = @json($articulos->pluck('titulo', 'id'));
@@ -149,17 +150,15 @@
                         icon:'warning',
                     });
                     this.selectedIndex = 0; 
-                } else {
-                    selectedArticleInput.value = selectedArticleId;
-                }
-            } else {
-                selectedArticleInput.value = '';
+                    return;
+                } 
             }
         });
 
         addBtn.addEventListener('click',() => {
             const selectedValue = selectedUsersSelect.value;
             const selectedText = selectedUsersSelect.options[selectedUsersSelect.selectedIndex].text;
+           
             //validaciones
             if (!selectedValue) {
                 Swal.fire({title:'Advertencia',text:'Por favor, seleccione un usuario de la lista desplegable.',icon:'error',});return;
@@ -169,19 +168,61 @@
             }
             //agregamos al vector
             selectedUsers.push({ id: selectedValue, name: selectedText });
-            
+            //actualizamos el vector y la Lista
             updateSelectedUsersInput();
             updateAuthorList();
+            if(selectedUsers.length===0){
+               noRevsTxt.style.display='block';
+            }else{
+               noRevsTxt.style.display='none';
+           }
         });
 
         removeBtn.addEventListener('click',() => {
-
+            const selectedValue = selectedUsersSelect.value;
+            if (!selectedValue) {
+                Swal.fire({
+                    title:'Cuidado',
+                    text:'Primero, seleccione un usuario de la lista desplegable.',
+                    icon:'error',
+                });
+                return;
+            }
+            const userIndex = selectedUsers.findIndex(user => user.id === selectedValue);
+            if (userIndex === -1) {
+                Swal.fire({
+                    title:'Advertencia',
+                    text:'El autor seleccionado no está en la lista.',
+                    icon:'error',
+                });
+                return;
+            }
+            selectedUsers.splice(userIndex, 1);
+            //actualizamos el vector y la Lista
+            updateSelectedUsersInput();
+            updateAuthorList();
+            if(selectedUsers.length===0){
+               noRevsTxt.style.display='block';
+            }else{
+               noRevsTxt.style.display='none';
+           }
         });
 
 
         revisorForm.addEventListener('submit', (event) => {     
            // Verificamos si al menos un revisor ha sido seleccionado
-            
+           
+            if(selectedUsers.length=== 0){
+                event.preventDefault();
+                Swal.fire({
+                    title:'Advertencia',
+                    text:'Debe seleccionar almenos un usuario.',
+                    icon:'error',
+                });
+                return;
+            }else{
+                UpdateSelectedUsersInput();
+            }
         });
 
         const updateSelectedUsersInput = () => {
@@ -190,7 +231,7 @@
             }));
             selectedUsersInput.value = JSON.stringify(selectedUsersData);
             console.log('Campo oculto:', selectedUsersInput.value);
-        };
+        }; 
 
         const updateAuthorList = () => {
             selectedRevLst.innerHTML = '';
