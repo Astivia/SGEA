@@ -45,14 +45,15 @@ class RevisoresArticulosController extends Controller
             $Revisores = json_decode($request->input('selected_users'), true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 // Recorrer el array de autores seleccionados
-                foreach ($Revisores  as $revisor) {
+                foreach ($Revisores  as $index=>$revisor) {
                     if (!is_null($revisor['id'])){
                         $usu=usuarios::where('id',$revisor['id'])->first();
                         revisoresArticulos::create([
                             'evento_id'=>$request->session()->get('eventoID'),
                             'articulo_id'=> $request['articles'],
                             'usuario_id'=> $usu->id,
-                            'notificado'=>$this->NotificarUsuario($usu,$request['articles'])
+                            'notificado'=>$this->NotificarUsuario($usu,$request['articles']),
+                            'orden' => $index+1
                             //'notificado'=>true
                         ]);
                     }
