@@ -41,20 +41,18 @@ class RevisoresArticulosController extends Controller
     public function store(Request $request)
     {
         $datos=$request->all();
-
-        if ($request->has('revisores')) {
-            $Revisores = json_decode($request->input('revisores'), true);
+        if ($request->has('selected_users')) {
+            $Revisores = json_decode($request->input('selected_users'), true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 // Recorrer el array de autores seleccionados
-                foreach ($Revisores  as $index => $revisor) {
+                foreach ($Revisores  as $revisor) {
                     if (!is_null($revisor['id'])){
                         $usu=usuarios::where('id',$revisor['id'])->first();
                         revisoresArticulos::create([
                             'evento_id'=>$request->session()->get('eventoID'),
-                            'articulo_id'=> $request->input('articulo_id'),
+                            'articulo_id'=> $request['articles'],
                             'usuario_id'=> $usu->id,
-                            'orden'=>  $index + 1 ,
-                            'notificado'=>$this->NotificarUsuario($usu,$request->input('articulo_id'))
+                            'notificado'=>$this->NotificarUsuario($usu,$request['articles'])
                             //'notificado'=>true
                         ]);
                     }

@@ -14,8 +14,8 @@ class EventosController extends Controller
 {
 
     public function __construct(){
-        $this->middleware('can:eventos.edit')->only('edit','update');
         $this->middleware('can:eventos.create')->only('create','store'); 
+        $this->middleware('can:eventos.edit')->only('edit','update');
         $this->middleware('can:eventos.destroy')->only('destroy'); 
     }
 
@@ -68,6 +68,7 @@ class EventosController extends Controller
                 $datos['logo'] = $fileName;
            
         }
+        $datos['estado'] =1;
         eventos::create($datos);
         return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
     }
@@ -86,16 +87,19 @@ class EventosController extends Controller
     public function edit(string $id)
     {
         $evento=eventos::find($id);
-
+        $url = 'SGEA/storage/app/public/EventImgs/'.$evento->acronimo.$evento->edicion.'/logo';
+        $actualLogo = $url.'/'.$evento->logo;
+     
+        //catalogos
         $Eventos=eventos::all();
         $sysImgs = [];
         foreach ($Eventos as $evento) {
-            $imageName = $evento->logo; 
-            if (!in_array($imageName, $sysImgs)) {
-                $sysImgs[] = $imageName;
+            $url2 = 'SGEA/storage/app/public/EventImgs/'.$evento->acronimo.$evento->edicion.'/logo';
+            if (!in_array($evento->logo, $sysImgs)) {
+                $sysImgs[] = $url2.'/'. $evento->logo;;
             }
         }
-        return view ('Eventos.edit',compact('evento','sysImgs'));
+        return view ('Eventos.edit',compact('evento','sysImgs','actualLogo'));
     }
 
     public function update(Request $request, string $id)
@@ -174,40 +178,56 @@ class EventosController extends Controller
     }
 
     public function deleteMultiple(Request $request){
-    $ids = $request->ids;
+        $ids = $request->ids;
 
-    if (!empty($ids)) {
-        foreach ($ids as $id) {
-            $evento = eventos::find($id);
+        if (!empty($ids)) {
+            foreach ($ids as $id) {
+                $evento = eventos::find($id);
 
-            if (!$evento) {
-                return response()->json(['error' => "No se encontró el evento con id: $id"], 404);
-            }
+                if (!$evento) {
+                    return response()->json(['error' => "No se encontró el evento con id: $id"], 404);
+                }
 
-            if ((articulos::where('evento_id', $id)->count() > 0) ||
-                $evento->participantes->count() > 0 ||
-                articulosAutores::where('evento_id', $id)->count() > 0 ||
-                revisoresArticulos::where('evento_id', $id)->count() > 0) {
-                return response()->json(['error' => "No se puede eliminar el evento con id: $id: hay información asociada con este evento"], 400);
-            }
+                if ((articulos::where('evento_id', $id)->count() > 0) ||
+                    $evento->participantes->count() > 0 ||
+                    articulosAutores::where('evento_id', $id)->count() > 0 ||
+                    revisoresArticulos::where('evento_id', $id)->count() > 0) {
+                    return response()->json(['error' => "No se puede eliminar el evento con id: $id: hay información asociada con este evento"], 400);
+                }
 
-            $logo = $evento->logo;
+                $logo = $evento->logo;
 
-            $evento->delete();
+                $evento->delete();
 
-            $otherEventsUsingLogo = eventos::where('logo', $logo)->count();
+                $otherEventsUsingLogo = eventos::where('logo', $logo)->count();
 
-            if ($otherEventsUsingLogo == 0 && $logo != 'NO ASIGNADO') {
-                $filePath = public_path('assets/uploads/' . $logo);
-                if (file_exists($filePath)) {
-                    unlink($filePath);
+                if ($otherEventsUsingLogo == 0 && $logo != 'NO ASIGNADO') {
+                    $filePath = public_path('assets/uploads/' . $logo);
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
                 }
             }
+            return response()->json(['success' => "Eventos eliminados correctamente."]);
         }
-        return response()->json(['success' => "Eventos eliminados correctamente."]);
+
+        return response()->json(['error' => "No se seleccionaron eventos."], 400);
     }
 
-    return response()->json(['error' => "No se seleccionaron eventos."], 400);
-}
+    public function cancelEvent($evento_id){
+        $evento = eventos::find($evento_id);
+        if (!$evento) {
+            return redirect()->back()->with('error', 'No se encontró el evento');
+        }
+
+        $evento->estado = 4;
+        $evento->save(); 
+    
+        if ($evento->estado !== 4) {
+            return redirect()->back()->with('error', 'El evento se ha Cancelado');
+        } else {
+            return redirect()->back()->with('info', 'El evento ha sido cancelado');
+        }
+    }
 
 }

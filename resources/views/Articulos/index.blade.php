@@ -121,7 +121,7 @@
                 {!! Form::select('area_id', $Areas->pluck('nombre', 'id'), null, ['placeholder' => 'Seleccionar...', 'required']) !!}
 
                 {!! Form::label('pdf', 'Subir archivo pdf:') !!}
-                {!! Form::file('pdf', ['id' => 'archivoPDF', 'class' => 'form-control', 'accept' => '.pdf,.docx,.doc']) !!}
+                {!! Form::file('pdf', ['id' => 'archivoPDF', 'class' => 'form-control', 'accept' => '.pdf,.docx,.doc', 'required']) !!}
                 <br><hr><br>
                 <!-------------------------------------------------- AUTORES --------------------------------------------->
                 {!! Form::hidden('selected_authors',null,['id'=> 'selected-authors-input'])!!}
@@ -440,7 +440,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         minusAuthorBtn.addEventListener('click', () => {
             const selectedValue = selectedAuthorSelect.value;
-
             if (!selectedValue) {
                 Swal.fire({
                     title:'Cuidado!',
@@ -449,7 +448,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 return;
             }
-
             const authorIndex = selectedAuthors.findIndex(author => author.id === selectedValue);
             if (authorIndex === -1) {
                 Swal.fire({
@@ -459,7 +457,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 return;
             }
-
             selectedAuthors.splice(authorIndex, 1);
             updateSelectedAuthorsInput();
             updateAuthorList();

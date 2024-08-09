@@ -8,15 +8,20 @@
                 <img src="{{asset($evento->logo)}}" alt="">
             </div>
             <div class="data">
-                <p><strong>Inicia en:</strong>{!!$evento->fecha_inicio!!}</p>
-                <p><strong>Culmina en:</strong>{!!$evento->fecha_fin!!}</p>
+                <p><strong>Inicia: </strong>{!!$evento->fecha_inicioNormal!!}</p>
+                <br><br>
+                <p><strong>Termina: </strong>{!!$evento->fecha_finNormal!!}</p>
+                <br><br>
                 @role(['Administrador','Comite'])
                 <strong>Status del evento:</strong>{!!$evento->estado!!}
+                <br><br>
                 <div class="evenControls">
-                    <a href="" ><i class="las la-cog la-2x"></i></a>
                     <a href="{{url('eventos/'.$evento->id.'/edit')}}"><i class="las la-pen la-2x"></i></a>
-                    <a href="" id="migrate-button" data-evento-id="{{ $evento->id }}"><i class="las la-rocket la-2x"></i></a>
-                    <a href=""><i class="las la-times la-2x"></i></a>
+                    @if(session('eventoID'))
+                        
+                        <a href="" id="migrate-button" data-evento-id="{{ $evento->id }}"><i class="las la-rocket la-2x"></i></a>
+                        <a href="{{ route('evento.cancel', session('eventoID')) }}"><i class="las la-times la-2x"></i></a>
+                    @endif
                 </div>
                 @endrole
             </div>
@@ -57,7 +62,7 @@
          </div>
     </div>
     @role('Administrador')
-        <button id="migrate-button" data-evento-id="{{ $evento->id }}">Migrar Informacion</button>
+        <!-- <button id="migrate-button" data-evento-id="{{ $evento->id }}">Migrar Informacion</button> -->
     @endrole
 
     <div id="create-modal" class="modal">

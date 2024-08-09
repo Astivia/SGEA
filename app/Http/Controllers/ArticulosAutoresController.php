@@ -20,6 +20,12 @@ class ArticulosAutoresController extends Controller
     public function show($eventoId, $id)
     {
         $autor=articulosAutores::where('usuario_id',$id)->where('evento_id',$eventoId)->first();
+        if($autor->usuario->foto === "DefaultH.jpg" ||$autor->usuario->foto === "DefaultM.jpg" ){
+            $url='SGEA/storage/app/public/users/profile';
+        }else{
+            $url='SGEA/storage/app/public/users/profile/'.$autor->usuario->curp;
+        }
+        $autor->usuario->foto = $url.'/'.$autor->usuario->foto;
         $articulos=articulosAutores::where('usuario_id',$id)->get();
 
         return view('Autores.read',compact('autor','articulos'));
