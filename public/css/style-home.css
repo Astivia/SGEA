@@ -749,6 +749,16 @@ button:hover {
     padding: 2%;
     text-align: left;
 }
+.info .evenControls a{   
+    display: inline-block; /* Asegura que el enlace se comporte como un bloque en línea */
+    padding: 5px; /* Ajusta el tamaño del enlace */
+    transition: transform 0.3s ease, color 0.3s ease; /* Transición suave para escalado y color */
+    text-decoration: none; /* Elimina el subrayado del enlace si es necesario */
+}
+.info .evenControls a:hover{
+    transform: scale(1.2);
+    
+}
 .info strong{
     color: #1a2d51;
     font-weight: bold;
