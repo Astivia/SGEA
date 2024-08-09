@@ -173,6 +173,8 @@ class LoginController extends Controller
     {
         // Buscar el evento con el acrónimo y la edición
         $evento = eventos::where('acronimo', $acronimo)->where('edicion', $edicion)->first();
+        $evento->logo = 'SGEA/storage/app/public/EventImgs/'.$acronimo.$edicion.'/logo'.'/'.$evento->logo;
+        
         if ($evento) {
             return view ('Eventos.read',compact('evento'));
         } else {

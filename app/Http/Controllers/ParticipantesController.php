@@ -15,6 +15,7 @@ use App\Models\participantes;
 class ParticipantesController extends Controller
 {
 
+
     public function index($eventoId)
     {
         $part = participantes::where('evento_id',$eventoId)->get(); 

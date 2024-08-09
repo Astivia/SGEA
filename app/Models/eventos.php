@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class eventos extends Model
 {
@@ -35,6 +36,29 @@ class eventos extends Model
     public function autores()
     {
         return $this->hasManyThrough(usuarios::class, articulos::class);
+    }
+
+    // Mutators
+    public function getFechaInicioAttribute($value)
+    {
+        return Carbon::parse($value)->locale('es')->isoFormat('dddd DD [de] MMMM [de] YYYY');
+    }
+
+    public function getFechaFinAttribute($value)
+    {
+        return Carbon::parse($value)->locale('es')->isoFormat('dddd DD [de] MMMM [de] YYYY');
+    }
+
+    public function getEstadoAttribute($value)
+    {
+        $estados = [
+            1 => 'Programado',
+            2 => 'En Curso',
+            3 => 'Finalizado',
+            4 => 'Cancelado'
+        ];
+
+        return $estados[$value] ?? 'Desconocido';
     }
 
 }

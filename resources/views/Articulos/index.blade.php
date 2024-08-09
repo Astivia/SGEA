@@ -118,7 +118,7 @@
                 {!! Form::textarea('resumen',null,['rows'=>4,'cols'=>50,'id'=>'description']) !!}
                 
                 {!! Form::label('area', 'Area del Articulo:') !!}
-                {!! Form::select('area', $Areas->pluck('nombre', 'id'), null, ['placeholder' => 'Seleccionar...', 'required']) !!}
+                {!! Form::select('area_id', $Areas->pluck('nombre', 'id'), null, ['placeholder' => 'Seleccionar...', 'required']) !!}
 
                 {!! Form::label('pdf', 'Subir archivo pdf:') !!}
                 {!! Form::file('pdf', ['id' => 'archivoPDF', 'class' => 'form-control', 'accept' => '.pdf,.docx,.doc']) !!}

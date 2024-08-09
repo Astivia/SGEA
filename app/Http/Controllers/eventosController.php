@@ -31,9 +31,7 @@ class EventosController extends Controller
                 $evento->logo = $url.'/'. $evento->logo;
             }
         }
-
-
-         return view ('Eventos.index',compact('Eventos','sysImgs'));
+        return view ('Eventos.index',compact('Eventos','sysImgs'));
     }
 
     public function store(Request $request)
@@ -47,16 +45,15 @@ class EventosController extends Controller
             'edicion' => 'required|integer|min:1',
             'logo' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
         ]);
+        $datos=$validatedData ;
         // Verificar si ya existe un evento con el mismo acrónimo y edición
         if (eventos::where('acronimo', $datos['acronimo'])->where('edicion', $datos['edicion'])->exists()) {
-            return redirect()->back()->with('error', 'Ya existe este evento');
+            return redirect ('/eventos')->with('error', 'Ya existe este evento');
         }
-
         // Obtener el archivo imagen
         $file = $datos['logo'];
         if(!is_string($file)){
             //EL FORMULARIO TIENE UNA IMAGEN
-            if($file){
                 // Definir la ruta donde se guardará el archivo
                 $destinationPath = storage_path('app/public/EventImgs/'.$datos['acronimo'].$datos['edicion'].'/logo');
                 // Crear la carpeta si no existe
@@ -69,11 +66,8 @@ class EventosController extends Controller
                 $file->move($destinationPath, $fileName);
                 //guardamos solo el nombre en la BD
                 $datos['logo'] = $fileName;
-            }else{
-                $datos['logo'] = 'NO ASIGNADO';
-            }
+           
         }
-        $datos['estado'] = 1;
         eventos::create($datos);
         return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
     }
@@ -84,6 +78,7 @@ class EventosController extends Controller
         $evento=eventos::find($id);
         $url= 'SGEA/storage/app/public/EventImgs/'.$evento->acronimo.$evento->edicion.'/logo';
         $evento->logo = $url.'/'. $evento->logo;
+
 
         return view ('Eventos.read',compact('evento'));
     }
@@ -177,16 +172,7 @@ class EventosController extends Controller
         }
 
     }
-    //eliminacion masiva 
-    // public function deleteMultiple(Request $request)
-    // {
-    //     $ids = $request->ids;
-    //     if (!empty($ids)) {
-    //         eventos::whereIn('id', $ids)->delete();
-    //         return response()->json(['success' => "Registros eliminados correctamente."]);
-    //     }
-    //     return response()->json(['error' => "No se seleccionaron registros."]);
-    // }
+
     public function deleteMultiple(Request $request){
     $ids = $request->ids;
 

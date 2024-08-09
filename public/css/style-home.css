@@ -433,7 +433,6 @@ form button[type="submit"] {
        
     }
    
-
     .sidebar-menu ul {
         margin-bottom:1.5rem;
         display: none;
@@ -451,7 +450,6 @@ form button[type="submit"] {
 }
 
 /* tablas */
-
 .ajuste{
     width: 100%;
     min-width: 100%;
@@ -728,27 +726,27 @@ button {
 button:hover {
     background-color: #d32f2f;
 }
-
+/* Vista Read */
 .info{
     margin: 1em auto 1em;
     padding: 2%;
     display: flex;
-    flex-direction: column;
-    justify-content:space-around;
-    align-items: center;
-
+    flex-direction: row;
+    justify-content: center;
 }
 
-.info img{
+.info .event-img img{
     margin-top: 0px;
-    
-    border-radius: 5px;
+    margin-left: 5vw;
+    border-radius: 50px;
+    background-color: #1a2d51;
     padding: 1.5%;
     width: 400px;
+    
 }
 .info .data{
     padding: 2%;
-    text-align: center;
+    text-align: left;
 }
 .info strong{
     color: #1a2d51;
@@ -809,6 +807,7 @@ button:hover {
         height: 15vh;
     }
 }
+
 
 .resumen{
     padding: 0%, 1%, 0%;

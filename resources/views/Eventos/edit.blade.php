@@ -57,8 +57,8 @@
        
 
         <button type="submit">Guardar evento</button>
-        <a href="{{!!asset('/eventos')!!}"><button>Cancelar</button></a>
         {!!Form::close()!!}   
+        <a href="{{ url()->previous() }}"><button>Cancelar</button></a> 
 </div>
 
 @endsection

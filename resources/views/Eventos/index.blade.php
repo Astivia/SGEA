@@ -28,6 +28,7 @@
                         <th>NOMBRE</th>
                         <th>ACRONIMO</th>
                         <th>EDicion</th>
+                        <th>ESTADO</th>
                         <th> </th>
                     </tr>
                 </thead>
@@ -47,7 +48,11 @@
                         <td><a href="{!! 'eventos/'.$e->id !!}" style="color:#000;"><strong>{!!$e->nombre!!}</strong></a></td>
                         <td>{!!$e->acronimo!!}</td>
                         <td>{!!$e->edicion!!}</td>
+                        <th>{!!$e->estado!!}</th>
                         <td>
+                            @if($e->acronimo === 'CIDICI')
+                                <a href=""><i class="las la-cog la-2x"></i></a>
+                            @endif
                             <a href="{!! 'eventos/'.$e->id !!}"><i class="las la-info-circle la-2x"></i></a>
                             
                             @role(['Administrador', 'Organizador'])
@@ -100,8 +105,10 @@
                                         " style="border:none;">
                                         <i class="las la-sign-out-alt la-2x"></i>Salir
                                     </button>
+     
                                 {!! Form::close() !!}
                             @endif
+                            
                         </td>
                     </tr>
                     @endforeach
@@ -146,7 +153,7 @@
 
             {!! Form::label('edition', 'Edición:') !!}
             {!! Form::number('edicion', null, ['id'=>'edicion','required']) !!}
-
+            <br>
             {!! Form::button('Crear Evento', ['type' => 'submit', 'id' => 'save-event-btn']) !!}
         {!!Form::close()!!}
 </div>
@@ -236,7 +243,10 @@
         // Obtener elementos del DOM
         const fechaInicio = document.getElementById('fecha_inicio');
         const fechaFin = document.getElementById('fecha_fin');
-        const fechaHoy = new Date(); 
+        const fechaHoy = new Date();
+        const edicionInput = document.getElementById('edicion');
+
+
         fechaHoy.setUTCHours(0,0,0,0);
         fechaInicio.addEventListener('input', validarFechaInicio);
         fechaFin.addEventListener('input', validarFechaFin);
@@ -245,17 +255,11 @@
             // Obtener el valor de la fecha de inicio y convertirla a la medianoche
             const startDate = new Date(fechaInicio.value);
             startDate.setUTCHours(0, 0, 0, 0); // Convertir la fecha a medianoche en UTC
-            
             // Limpiar mensajes de error anteriores
             limpiarErrores(fechaInicio);
-
-            console.log('Fecha de inicio:',fechaInicio.value.toString());
-            console.log('Fecha de hoy:', fechaHoy);
-
             // Validar que la fecha de inicio no sea anterior a la fecha actual
-            
             if (startDate < fechaHoy  ) {
-                showError(fechaInicio, 'La fecha de inicio no puede ser anterior a la fecha actual.');
+                showError(fechaInicio, 'La fecha de inicio no puede ser anterior a la actual.');
             }
             // Validar la fecha de fin solo si ya tiene un valor
             if (fechaFin.value) {
@@ -279,13 +283,11 @@
 
         function showError(element, message) {
             element.style.borderColor = 'red';
-
-            let errorMessage = document.createElement('span');
+            let errorMessage = document.createElement('small');
             errorMessage.className = 'error-message';
             errorMessage.style.color = 'red';
             errorMessage.innerText = message;
-
-            element.parentNode.insertBefore(errorMessage, element.nextSibling);
+            element.parentNode.insertBefore(errorMessage,element.nextSibling);
         }
 
         function limpiarErrores(element) {
@@ -301,6 +303,31 @@
                 nextElement.remove();
             }
         }
+
+        edicionInput.addEventListener('input', () => {
+            limpiarErrores(edicionInput);
+            const valor = parseFloat(edicionInput.value);
+            if (!Number.isInteger(valor) || valor < 0) {
+                showError(edicionInput, 'El número debe ser un valor entero y positivo');
+            }
+        });
+
+        const formulario = document.getElementById('evento-form');
+        formulario.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const errores = document.querySelectorAll('small');
+
+            if (errores.length > 0) {
+                Swal.fire({
+                    title:'Advertencia',
+                    text:'Hay errores, favor de verificar los datos.',
+                    icon:'warning',
+                });
+                return
+            } else {
+                formulario.submit();
+            }
+        });
     });
 </script>
 <script type="text/javascript">
@@ -346,7 +373,6 @@
         }
     
 </script>
-
 
 <style>
     .selected {

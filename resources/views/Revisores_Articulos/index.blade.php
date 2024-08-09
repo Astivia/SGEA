@@ -9,13 +9,10 @@
         @if($articles->isEmpty())
             <strong>No hay Revisores asignados a ningun articulo en este momento</strong>
         @else
-            <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
             <div class="ajuste" >
-            <!-- <button id="deleteSelected">Eliminar seleccionados</button> -->
                 <table id="example" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
-                            <!-- <th><input type="checkbox" id="selectAll"></th> -->
                             <th>ARTICULO</th>
                             <th>estado</th>
                             <th>Revisor 1</th>
@@ -27,7 +24,6 @@
                     <tbody>
                         @foreach ($articles as $ra)
                             <tr>
-                            <!-- <td><input type="checkbox" class="selectRow" data-id="{{ $ra->id }}"></td> -->
                                 <td><a href="{!! url(session('eventoID').'/articulo/'.$ra->id) !!}" style="color:#000;">{!!$ra->titulo!!} </a></td>
                                 <td>{!!$ra->estado!!}</td>
                                 @foreach ($ra->revisores as $revisor)
@@ -54,26 +50,31 @@
     <div id="create-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Asignar Revisor</h2>
+            <h3>Seleccionar Articulo</h3>
             {!! Form::open(['url'=>'/revisores','id' => 'revisor-form']) !!}
-                <label for="area">Seleccionar Área:</label>
+                {!! Form::label('area', 'Seleccionar Area:') !!}
                 {!! Form::select('area_id', $areas->pluck('nombre', 'id')->prepend('Seleccionar...', ''), null) !!}
 
-                <label for="articulo">Seleccionar Artículo:</label>
+                {!! Form::label('articulo', 'Seleccionar Articulo:') !!}
                 {!! Form::select('articles',$articulos->pluck('titulo','id')->prepend('Seleccionar...', ''), null, ['required']) !!}
+                <br><hr><br>
+                <!-------------------------------------------------- REVISORES --------------------------------------------->
+                <h3>{!! Form::label('', 'Lista de Revisores') !!}</h3>
+                <div class="showList" style ="display:flex;justify-content:center;align-items:cener;padding:3%;">
+                    <span id="No-Revs"><strong>No hay revisores Asignados</strong></span>
+                    <ul class="selectedRevisorsList" ></ul>
+                </div>
+                {!! Form::label('Revisor', 'Seleccionar Revisores:') !!}
+                {!! Form::select('revisor-Combo', $usuarios->pluck('nombre_completo', 'id')->prepend('Seleccionar...', ''), null,['id'=>'user-combo','required']) !!}
+                <div class="cntrls" style="display:flex;align-items:center;justify-content:space-evenly;margin-bottom:2vh;">
+                    <button type="button" id="add-revisor" style="color:#fff;background-color:#1a2d51;">Asignar</button>
+                    <button type="button" id="remove-revisor" style="color:#fff;background-color:#1a2d51;">Quitar</button>
+                </div>
+                
+                {!! Form::hidden('selected_users',null,['id'=> 'selected-users'])!!}
 
-                <label for="Revisor1">Revisor 1:</label>
-                {!! Form::select('revisor1', $usuarios->pluck('nombre_completo', 'id')->prepend('Seleccionar...', ''), null,['required']) !!}
+                {!! Form::button('Guardar', ['type' => 'submit', 'style' => 'background-color:#1a2d51;color:#fff;']) !!}
 
-                <label for="Revisor2">Revisor 2:</label>
-                {!! Form::select('revisor2', $usuarios->pluck('nombre_completo', 'id')->prepend('Seleccionar...', ''), null) !!}
-
-                <label for="Revisor3">Revisor 3:</label>
-                {!! Form::select('revisor3', $usuarios->pluck('nombre_completo', 'id')->prepend('Seleccionar...', ''), null) !!}
-
-                <input type="hidden" name="revisores" id="selected-users-input">
-                <input type="hidden" name="articulo_id" id="selected-article-input">
-                <button type="submit">Asignar</button>
             {!! Form::close() !!} 
         </div>
     </div>
@@ -82,14 +83,17 @@
     document.addEventListener('DOMContentLoaded', function() {
         const revisorForm = document.getElementById('revisor-form');
         const areaSelect = document.querySelector('select[name="area_id"]');
+        const selectedRevLst = document.querySelector('.selectedRevisorsList');
         const articlesSelect = document.querySelector('select[name="articles"]');
-        const revisoresSelects = Array.from(document.querySelectorAll('select[name="revisor1"], select[name="revisor2"], select[name="revisor3"]'));
-        const selectedUsersInput = document.getElementById('selected-users-input');
-        const selectedArticleInput = document.getElementById('selected-article-input');
+        const addBtn = document.getElementById('add-revisor');
+        const removeBtn = document.getElementById('remove-revisor');
+        const selectedUsersInput = document.getElementById('selected-users');
+        const selectedUsersSelect = document.getElementById('user-combo');
 
-        let selectedUsers = [null, null, null];
+
         const initialArticles = @json($articulos->pluck('titulo', 'id'));
         const articlesWithRevisores = @json($articles->pluck('id'));
+        selectedUsers=[];
 
         areaSelect.addEventListener('change', async function() {
             var areaId = this.value;
@@ -117,7 +121,6 @@
                             });
                             articlesSelect.disabled = false;
                         }
-                        toggleRevisoresSelects(false);
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -133,81 +136,71 @@
                     option.textContent = titulo;
                     articlesSelect.appendChild(option);
                 }
-                toggleRevisoresSelects(false);
             }
         });
 
-        articlesSelect.addEventListener('change', function() {
+        articlesSelect.addEventListener('change', function(){
             const selectedArticleId = parseInt(this.value);
-
             if (selectedArticleId) {
                 if (articlesWithRevisores.includes(selectedArticleId)) {
-                    
                     Swal.fire({
                         title:'Cuidado!',
                         text:'Este artículo ya tiene revisores asignados',
                         icon:'warning',
                     });
                     this.selectedIndex = 0; 
-                    toggleRevisoresSelects(false);
                 } else {
-                    toggleRevisoresSelects(true);
                     selectedArticleInput.value = selectedArticleId;
                 }
             } else {
-                toggleRevisoresSelects(false);
-                selectedUsers = [null, null, null];
                 selectedArticleInput.value = '';
             }
         });
 
-        revisoresSelects.forEach((select, index) => {
-            select.addEventListener('change', function() {
-                const userId = this.value;
-                if (selectedUsers.includes(userId)) {
-                    Swal.fire({
-                        title:'Cuidado!',
-                        text:'El revisor ya ha sido asignado en el artículo',
-                        icon:'warning',
-                    });
-                    this.selectedIndex = 0; 
-                } else {
-                    if (userId === '') {
-                        selectedUsers[index] = null;
-                    } else {
-                        selectedUsers[index] = userId;
-                    }
-                }
-                updateSelectedUsersInput();
-            });
+        addBtn.addEventListener('click',() => {
+            const selectedValue = selectedUsersSelect.value;
+            const selectedText = selectedUsersSelect.options[selectedUsersSelect.selectedIndex].text;
+            //validaciones
+            if (!selectedValue) {
+                Swal.fire({title:'Advertencia',text:'Por favor, seleccione un usuario de la lista desplegable.',icon:'error',});return;
+            }
+            if (selectedUsers.find(revisor => revisor.id === selectedValue)) {
+                Swal.fire({title:'Advertencia',text:'El revisor ya se encuentra en la lista.',icon:'error',});return;
+            }
+            //agregamos al vector
+            selectedUsers.push({ id: selectedValue, name: selectedText });
+            
+            updateSelectedUsersInput();
+            updateAuthorList();
         });
+
+        removeBtn.addEventListener('click',() => {
+
+        });
+
 
         revisorForm.addEventListener('submit', (event) => {     
            // Verificamos si al menos un revisor ha sido seleccionado
-            const hasSelectedRevisor = revisoresSelects.some(select => select.value !== '');
-            if (!hasSelectedRevisor) {
-                Swal.fire({
-                        title:'Cuidado!',
-                        text:'Debe seleccionarse al menos un revisor',
-                        icon:'warning',
-                    });
-                event.preventDefault(); 
-                return;
-            }
-            updateSelectedUsersInput();
+            
         });
 
         const updateSelectedUsersInput = () => {
             const selectedUsersData = selectedUsers.map(user => ({
-                id: user,
+                id:user.id
             }));
             selectedUsersInput.value = JSON.stringify(selectedUsersData);
             console.log('Campo oculto:', selectedUsersInput.value);
         };
 
-        function toggleRevisoresSelects(enabled) {
-            revisoresSelects.forEach(select => { select.disabled = !enabled; });
-        }
+        const updateAuthorList = () => {
+            selectedRevLst.innerHTML = '';
+            selectedUsers.forEach((revisor, index) => {
+                const newListItem = document.createElement('li');
+                newListItem.textContent = `${index + 1}. ${revisor.name} `;
+                newListItem.setAttribute('data-value', revisor.id);
+                selectedRevLst.appendChild(newListItem);
+            });
+        };
 
         const titleComparator = (a, b) => {
             const isAlphabetic = (char) => /^[a-zA-Z]$/.test(char);
@@ -223,11 +216,10 @@
             return a[1].localeCompare(b[1]);
         };
 
-        toggleRevisoresSelects(false);
+        updateSelectedUsersInput();
+        updateAuthorList();
     });
 </script>
-
-
 
 
 
