@@ -1079,3 +1079,43 @@ button:hover {
     margin: 10px;
 }
 
+/* Tootltips */
+.tooltip{
+    font-weight: bold;
+    color: #001f3f;
+    text-decoration: none;
+    position: relative;
+}
+.tooltip:hover{
+    color: #1a2d51;
+}
+.tooltip:hover .tooltip-box{
+    display: inline-block;
+}
+.tooltip-box{
+    display: none;
+    position: absolute;
+    background-color:white;  
+    color: #001f3f;
+    font-weight: bold;  
+    z-index: 500;
+    text-align: center;
+    font-size: 7px;
+    padding: 5px;
+    border-radius: 5px;
+    left: 0;
+    width: 100px;
+  height: auto;
+    bottom: 30px;
+    
+} 
+/* .tooltip-box::after{
+    content: "";
+    display: block;
+    border-top:7px solid black;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    position: absolute;
+    bottom: -7px;
+    left: calc(50% - 7px);
+} */

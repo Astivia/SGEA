@@ -5,7 +5,7 @@
         <div class="search-create">
             <h1 id="titulo-h1">Eventos</h1>
             @role(['Administrador','Organizador'])
-                <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
+                <button class="tooltip" id="create-btn"><i class="las la-plus-circle la-2x"></i><span class="tooltip-box">Crear Evento</span></button>
             @endrole
         </div>
         @if($Eventos->isEmpty())
@@ -16,7 +16,7 @@
             @endrole
         <div class="ajuste" >
             @role('Administrador')
-            <button id="deleteSelected">Eliminar seleccionados</button>
+            <button class="tooltip" id="deleteSelected"><i class="las la-trash-alt la-2x"></i><span class="tooltip-box">Eliminar Seleccionados</span></button>
             @endrole
             <table id="example" class="display  responsive nowrap" style="width:100%">
                 <thead>

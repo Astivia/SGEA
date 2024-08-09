@@ -6,14 +6,14 @@
     
     <div class="search-create">
         <h1 id="titulo-h1">Participantes del {!!$evento->acronimo!!} {!!$evento->edicion!!}</h1>
-        <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
+        <button class="tooltip" id="create-btn"><i class="las la-plus-circle la-2x"></i><span class="tooltip-box">Agregar Participante</span></button>
     </div>
 
     @if(count($part)===0)
         <strong>No hay datos</strong>
     @else
     <div class="ajuste" >
-        <button id="deleteSelected">Eliminar seleccionados</button>
+        <button class="tooltip" id="deleteSelected"><i class="las la-trash-alt la-2x"></i><span class="tooltip-box">Eliminar Seleccionados</span></button>
             <table id="example" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>

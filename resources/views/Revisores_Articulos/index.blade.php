@@ -4,7 +4,7 @@
     <div class="container">
         <div class="search-create">
             <h1 id="titulo-h1">Revision de Articulos</h1>
-                <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
+                <button class="tooltip" id="create-btn"><i class="las la-plus-circle la-2x"></i><span class="tooltip-box">Asignar Revisores</span></button>
         </div>
         @if($articles->isEmpty())
             <strong>No hay Revisores asignados a ningun articulo en este momento</strong>

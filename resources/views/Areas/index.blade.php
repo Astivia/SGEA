@@ -4,14 +4,14 @@
 <div class="container">
     <div class="search-create">
         <h1 id="titulo-h1">Areas</h1>
-        <button id="create-btn"><i class="las la-plus-circle la-2x"></i></button>
+        <button class="tooltip" id="create-btn"><i class="las la-plus-circle la-2x"></i><span class="tooltip-box">Crear Area</span></button>
     </div>
 
     @if($Areas->isEmpty())
         <strong>No hay datos</strong>
       @else
       <div class="ajuste" >
-            <button id="deleteSelected">Eliminar seleccionados</button>
+            <button  class="tooltip" id="deleteSelected"><i class="las la-trash-alt la-2x"></i><span class="tooltip-box">Eliminar Seleccionados</span></button>
             <table id="example" class="display  responsive nowrap" style="width:100%">
                 <thead>
                     <tr>
