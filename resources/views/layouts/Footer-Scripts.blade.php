@@ -182,6 +182,44 @@
     }
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script> 
+<script>
+        $(document).ready(function() {
+            function matchCustom(params, data) {
+                // Si no hay término de búsqueda, devuelve todos los datos
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+
+                // Convierte los términos de búsqueda y los datos a minúsculas para una búsqueda case-insensitive
+                if (typeof data.text === 'string') {
+                    var searchTerm = params.term.toLowerCase();
+                    var text = data.text.toLowerCase();
+
+                    // Si el término de búsqueda se encuentra en el texto
+                    if (text.indexOf(searchTerm) > -1) {
+                        return $.extend({}, data, true);
+                    }
+                }
+
+                // Si no coincide, devuelve null
+                return null;
+            }
+
+            $('.select2').select2({
+                matcher: matchCustom,
+                placeholder: "Seleccionar...",
+                allowClear: true,
+                language: {
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    }
+                }
+            });
+        });
+    </script> 
+
+
 
 @if(session('reload'))
     <script>

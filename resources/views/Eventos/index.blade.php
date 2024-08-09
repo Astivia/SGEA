@@ -48,7 +48,7 @@
                         <td><a href="{!! 'eventos/'.$e->id !!}" style="color:#000;"><strong>{!!$e->nombre!!}</strong></a></td>
                         <td>{!!$e->acronimo!!}</td>
                         <td>{!!$e->edicion!!}</td>
-                        <th>{!!$e->estado!!}</th>
+                        <td>{!!$e->estado!!}</td>
                         <td>
                             @if($e->acronimo === 'CIDICI')
                                 <a href=""><i class="las la-cog la-2x"></i></a>
@@ -241,11 +241,11 @@
 
         //////////////////////////////VALIDACIONES///////////////////////
         // Obtener elementos del DOM
+   
         const fechaInicio = document.getElementById('fecha_inicio');
         const fechaFin = document.getElementById('fecha_fin');
         const fechaHoy = new Date();
         const edicionInput = document.getElementById('edicion');
-
 
         fechaHoy.setUTCHours(0,0,0,0);
         fechaInicio.addEventListener('input', validarFechaInicio);
@@ -293,6 +293,8 @@
         function limpiarErrores(element) {
             element.style.borderColor = '';
             let nextElement = element.nextSibling;
+
+
 
             // Verificar si nextElement no es null antes de acceder a sus propiedades
             while (nextElement && nextElement.nodeType !== 1) {
@@ -373,6 +375,8 @@
         }
     
 </script>
+
+
 
 <style>
     .selected {

@@ -733,6 +733,7 @@ button:hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
 }
 
 .info .event-img img{
@@ -741,7 +742,7 @@ button:hover {
     border-radius: 50px;
     background-color: #1a2d51;
     padding: 1.5%;
-    width: 400px;
+    width: 300px;
     
 }
 .info .data{
@@ -798,8 +799,16 @@ button:hover {
 
 
 @media (max-width: 768px) {
+    .info{
+        display: flex;
+        flex-direction: column;
+    }
+    .info .event-img img{
+        width: 70%;
+        align-items: center;
+    }
     .info img{
-        width: 70vw;
+        width: 100px;
         padding: 5%;
     }
     .links .link-card{
