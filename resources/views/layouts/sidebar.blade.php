@@ -27,7 +27,7 @@
                 <span>Catálogos</span>
             </div>
             <ul class="menu-list active">
-                @if(session('eventoID') !== null)
+                @if(session('eventoID') !== null && session('rol')!== 'Revisor' && session('rol')!== 'Autor')
                     <li>
                         <a href="{{ url(session('eventoID').'/autores') }}" class="{{ Request::is(session('eventoID').'/autores') ? 'active' : '' }}">
                             <span class="las la-pen-nib"></span>Autores
@@ -45,6 +45,29 @@
                             </a>
                         </li>
                     @endrole 
+                @elseif(session('eventoID') !== null && session('rol')=== 'Revisor'&& session('rol')!== 'Autor')
+                    <li>
+                        <a href="{{url(session('eventoID').'/ArticulosPendientes/'.Auth::user()->id)}}"  class="{{ Request::is(session('eventoID').'/ArticulosPendientes/'.Auth::user()->id) ? 'active' : '' }}">
+                            <span class="las la-clock"></span>Pendientes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url(session('eventoID').'/articulos') }}" class="{{ Request::is(session('eventoID').'/articulos') ? 'active' : '' }}">
+                            <span class="las la-check-circle"></span>Revisados
+                        </a>
+                    </li>
+                @elseif(session('eventoID') !== null && session('rol')!== 'Revisor'&& session('rol')=== 'Autor')
+                    <li>
+                        <a href="{{url(session('eventoID').'_'.Auth::user()->id.'/MisArticulos/')}}" class="{{ Request::is(session('eventoID').'_'.Auth::user()->id.'/MisArticulos/') ? 'active' : '' }}">
+                            <span class="lar la-newspaper"></span>Mis Articulos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{url(session('eventoID').'_'.Auth::user()->id.'/Evaluaciones/')}}" class="{{ Request::is(session('eventoID').'_'.Auth::user()->id.'/Evaluaciones/') ? 'active' : '' }}">
+                            <span class="las la-list-alt"></span>Evaluaciones
+                        </a>
+                    </li>
+
                 @else
                     <li>    
                         <a href="{{ url('eventos')}}" class="{{ Request::is('eventos') ? 'active' : '' }}">

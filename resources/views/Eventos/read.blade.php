@@ -46,15 +46,15 @@
                     <i class="las la-newspaper la-3x"></i> Mis Articulos
                 </a>
                 <a href="{{url(session('eventoID').'_'.Auth::user()->id.'/Evaluaciones/')}}" class="link-card">
-                    <i class="las la-newspaper la-3x"></i>Historial de Evaluaciones
+                    <i class="las la-list-alt la-3x"></i>Historial de Evaluaciones
                 </a>
                 
             @elseif(session('rol')==='Revisor')
                 <a href="{{url(session('eventoID').'/ArticulosPendientes/'.Auth::user()->id)}}" class="link-card">
-                    <i class="las la-inbox la-3x"></i> Articulos por Revisar
+                    <i class="las la-clock la-3x"></i> Articulos Pendientes
                 </a>
                 <a href="{{url(session('eventoID').'_'.Auth::user()->id.'/ArticulosRevisados/')}}" class="link-card">
-                    <i class="las la-user-check la-3x"></i> Articulos Revisados
+                    <i class="las la-check-circle la-3x"></i> Articulos Revisados
                 </a>
             @else
             

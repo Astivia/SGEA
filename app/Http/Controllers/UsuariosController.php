@@ -90,7 +90,7 @@ class usuariosController extends Controller
     {
         $usuario=usuarios::find($id);
         $NuevosDatos = $request->all();
-        if($NuevosDatos['newPhoto']){
+        if($request->has('newPhoto')){
             // Definir la ruta donde se guardará el archivo
             $destinationPath = storage_path('app/public/Users/profile/'.$usuario->curp);
             // Crear la carpeta si no existe
@@ -103,8 +103,7 @@ class usuariosController extends Controller
             $NuevosDatos['newPhoto']->move($destinationPath, $fileName);
             //guardamos solo el nombre en la BD
             $NuevosDatos['foto'] = $fileName;
-        }
-        else{
+        }else{
             $NuevosDatos['foto'] = $usuario->foto;
         }
         //asignamos Rol elejido
