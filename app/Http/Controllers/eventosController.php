@@ -73,6 +73,12 @@ class EventosController extends Controller
         return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
     }
 
+    public function createParameterFile(Request $request){
+
+
+
+    }
+
 
     public function show(string $id)
     {
@@ -158,10 +164,11 @@ class EventosController extends Controller
         try {
             DB::statement('SELECT migrar_datos()');
             $request->session()->put('eventoID',null);
+
             return response()->json(['message' => 'Migracion de datos Satisfactoria'], 200);
         } catch (\Exception $e) {
             Log::error('Error en migracion de datos: ' . $e->getMessage());
-            return response()->json(['message' => 'Fallo la migracion de datos', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Fallo la migracion de datos', 'errores' => $e->getMessage()], 500);
         }
     }
 
