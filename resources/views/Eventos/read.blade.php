@@ -15,10 +15,10 @@
                 @role(['Administrador','Comite'])
                 <strong>Status del evento:</strong>{!!$evento->estado!!}
                 <br><br>
-                <div class="evenControls">
+                <div class="eventControls">
                     <a href="{{url('eventos/'.$evento->id.'/edit')}}"><i class="las la-pen la-2x"></i></a>
                     @if(session('eventoID'))
-                        
+                        <a href="{{url($evento->id.'/parameters')}}"><i class="las la-cog la-2x"></i></a>
                         <a href="" id="migrate-button" data-evento-id="{{ $evento->id }}"><i class="las la-rocket la-2x"></i></a>
                         <a href="{{ route('evento.cancel', session('eventoID')) }}"><i class="las la-times la-2x"></i></a>
                     @endif

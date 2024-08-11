@@ -15,6 +15,9 @@ use App\Http\Controllers\LoginController;
 Route::resource('areas', AreasController::class)->middleware('auth');
 Route::resource('eventos', EventosController::class)->middleware('auth');
 Route::get('/eventos/cancel/{evento_id}', [EventosController::class, 'cancelEvent'])->name('evento.cancel');
+Route::get('{evento_id}/parameters', [EventosController::class, 'editParameterFile'])->middleware('auth');
+Route::post('{eventoID}/update-parameters', [EventosController::class, 'updateParameterFile'])->name('eventos.updateParameters');
+
 
 Route::resource('usuarios', UsuariosController::class)->middleware('auth');
 
@@ -105,6 +108,7 @@ Route::view('/login',"login")->name('login');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
 
 
 Route::get('/', function () {

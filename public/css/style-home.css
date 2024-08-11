@@ -1129,3 +1129,40 @@ button:hover {
     bottom: -7px;
     left: calc(50% - 7px);
 } */
+
+.parameter-form{
+    padding: 3%;
+}
+
+.parameter-form .puntuation{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    gap: 20vw;
+}
+.parameter-form .questions{
+    margin-top: 3vh;
+}
+
+.parameter-form .questions .input-group{
+    margin-bottom: 3vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1vw;
+}
+
+.parameter-form .questions .input-group .input-control{
+    text-align: center;
+    max-width: 61vw;
+}
+
+.parameter-form .addQuestion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

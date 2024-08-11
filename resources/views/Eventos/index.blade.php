@@ -12,7 +12,7 @@
             <strong>No hay datos</strong>
         @else
             @role('Administrador')
-                <button id="migrate-button">Migrar Toda la Informacion</button>
+                <button id="migrate-button"><i class="las la-rocket la-2x"></i></button>
             @endrole
         <div class="ajuste" >
             @role('Administrador')
@@ -51,7 +51,7 @@
                         <td>{!!$e->estado!!}</td>
                         <td>
                             @if($e->acronimo === 'CIDICI')
-                                <a href=""><i class="las la-cog la-2x"></i></a>
+                                <a href="{{url($e->id.'/parameters')}}"><i class="las la-cog la-2x"></i></a>
                             @endif
                             <a href="{!! 'eventos/'.$e->id !!}"><i class="las la-info-circle la-2x"></i></a>
                             
@@ -154,7 +154,7 @@
             {!! Form::label('edition', 'Edición:') !!}
             {!! Form::number('edicion', null, ['id'=>'edicion','required']) !!}
             <br>
-            {!! Form::button('Crear Evento', ['type' => 'submit', 'id' => 'save-event-btn']) !!}
+            {!! Form::button('Crear Evento', ['type' => 'button', 'id' => 'save-event-btn']) !!}
         {!!Form::close()!!}
 </div>
 
@@ -238,13 +238,13 @@
                 });
             });
         }
-
         
     });
 </script>
 
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', (event)=>{
+        ///////////////////////////MIGRACION///////////////////////////////
         $(document).ready(function() {
             $('#migrate-button').click(function() {
                 $.ajax({
@@ -276,8 +276,47 @@
             });
         });
         fetchSidebar();
-    });
 
+        ///////////////////////////CREAR EVENTO///////////////////////////////
+        const saveEventBtn = document.getElementById('save-event-btn');
+        const configForm = document.getElementById('config-modal');
+        const createForm = document.getElementById('create-modal');
+
+        saveEventBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const formData = new FormData(document.getElementById('evento-form'));
+            fetch('{{route('eventos.store')}}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                            icon: 'success',
+                            text:'Evento Creado',
+                            confirmButtonText:'Ok',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                } else {
+                    Swal.fire({
+                            icon: 'error',
+                            text:data.error,
+                        })
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    
+    });
+    ///////////////////////////ACTUALIZAR SIDEBAR///////////////////////////////
     function fetchSidebar() {
         fetch('{{ route('get.sidebar') }}')
             .then(response => response.text())
@@ -285,7 +324,6 @@
                 document.getElementById('sidebar').innerHTML = html;
         });
     }
-    ///////////////////////////CREAR EVENTO///////////////////////////////
     
 </script>
 

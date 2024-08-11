@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\eventos;
@@ -43,12 +44,12 @@ class EventosController extends Controller
             'fecha_inicio' => 'required|date|after_or_equal:today',
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
             'edicion' => 'required|integer|min:1',
-            'logo' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,webp,jpg|max:2048',
         ]);
         $datos=$validatedData ;
         // Verificar si ya existe un evento con el mismo acrónimo y edición
         if (eventos::where('acronimo', $datos['acronimo'])->where('edicion', $datos['edicion'])->exists()) {
-            return redirect ('/eventos')->with('error', 'Ya existe este evento');
+            return response()->json(['success' => false , 'error' => 'El evento ya existe']);
         }
         // Obtener el archivo imagen
         $file = $datos['logo'];
@@ -69,17 +70,17 @@ class EventosController extends Controller
            
         }
         $datos['estado'] =1;
-        eventos::create($datos);
-        return redirect ('/eventos')->with('success', 'Se ha Registrado el evento');
+        //Crear el evento
+        $NewEvent=eventos::create($datos);
+
+        //Crear el archivo de configuracion
+        $this->createParameterFile($NewEvent->id);
+
+        return response()->json(['success' => true, 'type' => $datos['acronimo']]);
+        
     }
 
-    public function createParameterFile(Request $request){
-
-
-
-    }
-
-
+    
     public function show(string $id)
     {
         $evento=eventos::find($id);
@@ -130,7 +131,6 @@ class EventosController extends Controller
             $NuevosDatos['logo'] = $fileName;
         }
         
-
         $evento->update($NuevosDatos);
         return redirect('/eventos')->with('info','Informacion Actualizada');
     }
@@ -235,6 +235,63 @@ class EventosController extends Controller
         } else {
             return redirect()->back()->with('info', 'El evento ha sido cancelado');
         }
+    }
+
+    private function createParameterFile($eventoID){
+        $evento = eventos::find($eventoID);
+        $data = [
+            'Evento' => $evento->acronimo.' '.$evento->edicion,
+            'MaxToApprove' => 30,
+            'MinToApprove' => 21,
+            'Questions' => [
+                            "¿El Título es claro, corto y atractivo?",
+                            "¿Es de actualidad e interes el tema estudiado?",
+                            "¿El trabajo es ameno, con rigor divulgativo y transmite la idea esencial?",
+                            "¿Usa un lenguaje sencillo e imagenes descriptivas?",
+                            "¿Hace buen uso de la ortografía y la gramática, contiene párrafos cortos y no más de 4 páginas?",
+                            "¿El trabajo es accesible a un público no especializado?"
+                        ],
+            'OptionAnswers' =>['RechazoFuerte','Rechazar','Rechazo debil','Aceptacion debil','Aceptar','Aceptacien fuerte']
+        ];
+        $jsonData = json_encode($data, JSON_PRETTY_PRINT);
+        // Definir la ruta del archivo dentro del directorio 'storage/app/public'
+        $fileName =  $evento->acronimo.$evento->edicion.'parameter.json';
+        $url = 'public/EventImgs/'.$evento->acronimo.$evento->edicion;
+        // Guardar el archivo JSON en el sistema de ficheros
+        Storage::put($url.'/'.$fileName, $jsonData);
+        return true;
+    }
+
+    public function editParameterFile($eventoID){
+        $evento = eventos::find($eventoID);
+        $fileName = 'public/EventImgs/' . $evento->acronimo . $evento->edicion . '/' . $evento->acronimo . $evento->edicion . 'parameter.json';
+
+        if (Storage::exists($fileName)) {
+            $jsonData = Storage::get($fileName);
+            $data = json_decode($jsonData, true);
+        }
+        return view('Eventos.parameters', ['parameters' => $data]);
+    }
+
+    public function updateParameterFile(request $request, $eventoID){
+        $datos = $request->all();
+        $evento = eventos::find($eventoID);
+        // Actualizar los datos del JSON
+        $data = [
+            'Evento' => $evento->acronimo.' '.$evento->edicion,
+            'MaxToApprove' => $datos['max_to_approve'],
+            'MinToApprove' => $datos['min_to_approve'],
+            'Questions' => $datos['questions'],
+            'OptionAnswers' => $datos['answers'] // Mantener las respuestas sin cambios
+        ];
+
+        $jsonData = json_encode($data, JSON_PRETTY_PRINT);
+        $fileName = 'public/EventImgs/'.$evento->acronimo.$evento->edicion.'/'.$evento->acronimo.$evento->edicion.'parameter.json';
+        // Guardar el archivo JSON actualizado
+        Storage::put($fileName, $jsonData);
+
+        return redirect('eventos/'.$evento->id)->with('success','Se configuro el Evento Correctamente' );
+        
     }
 
 }

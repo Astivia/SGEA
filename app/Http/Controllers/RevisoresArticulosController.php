@@ -213,9 +213,17 @@ class RevisoresArticulosController extends Controller
         }else{
             $pdfUrl=null;
         }
+        //catalogo de autores
         $autores= articulosAutores::where('articulo_id',$articuloID)->OrderBy('orden')->get();
+        //logica para obtener las preguntas y respuestas
+        $evento = eventos::find($eventoID);
+        $fileName = 'public/EventImgs/' . $evento->acronimo . $evento->edicion . '/' . $evento->acronimo . $evento->edicion . 'parameter.json';
 
-        return view ('Revisores_Articulos.revision',compact('articulo','pdfUrl','autores'));
+        if (Storage::exists($fileName)) {
+            $jsonData = Storage::get($fileName);
+            $data = json_decode($jsonData, true);
+        }
+        return view ('Revisores_Articulos.revision', ['parameters' => $data],compact('articulo','pdfUrl','autores'));
     }
 
     public function revisados($eventoID,$usuarioId){
