@@ -6,16 +6,14 @@
         <p><strong>Evento: </strong>{!!$articulo->evento->nombre!!} (<strong>{!!$articulo->evento->acronimo!!} {!!$articulo->evento->edicion!!}</strong>)</p>
         <p>
             <strong>Autores: </strong><br>
-                <ul style="margin-left: 4%">
-                    @foreach ($autores as $index => $autor)
-                        <li>
-                            <strong>{!! $autor->orden !!}. </strong> 
-                            <a href="{{url('usuarios/'.$autor->usuario->id )}}" style="color:#000;">
-                            {!! $autor->usuario->nombre_completo !!}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
+            <ul style="margin-left: 4%">
+                @foreach ($autores as $index => $autor)
+                    <li>
+                        <strong>{!! $autor->orden !!}. </strong> 
+                        <a href="{{url('usuarios/'.$autor->usuario->id )}}" style="color:#000;">{!! $autor->usuario->nombre_completo !!}</a>
+                    </li>
+                @endforeach
+            </ul>
         </p>
         <p><strong>Area: </strong>{!! $articulo->area->nombre !!}</p>
         <p><strong>Correspondencia: </strong><a href="mailto:{!! $articulo->autor_correspondencia->email!!}"> {!! $articulo->autor_correspondencia->email!!} </a>({!! $articulo->autor_correspondencia->usuario->nombre_completo!!})</p>
@@ -31,10 +29,10 @@
             @endif
         </p>
         @if($pdfUrl)
-        <a href="{!!$pdfUrl !!}" target="_blank"><button><i class="las la-file-pdf"></i> Ver en nueva Pestaña</button></a>
-        <div class="LectorPDF">
-            <iframe src="{!!$pdfUrl !!}" frameborder="0" ></iframe>
-        </div>
+            <a href="{!!$pdfUrl !!}" target="_blank"><button><i class="las la-file-pdf"></i> Ver en nueva Pestaña</button></a>
+            <div class="LectorPDF">
+                <iframe src="{!!$pdfUrl !!}" frameborder="0" ></iframe>
+            </div>
         @endif
         <br><hr><br>
         <div class="revision-container">
@@ -47,7 +45,7 @@
                             <label for="pregunta{{$indexq+1}}"><h3>{{ $question }}</h3></label>
                             <div class="answerOptions">
                                 @foreach ($parameters['OptionAnswers'] as $index => $answer)
-                                <label>{!! Form::radio('op'.$indexq+1, $index ) !!}{{ $answer }} </label>
+                                <label>{!! Form::radio('op'.$indexq+1, null ) !!}{{ $answer }} </label>
                                 @endforeach
                             </div>
                         </div>
@@ -63,15 +61,56 @@
                 <strong>{{ Form::label('turniting', 'Archivo Turnitin:') }}</strong>
                 {!! Form::file('turniting', ['class' => 'form-control', 'accept' => '.pdf' , 'id' => 'turniting']) !!}
                 
-                {{ Form::hidden('puntuacion', null, ['required']) }}
+                {{ Form::hidden('puntuacion', null) }}
                 {{ Form::hidden('id_usuario', auth()->user()->id) }}
                 
-                
                 {!! Form::button('Finalizar Revision', ['type' => 'submit', 'style' => 'background-color:#1a2d51;color:#fff;', 'id' => 'EndRev-btn']) !!}
-
             {!! Form::close() !!}
             <a href="{{ url()->previous() }}"><button> Cancelar Revision</button></a>
         </div>
     </div>
 @endsection
 <script src="{{asset('SGEA/public/js/script-revision.js')}}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const questions = document.querySelectorAll('.question');
+        const maxToApprove = {!! json_encode($parameters['MaxToApprove']) !!}; 
+        const numQuestions = {!! count($parameters['Questions']) !!}; 
+        const numOptions = {!! count($parameters['OptionAnswers']) !!}; 
+
+        const maxScorePerQuestion = maxToApprove / numQuestions;
+        const scorePerOption = maxScorePerQuestion / (numOptions - 1); 
+
+        questions.forEach(question => {
+            const radios = question.querySelectorAll('input[type="radio"]');
+
+            radios.forEach((radio, index) => {
+                radio.value = index * scorePerOption; 
+            });
+
+            radios.forEach(radio => {
+                radio.addEventListener('click', function() {
+                    if (this.checked) {
+                        if (this.previousChecked) {
+                            this.checked = false;
+                            this.previousChecked = false;
+                            radios.forEach(r => r.disabled = false);
+                        } else {
+                            radios.forEach(r => {
+                                if (r !== this) {
+                                    r.disabled = true;
+                                }
+                            });
+                            this.previousChecked = true;
+                        }
+                    } else {
+                        this.previousChecked = false;
+                        radios.forEach(r => r.disabled = false);
+                    }
+                });
+            });
+        });
+       
+    });
+</script>

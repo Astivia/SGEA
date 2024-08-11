@@ -331,6 +331,6 @@
 
 <style>
     .selected {
-        border: 2px solid blue;
+        border: 2px solid #1a2d51;
     }
 </style>

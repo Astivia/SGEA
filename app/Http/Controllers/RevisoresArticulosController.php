@@ -112,7 +112,7 @@ class RevisoresArticulosController extends Controller
                 $Revisor=revisoresArticulos::where('articulo_id',$id)->where('evento_id', $evento_id)->where('usuario_id',$datos['id_usuario'])->first();
                 $archivo = $request->file('turniting');
                 //generamos nuevo nombre
-                $nombreArchivo = 'tntn-'.$Revisor->articulo->id.'.'.$archivo->getClientOriginalExtension();
+                $nombreArchivo = 'turniting.'.$archivo->getClientOriginalExtension();
                 try {
                     $path = 'public/Lector/web/ArticulosporEvento/' . $Revisor->evento->acronimo . $Revisor->evento->edicion . '/' .
                             $Revisor->articulo->area->nombre . '/' . $Revisor->articulo->titulo;
@@ -122,9 +122,8 @@ class RevisoresArticulosController extends Controller
                 } catch (\Exception $e) {
                     return back()->with('error', 'Error al subir el archivo: ' . $e->getMessage());
                 }
-            }else{
-                $nombreArchivo=null;
             }
+            
             //Actualizar el registro
             \DB::table('revisores_articulos')
                 ->where('evento_id', $evento_id)
@@ -132,7 +131,7 @@ class RevisoresArticulosController extends Controller
                 ->where('usuario_id', $datos['id_usuario'])
                 ->update([
                     'puntuacion' =>  $datos['puntuacion'],
-                    'similitud' => $datos['similitud'],
+                    'similitud' => $datos['similitud'].'%',
                     'comentarios' => isset($datos['comentarios']) ? $datos['comentarios'] : null,
                 ]);
             return redirect ($evento_id.'/ArticulosPendientes'.'/'.$datos['id_usuario'])->with('info','se ha calificado el Articulo correctamente');

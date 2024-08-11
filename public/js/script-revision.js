@@ -1,35 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const questions = document.querySelectorAll('.question');
+    //////////////////////////////////VALIDACIONES/////////////////////////////////////////
+    
     const revisionForm = document.getElementById('revision-form');
     const puntuacionInput = document.querySelector('input[name="puntuacion"]');
     const comentariosTextArea = document.querySelector('textarea[name="comentarios"]');
-
-    questions.forEach(question => {
-        const radios = question.querySelectorAll('input[type="radio"]');
-
-        radios.forEach(radio => {
-            radio.addEventListener('click', function() {
-                if (this.checked) {
-                    if (this.previousChecked) {
-                        this.checked = false;
-                        this.previousChecked = false;
-                        radios.forEach(r => r.disabled = false);
-                    } else {
-                        radios.forEach(r => {
-                            if (r !== this) {
-                                r.disabled = true;
-                            }
-                        });
-                        this.previousChecked = true;
-                    }
-                } else {
-                    this.previousChecked = false;
-                    radios.forEach(r => r.disabled = false);
-                }
-            });
-        });
-    });
-
+   
+    
     revisionForm.addEventListener('submit', function(event) {
         let allAnswered = true;
 
@@ -54,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         puntuacionInput.value  = calcularResultado();
     });
-
+    /////////////////////////////////CALCULAR PUNTUACION ///////////////////////////////
     function calcularResultado() {
         let total = 0;
         questions.forEach(question => {
