@@ -64,14 +64,14 @@ return new class extends Migration
             FOR EACH ROW
             EXECUTE PROCEDURE articulo_estado();
         ');
-
         //convertir usuario en  autor
         DB::unprepared("
             CREATE OR REPLACE FUNCTION convertirEnAutor() RETURNS TRIGGER AS $$
             BEGIN
             INSERT INTO PARTICIPANTES (evento_id, usuario_id, rol)
             VALUES (NEW.evento_id, NEW.usuario_id, 'Autor')
-            ON CONFLICT (evento_id, usuario_id) DO UPDATE SET rol =rol ||'- '|| EXCLUDED.rol;
+            ON CONFLICT (evento_id, usuario_id) DO UPDATE 
+            SET rol=PARTICIPANTES.rol || '- ' || EXCLUDED.rol;
             RETURN NEW;
             END;
             $$ LANGUAGE plpgsql;
@@ -89,7 +89,8 @@ return new class extends Migration
             BEGIN
             INSERT INTO PARTICIPANTES (evento_id, usuario_id, rol)
             VALUES (NEW.evento_id, NEW.usuario_id, 'Revisor')
-            ON CONFLICT (evento_id, usuario_id) DO UPDATE SET rol =rol ||'- '|| EXCLUDED.rol;
+            ON CONFLICT (evento_id, usuario_id) DO UPDATE 
+            SET rol =PARTICIPANTES.rol ||'- '|| EXCLUDED.rol;
             RETURN NEW;
             END;
             $$ LANGUAGE plpgsql;

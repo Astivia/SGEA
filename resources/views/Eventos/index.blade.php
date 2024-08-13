@@ -50,9 +50,11 @@
                         <td>{!!$e->edicion!!}</td>
                         <td>{!!$e->estado!!}</td>
                         <td>
+                            @role (['Administrador','Comite'])
                             @if($e->acronimo === 'CIDICI')
                                 <a href="{{url($e->id.'/parameters')}}"><i class="las la-cog la-2x"></i></a>
                             @endif
+                            @endrole
                             <a href="{!! 'eventos/'.$e->id !!}"><i class="las la-info-circle la-2x"></i></a>
                             
                             @role(['Administrador', 'Organizador'])
@@ -76,7 +78,7 @@
                                 ">
                                 <i class="las la-trash-alt la-2x"></i>
                             </a>
-                            <form id="delete-form-{{ $e->id }}" action="{{ url('eventos/'.$e->id) }}" method="POST"
+                            <form id="delete-form-{{$e->id}}" action="{{ url('eventos/'.$e->id) }}" method="POST"
                                 style="display: none;">
                                 @method('DELETE')
                                 @csrf

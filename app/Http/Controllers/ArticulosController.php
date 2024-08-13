@@ -15,6 +15,13 @@ use App\Models\areas;
 class ArticulosController extends Controller
 {
 
+    public function __construct(){
+        $this->middleware('can:articulos.index')->only('index');
+        $this->middleware('can:articulos.edit')->only('edit','update');
+        $this->middleware('can:articulos.create')->only('create','store'); 
+        $this->middleware('can:articulos.destroy')->only('destroy'); 
+    }
+
     public function index($eventoId)
     {
         $evento = eventos::find($eventoId); 

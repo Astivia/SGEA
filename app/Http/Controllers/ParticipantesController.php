@@ -15,6 +15,11 @@ use App\Models\participantes;
 class ParticipantesController extends Controller
 {
 
+    public function __construct(){
+        //$this->middleware('can:participantes.index')->only('index');
+        //$this->middleware('can:participantes.edit')->only('edit','update'); 
+    }
+
 
     public function index($eventoId)
     {
@@ -33,12 +38,11 @@ class ParticipantesController extends Controller
         // Verificar que el evento y el usuario existan
         $evento = eventos::find($datos['evento_id']);
         $usuario = usuarios::find($datos['usuario_id']);
-    
         if (!$evento || !$usuario) {
             return redirect()->back()->with('error', 'Evento o usuario no encontrado.');
         }
 
-        if(!participantes::where('evento_id',$datos['evento_id'])->where('usuario_id',$datos['usuario_id'])->first()){
+        if(!participantes::where('evento_id',$datos['evento_id'])->where('usuario_id',$datos['usuario_id'])->exists()){
             $evento->participantes()->attach($usuario);
         }else{
             return redirect()->back()->with('error', 'Este usuario ya es parte del evento');
@@ -65,6 +69,7 @@ class ParticipantesController extends Controller
         }
 
         $evento->participantes()->detach($usuario);
+        
         if (Auth::user()->id === $usuario->id) {
             session()->put('eventoID', null);
         }    

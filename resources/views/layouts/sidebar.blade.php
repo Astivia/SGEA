@@ -13,12 +13,9 @@
             </a>
             <div>
                 <h3>@auth {{ Auth::user()->nombre }} {{ Auth::user()->ap_paterno }} @endauth</h3>
-                @role('Administrador')
-                    <span>Administrador</span>
-                @endrole
-                @if(session('rol') !== null)
-                    <span>{{ session('rol') }}</span>
-                @endif
+                @foreach (Auth::user()->getRoleNames() as $role)
+                    <span>{{ $role }}</span>
+                @endforeach
             </div>
         </div>  
 

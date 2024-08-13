@@ -79,27 +79,37 @@
         {!! Form::open(['url'=>'/usuarios' , 'id' => 'usuario-register-form']) !!}
             
             {{ Form::label('usuario-nombre', 'Nombre:') }}
-            <input type="text" id="usuario-name" name="nombre" required>
+            {!! Form::text('nombre', null, ['id'=>'usuario-name','required']) !!}
 
             {{ Form::label('usuario-lastName', 'Apellido Paterno:') }}
-            <input type="text" id="usuario-lastName" name="ap_paterno" required>
+            {!! Form::text('ap_paterno', null, ['id'=>'usuario-lastName','required']) !!}
 
             {{ Form::label('usuario-2lastName', 'Apellido Materno:') }}
-            <input type="text" id="usuario-2lastName" name="ap_materno" required>
+            {!! Form::text('ap_materno', null, ['id'=>'usuario-2lastName','required']) !!}
 
             {{ Form::label('usuario-CURP', 'CURP:') }}
-            <input type="text" id="usuario-curp" name="curp" required>
+            {!! Form::text('curp', null, ['id'=>'usuario-curp','required']) !!}
             <span id="curp-error" style="color:red; display:none;">Esta CURP ya se ha registrado en otro usuario</span>
 
             {{ Form::label('usuario-mail', 'Email:') }}
-            <input type="text" id="usuario-email" name="email" required>
+            {!! Form::email('email', null, ['id'=>'usuario-email','required']) !!}
             <span id="email-error" style="color:red; display:none;">Este Correo ya se encuentra registrado en otro usuario</span>
 
             {{ Form::label('usuario-pass', 'Contraseña:') }}
-            <input type="password" id="usuario-password" name="password" required>
+            {!! Form::password('password', null, ['id'=>'usuario-password','required']) !!}
 
             {{ Form::label('usuario-phone', 'Telefono:') }}
-            <input type="tel" id="telefono" name="telefono" required>
+            {!! Form::tel('telefono', null, ['id'=>'telefono','required']) !!}
+
+            <h3>Seleccionar Rol:</h3>
+            <div class="selectRol" style="display:flex;flex-direction:row;justify-content:center;flex-wrap: wrap;gap:1vw;margin:1.5vw;">
+                @foreach($roles as $role)
+                    <div class="roleee" style="display:flex;flex-direction:row-reverse;gap:0.5vw;">
+                        {!! Form::checkbox('roles[]', $role->id, null, ['class' => 'checkRole']) !!}
+                        {{$role->name}}
+                    </div>
+                @endforeach
+            </div>
 
             <button type="submit">Guardar</button>
         {!!Form::close()!!}

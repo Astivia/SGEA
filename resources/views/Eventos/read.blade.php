@@ -61,9 +61,7 @@
             @endif
          </div>
     </div>
-    @role('Administrador')
-        <!-- <button id="migrate-button" data-evento-id="{{ $evento->id }}">Migrar Informacion</button> -->
-    @endrole
+
 
     <div id="create-modal" class="modal">
     <div class="modal-content">
@@ -107,25 +105,60 @@
 @endsection
 
 <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', (event) => {
-        $(document).ready(function() {
-            $('#migrate-button').click(function() {
-                var eventoId = $(this).data('evento-id');
-                $.ajax({
-                    url: '{{ url('migrar') }}/' + eventoId,
-                    type: 'POST',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        alert(response.message);
-                        window.location.href = '{{ route('eventos.index') }}';
-                        
-                    },
-                    error: function(response) {
-                        alert('Migration failed: ' + response.responseJSON.error);
-                    }
-                });
+    document.addEventListener('DOMContentLoaded', (event) => {   
+        document.getElementById('migrate-button').addEventListener('click', (event) => {
+            event.preventDefault();
+            const eventoId = event.currentTarget.dataset.eventoId;
+            Swal.fire({
+                title: 'Confirmar Migración',
+                text: 'Para confirmar que desea iniciar la migración de la información, escriba "INICIAR MIGRACION"',
+                input: 'text',
+                showCancelButton: true,
+                confirmButtonText: 'Ok',
+                cancelButtonText: 'Cancelar',
+                showLoaderOnConfirm: true,
+                preConfirm: (inputValue) => {
+                    return new Promise((resolve) => {
+                        if (inputValue.toLowerCase() === 'iniciar migracion') {
+                            resolve();
+                        } else {
+                            Swal.fire({text:'La frase ingresada no es correcta.',icon: 'error'});
+                        }
+                    })
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Migrando...',
+                        html: 'Por favor, espere...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
+                    
+                    $.ajax({
+                        url: '{{ url('migrar') }}/' + eventoId,
+                        type: 'POST',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                            icon: 'success',
+                            text:response.message,
+                            confirmButtonText:'Ok',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '{{ route('eventos.index') }}';
+                                }
+                            });
+                        },error: function(response) {
+                            alert('Migration failed: ' + response.responseJSON.error);
+                        }
+
+                    });
+                }
             });
         });
 

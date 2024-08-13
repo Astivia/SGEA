@@ -8,13 +8,10 @@
         @if($autores->isEmpty())
             <strong>No hay autores registrados en este momento</strong>
         @else
-        <!-- <div style="overflow-x:auto; overflow-y:auto; max-height:500px;"> -->
         <div class="ajuste" >
-        <!-- <button id="deleteSelected">Eliminar seleccionados</button> -->
             <table id="example" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>
-                    <!-- <th><input type="checkbox" id="selectAll"></th> -->
                         <th>AUTOR</th>
                         <th>INSTITUCION</th>
                         @role('Administrador')
@@ -26,7 +23,6 @@
                 <tbody>
                     @foreach ($autores as $autor)
                     <tr>
-                    <!-- <td><input type="checkbox" class="selectRow" data-id="{{ $autor->id }}"></td> -->
                         <td>{!!$autor->usuario->nombre_completo!!} </td>
                         <td>{{ Helper::truncate($autor->institucion, 50) }}</td>
                         @role('Administrador')

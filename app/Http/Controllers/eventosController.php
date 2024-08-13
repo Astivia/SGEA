@@ -15,6 +15,7 @@ class EventosController extends Controller
 {
 
     public function __construct(){
+        $this->middleware('can:eventos.index')->only('index'); 
         $this->middleware('can:eventos.create')->only('create','store'); 
         $this->middleware('can:eventos.edit')->only('edit','update');
         $this->middleware('can:eventos.destroy')->only('destroy'); 

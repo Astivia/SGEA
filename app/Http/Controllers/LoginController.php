@@ -17,7 +17,7 @@ use App\Models\participantes;
 class LoginController extends Controller
 {
     private function generarCodigo(){
-        //Generamos CODIGO DE VERIFICACION 
+        //Generamos el codigo de verificacion
         $characters = '0123456789';
         $code = '';
         for ($i = 0; $i < 4; $i++) {
@@ -70,14 +70,16 @@ class LoginController extends Controller
 
     public function verificarEmail(Request $request){
         $datos=$request->all();
-       
         $user=usuarios::where('id',$datos['user-id'])->first();
+        //validamos si el codigo es correcto
         if($datos['input-usuario']==$datos['codigo']){
+            //el codigo es correcto
             $user->update([
                 'estado' => 'alta,registrado'
             ]);
             $request->session()->forget('verification_code');
         }else{
+            //el codigo es incorrecto
             $request->session()->forget('verification_code');
             return redirect('login')->with('error', 'El codigo es Incorrecto');
         }

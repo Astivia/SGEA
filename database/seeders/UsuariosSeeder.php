@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\usuarios;
 
-class MaxSeeder extends Seeder
+class UsuariosSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -40,5 +40,6 @@ class MaxSeeder extends Seeder
             'estado'=>'alta,registrado'
         ]);
         $user->assignRole(1);
+        $user2->assignRole(5);
     }
 }

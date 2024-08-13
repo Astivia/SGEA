@@ -18,12 +18,18 @@ use Spatie\Permission\Models\Role;
 class usuariosController extends Controller
 {
 
-    
+    public function __construct(){
+        $this->middleware('can:usuarios.index')->only('index');
+        $this->middleware('can:usuarios.edit')->only('edit','update');
+        $this->middleware('can:usuarios.create')->only('create','store'); 
+        $this->middleware('can:usuarios.destroy')->only('destroy'); 
+    }
 
     public function index()
     {
         $Usuarios = usuarios::where('id','!=',1)->get();
-        return view ('Usuarios.index',compact('Usuarios'));
+        $roles = Role::All();
+        return view ('Usuarios.index',compact('Usuarios','roles'));
     }
 
     public function store(Request $request)
@@ -51,7 +57,8 @@ class usuariosController extends Controller
         }
         $datos['password'] = Hash::make($datos['password']);
         $datos['estado'] = "alta,no registrado";
-        usuarios::create($datos);
+        $usuario=usuarios::create($datos);
+        $usuario->roles()->sync($request->roles);
         return redirect()->back()->with('success', 'Se ha Registrado correctamente');
     }
 
@@ -71,6 +78,14 @@ class usuariosController extends Controller
     public function edit(string $id)
     {
         $usu = usuarios::find($id);
+        if(!$usu){
+            return redirect()->back()->with('error', 'El usuario no existe.');
+        }
+
+        // Si el usuario logueado no es el mismo que el usuario a editar y no es administrador
+        if (auth()->user()->id !== $usu->id && !auth()->user()->hasRole('Administrador')) {
+            return redirect()->back()->with('error', 'No tienes Autorizacion para modificar este perfil.');
+        }
         if($usu->id !==1){
             $roles = Role::All();
             if($usu->foto === "DefaultH.jpg" || $usu->foto === "DefaultM.jpg"){
@@ -193,6 +208,9 @@ class usuariosController extends Controller
             $user->ap_paterno = $authorData['ap_paterno'];$user->ap_materno = $authorData['ap_materno'];
             $user->telefono = $authorData['telefono'];$user->email = $authorData['email'];$user->estado = "alta,no registrado";
             $user->save();
+
+            $user->assignRole('Autor');
+
             //definimos la institucion
             $institution =$authorData['institucion'];
             return response()->json(['success' => 'Usuario insertado correctamente.','id'=>$user->id , $institution]);

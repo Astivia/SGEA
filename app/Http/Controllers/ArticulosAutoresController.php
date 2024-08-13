@@ -8,9 +8,14 @@ use App\Models\articulosAutores;
 
 class ArticulosAutoresController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
+    public function __construct(){
+        $this->middleware('can:articulos_autores.index')->only('index'); 
+        $this->middleware('can:articulos_autores.read')->only('read'); 
+        $this->middleware('can:articulos_autores.create')->only('create','store'); 
+        
+    }
+
     public function index($eventoId)
     {
         $autores= articulosAutores::distinct('usuario_id')->where('evento_id',$eventoId)->OrderBy('usuario_id')->get();
@@ -30,7 +35,6 @@ class ArticulosAutoresController extends Controller
 
         return view('Autores.read',compact('autor','articulos'));
     }
-
 
     public function edit($eventoId, $id)
     {
