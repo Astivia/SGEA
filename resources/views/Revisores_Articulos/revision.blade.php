@@ -45,7 +45,7 @@
                             <label for="pregunta{{$indexq+1}}"><h3>{{ $question }}</h3></label>
                             <div class="answerOptions">
                                 @foreach ($parameters['OptionAnswers'] as $index => $answer)
-                                <label>{!! Form::radio('op'.$indexq+1, null ) !!}{{ $answer }} </label>
+                                    <label>{!! Form::radio('op'.$indexq+1, null ) !!}{{ $answer }} </label>
                                 @endforeach
                             </div>
                         </div>

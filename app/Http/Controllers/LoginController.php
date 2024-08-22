@@ -131,7 +131,7 @@ class LoginController extends Controller
     public function register(Request $request){
         //recolectamos los datos en una variable
         $Datos=$request->all();
-        //Verificamos si existe el usuario por medio de su curp
+        //Verificamos si ya existe el usuario por medio de su curp
         $user = usuarios::where('curp', $Datos['curp'])->first();
         if ($user !== null) {
             //EL USUARIO EXISTE
@@ -193,11 +193,9 @@ class LoginController extends Controller
             if($user->estado=="alta,registrado"){
                 //PROCESO PARA INICIAR SESION
                 $credentials =[
-                    "email"=> $request['email'],
-                    "password"=> $request['password']
+                    "email"=> $request['email'],"password"=> $request['password']
                 ];
                 $remember = ($request->has('remember') ? true:false);
-    
                 if(Auth::attempt($credentials,$remember)){
                     //EL INICIO DE SESION FUE EXITOSO
                     $request->session()->regenerate();
@@ -224,7 +222,7 @@ class LoginController extends Controller
                 } else {
                     $codigo = $request->session()->get('verification_code');
                 }
-                //redirige al usuario a la vista
+                //redirige al usuario a la vista de verificación
                 return view('emailVerification',compact('user','codigo'));
             }
         }else{
@@ -244,6 +242,7 @@ class LoginController extends Controller
     public function resetPassword(Request $request){
         $request->validate(['email' => 'required|email',]);
         $user = usuarios::where('email',$request['email'])->first();
+
         if (!$user) { return redirect('login')->with('error','No existe un usuario con esa dirección de correo');}
 
         if (!$request->session()->has('verification_code')) {

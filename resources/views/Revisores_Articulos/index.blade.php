@@ -65,7 +65,8 @@
                     <ul class="selectedRevisorsList" ></ul>
                 </div>
                 {!! Form::label('Revisor', 'Seleccionar Revisores:') !!}
-                {!! Form::select('revisor-Combo', $usuarios->pluck('nombre_completo', 'id')->prepend('Seleccionar...', ''), null,['id'=>'user-combo','required']) !!}
+                {!! Form::select('revisor-Combo', $usuarios->pluck('nombre_completo', 'id')->prepend('Seleccionar...', ''),
+                     null,['id'=>'user-combo','required']) !!}
                 <div class="cntrls" style="display:flex;align-items:center;justify-content:space-evenly;margin-bottom:2vh;">
                     <button type="button" id="add-revisor" style="color:#fff;background-color:#1a2d51;">Asignar</button>
                     <button type="button" id="remove-revisor" style="color:#fff;background-color:#1a2d51;">Quitar</button>
@@ -161,7 +162,8 @@
            
             //validaciones
             if (!selectedValue) {
-                Swal.fire({title:'Advertencia',text:'Por favor, seleccione un usuario de la lista desplegable.',icon:'error',});return;
+                Swal.fire({title:'Advertencia',
+                    text:'Por favor, seleccione un usuario de la lista desplegable.',icon:'error',});return;
             }
             if (selectedUsers.find(revisor => revisor.id === selectedValue)) {
                 Swal.fire({title:'Advertencia',text:'El revisor ya se encuentra en la lista.',icon:'error',});return;
@@ -170,7 +172,7 @@
             selectedUsers.push({ id: selectedValue, name: selectedText });
             //actualizamos el vector y la Lista
             updateSelectedUsersInput();
-            updateAuthorList();
+            updateRevisorsList();
             if(selectedUsers.length===0){
                noRevsTxt.style.display='block';
             }else{
@@ -200,7 +202,7 @@
             selectedUsers.splice(userIndex, 1);
             //actualizamos el vector y la Lista
             updateSelectedUsersInput();
-            updateAuthorList();
+            updateRevisorsList();
             if(selectedUsers.length===0){
                noRevsTxt.style.display='block';
             }else{
@@ -211,7 +213,6 @@
 
         revisorForm.addEventListener('submit', (event) => {     
            // Verificamos si al menos un revisor ha sido seleccionado
-           
             if(selectedUsers.length=== 0){
                 event.preventDefault();
                 Swal.fire({
@@ -233,7 +234,7 @@
             console.log('Campo oculto:', selectedUsersInput.value);
         }; 
 
-        const updateAuthorList = () => {
+        const updateRevisorsList = () => {
             selectedRevLst.innerHTML = '';
             selectedUsers.forEach((revisor, index) => {
                 const newListItem = document.createElement('li');
@@ -258,7 +259,7 @@
         };
 
         updateSelectedUsersInput();
-        updateAuthorList();
+        updateRevisorsList();
     });
 </script>
 

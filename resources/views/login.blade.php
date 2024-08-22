@@ -9,9 +9,6 @@
 </head>
 <body>
     @if(session('error'))
-        <!-- <script>
-            alert('{{ session('error') }}');
-        </script> -->
         <div id="errorModal" class="modal">
             <div class="modal-content">
                 <span class="alerta-modal"><i class='bx bxs-error-alt'></i>Alerta</span>
@@ -23,9 +20,6 @@
     @endif
 
     @if(session('success'))
-        <!-- <script>
-            alert('{{ session('success') }}');
-            </script> -->
         <div id="successModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('successModal')">&times;</span>
@@ -50,30 +44,30 @@
                 </div>
             </div>
         </div>
-        <!-- Formulario de INICIO DE SESION -->
+        <!-- Formulario  INICIO DE SESION -->
         <div class="logreg-box">
             <div class="form-box login">
-                <form id="login-form" method="POST" action="{{route('inicia-sesion')}}">
-                @csrf
+                {!! Form::open(['id' => 'login-form', 'method' => 'POST','url' => 'inicia-sesion']) !!}
+                
                     <h2>Iniciar Sesion</h2>
                     <div class="input-box">
                         <span class="icon"><i class='bx bxs-envelope'></i></span>
-                        <input type="email" id="login-email" name="email" required>
-                        <label>Email</label>
+                        {!! Form::email('email', null, ['id'=>'login-email','required']) !!}
+                        {{ Form::label('usuario-mail', 'Email') }}
                     </div>
                     <div class="input-box">
-                        <input type="password" id="login-password" name="password" required>
-                        <label>Password</label>
+                        {!! Form::password('password', null, ['id'=>'login-password','required']) !!}
+                        {{ Form::label('login-Contraseña', 'Contraseña') }}
                         <span class="toggle-password" onclick="togglePassword('login-password')"><i class='bx bxs-show'></i></span>
                     </div>
                     <div class="remember-forgot"> 
                         <label for="remember_me">
-                            <input type="checkbox" id="remember_me" name="remember_me"> Mantener la sesión iniciada
+                            {{ Form::checkbox('remember_me', 1, false, ['id' => 'remember_me']) }} Mantener la sesión iniciada
                         </label>                     
                     </div>
-                 
-                    <button type="submit" class="btn">Iniciar Sesion</button>
-                </form>
+                    {!! Form::button('Iniciar Sesion', ['type' => 'submit','class'=>'btn']) !!}
+                {!!Form::close()!!}
+                
                 <div class="login-register">
                     <p>No tienes una cuenta? <a href="registro" class="register-link">Registrarme</a></p>
                     <a href="forgot-password" id="forgot-password-link">Olvidaste tu contraseña?</a>

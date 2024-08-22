@@ -110,8 +110,7 @@
                     </div>
                 @endforeach
             </div>
-
-            <button type="submit">Guardar</button>
+            {!! Form::button('Guardar', ['type' => 'submit', 'style' => 'background-color:#1a2d51;color:#fff;', 'id' => 'save-btn']) !!}
         {!!Form::close()!!}
     </div>
 </div>

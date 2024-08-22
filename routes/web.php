@@ -125,10 +125,3 @@ Route::get('/registro', function () {
 Route::get('/dashboard', function () {
     return view('HomeViews.dashboard');
 })->name('dashboard');
-
-Route::get('pruebas', function () {
-    return view('pruebas');
-});
-Route::get('pruebas2', function () {
-    return view('pruebas2');
-});

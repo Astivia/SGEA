@@ -87,8 +87,6 @@ class EventosController extends Controller
         $evento=eventos::find($id);
         $url= 'SGEA/storage/app/public/EventImgs/'.$evento->acronimo.$evento->edicion.'/logo';
         $evento->logo = $url.'/'. $evento->logo;
-
-
         return view ('Eventos.read',compact('evento'));
     }
 

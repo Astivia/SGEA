@@ -10,27 +10,6 @@
 </head>
 
 <body>
-    @if(session('error'))
-    <!-- <script>
-    alert('{{ session('
-        error ') }}');
-    </script> -->
-
-        <!-- <div id="errorModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('errorModal')">&times;</span>
-                <h1>Error al ingresar tu CURP </h1>
-                <p>{{ session('error') }}</p>
-            </div>
-        </div> -->
-    @endif
-
-    @if(session('success'))
-    <script>
-    alert('{{ session('
-        success ') }}');
-    </script>
-    @endif
     <div class="background"></div>
     <div class="container ">
         <div class="content">
@@ -100,29 +79,21 @@
                         </div>
 
                         <div class="input-box">
-                            <!-- <span class="icon"><i class='bx bxs-low-vision'></i></span> -->
                             <span class="toggle-password" onclick="togglePassword('password')"><i class='bx bxs-show'></i></span>
                             <input type="password" class="form-control" id="password" name="password" required>
                             <label for="password" class="form-label">Contraseña:</label>
-                            <!-- <span id="password-message" style="color: red;"></span> -->
                         </div>
                         <div class="input-box">
                             <span class="toggle-password" onclick="togglePassword('confirm-password')"><i class='bx bxs-show'></i></span>
                             <input type="password" class="form-control" id="confirm-password" name="confirm-password" required>
                             <label for="confirm-password" class="form-label">Confirmar Contraseña:</label>
-                            <!-- <span id="confirm-password-message" style="color: red;"></span> -->
                         </div>
                         <div class="remember-forgot">
                         <label for="privacy_policy">
                             <input type="checkbox" id="privacy_policy" name="privacy_policy" required> Acepto el <a href="#" onclick="openModal('privacyModal')">aviso de privacidad</a>
                         </label>
                         </div>
-
-
                         <button type="submit" class="btn btn-primary">registrarse</button>
-                        
-                        
-                        <!-- <button type="submit" class="btn btn-primary">Validar email</button> -->
                     </form>
                     <p>¿Ya tienes cuenta? <a href="{{route('login')}}">Iniciar Sesion</a></p>
                 </div>

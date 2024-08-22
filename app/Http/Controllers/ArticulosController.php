@@ -38,22 +38,19 @@ class ArticulosController extends Controller
         return view ('Articulos.index',compact('Articulos','Areas','Autores'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $evento= eventos::find($request->session()->get('eventoID'));
         if($evento){
             $datos=$request->all();
             if($request->has('pdf')){
                 $area=areas::find($datos['area_id']);
-                //validamos la carga del archivo
-                $request->validate([
-                    'pdf' => 'required|file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                ]);
+                
                 // manejo del archivo
                 $archivo = $request->file('pdf');
                 $nombreArchivo = $archivo->getClientOriginalName();
                 try {
-                    $archivo->storeAs('public/Lector/web/ArticulosporEvento/'.$evento->acronimo.$evento->edicion.'/'.$area->nombre.'/'.$datos['titulo'],$nombreArchivo);
+                    $archivo->storeAs('public/Lector/web/ArticulosporEvento/'.$evento->acronimo.$evento->edicion.
+                                        '/'.$area->nombre.'/'.$datos['titulo'],$nombreArchivo);
                 } catch (\Exception $e) {
                     return back()->with('error', 'Error al subir el archivo: ' . $e->getMessage());
                 }
@@ -70,7 +67,7 @@ class ArticulosController extends Controller
                 'area_id' => $datos['area_id'],
                 'estado' => 'Recibido'
             ]);
-            //Verificamos si el Form tiene un archivo JSON con los autores del articulo
+            //Verificamos los autores del articulo
             if ($request->has('selected_authors')) {
                 $selectedAuthors = json_decode($request->input('selected_authors'), true);
                 if (json_last_error() === JSON_ERROR_NONE) {
@@ -94,10 +91,8 @@ class ArticulosController extends Controller
             }else{
                 return redirect ($evento->id.'/articulos')->with('success','Articulo Registrado');
             }
-
         }else{
             return redirect()->back()->with('error','No es posible agregar: el usuario no es parte del evento');
-
         }
     }
 

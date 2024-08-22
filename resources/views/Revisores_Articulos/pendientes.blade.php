@@ -1,6 +1,5 @@
 @extends('layouts.master')
 <title>Articulos por Revisar</title>
-
 @section('Content')
     <div class="container">
         <div class="search-create">

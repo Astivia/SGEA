@@ -26,26 +26,25 @@
 <div class="background"></div>
 <div class="container">
     
-        
-    
     <div class="header-img">
     <img src="{{asset('SGEA/public/assets/img/lgoTec.png')}}" alt="">
     </div>
     <div class="card">
-    <h1>Verifica la dirección de correo electrónico</h1>
-    <p>{!!$user->nombre!!}, Para verificar tu correo electrónico, hemos enviado un código a <strong> {!!$user->email!!} </strong></p>
-    <form method="POST" id="verification-form" action="{{ route('verificar-email') }}">
-        @csrf
+        <h1>Verifica la dirección de correo electrónico</h1>
+        <p>{!!$user->nombre!!}, Para verificar tu correo electrónico, hemos enviado un código a <strong> {!!$user->email!!} </strong>
+        </p>
+        <form method="POST" id="verification-form" action="{{ route('verificar-email') }}">
+            @csrf
 
-        <input type="hidden" id="user-identifier" name="user-id" value="{!!$user->id!!}">
-        <input type="hidden" id="codee" name="codigo" value="{!!$codigo!!}">
+            <input type="hidden" id="user-identifier" name="user-id" value="{!!$user->id!!}">
+            <input type="hidden" id="codee" name="codigo" value="{!!$codigo!!}">
 
-        <label for=""><strong>Introducir Codigo</strong></label><br>
-        <input type="number" name="input-usuario" id="" placeHolder="ej: 1234">
-        <br><br>
-        <button type="submit" class="btn">Confirmar</button>
-    </form>
-    <a href="javascript:void(0);" id="resend-code-link">Reenviar Codigo</a>
+            <label for=""><strong>Introducir Codigo</strong></label><br>
+            <input type="number" name="input-usuario" id="" placeHolder="ej: 1234">
+            <br><br>
+            <button type="submit" class="btn">Confirmar</button>
+        </form>
+        <a href="javascript:void(0);" id="resend-code-link">Reenviar Codigo</a>
     </div>
 </div>
 

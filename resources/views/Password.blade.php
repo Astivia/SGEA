@@ -20,16 +20,11 @@
         <p>Hola <strong>{!!$user->nombre!!}</strong> porfavor introduce una contraseña nueva</p>
         <form method="POST" id="password-form" action="{{ route('Password') }}">
             @csrf
-
             <input type="hidden" id="user-identifier" name="user-id" value="{!!$user->id!!}">
-
             <label for=""><strong>Definir Contraseña: </strong></label>
             <input type="password" name="password" id="pass" placeHolder="">
-            
             <label for=""><strong>Confirmar Contraseña: </strong></label>
             <input type="password" name="password-confirm" id="pass-confirm" placeHolder="">
-
-            
             <button type="submit" class="btn">Confirmar</button>
         </form>
       </div>
